@@ -1,0 +1,46 @@
+*.txt
+*.zip
+*.rar
+*.FDB
+*.xml
+*.pfx
+*.exe
+*.cfg
+*.dof
+Dados/install.VALID
+FinalizaProcessosSmart/prjFinalizaProcessosSmart.dpr
+FinalizaProcessosSmart/prjFinalizaProcessosSmart.dproj
+FinalizaProcessosSmart/prjFinalizaProcessosSmart.dproj.local
+FinalizaProcessosSmart/prjFinalizaProcessosSmart.identcache
+FinalizaProcessosSmart/prjFinalizaProcessosSmart.res
+*.xsd
+*.~dpr
+*.~1~
+*.~2~
+*.~3~
+*.~4~
+*.~5~
+*.~6~
+*.~7~
+*.~pas
+*.dcu
+*.~ddp
+*.~dfm
+*.ddp
+src antigo/infraestrutura/servico/atualizacao/.#ServicoAtualizadorBD.pas.1.25
+src antigo/infraestrutura/servico/atualizacao/.#ServicoAtualizadorBD.pas.1.6
+src antigo/infraestrutura/servico/atualizacao/.#ServicoAtualizadorBD.pas.1.7
+*.~10~
+*.~11~
+*.~12~
+*.~13~
+*.~14~
+*.~8~
+*.~9~
+src----/infraestrutura/servico/atualizacao/.#ServicoAtualizadorBD.pas.1.25
+src----/infraestrutura/servico/atualizacao/.#ServicoAtualizadorBD.pas.1.6
+src----/infraestrutura/servico/atualizacao/.#ServicoAtualizadorBD.pas.1.7
+src----/infraestrutura/servico/atualizacao/ServicoAtualizadorBD.pas
+src/infraestrutura/servico/atualizacao/.#ServicoAtualizadorBD.pas.1.25
+src/infraestrutura/servico/atualizacao/.#ServicoAtualizadorBD.pas.1.6
+src/infraestrutura/servico/atualizacao/.#ServicoAtualizadorBD.pas.1.7

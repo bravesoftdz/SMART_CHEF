@@ -1,0 +1,455 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{8B27A090-60E5-488E-A3BD-0BE97ADDB2F7}</ProjectGuid>
+        <MainSource>SmartChef.dpr</MainSource>
+        <Base>True</Base>
+        <Config Condition="'$(Config)'==''">Debug</Config>
+        <TargetedPlatforms>1</TargetedPlatforms>
+        <AppType>Application</AppType>
+        <FrameworkType>VCL</FrameworkType>
+        <ProjectVersion>18.1</ProjectVersion>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
+        <Base_Win32>true</Base_Win32>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Base)'=='true') or '$(Base_Win64)'!=''">
+        <Base_Win64>true</Base_Win64>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+        <Cfg_1>true</Cfg_1>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win32)'!=''">
+        <Cfg_1_Win32>true</Cfg_1_Win32>
+        <CfgParent>Cfg_1</CfgParent>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+        <Cfg_2>true</Cfg_2>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win32)'!=''">
+        <Cfg_2_Win32>true</Cfg_2_Win32>
+        <CfgParent>Cfg_2</CfgParent>
+        <Cfg_2>true</Cfg_2>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_E>false</DCC_E>
+        <VerInfo_Locale>1046</VerInfo_Locale>
+        <DCC_SymbolReferenceInfo>1</DCC_SymbolReferenceInfo>
+        <DCC_ImageBase>00400000</DCC_ImageBase>
+        <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;System.Win;Xml.Win;IBX;$(DCC_Namespace)</DCC_Namespace>
+        <DCC_S>false</DCC_S>
+        <DCC_K>false</DCC_K>
+        <DCC_UsePackage>vcl;rtl;vclx;indy;inet;xmlrtl;vclie;inetdbbde;inetdbxpress;dbrtl;dsnap;dsnapcon;vcldb;soaprtl;VclSmp;dbexpress;dbxcds;inetdb;bdertl;vcldbx;webdsnap;websnap;adortl;ibxpress;teeui;teedb;tee;dss;visualclx;visualdbclx;vclactnband;vclshlctrls;IntrawebDB_50_70;Intraweb_50_70;Rave50CLX;Rave50VCL;dclOfficeXP;rxctl7;rxdb7;rxbde7;Jcl;JclVcl;JvCoreD7R;JvSystemD7R;JvStdCtrlsD7R;JvAppFrmD7R;JvBandsD7R;JvDBD7R;JvDlgsD7R;JvBDED7R;JvCmpD7R;JvCryptD7R;JvCtrlsD7R;JvCustomD7R;JvDockingD7R;JvDotNetCtrlsD7R;JvEDID7R;JvGlobusD7R;JvHMID7R;JvInterpreterD7R;JvJansD7R;JvManagedThreadsD7R;JvMMD7R;JvNetD7R;JvPageCompsD7R;JvPluginD7R;JvPrintPreviewD7R;JvRuntimeDesignD7R;JvTimeFrameworkD7R;JvValidatorsD7R;JvWizardD7R;JvXPCtrlsD7R;DELPRINT7;REasyTEFD67;frxADO7;frxBDE7;frxDB7;frx7;frxDBX7;frxe7;frxIBX7;frxTee7;frxcs7;fsADO7;fs7;fsBDE7;fsDB7;fsIBX7;fsTee7;RCLMDO70;IndyCore70;IndySystem70;Transpear_XP;IndyProtocols70;ACBrComum;ACBrDiversos;PKGFuncoes;RLibWinD7vcl;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_DebugInformation>1</DCC_DebugInformation>
+        <SanitizedProjectName>SmartChef</SanitizedProjectName>
+        <DCC_N>true</DCC_N>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <DCC_F>false</DCC_F>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win32)'!=''">
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
+        <DCC_Namespace>Data.Win;Datasnap.Win;Web.Win;Soap.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <Icon_MainIcon>SmartChef_Icon.ico</Icon_MainIcon>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win64)'!=''">
+        <Icon_MainIcon>SmartChef_Icon.ico</Icon_MainIcon>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1)'!=''">
+        <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+        <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+        <DCC_DebugInformation>0</DCC_DebugInformation>
+        <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
+        <AppEnableHighDPI>true</AppEnableHighDPI>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2)'!=''">
+        <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+        <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+        <DCC_Optimize>false</DCC_Optimize>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
+        <AppEnableHighDPI>true</AppEnableHighDPI>
+    </PropertyGroup>
+    <ItemGroup>
+        <DelphiCompile Include="$(MainSource)">
+            <MainSource>MainSource</MainSource>
+        </DelphiCompile>
+        <DCCReference Include="src\formularios\uInicial.pas">
+            <Form>frmInicial</Form>
+        </DCCReference>
+        <DCCReference Include="src\formularios\uAguarde.pas">
+            <Form>frmAguarde</Form>
+        </DCCReference>
+        <DCCReference Include="src\formularios\uAvisar.pas">
+            <Form>frmAvisar</Form>
+        </DCCReference>
+        <DCCReference Include="src\formularios\uCadastroPerfilAcesso.pas"/>
+        <DCCReference Include="src\formularios\uCadastroUsuario.pas"/>
+        <DCCReference Include="src\formularios\uConfiguraBancoDeDados.pas"/>
+        <DCCReference Include="src\formularios\uInputBox.pas">
+            <Form>frmInputBox</Form>
+        </DCCReference>
+        <DCCReference Include="src\formularios\uLogin.pas"/>
+        <DCCReference Include="src\formularios\uManutencaoSistema.pas"/>
+        <DCCReference Include="src\formularios\uPadrao.pas">
+            <Form>frmPadrao</Form>
+        </DCCReference>
+        <DCCReference Include="src\formularios\uPesquisaSimples.pas">
+            <Form>frmPesquisaSimples</Form>
+        </DCCReference>
+        <DCCReference Include="src\formularios\uSupervisor.pas">
+            <Form>frmSupervisor</Form>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBotaoImg.pas">
+            <Form>BotaoImg</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameHorario.pas">
+            <Form>Horario</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameListaCampo.pas">
+            <Form>ListaCampo</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameMaskCpfCnpj.pas">
+            <Form>MaskCpfCnpj</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameRealEdit.pas">
+            <Form>RealEdit</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\Especificacao.pas"/>
+        <DCCReference Include="src\dominio\utilitario\CriaBalaoInformacao.pas"/>
+        <DCCReference Include="src\dominio\utilitario\DateTimeUtilitario.pas"/>
+        <DCCReference Include="src\dominio\utilitario\Objeto.pas"/>
+        <DCCReference Include="src\dominio\utilitario\StringUtilitario.pas"/>
+        <DCCReference Include="src\infraestrutura\backup\Backup.pas"/>
+        <DCCReference Include="src\infraestrutura\backup\DiretorioBackup.pas"/>
+        <DCCReference Include="src\infraestrutura\excecao\ExcecaoBancoDeBackupInvalido.pas"/>
+        <DCCReference Include="src\infraestrutura\excecao\ExcecaoBancoDeDadosInvalido.pas"/>
+        <DCCReference Include="src\infraestrutura\excecao\ExcecaoBancoInvalido.pas"/>
+        <DCCReference Include="src\infraestrutura\excecao\ExcecaoScriptDeAtualizacaoInvalido.pas"/>
+        <DCCReference Include="src\infraestrutura\excecao\ExcecaoSistemaEmManutencao.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\FabricaRepositorio.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\ObjetoGenerico.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\Repositorio.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioAuditoria.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioCampoAlteradoAuditoria.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioCampoAuditoria.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioCampoExcluidoAuditoria.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioCampoIncluidoAuditoria.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioDiretorioBackup.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioManutencaoSistema.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioVersao.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioPerfil.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioUsuario.pas"/>
+        <DCCReference Include="src\infraestrutura\servico\BuscadorDeAtualizacoesBD.pas"/>
+        <DCCReference Include="src\infraestrutura\servico\ServicoBackup.pas"/>
+        <DCCReference Include="src\infraestrutura\servico\ServicoVerificadorSistemaEmManutencao.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\excecao\ExcecaoRepositorioNaoEncontrado.pas"/>
+        <DCCReference Include="src\infraestrutura\servico\atualizacao\ServicoAtualizadorBD.pas"/>
+        <DCCReference Include="src\infraestrutura\tipo\TipoBanco.pas"/>
+        <DCCReference Include="src\infraestrutura\ArquivoConfiguracao.pas"/>
+        <DCCReference Include="src\infraestrutura\Funcoes.pas"/>
+        <DCCReference Include="src\infraestrutura\LogErros.pas"/>
+        <DCCReference Include="src\infraestrutura\uModulo.pas">
+            <Form>dm</Form>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\dominio\entidade\auditoria\Auditoria.pas"/>
+        <DCCReference Include="src\dominio\entidade\auditoria\CampoAlteracaoAuditoria.pas"/>
+        <DCCReference Include="src\dominio\entidade\auditoria\CampoAuditoria.pas"/>
+        <DCCReference Include="src\dominio\entidade\auditoria\CampoIncluidoAuditoria.pas"/>
+        <DCCReference Include="src\dominio\entidade\ManutencaoSistema.pas"/>
+        <DCCReference Include="src\dominio\entidade\Versao.pas"/>
+        <DCCReference Include="src\dominio\entidade\Perfil.pas"/>
+        <DCCReference Include="src\dominio\entidade\Usuario.pas"/>
+        <DCCReference Include="src\dominio\excecao\ExcecaoMetodoNaoImplementado.pas"/>
+        <DCCReference Include="src\formularios\Eventos\EventoExecutarOperacao.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoDiretorioBackupComUsuarioIgualA.pas"/>
+        <DCCReference Include="src\dominio\excecao\ExcecaoParametroInvalido.pas"/>
+        <DCCReference Include="src\dominio\excecao\ExcecaoAtributoDuplicado.pas"/>
+        <DCCReference Include="src\dominio\entidade\PermissoesAcesso.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoUsuarioComLoginIgualA.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\Criptografia.pas"/>
+        <DCCReference Include="src\formularios\uConfirmacaoUsuario.pas">
+            <Form>frmConfirmacaoUsuario</Form>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Eventos\EventoExecutandoOperacao.pas"/>
+        <DCCReference Include="src\formularios\Eventos\EventoAvisar.pas"/>
+        <DCCReference Include="src\formularios\Eventos\EventoFechar.pas"/>
+        <DCCReference Include="src\formularios\uCadastroPadrao.pas">
+            <Form>frmCadastroPadrao</Form>
+        </DCCReference>
+        <DCCReference Include="src\formularios\uCadastroGrupo.pas">
+            <Form>frmCadastroGrupo</Form>
+        </DCCReference>
+        <DCCReference Include="src\dominio\entidade\Grupo.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioGrupo.pas"/>
+        <DCCReference Include="src\dominio\entidade\MateriaPrima.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioMateriaPrima.pas"/>
+        <DCCReference Include="src\formularios\uCadastroMateriaPrima.pas">
+            <Form>frmCadastroMateriaPrima</Form>
+        </DCCReference>
+        <DCCReference Include="src\dominio\entidade\Produto.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioProduto.pas"/>
+        <DCCReference Include="src\formularios\uCadastroProduto.pas">
+            <Form>frmCadastroProduto</Form>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaMateriaPrima.pas">
+            <Form>BuscaMateriaPrima</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\dominio\entidade\ProdutoHasMateria.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioProdutoHasMateria.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoMateriasDoProduto.pas"/>
+        <DCCReference Include="src\formularios\uPedido.pas">
+            <Form>frmPedido</Form>
+        </DCCReference>
+        <DCCReference Include="src\dominio\entidade\Comanda.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioComanda.pas"/>
+        <DCCReference Include="src\formularios\Frames\frameBuscaComanda.pas">
+            <Form>BuscaComanda</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\dominio\entidade\Pedido.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioPedido.pas"/>
+        <DCCReference Include="src\dominio\entidade\Item.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioItem.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoItensDoPedido.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoPedidoAbertoDaComanda.pas"/>
+        <DCCReference Include="src\formularios\Frames\frameBuscaProduto.pas">
+            <Form>BuscaProduto</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\uCadastroEmpresa.pas">
+            <Form>frmCadastroEmpresa</Form>
+        </DCCReference>
+        <DCCReference Include="src\dominio\entidade\Empresa.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioEmpresa.pas"/>
+        <DCCReference Include="src\formularios\uAdicionaItemProduto.pas">
+            <Form>frmAdicionaItemProduto</Form>
+        </DCCReference>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoProdutosQueContemMateria.pas"/>
+        <DCCReference Include="src\dominio\entidade\AdicionalItem.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioAdicionalItem.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoAdicionalDoItem.pas"/>
+        <DCCReference Include="src\formularios\uFinalizaPedido.pas">
+            <Form>frmFinalizaPedido</Form>
+        </DCCReference>
+        <DCCReference Include="src\dominio\entidade\Caixa.pas"/>
+        <DCCReference Include="src\dominio\entidade\Movimento.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioCaixa.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioMovimento.pas"/>
+        <DCCReference Include="src\formularios\uCaixa.pas">
+            <Form>frmCaixa</Form>
+        </DCCReference>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoMovimentosPorCodigoCaixa.pas"/>
+        <DCCReference Include="src\formularios\uScript.pas">
+            <Form>frmScript</Form>
+        </DCCReference>
+        <DCCReference Include="src\formularios\uCadastroDepartamento.pas">
+            <Form>frmCadastroDepartamento</Form>
+        </DCCReference>
+        <DCCReference Include="src\dominio\entidade\Departamento.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioDepartamento.pas"/>
+        <DCCReference Include="src\formularios\uAvisoPedidoPendente.pas">
+            <Form>frmAvisoPedidoPendente</Form>
+        </DCCReference>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoPedidosComItemNaoImpresso.pas"/>
+        <DCCReference Include="src\dominio\entidade\NcmIBPT.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioNcmIBPT.pas"/>
+        <DCCReference Include="src\formularios\Frames\frameBuscaNCM.pas">
+            <Form>BuscaNCM</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\dominio\entidade\ConfiguracaoECF.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioConfiguracaoECF.pas"/>
+        <DCCReference Include="src\formularios\uConfiguraECF.pas">
+            <Form>frmConfiguraECF</Form>
+        </DCCReference>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoCaixaPorData.pas"/>
+        <DCCReference Include="src\formularios\relatorios\Fortes\uRelatorioVendas.pas">
+            <Form>frmRelatorioVendas</Form>
+        </DCCReference>
+        <DCCReference Include="src\formularios\uSuporteTecnico.pas">
+            <Form>frmSuporteTecnico</Form>
+        </DCCReference>
+        <DCCReference Include="src\formularios\uPedidosEmAberto.pas">
+            <Form>frmPedidosEmAberto</Form>
+        </DCCReference>
+        <DCCReference Include="src\formularios\uCadastroComanda.pas">
+            <Form>frmCadastroComanda</Form>
+        </DCCReference>
+        <DCCReference Include="src\dominio\entidade\Dispensa.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioDispensa.pas"/>
+        <DCCReference Include="src\dominio\entidade\Estoque.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioEstoque.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoEstoquePorProduto.pas"/>
+        <DCCReference Include="src\formularios\uCadastroDispensa.pas">
+            <Form>frmCadastroDispensa</Form>
+        </DCCReference>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoEstoquePorItemDispensa.pas"/>
+        <DCCReference Include="src\formularios\uEntradaSaidaMercadoria.pas">
+            <Form>frmEntradaSaidaMercadoria</Form>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaDispensa.pas">
+            <Form>BuscaDispensa</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\relatorios\Fortes\uRelatorioAtendimentos.pas">
+            <Form>frmRelatorioAtendimentos</Form>
+        </DCCReference>
+        <DCCReference Include="src\formularios\relatorios\Fortes\uRelatorioPedidos.pas">
+            <Form>frmRelatorioPedidos</Form>
+        </DCCReference>
+        <DCCReference Include="src\dominio\entidade\EntradaSaida.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioEntradaSaida.pas"/>
+        <DCCReference Include="src\formularios\relatorios\Fortes\uRelatorioEstoque.pas">
+            <Form>frmRelatorioEstoque</Form>
+        </DCCReference>
+        <DCCReference Include="src\formularios\relatorios\Fortes\uRelatorioEntradaSaida.pas">
+            <Form>frmRelatorioEntradaSaida</Form>
+        </DCCReference>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoMovimentosCaixa.pas"/>
+        <DCCReference Include="src\formularios\relatorios\Fortes\uRelatorioCaixa48Colunas.pas">
+            <Form>frmRelatorioCaixa48Colunas</Form>
+        </DCCReference>
+        <DCCReference Include="src\dominio\entidade\ItemDeletado.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioItemDeletado.pas"/>
+        <DCCReference Include="src\formularios\relatorios\Fortes\uRelatorioItensDeletados.pas">
+            <Form>frmRelatorioItensDeletados</Form>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaUsuario.pas">
+            <Form>BuscaUsuario</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\dominio\excecao\ExcecaoCampoNaoInformado.pas"/>
+        <DCCReference Include="src\dominio\excecao\ExcecaoValorInvalido.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\CertificadoNFCE.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\CidadeNFCe.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\CSTTributadoIntegralmente.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\EnderecoNFCe.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\FormaPagamento.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\FormasPagamento.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\ItemVenda.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\ParametrosDANFE.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\ParametrosNFCe.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\Token.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\Venda.pas"/>
+        <DCCReference Include="src\dominio\servico\ServicoEmissorNFCe.pas"/>
+        <DCCReference Include="src\dominio\tipo\TipoAmbiente.pas"/>
+        <DCCReference Include="src\dominio\tipo\TipoFormaEmissao.pas"/>
+        <DCCReference Include="src\dominio\tipo\TipoRegime.pas"/>
+        <DCCReference Include="src\dominio\tipo\TipoVersaoDF.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\Parametros.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioParametrosNFCe.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\CSOSNTributadoSNSemCredito.pas"/>
+        <DCCReference Include="src\dominio\entidade\NFCE.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioNFCE.pas"/>
+        <DCCReference Include="src\formularios\uConfiguraNFCe.pas">
+            <Form>frmConfiguraNFCe</Form>
+        </DCCReference>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoMovimentosPorCodigoPedido.pas"/>
+        <DCCReference Include="src\formularios\uNFCes.pas">
+            <Form>frmNFCes</Form>
+        </DCCReference>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoFiltraNFCe.pas"/>
+        <DCCReference Include="src\formularios\uConfiguracoesSistema.pas">
+            <Form>frmconfiguracoesSistema</Form>
+        </DCCReference>
+        <DCCReference Include="src\dominio\entidade\ConfiguracoesSistema.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioConfiguracoesSistema.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\ParametrosEmpresa.pas"/>
+        <DCCReference Include="src\formularios\uCadastroCliente.pas">
+            <Form>frmCadastroCliente</Form>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaCidade.pas">
+            <Form>BuscaCidade</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\dominio\entidade\Cliente.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioCliente.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoClientePorCpfCnpj.pas"/>
+        <DCCReference Include="src\formularios\relatorios\Fortes\uRelatorioProdutos.pas">
+            <Form>frmRelatorioProdutos</Form>
+        </DCCReference>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioEndereco.pas"/>
+        <DCCReference Include="src\dominio\entidade\Endereco.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoEnderecosDoCliente.pas"/>
+        <DCCReference Include="src\formularios\relatorios\Fortes\uRelatorioCuponsFiscais.pas">
+            <Form>frmRelatorioCuponsFiscais</Form>
+        </DCCReference>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoNFCe.pas"/>
+        <DCCReference Include="src\dominio\entidade\ProdutoDependenciaEst.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioProdutoDependenciaEst.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoDependenciaEstoqueProduto.pas"/>
+        <DCCReference Include="src\formularios\Frames\frameBuscaCliente.pas">
+            <Form>BuscaCliente</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoEnderecoPorTelefone.pas"/>
+        <DCCReference Include="src\formularios\uReimpressaoPedido.pas">
+            <Form>frmReimpressaoPedido</Form>
+        </DCCReference>
+        <BuildConfiguration Include="Debug">
+            <Key>Cfg_2</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Base">
+            <Key>Base</Key>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Release">
+            <Key>Cfg_1</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Delphi.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Delphi.Personality>
+                <Source>
+                    <Source Name="MainSource">SmartChef.dpr</Source>
+                </Source>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\bcboffice2k230.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\bcbofficexp230.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k230.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp230.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                </Excluded_Packages>
+            </Delphi.Personality>
+            <Platforms>
+                <Platform value="Win32">True</Platform>
+                <Platform value="Win64">False</Platform>
+            </Platforms>
+        </BorlandProject>
+        <ProjectFileVersion>12</ProjectFileVersion>
+    </ProjectExtensions>
+    <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
+    <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
+</Project>
