@@ -10,7 +10,7 @@ uses
   ACBrDANFCeFortesFr,
   ContNrs, DateTimeUtilitario, Classes, AcbrNfe,  pcnConversao, pcnNFe,
   pcnRetInutNFe, pcnRetConsSitNFe, pcnCCeNFe, ACBrNFeWebServices,
-  pcnEventoNFe, pcnConversaoNFe,   pcnProcNFe, funcoes;
+  pcnEventoNFe, pcnConversaoNFe,   pcnProcNFe, funcoes, Pedido;
 
 type
   TServicoEmissorNFCe = class
@@ -21,6 +21,7 @@ type
     FParametros :TParametros;
 
   private
+    function  gerarVenda(Pedido :TPedido):TVenda;
     procedure GerarNFCe(Venda :TVenda);
     procedure GerarIdentificacao(Configuracoes :TParametros;
                                  Venda :TVenda;
@@ -40,7 +41,7 @@ type
     destructor Destroy; override;
 
   public
-    procedure Emitir(Venda :TVenda; NumeroLote :Integer);
+    procedure Emitir(Pedido :TPedido);
     procedure CancelarNFCe(XML: TStringStream; Justificativa :String);
     procedure reimprimir(XML :String);
 end;
@@ -55,7 +56,7 @@ uses
   Produto, Movimento,
   Token, EspecificacaoMovimentosPorCodigoPedido,
   ParametrosDANFE, NcmIBPT, ItemVenda, Dialogs, Repositorio, FabricaRepositorio, NFCe, uModulo, StrUtils, Math, EspecificacaoFiltraNFCe,
-  Cliente, MaskUtils;
+  Cliente, MaskUtils, AdicionalItem;
 
 { TServicoEmissorNFCe }
 
@@ -144,16 +145,28 @@ begin
    inherited;
 end;
 
-procedure TServicoEmissorNFCe.Emitir(Venda: TVenda; NumeroLote :Integer);
+procedure TServicoEmissorNFCe.Emitir(Pedido :TPedido);
 const
   IMPRIMIR = true;
   SINCRONO = true;
+var
+  numeroLote :integer;
 begin
   try
-    GerarNFCe(Venda);
+    GerarNFCe( gerarVenda(Pedido) );
 
     try
-      FACBrNFe.Enviar(NumeroLote, IMPRIMIR, SINCRONO);
+      numeroLote := dm.GetValorGenerator('gen_lote_nfce','1');
+
+      if FParametros.NFCe.justContingencia <> '' then
+      begin
+        FACBrNFe.NotasFiscais.Assinar;
+        FACBrNFe.NotasFiscais.Validar;
+        FACBrNFe.NotasFiscais.Imprimir;
+      end
+      else
+        FACBrNFe.Enviar(numeroLote, IMPRIMIR, SINCRONO);
+
     Except
       On E: Exception do begin
         dm.GetValorGenerator('gen_lote_nfce','-1');
@@ -163,7 +176,9 @@ begin
       end;
     end;
 
-    Salva_retorno_envio(Venda.Codigo_pedido, NumeroLote);
+    {se nao for em contingencia, salva xml}
+    if FParametros.NFCe.justContingencia = '' then
+      Salva_retorno_envio(Pedido.codigo, numeroLote);
 
   Except
     On E: Exception do begin
@@ -324,7 +339,14 @@ begin
    NFCe.NFe.Ide.dSaiEnt  := Now;
    NFCe.NFe.Ide.hSaiEnt  := Now;
    NFCe.NFe.Ide.tpNF     := tnSaida;
-   NFCe.NFe.Ide.tpEmis   := teNormal; //TpcnTipoEmissao(Configuracoes.NFCe.FormaEmissao); SEGUNDA_CONFIGURACAO
+   NFCe.NFe.Ide.tpEmis   := TpcnTipoEmissao(Configuracoes.NFCe.FormaEmissao);
+
+   if Configuracoes.NFCe.justContingencia <> '' then
+   begin
+     NFCe.NFe.Ide.xJust  := Configuracoes.NFCe.justContingencia;
+     NFCe.NFe.Ide.dhCont := Configuracoes.NFCe.inicioContingencia;
+   end;
+
    NFCe.NFe.Ide.tpAmb    := TpcnTipoAmbiente( IfThen( copy(Configuracoes.NFCe.Ambiente,1,1) = 'P',0,1) );
    NFCe.NFe.Ide.cUF      := UF_TO_CODUF(Configuracoes.Empresa.estado);
    NFCe.NFe.Ide.cMunFG   := Configuracoes.Empresa.cod_municipio;
@@ -435,6 +457,53 @@ begin
    NFCe.NFe.Total.ICMSTot.vOutro   := 0; //Venda.OutrasDespesas;
    NFCe.NFe.Total.ICMSTot.vNF      := Venda.Total - Venda.Desconto;
    NFCe.NFe.Total.ICMSTot.vTotTrib := Venda.TotalTributos;
+end;
+
+function TServicoEmissorNFCe.gerarVenda(Pedido :TPedido): TVenda;
+var valor_adicionais :Real;
+    i, x :integer;
+begin
+  try
+    result               := TVenda.Create;
+
+    result.Data          := Pedido.data;
+    result.Codigo_pedido := Pedido.codigo;
+    result.NumeroNFe     := dm.GetValorGenerator('gen_nrnota_nfce','1');//StrToInt(Maior_Valor_Cadastrado('NFCE_RETORNO', 'CODIGO'))+1; // criar tab. de retorno da nf p/ poder pegar tb o cod. da nf
+   // Venda.Acrescimo     := buscaComanda1.Pedido.acrescimo;
+    result.Desconto      := Pedido.desconto;
+    result.Couvert       := Pedido.couvert;
+    result.Tx_servico    := Pedido.taxa_servico;
+    result.Taxa_entrega  := Pedido.taxa_entrega;
+    result.Cpf_cliente   := Pedido.cpf_cliente;
+    result.nome_cliente  := Pedido.nome_cliente;
+    result.Codigo_endereco := Pedido.Codigo_endereco;
+
+    for i := 0 to Pedido.Itens.Count - 1 do begin
+      valor_adicionais := 0;
+
+      if (Pedido.Itens[i] as TItem).Produto.tipo = 'S' then begin
+        result.Total_em_servicos := result.Total_em_servicos + ( (Pedido.Itens[i] as TItem).valor_Unitario *
+                                                               IfThen((((Pedido.Itens[i] as TItem).quantidade > 198)and((Pedido.Itens[i] as TItem).Fracionado = 'S')) or ((Pedido.Itens[i] as TItem).quantidade > 599),
+                                                                        1, (Pedido.Itens[i] as TItem).quantidade) );
+        Continue;
+      end;
+
+      if assigned( (Pedido.Itens[i] as TItem).Adicionais ) then
+        for x := 0 to (Pedido.Itens[i] as TItem).Adicionais.Count - 1 do    //Adicionados
+          if ((Pedido.Itens[i] as TItem).Adicionais[x] as TAdicionalItem).flag = 'A' then
+             valor_adicionais := valor_adicionais + ( ((Pedido.Itens[i] as TItem).Adicionais[x] as TAdicionalItem).valor_unitario *
+                                                      ((Pedido.Itens[i] as TItem).Adicionais[x] as TAdicionalItem).quantidade);
+
+      result.AdicionarItem( (Pedido.Itens[i] as TItem).codigo_produto,
+                           ((Pedido.Itens[i] as TItem).valor_Unitario + valor_adicionais),
+                           IfThen( (((Pedido.Itens[i] as TItem).quantidade > 198)and((Pedido.Itens[i] as TItem).Fracionado = 'S')) or ((Pedido.Itens[i] as TItem).quantidade > 599),
+                                   1, (Pedido.Itens[i] as TItem).quantidade));
+    end;
+
+  Except
+    on e:Exception do
+      raise Exception.Create(e.message);
+  end;
 end;
 
 procedure TServicoEmissorNFCe.reimprimir(XML :String);

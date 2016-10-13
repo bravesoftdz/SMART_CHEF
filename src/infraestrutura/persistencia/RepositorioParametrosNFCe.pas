@@ -56,6 +56,8 @@ begin
    ParametrosNFCe.DANFE.ViaConsumidor       := (self.FQuery.FieldByName('via_consumidor').AsString = 'S');
    ParametrosNFCe.DANFE.ImprimirItens       := (self.FQuery.FieldByName('imprime_itens').AsString = 'S');
    ParametrosNFCe.Ambiente                  := IfThen(self.FQuery.FieldByName('ambiente').AsString = 'P', 'Produção','Homologação');
+   ParametrosNFCe.justContingencia          := self.FQuery.FieldByName('just_contingencia').AsString;
+   ParametrosNFCe.inicioContingencia        := self.FQuery.FieldByName('inicio_contingencia').AsDateTime;
 
    result := ParametrosNFCe;
 end;
@@ -114,6 +116,12 @@ begin
 
    if (ParametrosNFCeAntigo.Ambiente <> ParametrosNFCeNovo.Ambiente) then
      Auditoria.AdicionaCampoAlterado('ambiente', ParametrosNFCeAntigo.Ambiente, ParametrosNFCeNovo.Ambiente);
+
+   if (ParametrosNFCeAntigo.justContingencia <> ParametrosNFCeNovo.justContingencia) then
+     Auditoria.AdicionaCampoAlterado('just_Contingencia', ParametrosNFCeAntigo.justContingencia, ParametrosNFCeNovo.justContingencia);
+
+   if (ParametrosNFCeAntigo.inicioContingencia <> ParametrosNFCeNovo.inicioContingencia) then
+     Auditoria.AdicionaCampoAlterado('inicio_Contingencia', DateTimeToStr(ParametrosNFCeAntigo.inicioContingencia), DateTimeToStr(ParametrosNFCeNovo.inicioContingencia));
 end;
 
 procedure TRepositorioParametrosNFCe.SetCamposExcluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -131,6 +139,8 @@ begin
   Auditoria.AdicionaCampoExcluido('certificado'         , ParametrosNFCe.certificado);
   Auditoria.AdicionaCampoExcluido('senha'               , ParametrosNFCe.senha);
   Auditoria.AdicionaCampoExcluido('ambiente'            , ParametrosNFCe.Ambiente);
+  Auditoria.AdicionaCampoExcluido('inicio_Contingencia' , DateTimeToStr(ParametrosNFCe.inicioContingencia));
+  Auditoria.AdicionaCampoExcluido('just_Contingencia'   , ParametrosNFCe.justContingencia);
 end;
 
 procedure TRepositorioParametrosNFCe.SetCamposIncluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -148,6 +158,8 @@ begin
   Auditoria.AdicionaCampoIncluido('certificado'         ,    ParametrosNFCe.certificado);
   Auditoria.AdicionaCampoIncluido('senha'               ,    ParametrosNFCe.senha);
   Auditoria.AdicionaCampoIncluido('Ambiente'            ,    ParametrosNFCe.Ambiente);
+  Auditoria.AdicionaCampoIncluido('inicio_Contingencia' , DateTimeToStr(ParametrosNFCe.inicioContingencia));
+  Auditoria.AdicionaCampoIncluido('just_Contingencia'   , ParametrosNFCe.justContingencia);
 end;
 
 procedure TRepositorioParametrosNFCe.SetIdentificador(Objeto: TObject; Identificador: Variant);
@@ -174,7 +186,8 @@ begin
   self.FQuery.ParamByName('via_consumidor').AsString        := IfThen( ParametrosNFCe.DANFE.ViaConsumidor, 'S', 'N');
   self.FQuery.ParamByName('imprime_itens').AsString         := IfThen( ParametrosNFCe.DANFE.ImprimirItens, 'S', 'N');
   self.FQuery.ParamByName('ambiente').AsString              := Copy(ParametrosNFCe.ambiente,1,1);
-
+  self.FQuery.ParamByName('just_Contingencia').AsString     := ParametrosNFCe.justContingencia;
+  self.FQuery.ParamByName('inicio_Contingencia').AsDateTime := ParametrosNFCe.inicioContingencia;
 end;
 
 function TRepositorioParametrosNFCe.SQLGet: String;
@@ -200,9 +213,11 @@ end;
 function TRepositorioParametrosNFCe.SQLSalvar: String;
 begin
   result := 'update or insert into PARAMETROS_NFCE (CODIGO ,FORMA_EMISSAO ,INTERVALO_TENTATIVAS ,TENTATIVAS ,VERSAO_DF ,ID_TOKEN ,TOKEN       '+
-            '                                       ,CERTIFICADO ,SENHA, VISUALIZA_IMPRESSAO, VIA_CONSUMIDOR, IMPRIME_ITENS, AMBIENTE)        '+
+            '                                       ,CERTIFICADO ,SENHA, VISUALIZA_IMPRESSAO, VIA_CONSUMIDOR, IMPRIME_ITENS, AMBIENTE,        '+
+            '                                       JUST_CONTINGENCIA, INICIO_CONTINGENCIA)                                                   '+
             '                      values ( :CODIGO , :FORMA_EMISSAO , :INTERVALO_TENTATIVAS , :TENTATIVAS , :VERSAO_DF , :ID_TOKEN ,         '+
-            '                               :TOKEN , :CERTIFICADO , :SENHA, :VISUALIZA_IMPRESSAO, :VIA_CONSUMIDOR, :IMPRIME_ITENS, :AMBIENTE) ';
+            '                               :TOKEN , :CERTIFICADO , :SENHA, :VISUALIZA_IMPRESSAO, :VIA_CONSUMIDOR, :IMPRIME_ITENS, :AMBIENTE, '+
+            '                               :JUST_CONTINGENCIA, :INICIO_CONTINGENCIA) ';
 end;
 
 end.

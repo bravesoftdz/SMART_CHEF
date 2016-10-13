@@ -165,6 +165,7 @@ type
 
   public
     procedure imprime_no_departamento(codigo_pedido :Integer);
+    procedure verificaNFCesContingencia;
     
   end;
 
@@ -176,7 +177,7 @@ implementation
 uses uCadastroPerfilAcesso, PermissoesAcesso, uCadastroUsuario, uCadastroGrupo, uCadastroMateriaPrima,
      uCadastroProduto, uPedido, Math, uCadastroEmpresa, uCaixa, Repositorio, FabricaRepositorio,
      EspecificacaoPedidoAbertoDaComanda, Pedido, Item, AdicionalItem, Empresa, uCadastroDepartamento,
-     RepositorioPedido, uAvisoPedidoPendente, EspecificacaoPedidosComItemNaoImpresso,
+     RepositorioPedido, uAvisoPedidoPendente, EspecificacaoPedidosComItemNaoImpresso, uNFCesContingencia,
      ParametrosNFCe, uModulo, StrUtils, MateriaPrima, EspecificacaoCaixaPorData, Caixa, uCadastroComanda,
      Usuario, Departamento, DateTimeUtilitario, uRelatorioVendas, uSuporteTecnico, uPedidosEmAberto, Comanda,
      uCadastroDispensa, uEntradaSaidaMercadoria, Produto, uRelatorioAtendimentos, uRelatorioPedidos, uRelatorioEstoque,
@@ -226,7 +227,7 @@ var
   Repositorio      :TRepositorio;
 begin
   inherited;
-
+  verificaNFCesContingencia;
   ConfiguracaoNFCe  := nil;
   Repositorio       := nil;
 
@@ -309,7 +310,6 @@ begin
 
     RxFolderMonitor2.Active     := true;
   end;
-
 end;
 
 procedure TfrmInicial.RxFolderMonitor1Change(Sender: TObject);
@@ -566,6 +566,18 @@ begin
   end
   else
     frmAvisoPedidoPendente.OnShow(nil);
+end;
+
+procedure TfrmInicial.verificaNFCesContingencia;
+begin
+  frmNFCesContingencia := TfrmNFCesContingencia.Create(nil);
+  if not frmNFCesContingencia.qryPedidos.IsEmpty then
+    if confirma('Atenção! Existem NFC-es em contingência, aguardando envio.'+#13#10+
+                'Deseja envia-las agora?') then
+      frmNFCesContingencia.ShowModal;
+
+  frmNFCesContingencia.Release;
+  frmNFCesContingencia := nil;
 end;
 
 procedure TfrmInicial.verifica_pendencia;

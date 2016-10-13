@@ -22,11 +22,11 @@ type
     ListaComanda: TListaCampo;
     pnlBotoes: TPanel;
     Shape12: TShape;
-    BitBtn1: TBitBtn;
-    BitBtn2: TBitBtn;
+    btnImprimir: TBitBtn;
+    btnCancelar: TBitBtn;
     DBGridCBN1: TDBGridCBN;
     dsPedidos: TDataSource;
-    BitBtn3: TBitBtn;
+    btnFiltrar: TBitBtn;
     qryPedidos: TFDQuery;
     qryPedidosCODIGO: TIntegerField;
     qryPedidosDATA: TDateField;
@@ -34,11 +34,14 @@ type
     qryPedidosVALOR_TOTAL: TBCDField;
     qryPedidosCLIENTE: TStringField;
     qryPedidosAGRUPADAS: TStringField;
-    procedure BitBtn3Click(Sender: TObject);
+    Shape1: TShape;
+    Label1: TLabel;
+    procedure btnFiltrarClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure BitBtn1Click(Sender: TObject);
+    procedure btnImprimirClick(Sender: TObject);
+    procedure btnCancelarClick(Sender: TObject);
   private
-    { Private declarations }
+
   public
     { Public declarations }
   end;
@@ -48,11 +51,17 @@ var
 
 implementation
 
-uses repositorioPedido, fabricaRepositorio, Pedido, uModulo;
+uses repositorioPedido, fabricaRepositorio, Pedido, uModulo, ServicoEmissorNFCe, repositorio,
+  Parametros;
 
 {$R *.dfm}
 
-procedure TfrmReimpressaoPedido.BitBtn3Click(Sender: TObject);
+procedure TfrmReimpressaoPedido.btnCancelarClick(Sender: TObject);
+begin
+  self.Close;
+end;
+
+procedure TfrmReimpressaoPedido.btnFiltrarClick(Sender: TObject);
 begin
   if ListaComanda.CodCampo <= 0 then
   begin
@@ -72,13 +81,14 @@ procedure TfrmReimpressaoPedido.FormShow(Sender: TObject);
 begin
   dtpInicio.DateTime    := Date;
   dtpFim.DateTime       := Date;
+
   qryPedidos.Connection := dm.conexao;
 
   ListaComanda.setValores('select * from comandas', 'numero_comanda', 'Comanda');
   ListaComanda.executa;
 end;
 
-procedure TfrmReimpressaoPedido.BitBtn1Click(Sender: TObject);
+procedure TfrmReimpressaoPedido.btnImprimirClick(Sender: TObject);
 var repositorio :TRepositorioPedido;
 begin
   if qryPedidos.IsEmpty then

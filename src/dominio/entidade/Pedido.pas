@@ -36,6 +36,7 @@ type
     FAgrupadas :String;
     FTaxa_entrega: Real;
     FSts_recebimento: String;
+    FEmContingencia: String;
 
     function GetItens: TObjectList;
     function GetTotal_produtos: Real;
@@ -67,6 +68,8 @@ type
     property Agrupadas       :String    read FAgrupadas       write FAgrupadas; 
     property taxa_entrega    :Real      read Ftaxa_entrega    write Ftaxa_entrega;
     property sts_recebimento :String    read FSts_recebimento write FSts_recebimento;
+    property emContingencia  :String    read FEmContingencia  write FEmContingencia;
+
     property paraEntrega     :Boolean   read GetPedidoEntrega;
     property paraRetiradaLocal :Boolean   read GetPedidoRetiradaLocal;
 

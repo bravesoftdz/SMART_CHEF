@@ -61,6 +61,7 @@ type
 
     { Verifica os dados antes de persistir }
     function VerificaDados :Boolean;                   override;
+    function indexFormaEmissao(formaEmissao :integer) :integer;
   end;
 
 var
@@ -153,7 +154,19 @@ begin
      if not Assigned(ParametrosNFCe) then
       ParametrosNFCe := TParametrosNFCe.Create;
 
-     ParametrosNFCe.FormaEmissao              := self.cbxFormaEmissao.itemIndex;
+     ParametrosNFCe.FormaEmissao              := StrToInt(copy(cbxFormaEmissao.Items[cbxFormaEmissao.ItemIndex],1,1));
+
+     if (ParametrosNFCe.FormaEmissao in [8]) and (ParametrosNFCe.justContingencia = '') then
+     begin
+       ParametrosNFCe.justContingencia   := 'Servidor da receita indisponível';
+       ParametrosNFCe.inicioContingencia := now;
+     end
+     else if ParametrosNFCe.FormaEmissao in [0] then
+     begin
+       ParametrosNFCe.justContingencia   := '';
+       ParametrosNFCe.inicioContingencia := 0;
+     end;
+
      ParametrosNFCe.VersaoDF                  := self.cbxVersaoDF.itemIndex;
      ParametrosNFCe.IntervaloTentativas       := spnIntervalo.Value;
      ParametrosNFCe.Tentativas                := spnTentativas.Value;
@@ -189,6 +202,19 @@ begin
   self.cds.Post;
 end;
 
+function TfrmConfiguraNFCe.indexFormaEmissao(formaEmissao: integer): integer;
+var i :integer;
+begin
+  for i := 0 to cbxFormaEmissao.Items.Count -1 do
+  begin
+    if copy(cbxFormaEmissao.Items[i],1,1) = intToStr(formaEmissao) then
+    begin
+      result := i;
+      break;
+    end;
+  end;
+end;
+
 procedure TfrmConfiguraNFCe.LimparDados;
 begin
   inherited;
@@ -212,7 +238,7 @@ begin
     if not Assigned(ParametrosNFCe) then exit;
 
     edtCodigo.Text                   := IntToStr(ParametrosNFCe.Codigo); 
-    cbxFormaEmissao.ItemIndex        := ParametrosNFCe.FormaEmissao;
+    cbxFormaEmissao.ItemIndex        := indexFormaEmissao(ParametrosNFCe.FormaEmissao);
     cbxVersaoDF.ItemIndex            := ParametrosNFCe.VersaoDF;
     spnTentativas.Value              := ParametrosNFCe.Tentativas;
     spnIntervalo.Value               := ParametrosNFCe.IntervaloTentativas;

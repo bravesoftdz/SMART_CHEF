@@ -3,6 +3,8 @@ inherited frmConfiguraNFCe: TfrmConfiguraNFCe
   Caption = 'Configura'#231#227'o NFC-e'
   ClientHeight = 445
   ClientWidth = 767
+  ExplicitWidth = 773
+  ExplicitHeight = 473
   PixelsPerInch = 96
   TextHeight = 13
   inherited Splitter1: TSplitter
@@ -29,22 +31,21 @@ inherited frmConfiguraNFCe: TfrmConfiguraNFCe
     ExplicitWidth = 624
     ExplicitHeight = 410
     inherited tsConsulta: TTabSheet
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 616
+      ExplicitHeight = 379
       inherited gridConsulta: TDBGridCBN
         Width = 470
       end
       inherited lblAjudaSelecionar: TStaticText
-        Width = 222
+        Top = 362
+        Width = 616
+        ExplicitTop = 362
+        ExplicitWidth = 616
       end
     end
     inherited tsDados: TTabSheet
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 616
+      ExplicitHeight = 379
       inherited pnlDados: TPanel
         Width = 616
         Height = 379
@@ -195,12 +196,11 @@ inherited frmConfiguraNFCe: TfrmConfiguraNFCe
           Top = 226
           Width = 154
           Height = 21
-          ItemIndex = 0
+          Style = csDropDownList
           TabOrder = 5
-          Text = 'Normal'
           Items.Strings = (
-            'Normal'
-            'Contingencia')
+            '0-Normal'
+            '8-Contingencia Offline')
         end
         object edtCertificado: TEdit
           Left = 32
@@ -307,6 +307,7 @@ inherited frmConfiguraNFCe: TfrmConfiguraNFCe
           Top = 226
           Width = 154
           Height = 21
+          Style = csDropDownList
           ItemIndex = 2
           TabOrder = 6
           Text = 've310'
@@ -372,6 +373,7 @@ inherited frmConfiguraNFCe: TfrmConfiguraNFCe
           Top = 322
           Width = 154
           Height = 21
+          Style = csDropDownList
           ItemIndex = 0
           TabOrder = 9
           Text = 'Produ'#231#227'o'

@@ -139,6 +139,7 @@ begin
    Pedido.Agrupadas       := self.FQuery.FieldByName('agrupadas').AsString;
    Pedido.taxa_entrega    := self.FQuery.FieldByName('taxa_entrega').AsFloat;
    Pedido.sts_recebimento := self.FQuery.FieldByName('STS_RECEBIMENTO').AsString;
+   Pedido.emContingencia  := self.FQuery.FieldByName('em_Contingencia').AsString;
 
    result := Pedido;
 end;
@@ -595,6 +596,9 @@ begin
 
    if (PedidoAntigo.sts_recebimento <> PedidoNovo.sts_recebimento) then
     Auditoria.AdicionaCampoAlterado('STS_RECEBIMENTO', PedidoAntigo.sts_recebimento, PedidoNovo.sts_recebimento);
+
+   if (PedidoAntigo.emContingencia <> PedidoNovo.emContingencia) then
+    Auditoria.AdicionaCampoAlterado('em_Contingencia', PedidoAntigo.emContingencia, PedidoNovo.emContingencia);
 end;
 
 procedure TRepositorioPedido.SetCamposExcluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -623,6 +627,7 @@ begin
    Auditoria.AdicionaCampoExcluido('Agrupadas',       Pedido.Agrupadas);
    Auditoria.AdicionaCampoExcluido('taxa_entrega',    FloatToStr(Pedido.taxa_entrega));
    Auditoria.AdicionaCampoExcluido('STS_RECEBIMENTO', Pedido.sts_recebimento);
+   Auditoria.AdicionaCampoExcluido('em_Contingencia', Pedido.emContingencia);
 end;
 
 procedure TRepositorioPedido.SetCamposIncluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -649,6 +654,7 @@ begin
    Auditoria.AdicionaCampoIncluido('Agrupadas',       Pedido.Agrupadas);
    Auditoria.AdicionaCampoIncluido('taxa_entrega',    FloatToStr(Pedido.taxa_entrega));
    Auditoria.AdicionaCampoIncluido('STS_RECEBIMENTO', Pedido.sts_recebimento);
+   Auditoria.AdicionaCampoIncluido('em_Contingencia', Pedido.emContingencia);
 end;
 
 procedure TRepositorioPedido.SetIdentificador(Objeto: TObject;
@@ -686,6 +692,7 @@ begin
    self.FQuery.ParamByName('Agrupadas').AsString        := Pedido.Agrupadas;
    self.FQuery.ParamByName('taxa_entrega').AsFloat      := Pedido.taxa_entrega;
    self.FQuery.ParamByName('STS_RECEBIMENTO').AsString  := Pedido.sts_recebimento;
+   self.FQuery.ParamByName('em_Contingencia').AsString  := Pedido.emContingencia;
 end;
 
 function TRepositorioPedido.SQLGet: String;
@@ -712,10 +719,10 @@ function TRepositorioPedido.SQLSalvar: String;
 begin
    result := 'update or insert into Pedidos (codigo, codigo_comanda, codigo_mesa, data, observacoes, situacao, desconto, acrescimo,         '+
              '                               couvert, valor_total, taxa_servico, tipo_moeda, nome_cliente, telefone, cpf_cliente,           '+
-             '                               codigo_endereco, valor_pago, agrupadas, taxa_entrega, sts_recebimento)                         '+
+             '                               codigo_endereco, valor_pago, agrupadas, taxa_entrega, sts_recebimento, em_contingencia)        '+
              '                       values (:codigo, :codigo_comanda, :codigo_mesa, :data, :observacoes, :situacao, :desconto, :acrescimo, '+
              '                               :couvert, :valor_total, :taxa_servico, :tipo_moeda, :nome_cliente, :telefone, :cpf_cliente,    '+
-             '                               :codigo_endereco, :valor_pago, :agrupadas, :taxa_entrega, :sts_recebimento)                    ';
+             '                               :codigo_endereco, :valor_pago, :agrupadas, :taxa_entrega, :sts_recebimento, :em_contingencia)  ';
 end;
 
 procedure TRepositorioPedido.Gera_xml_para_dispensadora(Pedido :TPedido; primeira :Boolean);

@@ -553,6 +553,26 @@ object frmScript: TfrmScript
     TabOrder = 24
     WordWrap = False
   end
+  object versao26: TMemo
+    Left = 286
+    Top = 38
+    Width = 31
+    Height = 23
+    Ctl3D = False
+    Lines.Strings = (
+      'ALTER TABLE PARAMETROS_NFCE'
+      'ADD JUST_CONTINGENCIA VARCHAR(40)'
+      '^'
+      'ALTER TABLE PARAMETROS_NFCE'
+      'ADD INICIO_CONTINGENCIA TIMESTAMP'
+      '^'
+      'ALTER TABLE PEDIDOS'
+      'ADD EM_CONTINGENCIA CHAR(1)'
+      '^')
+    ParentCtl3D = False
+    TabOrder = 25
+    WordWrap = False
+  end
   object Zsql: TZSQLProcessor
     Params = <>
     Delimiter = ';'

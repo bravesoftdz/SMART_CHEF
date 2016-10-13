@@ -61,7 +61,7 @@ type
     procedure ValidarPreco;
 
   public
-    function ObterItem(CodigoProduto: Integer) :TItem;
+    function ObterItem(CodigoProduto: Integer) :TItemVenda;
 
   public
     property Data :TDateTime read FData write SetData;
@@ -117,7 +117,7 @@ uses
 procedure TVenda.AdicionarItem(CodigoProduto: Integer; ValorUnitario: Real;
   Quantidade: Real);
 var
-  Item :TItem;
+  Item :TItemVenda;
 begin
    if not Assigned(Itens) then
     FItens := TItens.Create;
@@ -125,7 +125,7 @@ begin
    Item := ObterItem(CodigoProduto);
 
    if not Assigned(Item) or ( assigned(Item) and (Item.ValorUnitario <> ValorUnitario)) then begin
-     Item := TItem.Create(
+     Item := TItemVenda.Create(
       CodigoProduto,
       ValorUnitario,
       Quantidade);
@@ -367,7 +367,7 @@ begin
    end;
 end;
 
-function TVenda.ObterItem(CodigoProduto: Integer): TItem;
+function TVenda.ObterItem(CodigoProduto: Integer): TItemVenda;
 var
   nX :Integer;
 begin

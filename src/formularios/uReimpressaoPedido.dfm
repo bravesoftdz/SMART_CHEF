@@ -2,20 +2,34 @@ inherited frmReimpressaoPedido: TfrmReimpressaoPedido
   Left = 417
   Top = 221
   Caption = 'Reimpressao do pedido'
-  ClientHeight = 498
-  ClientWidth = 812
+  ClientHeight = 513
+  ClientWidth = 997
   OnShow = FormShow
-  ExplicitWidth = 818
-  ExplicitHeight = 526
+  ExplicitWidth = 1003
+  ExplicitHeight = 541
   PixelsPerInch = 96
   TextHeight = 13
+  object Shape1: TShape [0]
+    Left = 142
+    Top = 454
+    Width = 18
+    Height = 17
+    Brush.Color = 7398387
+  end
+  object Label1: TLabel [1]
+    Left = 168
+    Top = 456
+    Width = 177
+    Height = 13
+    Caption = 'CONTING'#202'NCIA (ENVIO PENDENTE)'
+  end
   inherited pnlPropaganda: TPanel
-    Top = 463
-    Width = 812
-    ExplicitTop = 463
-    ExplicitWidth = 812
+    Top = 478
+    Width = 997
+    ExplicitTop = 478
+    ExplicitWidth = 997
     inherited Shape8: TShape
-      Width = 810
+      Width = 995
       ExplicitWidth = 810
     end
   end
@@ -123,19 +137,20 @@ inherited frmReimpressaoPedido: TfrmReimpressaoPedido
     Left = 0
     Top = 0
     Width = 129
-    Height = 463
+    Height = 478
     Align = alLeft
     TabOrder = 3
     object Shape12: TShape
       Left = 1
       Top = 1
       Width = 127
-      Height = 461
+      Height = 476
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119
+      ExplicitHeight = 461
     end
-    object BitBtn1: TBitBtn
+    object btnImprimir: TBitBtn
       Left = 11
       Top = 24
       Width = 108
@@ -210,12 +225,12 @@ inherited frmReimpressaoPedido: TfrmReimpressaoPedido
         77008B847700847B6C009B9B9B009B9B9B009B9B9B009B9B9B00}
       NumGlyphs = 2
       TabOrder = 0
-      OnClick = BitBtn1Click
+      OnClick = btnImprimirClick
     end
-    object BitBtn2: TBitBtn
+    object btnCancelar: TBitBtn
       Left = 11
-      Top = 72
-      Width = 105
+      Top = 64
+      Width = 108
       Height = 30
       Caption = ' Cancelar'
       Glyph.Data = {
@@ -287,12 +302,13 @@ inherited frmReimpressaoPedido: TfrmReimpressaoPedido
         9B009B9B9B009B9B9B00807F9A003A3795000102920009089300}
       NumGlyphs = 2
       TabOrder = 1
+      OnClick = btnCancelarClick
     end
   end
   object DBGridCBN1: TDBGridCBN
     Left = 142
     Top = 97
-    Width = 659
+    Width = 844
     Height = 352
     Color = 14803425
     DataSource = dsPedidos
@@ -359,7 +375,7 @@ inherited frmReimpressaoPedido: TfrmReimpressaoPedido
       item
         Expanded = False
         FieldName = 'SITUACAO'
-        Width = 80
+        Width = 76
         Visible = True
       end
       item
@@ -372,7 +388,7 @@ inherited frmReimpressaoPedido: TfrmReimpressaoPedido
       item
         Expanded = False
         FieldName = 'CLIENTE'
-        Width = 223
+        Width = 227
         Visible = True
       end
       item
@@ -388,7 +404,7 @@ inherited frmReimpressaoPedido: TfrmReimpressaoPedido
         Visible = True
       end>
   end
-  object BitBtn3: TBitBtn
+  object btnFiltrar: TBitBtn
     Left = 606
     Top = 13
     Width = 98
@@ -423,7 +439,7 @@ inherited frmReimpressaoPedido: TfrmReimpressaoPedido
       CD7AF4CE7CF0C56EEFC56DEFC66DF1CA7EF2CE8BF5DBADFAECD3}
     Layout = blGlyphTop
     TabOrder = 5
-    OnClick = BitBtn3Click
+    OnClick = btnFiltrarClick
   end
   object dsPedidos: TDataSource
     DataSet = qryPedidos
@@ -481,6 +497,7 @@ inherited frmReimpressaoPedido: TfrmReimpressaoPedido
     object qryPedidosVALOR_TOTAL: TBCDField
       FieldName = 'VALOR_TOTAL'
       Origin = 'VALOR_TOTAL'
+      DisplayFormat = ',0.00; ,0.00'
       Precision = 18
       Size = 2
     end

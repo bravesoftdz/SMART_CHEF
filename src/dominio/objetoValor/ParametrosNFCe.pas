@@ -24,6 +24,8 @@ type
     FDANFE: TParametrosDANFE;
     Fcodigo :Integer;
     FAmbiente :String;
+    FJustContingencia: String;
+    FInicioContingencia: TDateTime;
 
   private
     procedure SetFormaEmissao(const Value: Integer);
@@ -42,6 +44,8 @@ type
     property Certificado         :String            read FCertificado         write FCertificado;
     property Senha               :String            read FSenha               write FSenha;
     property Ambiente            :String            read FAmbiente            write FAmbiente;
+    property justContingencia    :String            read FJustContingencia    write FJustContingencia;
+    property inicioContingencia  :TDateTime         read FInicioContingencia  write FInicioContingencia;
 
   public
     property DANFE :TParametrosDANFE read FDANFE write FDANFE;
@@ -67,7 +71,7 @@ end;
 procedure TParametrosNFCe.SetFormaEmissao(const Value: Integer);
 begin
   try
-    if (Integer(Value) < 0) or (Integer(Value) > 8) then
+    if (Integer(Value) < 0) or (Integer(Value) > 9) then
       raise TExcecaoCampoNaoInformado.Create('FormaEmissao');
   except
     raise TExcecaoCampoNaoInformado.Create('FormaEmissao');

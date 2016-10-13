@@ -10,7 +10,7 @@ object dm: Tdm
       'Password=masterkey'
       'Port=3050'
       'Protocol=firebird-2.1'
-      'Server=servidor'
+      'Server=localhost'
       'DriverID=FB')
     FetchOptions.AssignedValues = [evMode]
     TxOptions.AutoStop = False

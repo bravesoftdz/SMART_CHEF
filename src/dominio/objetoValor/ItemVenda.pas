@@ -9,30 +9,30 @@ uses
 
 type
   TItens = class;
-  TItem = class;
+  TItemVenda = class;
   TGetCodigoVenda = function :Integer of Object;
 
   TItens = class(TObjectList)
 
   private
-    function GetItem(Index :Integer) :TItem;
-    procedure SetItem(Index :Integer; Value: TItem);
+    function GetItem(Index :Integer) :TItemVenda;
+    procedure SetItem(Index :Integer; Value: TItemVenda);
 
   public
     constructor Create;
 
   public
-    procedure Add(Item :TItem);
+    procedure Add(Item :TItemVenda);
 
   public
-    function GetLast :TItem;
+    function GetLast :TItemVenda;
 
   public
-    property Items[Index: Integer]: TItem read GetItem write SetItem; default;
-    property Last :TItem read GetLast;
+    property Items[Index: Integer]: TItemVenda read GetItem write SetItem; default;
+    property Last :TItemVenda read GetLast;
 end;
 
-  TItem = class
+  TItemVenda = class
 
   private
     FCodigoProduto :Integer;
@@ -82,7 +82,7 @@ uses
 
 { TItens }
 
-procedure TItens.Add(Item :TItem);
+procedure TItens.Add(Item :TItemVenda);
 begin
   inherited Add(Item);
 end;
@@ -92,24 +92,24 @@ begin
    inherited Create(true);
 end;
 
-function TItens.GetItem(Index: Integer): TItem;
+function TItens.GetItem(Index: Integer): TItemVenda;
 begin
-  result := TItem(inherited GetItem(Index));
+  result := TItemVenda(inherited GetItem(Index));
 end;
 
-function TItens.GetLast: TItem;
+function TItens.GetLast: TItemVenda;
 begin
-   result := TItem(inherited Last);
+   result := TItemVenda(inherited Last);
 end;
 
-procedure TItens.SetItem(Index: Integer; Value: TItem);
+procedure TItens.SetItem(Index: Integer; Value: TItemVenda);
 begin
   inherited SetItem(Index, Value);
 end;
 
 { TItem }
 
-constructor TItem.Create(CodigoProduto: Integer; ValorUnitario: Real; Quantidade: Real);
+constructor TItemVenda.Create(CodigoProduto: Integer; ValorUnitario: Real; Quantidade: Real);
 begin
    FCodigoProduto := CodigoProduto;
    FValorUnitario := ValorUnitario;
@@ -119,14 +119,14 @@ begin
  //  FCST00         := nil;
 end;
 
-destructor TItem.Destroy;
+destructor TItemVenda.Destroy;
 begin
    FreeAndNil(FCSOSN02);
    
    inherited;
 end;
 
-function TItem.GetCodigoVenda: Integer;
+function TItemVenda.GetCodigoVenda: Integer;
 begin
    if (FCodigoVenda = 0) and Assigned(FGetCodigoVenda) then begin
     FCodigoVenda := FGetCodigoVenda;
@@ -135,7 +135,7 @@ begin
    result := FCodigoVenda;
 end;
 
-function TItem.GetCSOSN02: TCSOSNTributadoSNSemCredito;
+function TItemVenda.GetCSOSN02: TCSOSNTributadoSNSemCredito;
 begin
    if (Produto.tipo = 'P') then
      FCSOSN02 := TCSOSNTributadoSNSemCredito.Create(Produto.icms, Total);
@@ -143,7 +143,7 @@ begin
    result := FCSOSN02;
 end;
 
-function TItem.GetProduto: TProduto;
+function TItemVenda.GetProduto: TProduto;
 var
   Repositorio   :TRepositorio;
 begin
@@ -164,28 +164,28 @@ begin
    result := FProduto;
 end;
 
-function TItem.GetTotal: Real;
+function TItemVenda.GetTotal: Real;
 begin
    result := (Quantidade * ValorUnitario);
 end;
 
-function TItem.GetValorImpostos: Real;
+function TItemVenda.GetValorImpostos: Real;
 begin
   result := ( self.Produto.NcmIBPT.aliqnacional_ibpt * (self.FQuantidade * self.FValorUnitario) )/100;
   result := Arredonda(result);
 end;
 
-procedure TItem.SetCodigo(const Value: Integer);
+procedure TItemVenda.SetCodigo(const Value: Integer);
 begin
   FCodigo := Value;
 end;
 
-procedure TItem.SetCSOSN02(const Value: TCSOSNTributadoSNSemCredito);
+procedure TItemVenda.SetCSOSN02(const Value: TCSOSNTributadoSNSemCredito);
 begin
   FCSOSN02 := Value;
 end;
 
-procedure TItem.SomarQuantidade(QuantidadeParaSomar: Real);
+procedure TItemVenda.SomarQuantidade(QuantidadeParaSomar: Real);
 begin
    FQuantidade := FQuantidade + QuantidadeParaSomar;
 end;

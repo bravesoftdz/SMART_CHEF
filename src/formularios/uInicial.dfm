@@ -22,8 +22,6 @@ object frmInicial: TfrmInicial
   OnDestroy = FormDestroy
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  ExplicitWidth = 320
-  ExplicitHeight = 240
   DesignSize = (
     1080
     746)

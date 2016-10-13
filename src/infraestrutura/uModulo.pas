@@ -162,7 +162,7 @@ end;
 
 procedure Tdm.DataModuleCreate(Sender: TObject);
 var
-  Aplicacao   :TApplication;
+  Aplicacao :TApplication;
 begin
    Aplicacao                            := (self.Owner as TApplication);
    self.FNomeDoExecutavel               := ExtractFilePath(Aplicacao.ExeName);

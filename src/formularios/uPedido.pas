@@ -1493,21 +1493,14 @@ end;
 procedure TfrmPedido.Gera_cupom_eletronico;
 var i, x               :Integer;
     valor_adicionais   :Real;
-    desconto           :Real;
-    total_item         :Real;
-    total_imposto      :Real;
     repositorio :TRepositorio;
-    Venda              :TVenda;
     NFCe               :TServicoEmissorNFCe;
     padraoImprimeItem  :Boolean;
     Pedido             :TPedido;
 begin
    repositorio    := nil;
-   total_imposto  := 0;
-   desconto       := 0;
-   Venda          := nil;
    NFCe           := nil;
-   Pedido := nil;
+   Pedido         := nil;
 
  try
  try
@@ -1516,60 +1509,27 @@ begin
    if assigned(frmFinalizaPedido) then
      Parametros.NFCe.DANFE.ImprimirItens := frmFinalizaPedido.chkImprimeItens.Checked;
 
-   Venda               := TVenda.Create;
    NFCe                := TServicoEmissorNFCe.Create(Parametros);
 
-   repositorio := TFabricaRepositorio.GetRepositorio(TPedido.ClassName);
-   Pedido          := TPedido(repositorio.Get(Fcodigo_pedido));
+   repositorio  := TFabricaRepositorio.GetRepositorio(TPedido.ClassName);
+   Pedido       := TPedido(repositorio.Get(Fcodigo_pedido));
 
-   Venda.Data          := Pedido.data;
-   Venda.Codigo_pedido := Pedido.codigo;
-   Venda.NumeroNFe     := fdm.GetValorGenerator('gen_nrnota_nfce','1');//StrToInt(Maior_Valor_Cadastrado('NFCE_RETORNO', 'CODIGO'))+1; // criar tab. de retorno da nf p/ poder pegar tb o cod. da nf
-  // Venda.Acrescimo     := buscaComanda1.Pedido.acrescimo;
-   Venda.Desconto      := Pedido.desconto;
-   Venda.Couvert       := Pedido.couvert;
-   Venda.Tx_servico    := Pedido.taxa_servico;
-   Venda.Taxa_entrega  := Pedido.taxa_entrega;
-   Venda.Cpf_cliente   := Pedido.cpf_cliente;
-   Venda.nome_cliente  := Pedido.nome_cliente;
-   Venda.Codigo_endereco := Pedido.Codigo_endereco;
-
-   for i := 0 to Pedido.Itens.Count - 1 do begin
-     valor_adicionais := 0;
-
-     if (Pedido.Itens[i] as TItem).Produto.tipo = 'S' then begin
-       Venda.Total_em_servicos := Venda.Total_em_servicos + ( (Pedido.Itens[i] as TItem).valor_Unitario *
-                                                              IfThen((((Pedido.Itens[i] as TItem).quantidade > 198)and((Pedido.Itens[i] as TItem).Fracionado = 'S')) or ((Pedido.Itens[i] as TItem).quantidade > 599),
-                                                                       1, (Pedido.Itens[i] as TItem).quantidade) );
-       Continue;
-     end;
-
-     if assigned( (Pedido.Itens[i] as TItem).Adicionais ) then
-       for x := 0 to (Pedido.Itens[i] as TItem).Adicionais.Count - 1 do    //Adicionados
-         if ((Pedido.Itens[i] as TItem).Adicionais[x] as TAdicionalItem).flag = 'A' then
-            valor_adicionais := valor_adicionais + ( ((Pedido.Itens[i] as TItem).Adicionais[x] as TAdicionalItem).valor_unitario *
-                                                     ((Pedido.Itens[i] as TItem).Adicionais[x] as TAdicionalItem).quantidade);
-
-     Venda.AdicionarItem( (Pedido.Itens[i] as TItem).codigo_produto,
-                          ((Pedido.Itens[i] as TItem).valor_Unitario + valor_adicionais),
-                          IfThen( (((Pedido.Itens[i] as TItem).quantidade > 198)and((Pedido.Itens[i] as TItem).Fracionado = 'S')) or ((Pedido.Itens[i] as TItem).quantidade > 599),
-                                  1, (Pedido.Itens[i] as TItem).quantidade));
-   end;
-
-   NFCe.Emitir(Venda, fdm.GetValorGenerator('gen_lote_nfce','1'));
+   NFCe.Emitir(Pedido);
+   if Parametros.NFCe.justContingencia <> '' then
+     Pedido.emContingencia := 'S';
 
  Except
    On E: Exception do begin
 
      Pedido.situacao := 'A';
-     
-     repositorio.Salvar(Pedido);
 
      raise Exception.Create('Ocorreu um erro ao enviar nota fiscal.'+#13#10+e.Message);
    end;
  end;
 
  Finally
+   repositorio.Salvar(Pedido);
+
    FreeAndNil(repositorio);
    FreeAndNil(Pedido);
    Parametros.NFCe.DANFE.ImprimirItens := padraoImprimeItem;

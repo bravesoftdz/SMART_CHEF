@@ -206,7 +206,8 @@ uses
   EspecificacaoEnderecoPorTelefone in 'src\dominio\objetoValor\especificacao\EspecificacaoEnderecoPorTelefone.pas',
   uReimpressaoPedido in 'src\formularios\uReimpressaoPedido.pas' {frmReimpressaoPedido},
   Vcl.Themes,
-  Vcl.Styles;
+  Vcl.Styles,
+  uNFCesContingencia in 'src\formularios\uNFCesContingencia.pas' {frmNFCesContingencia};
 
 {$R *.res}
 
