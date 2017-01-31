@@ -15,6 +15,8 @@ type
     Funidade_medida  :String;
     Fpecas           :Integer;
     Fquantidade_min  :REal;
+    Funidade_entrada :String;
+    Fmultiplicador   :Real;
     
   public
     property codigo                :Integer read Fcodigo                write Fcodigo;
@@ -24,6 +26,8 @@ type
     property unidade_medida        :String  read Funidade_medida        write Funidade_medida;
     property pecas                 :Integer read Fpecas                 write Fpecas;
     property quantidade_min        :Real    read Fquantidade_min        write Fquantidade_min;
+    property unidade_entrada       :String  read Funidade_entrada       write Funidade_entrada;
+    property multiplicador         :Real    read Fmultiplicador         write Fmultiplicador;
 end;
 
 implementation

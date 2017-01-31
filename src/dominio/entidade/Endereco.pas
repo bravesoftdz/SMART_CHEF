@@ -2,7 +2,7 @@ unit Endereco;
 
 interface
 
-uses SysUtils, Contnrs;
+uses SysUtils, Contnrs, Cidade;
 
 type
   TEndereco = class
@@ -17,15 +17,16 @@ type
     Fbairro :String;
     Fcodigo_cidade :Integer;
     Fuf :String;
-    FCidade :String;
+    FCidade :TCidade;
     Ffone :String;
+    FCodigo_pessoa :integer;
 
   private
-    function GetCidade: String;
+    function GetCidade: TCidade;
 
   public
     property codigo           :Integer read Fcodigo         write Fcodigo;
-    property codigo_cliente   :Integer read Fcodigo_cliente write Fcodigo_cliente;
+    property codigo_pessoa    :integer read FCodigo_pessoa  write FCodigo_pessoa;
     property cep              :String  read Fcep            write Fcep;
     property logradouro       :String  read Flogradouro     write Flogradouro;
     property numero           :String  read Fnumero         write Fnumero;
@@ -36,18 +37,28 @@ type
     property fone             :String  read Ffone           write Ffone;
 
   public
-    property cidade                :String read GetCidade        write FCidade;
+    property Cidade           :TCidade read GetCidade;
 end;
 
 implementation
 
-uses Funcoes;
+uses Funcoes, repositorio, FabricaRepositorio, EspecificacaoCidadePorCodigoIBGE;
 
 { TEndereco }
 
-function TEndereco.GetCidade: String;
+function TEndereco.GetCidade: TCidade;
+var repositorio   :TRepositorio;
+    especificacao :TEspecificacaoCidadePorCodigoIBGE;
 begin
-  result := campo_por_campo('CIDADES', 'NOME', 'CODIBGE', intToStr(codigo_cidade));
+
+  if not assigned(FCidade) then
+  begin
+    repositorio   := TFabricaRepositorio.GetRepositorio(TCidade.ClassName);
+    especificacao := TEspecificacaoCidadePorCodigoIBGE.Create(self.codigo_cidade);
+    FCidade       := TCidade(repositorio.GetPorEspecificacao(especificacao));
+  end;
+
+  result := FCidade;
 end;
 
 end.

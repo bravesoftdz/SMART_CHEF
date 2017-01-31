@@ -44,7 +44,11 @@ const
   paCadastroCliente              = 28;
   paRelatorioProdutos            = 29;
   paRelatorioCuponsFiscais       = 30;
-  paReimpressaoPedido            = 31; 
+  paReimpressaoPedido            = 31;
+  paCadastroFornecedor           = 32;
+  paEntradaNotaPorXml            = 33;
+  paCadastroCFOPsCorrespondentes = 34;
+  paLancaSangriaReforco          = 35;
 
 implementation
 

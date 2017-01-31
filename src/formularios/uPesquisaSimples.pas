@@ -78,7 +78,7 @@ begin
     exit;
 
   for nx := 0 to cds.Fields.Count - 1 do
-    if cds.Fields[nx].DataType = ftFloat then
+    if (cds.Fields[nx].DataType = ftFloat) or (cds.Fields[nx].DataType = ftBCD) then
       TNumericField( cds.Fields[nX] ).DisplayFormat := ',0.00; ,0.00';
 
   cds.RecNo       := 1;
@@ -89,7 +89,7 @@ begin
 
        DBGrid1.Columns[nx].Width := 300;
 
-    if (cds.Fields[nx].DataType = ftFloat) then
+    if (cds.Fields[nx].DataType = ftFloat) or (cds.Fields[nx].DataType = ftBCD) then
        DBGrid1.Columns[nx].Width := 90;
 
     if pos('CODIGO', cds.Fields[nX].FieldName) > 0 then
@@ -103,7 +103,10 @@ begin
     else if pos('BAIRR', cds.Fields[nX].FieldName) > 0 then
        DBGrid1.Columns[nx].Width := 150
     else if pos('DESC', cds.Fields[nX].FieldName) > 0 then
-       DBGrid1.Columns[nx].Width := 450;
+       DBGrid1.Columns[nx].Width := 450
+    else if pos('REFER', cds.Fields[nX].FieldName) > 0 then
+       DBGrid1.Columns[nx].Width := 134;
+
   end;
 
   cds.Fields[0].Visible   := false;
@@ -136,7 +139,10 @@ begin
   end
   else if key = vk_escape then begin
     key := 0;
-    btnCancela.Click;
+    if self.ds.DataSet.Filtered then
+      self.ds.DataSet.Filtered:= False
+    else
+      btnCancela.Click;
   end;  
 
   inherited;

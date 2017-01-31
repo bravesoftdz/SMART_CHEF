@@ -25,7 +25,9 @@ function UF_TO_CODUF(UF :String) :integer;
 function CastField(tipo :TFieldType; conteudo :Variant):Variant;
 procedure DivideProporcional(var valor, diferenca :Real; partes :Integer);
 function impressoraPadrao:String;
-
+function ApenasNumeros(const Texto: String): String;
+function retorna_estado(const codigo_estado :integer; const uf :String):Variant;
+function zeroEsquerda(texto :String; tamMax :integer) :String;
 
 implementation
 
@@ -39,9 +41,95 @@ begin
     result := StrToIntDef(conteudo,0)
 end;
 
+function ApenasNumeros(const Texto: String): String;
+var nX: Integer;
+begin
+  result := '';
+
+  for nX := 1 To Length(Texto) do begin
+      if Texto[nX] in ['0'..'9'] Then
+        result := result + Texto[nX];
+  end;
+end;
+
+function zeroEsquerda(texto :String; tamMax :integer) :String;
+begin
+  Result := StringOfChar('0',tamMax-Length(texto))+ texto;
+end;
+
 function impressoraPadrao:String;
 begin
   Result := IfThen(pos('\\',Printer.Printers[Printer.PrinterIndex]) > 0,'','\\localhost\' )+ Printer.Printers[Printer.PrinterIndex];
+end;
+
+function retorna_estado(const codigo_estado :integer; const uf :String):Variant;
+begin
+  if (uf = '') and (codigo_estado = 0) then
+    raise Exception.Create('Nenhum parâmetro válido foi informado');
+
+  if uf <> '' then
+    case AnsiIndexStr(UpperCase(uf),
+        ['AC','AL','AP','AM','BA','CE','DF','ES','RR','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','TO','SC','SP','SE']) of
+
+      0 : result :=  1;
+      1 : result :=  2;
+      2 : result :=  3;
+      3 : result :=  4;
+      4 : result :=  5;
+      5 : result :=  6;
+      6 : result :=  7;
+      7 : result :=  8;
+      8 : result :=  9;
+      9 : result := 10;
+     10 : result := 11;
+     11 : result := 12;
+     12 : result := 13;
+     13 : result := 14;
+     14 : result := 15;
+     15 : result := 16;
+     16 : result := 17;
+     17 : result := 18;
+     18 : result := 19;
+     19 : result := 20;
+     20 : result := 21;
+     21 : result := 22;
+     22 : result := 23;
+     23 : result := 24;
+     24 : result := 25;
+     25 : result := 26;
+     26 : result := 27;
+    end
+  else
+    case codigo_estado of
+
+      0 : result := 'AC';
+      1 : result := 'AL';
+      2 : result := 'AP';
+      3 : result := 'AM';
+      4 : result := 'BA';
+      5 : result := 'CE';
+      6 : result := 'DF';
+      7 : result := 'ES';
+      8 : result := 'RR';
+      9 : result := 'GO';
+     10 : result := 'MA';
+     11 : result := 'MT';
+     12 : result := 'MS';
+     13 : result := 'MG';
+     14 : result := 'PA';
+     15 : result := 'PB';
+     16 : result := 'PR';
+     17 : result := 'PE';
+     18 : result := 'PI';
+     19 : result := 'RJ';
+     20 : result := 'RN';
+     21 : result := 'RS';
+     22 : result := 'RO';
+     23 : result := 'TO';
+     24 : result := 'SC';
+     25 : result := 'SP';
+     26 : result := 'SE';
+    end;
 end;
 
 function UF_TO_CODUF(UF :String) :integer;
@@ -258,7 +346,11 @@ begin
   Result := '';
 
   if ( codigo_natureza <> '' ) then
-    Result          := Campo_por_campo('CFOP_CORRESPONDENTE', 'COD_CFOP_ENTRADA', 'COD_CFOP_SAIDA',codigo_natureza)
+  begin
+    Result          := Campo_por_campo('CFOP_CORRESPONDENTE', 'COD_CFOP_ENTRADA', 'COD_CFOP_SAIDA',codigo_natureza);
+    if Result = '' then
+      raise Exception.Create('CFOP correspondente ao CFOP: '+CFOP+', não encontrado.');
+  end
   else
     raise Exception.Create('CFOP '+ CFOP +' não cadastrado');
 end;

@@ -108,9 +108,9 @@ type
     qryVendasPRODUTO: TStringField;
     qryVendasQTDE: TBCDField;
     qryVendasVLR_UNI: TBCDField;
-    qryVendasVLR_TOTAL_IT: TBCDField;
-    qryVendasVLR_TOTAL_AD: TBCDField;
     qryVendasQTD_FRACIONADO: TIntegerField;
+    qryVendasVLR_TOTAL_IT: TFMTBCDField;
+    qryVendasVLR_TOTAL_AD: TFMTBCDField;
     procedure FormShow(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
     procedure chkPeriodoGeralClick(Sender: TObject);

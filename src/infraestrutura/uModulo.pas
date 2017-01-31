@@ -99,7 +99,7 @@ type
 
      function GetConsulta                            :TFDQuery; overload;
      function GetConsulta(const SQL         :String) :TFDQuery; overload;
-     function GetValorGenerator(const NomeDoGenerator :String; numero :String) :Integer;
+     function GetValorGenerator(const NomeDoGenerator :String; const numero :String = '0') :Integer;
 end;
 
 
@@ -282,7 +282,7 @@ begin
   FUsuario := Value;
 end;
 
-function Tdm.GetValorGenerator(const NomeDoGenerator: String; numero :String): Integer;
+function Tdm.GetValorGenerator(const NomeDoGenerator: String; const numero :String): Integer;
 begin
    try
      qryGenerica.sql.Text := 'select gen_id(' + NomeDoGenerator + ', '+numero+' ) from rdb$database';

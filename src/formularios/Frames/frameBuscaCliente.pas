@@ -62,8 +62,9 @@ function TBuscaCliente.selecionaCliente: String;
 begin
   Result := '';
 
-  frmPesquisaSimples := TFrmPesquisaSimples.Create(Self,'select cli.codigo, cli.nome, cli.cpf_cnpj, en.logradouro, en.numero, en.bairro from clientes cli '+
-                                                        ' left join enderecos en on en.codigo_cliente = cli.codigo ',
+  frmPesquisaSimples := TFrmPesquisaSimples.Create(Self,'select cli.codigo, cli.razao cliente, cli.cpf_cnpj, en.logradouro, en.numero, en.bairro from Pessoas cli '+
+                                                        ' left join enderecos en on en.codigo_pessoa = cli.codigo                                        '+
+                                                        ' where cli.tipo = ''C'' ' ,
                                                         'CODIGO', 'Selecione o Produto desejado...');
 
   if frmPesquisaSimples.ShowModal = mrOk then begin
@@ -91,7 +92,7 @@ begin
 
     if assigned(Endereco) then
     begin
-      FCliente        := TCliente(RepCliente.Get(Endereco.codigo_cliente));
+      FCliente        := TCliente(RepCliente.Get(Endereco.codigo_pessoa));
       FCodigoEndereco := Endereco.codigo;
     end;
 

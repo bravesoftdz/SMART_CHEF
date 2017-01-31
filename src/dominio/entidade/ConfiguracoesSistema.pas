@@ -18,6 +18,8 @@ type
     Fduas_vias_departamento  :Boolean;
     Fimp_dep_espacada         :Boolean;
     FDesconto_pedido: Boolean;
+    FImpressoes_parciais: Boolean;
+    FPerguntaImprimirPedido: Boolean;
 
   public
     property codigo                  :Integer read Fcodigo                  write Fcodigo;
@@ -29,6 +31,8 @@ type
     property possui_delivery         :Boolean read Fpossui_delivery         write Fpossui_delivery;
     property imp_dep_espacada        :Boolean read Fimp_dep_espacada        write Fimp_dep_espacada;
     property desconto_pedido         :Boolean read FDesconto_pedido         write FDesconto_pedido;
+    property impressoes_parciais     :Boolean read FImpressoes_parciais     write FImpressoes_parciais;
+    property perguntaImprimirPedido  :Boolean read FPerguntaImprimirPedido  write FPerguntaImprimirPedido;
 end;
 
 implementation

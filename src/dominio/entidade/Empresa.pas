@@ -2,23 +2,16 @@ unit Empresa;
 
 interface
 
-uses SysUtils, TipoRegime, Contnrs;
+uses SysUtils, TipoRegimeTributario, Contnrs, ConfiguracoesNF, Pessoa;
 
 type
-  TEmpresa = class
+  TEmpresa = class(TPessoa)
 
   private
-    Fcodigo :Integer;
-    Frazao_social :String;
     Fnome_fantasia :String;
-    Fcnpj :String;
-    Fie :String;
-    Ftelefone :String;
-    Fsite :String;
     Fquantidade_mesas :Integer;
     Fcouvert :Boolean;
     Fvalor_couvert :Real;
-    Fcidade :String;
     Ftaxa_servico :Real;
     Faliquota_couvert :Real;
     Faliquota_txservico :Real;
@@ -26,52 +19,50 @@ type
     Ftributacao_txservico :String;
     Fdiretorio_boliche :String;
     Fdiretorio_dispensadora :String;
-    Festado :String;
-    Fcep :Integer;
-    Frua :String;
-    Fnumero :String;
-    Fbairro :String;
-    Fcomplemento :String;
     Fcod_municipio :Integer;
-    FRegime: TTipoRegime;
+    FRegime: TTipoRegimeTributario;
     FTaxa_entrega :Real;
+    FConfiguracoesNF: TConfiguracoesNF;
+    FCodigoEmpresa: integer;
     
     function GetAliqCouvertParaECF: String;
     function GetAliqTxServicoParaECF: String;
+    function GetConfiguracoesNF: TConfiguracoesNF;
 
   public
-    property codigo                :Integer read Fcodigo                write Fcodigo;
-    property razao_social          :String read Frazao_social          write Frazao_social;
-    property nome_fantasia         :String read Fnome_fantasia         write Fnome_fantasia;
-    property cnpj                  :String read Fcnpj                  write Fcnpj;
-    property ie                    :String read Fie                    write Fie;
-    property telefone              :String read Ftelefone              write Ftelefone;
-    property site                  :String read Fsite                  write Fsite;
+    property codigoEmpresa         :integer read FCodigoEmpresa         write FCodigoEmpresa;
     property quantidade_mesas      :Integer read Fquantidade_mesas      write Fquantidade_mesas;
     property couvert               :Boolean read Fcouvert               write Fcouvert;
-    property valor_couvert         :Real read Fvalor_couvert         write Fvalor_couvert;
-    property cidade                :String read Fcidade                write Fcidade;
-    property taxa_servico          :Real read Ftaxa_servico          write Ftaxa_servico;
-    property aliquota_couvert      :Real read Faliquota_couvert      write Faliquota_couvert;
-    property aliquota_txservico    :Real read Faliquota_txservico    write Faliquota_txservico;
-    property tributacao_couvert    :String read Ftributacao_couvert    write Ftributacao_couvert;
-    property tributacao_txservico  :String read Ftributacao_txservico  write Ftributacao_txservico;
-    property diretorio_boliche     :String read Fdiretorio_boliche     write Fdiretorio_boliche;
+    property valor_couvert         :Real    read Fvalor_couvert         write Fvalor_couvert;
+    property taxa_servico          :Real    read Ftaxa_servico          write Ftaxa_servico;
+    property aliquota_couvert      :Real    read Faliquota_couvert      write Faliquota_couvert;
+    property aliquota_txservico    :Real    read Faliquota_txservico    write Faliquota_txservico;
+    property tributacao_couvert    :String  read Ftributacao_couvert    write Ftributacao_couvert;
+    property tributacao_txservico  :String  read Ftributacao_txservico  write Ftributacao_txservico;
+    property diretorio_boliche     :String  read Fdiretorio_boliche     write Fdiretorio_boliche;
     property diretorio_dispensadora :String read Fdiretorio_dispensadora write Fdiretorio_dispensadora;
-    property estado                :String read Festado                write Festado;
-    property cep                   :Integer read Fcep                   write Fcep;
-    property rua                   :String read Frua                   write Frua;
-    property numero                :String read Fnumero                write Fnumero;
-    property bairro                :String read Fbairro                write Fbairro;
-    property complemento           :String read Fcomplemento           write Fcomplemento;
-    property cod_municipio         :Integer read Fcod_municipio         write Fcod_municipio;
-    property Regime                :TTipoRegime read FRegime            write FRegime;
+    property Regime                :TTipoRegimeTributario read FRegime            write FRegime;
     property taxa_entrega          :Real    read Ftaxa_entrega          write Ftaxa_entrega;        
 
   public
     property aliqCouvertParaECF     :String  read GetAliqCouvertParaECF;
     property aliqTxServicoParaECF   :String  read GetAliqTxServicoParaECF;
+    property ConfiguracoesNF        :TConfiguracoesNF      read GetConfiguracoesNF          write FConfiguracoesNF;
 
+  public
+    procedure AdicionarConfiguracoesNFe(
+                                     AliquotaCreditoSN :Real;
+                                     AliquotaICMS      :Real;
+                                     AliquotaPIS       :Real;
+                                     AliquotaCOFINS    :Real;
+                                     NumeroCertificado :String;
+                                     AmbienteNFe       :String;
+                                     SenhaCertificado  :String;
+                                     TipoEmissao       :integer;
+                                     CRT               :integer;
+                                     obsGeradaSistema  :string;
+                                     SequenciaNF       :integer
+                                    );
   public
     constructor Create;
 
@@ -79,10 +70,37 @@ end;
 
 implementation
 
+uses Repositorio, FabricaRepositorio;
+
 { TEmpresa }
+
+procedure TEmpresa.AdicionarConfiguracoesNFe(AliquotaCreditoSN, AliquotaICMS, AliquotaPIS, AliquotaCOFINS: Real; NumeroCertificado, AmbienteNFe,
+  SenhaCertificado: String; TipoEmissao, CRT: integer; obsGeradaSistema: string; SequenciaNF: integer);
+begin
+   self.FConfiguracoesNF                      := TConfiguracoesNF.Create;
+   self.FConfiguracoesNF.codigo_empresa       := self.CodigoEmpresa;
+   self.FConfiguracoesNF.aliq_cred_sn         := AliquotaCreditoSN;
+   self.FConfiguracoesNF.aliq_icms            := AliquotaICMS;
+   self.FConfiguracoesNF.aliq_pis             := AliquotaPIS;
+   self.FConfiguracoesNF.aliq_cofins          := AliquotaCOFINS;
+   self.FConfiguracoesNF.num_certificado      := NumeroCertificado;
+   self.FConfiguracoesNF.senha_certificado    := SenhaCertificado;
+   self.FConfiguracoesNF.ambiente_nfe         := AmbienteNFe;
+   self.FConfiguracoesNF.CRT                  := CRT;
+   self.FConfiguracoesNF.ObsGeradaPeloSistema := obsGeradaSistema;
+   self.FConfiguracoesNF.SequenciaNotaFiscal  := SequenciaNF;
+
+   {7 = SVCRS}
+   if (tipoEmissao = 7) then
+     self.FConfiguracoesNF.Dt_contingencia := now;
+
+   self.FConfiguracoesNF.Tipo_emissao        := TipoEmissao;
+end;
 
 constructor TEmpresa.Create;
 begin
+  inherited Create;
+  inherited tipo := 'E';
 end;
 
 function TEmpresa.GetAliqCouvertParaECF: String;
@@ -99,6 +117,23 @@ begin
 
   if Result[1] in ['S'] then
     Result := FloatToStr(self.Aliquota_TxServico) + Result;
+end;
+
+function TEmpresa.GetConfiguracoesNF: TConfiguracoesNF;
+var
+  Repositorio :TRepositorio;
+begin
+   if not Assigned(self.FConfiguracoesNF) then begin
+     Repositorio := nil;
+     try
+       Repositorio              := TFabricaRepositorio.GetRepositorio(TConfiguracoesNF.ClassName);
+       self.FConfiguracoesNF := (Repositorio.Get(self.codigo) as TConfiguracoesNF);
+     finally
+       FreeAndNil(Repositorio);
+     end;
+   end;
+
+   result := self.FConfiguracoesNF;
 end;
 
 end.

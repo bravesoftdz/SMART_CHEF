@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, uPadrao, pngimage, ExtCtrls, DB, DBClient, Grids, DBGrids,
-  DBGridCBN, StdCtrls, ComCtrls, Buttons, ContNrs, FileCtrl;
+  DBGridCBN, StdCtrls, ComCtrls, Buttons, ContNrs, FileCtrl, generics.collections;
 
 type
   TfrmNFCes = class(TfrmPadrao)
@@ -67,7 +67,7 @@ uses Repositorio, FabricaRepositorio, NFCE, EspecificacaoFiltraNFCe, ServicoEmis
 {$R *.dfm}
 
 procedure TfrmNFCes.busca_NFCes;
-var NFCEs         :TObjectList;
+var NFCEs         :TObjectList<TNFCe>;
     Repositorio   :TRepositorio;
     Especificacao :TEspecificacaoFiltraNFCe;
     i             :integer;
@@ -81,7 +81,7 @@ begin
  try
    Repositorio   := TFabricaRepositorio.GetRepositorio(TNFCe.ClassName);
    Especificacao := TEspecificacaoFiltraNFCe.Create(dtpInicio.DateTime, dtpFim.DateTime);
-   NFCes         := Repositorio.GetListaPorEspecificacao( Especificacao );
+   NFCes         := Repositorio.GetListaPorEspecificacao<TNFCe>( Especificacao );
 
    if not cdsNFCes.IsEmpty then
      cdsNFCes.EmptyDataSet;

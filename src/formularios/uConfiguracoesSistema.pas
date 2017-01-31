@@ -36,6 +36,10 @@ type
     Label8: TLabel;
     cbxDescontoPedido: TComboBox;
     cdsDESCONTO_PEDIDO: TStringField;
+    Label9: TLabel;
+    cbxImpressoesParciais: TComboBox;
+    Label10: TLabel;
+    cbxPerguntaImprimir: TComboBox;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormShow(Sender: TObject);
@@ -92,7 +96,6 @@ begin
   self.cdsUTILIZA_COMANDAS.AsString    := IfThen(ConfiguracoesSistema.Utiliza_comandas, 'SIM', 'NÃO');
   self.cdsPOSSUI_DELIVERY.AsString     := IfThen(ConfiguracoesSistema.possui_delivery, 'SIM', 'NÃO');
   self.cdsDESCONTO_PEDIDO.AsString     := IfThen(ConfiguracoesSistema.desconto_pedido, 'SIM', 'NÃO');
-
   self.cds.Post;
 end;
 
@@ -177,6 +180,8 @@ begin
      Configuracoes.possui_delivery         := self.cbxPossuiDelivery.ItemIndex = 0;
      Configuracoes.imp_dep_espacada        := self.cbxImpDepEspacada.ItemIndex = 0;
      Configuracoes.desconto_pedido         := self.cbxDescontoPedido.ItemIndex = 0;
+     Configuracoes.impressoes_parciais     := self.cbxImpressoesParciais.ItemIndex = 0;
+     Configuracoes.perguntaImprimirPedido  := self.cbxPerguntaImprimir.ItemIndex = 0;
 
      RepositorioConfiguracoes.Salvar(Configuracoes);
 
@@ -237,15 +242,17 @@ begin
 
     if not Assigned(Configuracoes) then exit;
 
-    self.edtCodigo.Text                := IntToStr(Configuracoes.codigo);
-    self.cbxUsaBoliche.ItemIndex       := IfThen(Configuracoes.possui_boliche,0,1);
-    self.cbxUsaDispensadora.ItemIndex  := IfThen(Configuracoes.possui_dispensadora,0,1);
-    self.cbxViasImpressao.ItemIndex    := IfThen(Configuracoes.duas_vias_pedido,0,1);
-    self.cbxEditaPrecoPedido.ItemIndex := IfThen(Configuracoes.preco_produto_alteravel,0,1);
-    self.cbxUtilizaComandas.ItemIndex  := IfThen(Configuracoes.Utiliza_comandas,0,1);
-    self.cbxPossuiDelivery.ItemIndex   := IfThen(Configuracoes.possui_delivery,0,1);
-    self.cbxImpDepEspacada.ItemIndex   := IfThen(Configuracoes.imp_dep_espacada,0,1);
-    self.cbxDescontoPedido.ItemIndex   := IfThen(Configuracoes.desconto_pedido,0,1);
+    self.edtCodigo.Text                  := IntToStr(Configuracoes.codigo);
+    self.cbxUsaBoliche.ItemIndex         := IfThen(Configuracoes.possui_boliche,0,1);
+    self.cbxUsaDispensadora.ItemIndex    := IfThen(Configuracoes.possui_dispensadora,0,1);
+    self.cbxViasImpressao.ItemIndex      := IfThen(Configuracoes.duas_vias_pedido,0,1);
+    self.cbxEditaPrecoPedido.ItemIndex   := IfThen(Configuracoes.preco_produto_alteravel,0,1);
+    self.cbxUtilizaComandas.ItemIndex    := IfThen(Configuracoes.Utiliza_comandas,0,1);
+    self.cbxPossuiDelivery.ItemIndex     := IfThen(Configuracoes.possui_delivery,0,1);
+    self.cbxImpDepEspacada.ItemIndex     := IfThen(Configuracoes.imp_dep_espacada,0,1);
+    self.cbxDescontoPedido.ItemIndex     := IfThen(Configuracoes.desconto_pedido,0,1);
+    self.cbxImpressoesParciais.ItemIndex := IfThen(Configuracoes.impressoes_parciais,0,1);
+    self.cbxPerguntaImprimir.ItemIndex   := IfThen(Configuracoes.perguntaImprimirPedido,0,1);
 
   finally
     FreeAndNil(RepositorioConfiguracoes);

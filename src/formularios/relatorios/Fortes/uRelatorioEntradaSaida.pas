@@ -148,8 +148,8 @@ begin
   if BuscaDispensa1.edtCodigo.AsInteger > 0 then
     qry.SQL.Add(' and dis.codigo = '+intToStr(BuscaDispensa1.edtCodigo.AsInteger));
 
-  if BuscaProduto1.edtCodigo.AsInteger > 0 then
-    qry.SQL.Add(' and pro.codigo = '+intToStr(BuscaProduto1.edtCodigo.AsInteger));
+  if BuscaProduto1.edtCodigo.Text <> '0' then
+    qry.SQL.Add(' and pro.codigo = '+BuscaProduto1.edtCodigo.Text);
 
   if not chkPeriodoGeral.Checked then begin
     qry.SQL.Add(' and ( es.data between :dti and :dtf )  ');

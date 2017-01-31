@@ -367,8 +367,16 @@ end;
 procedure TfrmCadastroPadrao.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  inherited;
-  { teste }
+  if key = vk_escape then
+  begin
+    key := 0;
+    if self.ds.DataSet.Filtered then
+      self.ds.DataSet.Filtered:= False
+    else
+      inherited;
+  end
+  else
+    inherited;
 end;
 
 procedure TfrmCadastroPadrao.AlterarRegistroNoCDS(Registro: TObject);

@@ -50,6 +50,8 @@ begin
    Estoque.unidade_medida  := self.FQuery.FieldByName('unidade_medida').AsString;
    Estoque.pecas           := self.FQuery.FieldByName('pecas').AsInteger;
    Estoque.quantidade_min  := self.FQuery.FieldByName('quantidade_min').AsFloat;
+   Estoque.unidade_entrada := self.FQuery.FieldByName('unidade_entrada').AsString;
+   Estoque.multiplicador   := self.FQuery.FieldByName('multiplicador').AsFloat;
 
    result := Estoque;
 end;
@@ -99,6 +101,12 @@ begin
 
    if (EstoqueAntigo.quantidade_min <> EstoqueNovo.quantidade_min) then
      Auditoria.AdicionaCampoAlterado('quantidade_min', FloatToStr(EstoqueAntigo.quantidade_min), FloatToStr(EstoqueNovo.quantidade_min));
+
+   if (EstoqueAntigo.unidade_entrada <> EstoqueNovo.unidade_entrada) then
+     Auditoria.AdicionaCampoAlterado('unidade_entrada', EstoqueAntigo.unidade_entrada, EstoqueNovo.unidade_entrada);
+
+   if (EstoqueAntigo.multiplicador <> EstoqueNovo.multiplicador) then
+     Auditoria.AdicionaCampoAlterado('multiplicador', FloatToStr(EstoqueAntigo.multiplicador), FloatToStr(EstoqueNovo.multiplicador));
 end;
 
 procedure TRepositorioEstoque.SetCamposExcluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -113,6 +121,8 @@ begin
   Auditoria.AdicionaCampoExcluido('unidade_medida' , Estoque.unidade_medida);
   Auditoria.AdicionaCampoExcluido('pecas'          , IntToStr(Estoque.pecas));
   Auditoria.AdicionaCampoExcluido('quantidade_min' , FloatToStr(Estoque.quantidade_min));
+  Auditoria.AdicionaCampoExcluido('unidade_entrada' , Estoque.unidade_entrada);
+  Auditoria.AdicionaCampoExcluido('multiplicador' , FloatToStr(Estoque.multiplicador));
 end;
 
 procedure TRepositorioEstoque.SetCamposIncluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -126,7 +136,9 @@ begin
   Auditoria.AdicionaCampoIncluido('quantidade'     ,    FloatToStr(Estoque.quantidade));
   Auditoria.AdicionaCampoIncluido('unidade_medida' ,    Estoque.unidade_medida);
   Auditoria.AdicionaCampoIncluido('pecas'          ,    IntToStr(Estoque.pecas));
-  Auditoria.AdicionaCampoIncluido('quantidade_min' ,    FloatToStr(Estoque.quantidade_min));  
+  Auditoria.AdicionaCampoIncluido('quantidade_min' ,    FloatToStr(Estoque.quantidade_min));
+  Auditoria.AdicionaCampoIncluido('unidade_entrada' ,    Estoque.unidade_entrada);
+  Auditoria.AdicionaCampoIncluido('multiplicador' ,    FloatToStr(Estoque.multiplicador));
 end;
 
 procedure TRepositorioEstoque.SetIdentificador(Objeto: TObject; Identificador: Variant);
@@ -151,6 +163,8 @@ begin
   self.FQuery.ParamByName('unidade_medida').AsString   := Estoque.unidade_medida;
   self.FQuery.ParamByName('pecas').AsInteger           := Estoque.pecas;
   self.FQuery.ParamByName('quantidade_min').AsFloat    := Estoque.quantidade_min;
+  self.FQuery.ParamByName('unidade_entrada').AsString  := Estoque.unidade_entrada;
+  self.FQuery.ParamByName('multiplicador').AsFloat     := Estoque.multiplicador;
 end;
 
 function TRepositorioEstoque.SQLGet: String;
@@ -175,8 +189,8 @@ end;
 
 function TRepositorioEstoque.SQLSalvar: String;
 begin
-  result := 'update or insert into ESTOQUE (CODIGO ,CODIGO_PRODUTO ,CODIGO_DISPENSA ,QUANTIDADE ,UNIDADE_MEDIDA ,PECAS, QUANTIDADE_MIN) '+
-           '                      values ( :CODIGO , :CODIGO_PRODUTO , :CODIGO_DISPENSA , :QUANTIDADE , :UNIDADE_MEDIDA , :PECAS, :QUANTIDADE_MIN) ';
+  result := 'update or insert into ESTOQUE (CODIGO ,CODIGO_PRODUTO ,CODIGO_DISPENSA ,QUANTIDADE ,UNIDADE_MEDIDA ,PECAS, QUANTIDADE_MIN, UNIDADE_ENTRADA, MULTIPLICADOR) '+
+           '                      values ( :CODIGO , :CODIGO_PRODUTO , :CODIGO_DISPENSA , :QUANTIDADE , :UNIDADE_MEDIDA , :PECAS, :QUANTIDADE_MIN, :UNIDADE_ENTRADA, :MULTIPLICADOR) ';
 end;
 
 end.

@@ -6,10 +6,6 @@ inherited frmconfiguracoesSistema: TfrmconfiguracoesSistema
   TextHeight = 13
   inherited pgGeral: TPageControl
     inherited tsConsulta: TTabSheet
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inherited gridConsulta: TDBGridCBN
         Columns = <
           item
@@ -37,7 +33,7 @@ inherited frmconfiguracoesSistema: TfrmconfiguracoesSistema
           end>
       end
       inherited lblAjudaSelecionar: TStaticText
-        Width = 222
+        ExplicitWidth = 553
       end
     end
     inherited tsDados: TTabSheet
@@ -47,7 +43,7 @@ inherited frmconfiguracoesSistema: TfrmconfiguracoesSistema
           Top = 4
           Width = 544
           Height = 377
-          ActivePage = TabSheet2
+          ActivePage = TabSheet1
           Style = tsFlatButtons
           TabOrder = 0
           object TabSheet1: TTabSheet
@@ -172,6 +168,20 @@ inherited frmconfiguracoesSistema: TfrmconfiguracoesSistema
               Height = 13
               Caption = 'Permitir desconto no pedido?'
             end
+            object Label9: TLabel
+              Left = 193
+              Top = 76
+              Width = 144
+              Height = 13
+              Caption = 'Impress'#245'es parciais pedido?'
+            end
+            object Label10: TLabel
+              Left = 369
+              Top = 76
+              Width = 151
+              Height = 13
+              Caption = 'Pergunta p/ imprimir pedido?'
+            end
             object cbxViasImpressao: TComboBox
               Left = 16
               Top = 40
@@ -212,6 +222,28 @@ inherited frmconfiguracoesSistema: TfrmconfiguracoesSistema
               Height = 21
               Style = csDropDownList
               TabOrder = 3
+              Items.Strings = (
+                'SIM'
+                'N'#195'O')
+            end
+            object cbxImpressoesParciais: TComboBox
+              Left = 192
+              Top = 92
+              Width = 145
+              Height = 21
+              Style = csDropDownList
+              TabOrder = 4
+              Items.Strings = (
+                'SIM'
+                'N'#195'O')
+            end
+            object cbxPerguntaImprimir: TComboBox
+              Left = 368
+              Top = 92
+              Width = 145
+              Height = 21
+              Style = csDropDownList
+              TabOrder = 5
               Items.Strings = (
                 'SIM'
                 'N'#195'O')

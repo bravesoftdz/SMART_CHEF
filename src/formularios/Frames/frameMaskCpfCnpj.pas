@@ -18,11 +18,12 @@ type
     Fpessoa: String;
     procedure Setpessoa(const Value: String);
     procedure SetCpfCnpj(const Value: String);
+    function GetPessoa: String;
     { Private declarations }
   public
     procedure Limpa;
 
-    property pessoa :String read Fpessoa write Setpessoa;
+    property pessoa :String read GetPessoa write Setpessoa;
     property cpfCnpj :String write SetCpfCnpj;
   end;
 
@@ -67,14 +68,20 @@ begin
   end;
 end;
 
+function TMaskCpfCnpj.GetPessoa: String;
+begin
+  result := IfThen(edtCpf.EditMask = '999\.999\.999\-99;0; ', 'F', 'J');
+end;
+
 procedure TMaskCpfCnpj.Limpa;
 begin
   edtCpf.Clear;
 end;
 
 procedure TMaskCpfCnpj.SetCpfCnpj(const Value: String);
-begin               
-   Setpessoa( IfThen( length(value) > 11, 'J', 'F') );
+begin
+   if length(value) > 0 then
+     Setpessoa( IfThen( length(value) > 11, 'J', 'F') );
    edtCpf.Text := Value;
 end;
 

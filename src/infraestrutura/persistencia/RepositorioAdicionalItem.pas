@@ -51,7 +51,7 @@ uses
 
 function TRepositorioAdicionalItem.CondicaoSQLGetAll: String;
 begin
-  result := ' WHERE '+FCondicao;
+  result := ' WHERE '+FIdentificador;
 end;
 
 function TRepositorioAdicionalItem.Get(Dataset: TDataSet): TObject;
@@ -168,7 +168,7 @@ end;
 
 function TRepositorioAdicionalItem.SQLGetAll: String;
 begin
-   result := 'select * from Adicionais_Item '+ IfThen(FCondicao = '','', CondicaoSQLGetAll) +' order by codigo';
+   result := 'select * from Adicionais_Item '+ IfThen(FIdentificador = '','', CondicaoSQLGetAll) +' order by codigo';
 end;
 
 function TRepositorioAdicionalItem.SQLGetExiste(campo: String): String;

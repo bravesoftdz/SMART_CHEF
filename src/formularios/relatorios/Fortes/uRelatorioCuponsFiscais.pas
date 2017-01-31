@@ -6,8 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, uPadrao, StdCtrls, Buttons, pngimage, ExtCtrls, Grids, DBGrids,
   DB, DBClient, xmldom, Provider, Xmlxform, XMLIntf, msxmldom, XMLDoc,
-  ComCtrls, Contnrs,
-  RLReport;
+  ComCtrls, Contnrs, RLReport, generics.collections, AcbrNFe;
 
 type
   TfrmRelatorioCuponsFiscais = class(TfrmPadrao)
@@ -52,6 +51,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure chkPeriodoGeralClick(Sender: TObject);
   private
+
     procedure imprimir;
   public
     { Public declarations }
@@ -74,62 +74,51 @@ end;
 
 procedure TfrmRelatorioCuponsFiscais.imprimir;
 var repositorio :TRepositorio;
-    Nfces       :TObjectList;
-    Corpo, No   :IXMLNode;
-    T           :TFormatSettings;
+    Nfces       :TObjectList<TNFCe>;
     Especificacao :TEspecificacaoNFCe;
     dt_i, dt_f  :TDateTime;
     nx :integer;
+    FAcbrNfe: TACBrNFe;
+    FXMLStringList    :TStringList;
 begin
+  try
+    FAcbrNfe        := TACBrNFe.Create(nil);
+    FXMLStringList  := TStringList.Create;
 
-  if chkPeriodoGeral.Checked then begin
-    dt_i := 0;
-    dt_f := 0;
-  end
-  else begin
-    dt_i := dtpInicio.DateTime;
-    dt_f := dtpFim.DateTime;
+    if chkPeriodoGeral.Checked then begin
+      dt_i := 0;
+      dt_f := 0;
+    end
+    else begin
+      dt_i := dtpInicio.DateTime;
+      dt_f := dtpFim.DateTime;
+    end;
+
+    repositorio   := TFabricaRepositorio.GetRepositorio(TNfce.ClassName);
+    Especificacao := TEspecificacaoNFCe.Create(dt_i, dt_f);
+    NFCes         := repositorio.GetListaPorEspecificacao<TNFCe>(Especificacao);
+
+    for nx := 0 to Nfces.Count - 1 do begin
+      FXMLStringList.LoadFromStream(NFces.Items[nx].XML);
+      FAcbrNfe.NotasFiscais.LoadFromString(FXMLStringList.Text);
+
+      cds.Append;
+      cdsCODIGO.AsInteger := FAcbrNfe.NotasFiscais.Items[0].NFe.Ide.cNF;
+      cdsDATA.AsDateTime  := FAcbrNfe.NotasFiscais.Items[0].NFe.Ide.dEmi;
+      cdsVALOR.AsFloat    := FAcbrNfe.NotasFiscais.Items[0].NFe.Total.ICMSTot.vNF;
+      cds.Post;
+    end;
+
+    if cds.IsEmpty then begin
+      avisar('Não foram encontrados registros com os filtros informados.');
+      exit;
+    end;
+
+    RLReport1.PreviewModal;
+  finally
+    FreeAndNil(FAcbrNfe);
+    FreeAndNil(FXMLStringList);
   end;
-
-  repositorio   := TFabricaRepositorio.GetRepositorio(TNfce.ClassName);
-  Especificacao := TEspecificacaoNFCe.Create(dt_i, dt_f);
-  NFCes         := repositorio.GetListaPorEspecificacao(Especificacao);
-
-  for nx := 0 to Nfces.Count - 1 do begin
-
-    Corpo := nil;
-    No    := nil;
-
-    XMLDocument1.LoadFromStream(TNfce(NFces.Items[nx]).XML);
-    Corpo := XMLDocument1.DocumentElement.ChildNodes[0];
-    Corpo := Corpo.ChildNodes[0];
-
-    No := Corpo.ChildNodes.FindNode('ide');
-
-    cds.Append;
-
-    cdsCODIGO.AsInteger := StrToIntDef(No.ChildNodes['cNF'].Text, 0);
-
-    T.ShortDateFormat := 'yyyy-mm-dd';
-    T.DateSeparator   := '-';
-
-    cdsDATA.AsDateTime  := StrToDate(copy(No.ChildNodes['dhEmi'].text, 1, 10), T);
-
-
-    No := Corpo.ChildNodes.FindNode('total');
-    No := No.ChildNodes[0];
-
-    cdsVALOR.AsFloat    := StrToFloatDef(StringReplace(No.ChildNodes['vNF'].text,'.',',',[]), 0);
-
-    cds.Post;
-  end;
-
-  if cds.IsEmpty then begin
-    avisar('Não foram encontrados registros com os filtros informados.');
-    exit;
-  end;
-
-  RLReport1.PreviewModal;
 end;
 
 procedure TfrmRelatorioCuponsFiscais.FormShow(Sender: TObject);

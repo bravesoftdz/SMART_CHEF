@@ -41,7 +41,7 @@ uses SysUtils, Movimento, Funcoes;
 
 function TRepositorioMovimento.CondicaoSQLGetAll: String;
 begin
-  result := ' WHERE '+FCondicao+''; 
+  result := ' WHERE '+FIdentificador+'';
 end;
 
 function TRepositorioMovimento.Get(Dataset: TDataSet): TObject;
@@ -174,4 +174,6 @@ begin
 end;
 
 end.
+
+
 

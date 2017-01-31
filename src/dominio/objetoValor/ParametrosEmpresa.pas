@@ -3,7 +3,7 @@ unit ParametrosEmpresa;
 interface
 
 uses
-  TipoRegime,
+  TipoRegimeTributario,
   EnderecoNFCe;
 
 type
@@ -15,7 +15,7 @@ type
     FRazao: String;
     FFantasia: String;
     FEndereco: TEndereco;
-    FRegime: TTipoRegime;
+    FRegime: TTipoRegimeTributario;
 
   private
     procedure SetCNPJ(const Value: String);
@@ -23,7 +23,7 @@ type
     procedure SetRazao(const Value: String);
     procedure SetFantasia(const Value: String);
     procedure SetEndereco(const Value: TEndereco);
-    procedure SetRegime(const Value: TTipoRegime);
+    procedure SetRegime(const Value: TTipoRegimeTributario);
 
   public
     property CNPJ :String read FCNPJ write SetCNPJ;
@@ -31,7 +31,7 @@ type
     property Razao :String read FRazao write SetRazao;
     property Fantasia :String read FFantasia write SetFantasia;
     property Endereco :TEndereco read FEndereco;
-    property Regime :TTipoRegime read FRegime write SetRegime;
+    property Regime :TTipoRegimeTributario read FRegime write SetRegime;
 
   public
     constructor Create;
@@ -53,7 +53,7 @@ begin
    FRazao := '';
    FFantasia := '';
    FEndereco := TEndereco.Create;
-   FRegime := trRegimeNormal;
+   FRegime := trtSimplesNacional;
 end;
 
 destructor TParametrosEmpresa.Destroy;
@@ -100,7 +100,7 @@ begin
    FRazao := Value;
 end;
 
-procedure TParametrosEmpresa.SetRegime(const Value: TTipoRegime);
+procedure TParametrosEmpresa.SetRegime(const Value: TTipoRegimeTributario);
 begin
    if (Integer(Value) <= 0) then
     raise TExcecaoCampoNaoInformado.Create('Regime');

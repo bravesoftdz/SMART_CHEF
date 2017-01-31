@@ -114,15 +114,15 @@ type
     qryPedidosDESCRICAO: TStringField;
     qryPedidosHORA: TTimeField;
     qryPedidosQTD_ITEM: TBCDField;
-    qryPedidosTOT_ITEM: TBCDField;
     qryPedidosDESCONTO: TBCDField;
     qryPedidosFLAG: TStringField;
     qryPedidosNOME: TStringField;
     qryPedidosMAT_PRIMA: TStringField;
     qryPedidosCODITEM: TIntegerField;
     qryPedidosQTD_ADICIONAL: TSmallintField;
-    qryPedidosTOT_ADICIONAL: TBCDField;
     qryPedidosAGRUPADAS: TStringField;
+    qryPedidosTOT_ITEM: TFMTBCDField;
+    qryPedidosTOT_ADICIONAL: TFMTBCDField;
     procedure BitBtn1Click(Sender: TObject);
     procedure RLDBText9BeforePrint(Sender: TObject; var Text: String;
       var PrintIt: Boolean);

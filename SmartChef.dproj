@@ -122,26 +122,6 @@
         <DCCReference Include="src\formularios\uSupervisor.pas">
             <Form>frmSupervisor</Form>
         </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameBotaoImg.pas">
-            <Form>BotaoImg</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameHorario.pas">
-            <Form>Horario</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameListaCampo.pas">
-            <Form>ListaCampo</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameMaskCpfCnpj.pas">
-            <Form>MaskCpfCnpj</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameRealEdit.pas">
-            <Form>RealEdit</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
         <DCCReference Include="src\dominio\objetoValor\especificacao\Especificacao.pas"/>
         <DCCReference Include="src\dominio\utilitario\CriaBalaoInformacao.pas"/>
         <DCCReference Include="src\dominio\utilitario\DateTimeUtilitario.pas"/>
@@ -220,10 +200,6 @@
         <DCCReference Include="src\formularios\uCadastroProduto.pas">
             <Form>frmCadastroProduto</Form>
         </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameBuscaMateriaPrima.pas">
-            <Form>BuscaMateriaPrima</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
         <DCCReference Include="src\dominio\entidade\ProdutoHasMateria.pas"/>
         <DCCReference Include="src\infraestrutura\persistencia\RepositorioProdutoHasMateria.pas"/>
         <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoMateriasDoProduto.pas"/>
@@ -232,20 +208,12 @@
         </DCCReference>
         <DCCReference Include="src\dominio\entidade\Comanda.pas"/>
         <DCCReference Include="src\infraestrutura\persistencia\RepositorioComanda.pas"/>
-        <DCCReference Include="src\formularios\Frames\frameBuscaComanda.pas">
-            <Form>BuscaComanda</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
         <DCCReference Include="src\dominio\entidade\Pedido.pas"/>
         <DCCReference Include="src\infraestrutura\persistencia\RepositorioPedido.pas"/>
         <DCCReference Include="src\dominio\entidade\Item.pas"/>
         <DCCReference Include="src\infraestrutura\persistencia\RepositorioItem.pas"/>
         <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoItensDoPedido.pas"/>
         <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoPedidoAbertoDaComanda.pas"/>
-        <DCCReference Include="src\formularios\Frames\frameBuscaProduto.pas">
-            <Form>BuscaProduto</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
         <DCCReference Include="src\formularios\uCadastroEmpresa.pas">
             <Form>frmCadastroEmpresa</Form>
         </DCCReference>
@@ -283,10 +251,6 @@
         <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoPedidosComItemNaoImpresso.pas"/>
         <DCCReference Include="src\dominio\entidade\NcmIBPT.pas"/>
         <DCCReference Include="src\infraestrutura\persistencia\RepositorioNcmIBPT.pas"/>
-        <DCCReference Include="src\formularios\Frames\frameBuscaNCM.pas">
-            <Form>BuscaNCM</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
         <DCCReference Include="src\dominio\entidade\ConfiguracaoECF.pas"/>
         <DCCReference Include="src\infraestrutura\persistencia\RepositorioConfiguracaoECF.pas"/>
         <DCCReference Include="src\formularios\uConfiguraECF.pas">
@@ -317,10 +281,6 @@
         <DCCReference Include="src\formularios\uEntradaSaidaMercadoria.pas">
             <Form>frmEntradaSaidaMercadoria</Form>
         </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameBuscaDispensa.pas">
-            <Form>BuscaDispensa</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
         <DCCReference Include="src\formularios\relatorios\Fortes\uRelatorioAtendimentos.pas">
             <Form>frmRelatorioAtendimentos</Form>
         </DCCReference>
@@ -344,10 +304,6 @@
         <DCCReference Include="src\formularios\relatorios\Fortes\uRelatorioItensDeletados.pas">
             <Form>frmRelatorioItensDeletados</Form>
         </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameBuscaUsuario.pas">
-            <Form>BuscaUsuario</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
         <DCCReference Include="src\dominio\excecao\ExcecaoCampoNaoInformado.pas"/>
         <DCCReference Include="src\dominio\excecao\ExcecaoValorInvalido.pas"/>
         <DCCReference Include="src\dominio\objetoValor\CertificadoNFCE.pas"/>
@@ -357,14 +313,12 @@
         <DCCReference Include="src\dominio\objetoValor\FormaPagamento.pas"/>
         <DCCReference Include="src\dominio\objetoValor\FormasPagamento.pas"/>
         <DCCReference Include="src\dominio\objetoValor\ItemVenda.pas"/>
-        <DCCReference Include="src\dominio\objetoValor\ParametrosDANFE.pas"/>
         <DCCReference Include="src\dominio\objetoValor\ParametrosNFCe.pas"/>
         <DCCReference Include="src\dominio\objetoValor\Token.pas"/>
         <DCCReference Include="src\dominio\objetoValor\Venda.pas"/>
         <DCCReference Include="src\dominio\servico\ServicoEmissorNFCe.pas"/>
         <DCCReference Include="src\dominio\tipo\TipoAmbiente.pas"/>
         <DCCReference Include="src\dominio\tipo\TipoFormaEmissao.pas"/>
-        <DCCReference Include="src\dominio\tipo\TipoRegime.pas"/>
         <DCCReference Include="src\dominio\tipo\TipoVersaoDF.pas"/>
         <DCCReference Include="src\dominio\objetoValor\Parametros.pas"/>
         <DCCReference Include="src\infraestrutura\persistencia\RepositorioParametrosNFCe.pas"/>
@@ -388,10 +342,6 @@
         <DCCReference Include="src\formularios\uCadastroCliente.pas">
             <Form>frmCadastroCliente</Form>
         </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameBuscaCidade.pas">
-            <Form>BuscaCidade</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
         <DCCReference Include="src\dominio\entidade\Cliente.pas"/>
         <DCCReference Include="src\infraestrutura\persistencia\RepositorioCliente.pas"/>
         <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoClientePorCpfCnpj.pas"/>
@@ -408,10 +358,6 @@
         <DCCReference Include="src\dominio\entidade\ProdutoDependenciaEst.pas"/>
         <DCCReference Include="src\infraestrutura\persistencia\RepositorioProdutoDependenciaEst.pas"/>
         <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoDependenciaEstoqueProduto.pas"/>
-        <DCCReference Include="src\formularios\Frames\frameBuscaCliente.pas">
-            <Form>BuscaCliente</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
         <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoEnderecoPorTelefone.pas"/>
         <DCCReference Include="src\formularios\uReimpressaoPedido.pas">
             <Form>frmReimpressaoPedido</Form>
@@ -420,6 +366,193 @@
             <Form>frmNFCesContingencia</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="src\formularios\uImpressaoPedido.pas">
+            <Form>frmImpressaoPedido</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\formularios\uCadastroFornecedor.pas">
+            <Form>frmCadastroPadrao1</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBotaoImg.pas">
+            <Form>BotaoImg</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaCidade.pas">
+            <Form>BuscaCidade</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaCliente.pas">
+            <Form>BuscaCliente</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaComanda.pas">
+            <Form>BuscaComanda</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaDispensa.pas">
+            <Form>BuscaDispensa</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaMateriaPrima.pas">
+            <Form>BuscaMateriaPrima</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaNCM.pas">
+            <Form>BuscaNCM</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaProduto.pas">
+            <Form>BuscaProduto</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaUsuario.pas">
+            <Form>BuscaUsuario</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameHorario.pas">
+            <Form>Horario</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameListaCampo.pas">
+            <Form>ListaCampo</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameMaskCpfCnpj.pas">
+            <Form>MaskCpfCnpj</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameRealEdit.pas">
+            <Form>RealEdit</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameFone.pas">
+            <Form>Fone</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\dominio\entidade\Fornecedor.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioFornecedor.pas"/>
+        <DCCReference Include="src\dominio\utilitario\importadorNotaXML.pas"/>
+        <DCCReference Include="src\formularios\uEntradaNota.pas">
+            <Form>frmEntradaNota</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\dominio\entidade\NotaFiscal.pas"/>
+        <DCCReference Include="src\dominio\entidade\NFe.pas"/>
+        <DCCReference Include="src\dominio\entidade\AliqInternaIcms.pas"/>
+        <DCCReference Include="src\dominio\entidade\NaturezaOperacao.pas"/>
+        <DCCReference Include="src\dominio\entidade\CFOPCorrespondente.pas"/>
+        <DCCReference Include="src\dominio\entidade\Duplicata.pas"/>
+        <DCCReference Include="src\dominio\entidade\Fatura.pas"/>
+        <DCCReference Include="src\dominio\entidade\LoteNFe.pas"/>
+        <DCCReference Include="src\dominio\entidade\RetornoLoteNFe.pas"/>
+        <DCCReference Include="src\dominio\tipo\TipoSerie.pas"/>
+        <DCCReference Include="src\dominio\tipo\TipoStatusNotaFiscal.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\TotaisNotaFiscal.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\ItemNotaFiscal.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\Icms00.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\ParametrosDANFE.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\IpiTrib.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\CofinsAliq.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\PisAliq.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\ObservacaoNotaFiscal.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\IcmsSn101.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\TributacaoItemNotaFiscal.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\ItemAvulso.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\LocalEntregaNotaFiscal.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\VolumesNotaFiscal.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\CofinsNt.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\Icms20.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\IpiNt.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\PisNt.pas"/>
+        <DCCReference Include="src\dominio\metodoDelegado\MetodoDelegadoAposAtualizarNotaFiscal.pas"/>
+        <DCCReference Include="src\dominio\metodoDelegado\MetodoDelegadoObtemCampoBoolean.pas"/>
+        <DCCReference Include="src\dominio\metodoDelegado\MetodoDelegadoObtemCampoInteger.pas"/>
+        <DCCReference Include="src\dominio\metodoDelegado\MetodoDelegadoObtemCampoReal.pas"/>
+        <DCCReference Include="src\dominio\metodoDelegado\MetodoDelegadoObtemCampoString.pas"/>
+        <DCCReference Include="src\dominio\metodoDelegado\MetodoDelegadoSomarCampoEspecificoInteger.pas"/>
+        <DCCReference Include="src\dominio\metodoDelegado\MetodoDelegadoSomarCampoEspecificoReal.pas"/>
+        <DCCReference Include="src\dominio\metodoDelegado\MetodoDelegadoVerificaPedidoFaturado.pas"/>
+        <DCCReference Include="src\dominio\entidade\ProdutoFornecedor.pas"/>
+        <DCCReference Include="src\dominio\tipo\TipoOrigemMercadoria.pas"/>
+        <DCCReference Include="src\formularios\uCadastroCfopCorrespondente.pas">
+            <Form>frmCadastroCfopCorrespondente</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\formularios\uCadastroNaturezaOperacao.pas">
+            <Form>frmCadastroNaturezaOperacao</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\dominio\tipo\TipoFrete.pas"/>
+        <DCCReference Include="src\dominio\entidade\Pessoa.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoEnderecoComPessoaIgualA.pas"/>
+        <DCCReference Include="src\dominio\entidade\RetornoNFe.pas"/>
+        <DCCReference Include="src\dominio\entidade\IcmsEstado.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoAliqInternaPorCodigoEstado.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoItensDaNotaFiscal.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoLoteNFePorCodigoNotaFiscal.pas"/>
+        <DCCReference Include="src\dominio\excecao\ExcecaoNotaFiscalInvalida.pas"/>
+        <DCCReference Include="src\dominio\entidade\ConfiguracoesNFEmail.pas"/>
+        <DCCReference Include="src\dominio\tipo\TipoNaturezaOperacao.pas"/>
+        <DCCReference Include="src\dominio\tipo\TipoRegimeTributario.pas"/>
+        <DCCReference Include="src\dominio\entidade\ConfiguracoesNF.pas"/>
+        <DCCReference Include="src\dominio\entidade\Cidade.pas"/>
+        <DCCReference Include="src\dominio\entidade\Estado.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoIcmsEstadoPorCodigoEstado.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoCidadePorCodigoIBGE.pas"/>
+        <DCCReference Include="src\dominio\servico\ValidadorNaturezaOperacao.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoNaturezaComCFOPIgualA.pas"/>
+        <DCCReference Include="src\dominio\excecao\ExcecaoCFOPDuplicada.pas"/>
+        <DCCReference Include="src\dominio\excecao\ExcecaoCFOPInvalida.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioIcmsEstado.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioItemNotaFiscal.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioTotaisNotaFiscal.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioNotaFiscal.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioConfiguracoesNF.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioLoteNFe.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioItemAvulso.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioLocalEntregaNotaFiscal.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioIcms00.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioRetornoNFe.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioRetornoLoteNFe.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioPisAliq.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioIpiNt.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioVolumesNotaFiscal.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioPisNt.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioObservacoesNotaFiscal.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioIpiTrib.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioIcmsSn101.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioCofinsAliq.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioCofinsNt.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioConfiguracoesNFEmail.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioNFe.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioNaturezaOperacao.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioProdutoFornecedor.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioCFOPCorrespondente.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioPessoa.pas"/>
+        <DCCReference Include="src\dominio\entidade\SangriaReforco.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioSangriaReforco.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoSangriaReforcoPorCodigoCaixa.pas"/>
+        <DCCReference Include="src\formularios\uLancaSangriaReforco.pas">
+            <Form>frmLancaSangriaReforco</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioCidade.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioEstado.pas"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -458,12 +591,27 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployClass Name="ProjectiOSDeviceResourceRules">
+                <DeployClass Name="DependencyModule">
+                    <Platform Name="Win32">
+                        <Operation>0</Operation>
+                        <Extensions>.dll;.bpl</Extensions>
+                    </Platform>
                     <Platform Name="iOSDevice64">
                         <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                    <Platform Name="OSX32">
+                        <RemoteDir>Contents\MacOS</RemoteDir>
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="ProjectOSXResource">
@@ -817,27 +965,12 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <DeployClass Name="DependencyModule">
-                    <Platform Name="Win32">
-                        <Operation>0</Operation>
-                        <Extensions>.dll;.bpl</Extensions>
-                    </Platform>
+                <DeployClass Name="ProjectiOSDeviceResourceRules">
                     <Platform Name="iOSDevice64">
                         <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
                     </Platform>
                 </DeployClass>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>

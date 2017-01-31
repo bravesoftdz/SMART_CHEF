@@ -6,7 +6,7 @@ uses
   SysUtils,
   Perfil,
   Contnrs,
-  Departamento;
+  Departamento, Generics.Collections;
 
 type
   TUsuario = class
@@ -122,7 +122,7 @@ function TUsuario.GetDiretoriosBackup: TObjectList;
 var
   Repositorio   :TRepositorio;
   Especificacao :TEspecificacaoDiretorioBackupComUsuarioIgualA;
-  Lista         :TList;
+  Lista         :TObjectList<TList>;
   nX            :Integer;
 begin
    Repositorio   := nil;
@@ -133,7 +133,7 @@ begin
        try
          Repositorio   := TFabricaRepositorio.GetRepositorio(TDiretorioBackup.ClassName);
          Especificacao := TEspecificacaoDiretorioBackupComUsuarioIgualA.Create(self);
-         Lista         := Repositorio.GetListaPorEspecificacao(Especificacao);
+         Lista         := Repositorio.GetListaPorEspecificacao<TList>(Especificacao);
 
          if Assigned(Lista) and (Lista.Count > 0) then begin
            self.FDiretoriosBackup := TObjectList.Create;

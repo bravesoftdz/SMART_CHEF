@@ -10,7 +10,7 @@ uses
   ACBrDANFCeFortesFr,
   ContNrs, DateTimeUtilitario, Classes, AcbrNfe,  pcnConversao, pcnNFe,
   pcnRetInutNFe, pcnRetConsSitNFe, pcnCCeNFe, ACBrNFeWebServices,
-  pcnEventoNFe, pcnConversaoNFe,   pcnProcNFe, funcoes, Pedido;
+  pcnEventoNFe, pcnConversaoNFe,   pcnProcNFe, funcoes, Pedido, Generics.Collections;
 
 type
   TServicoEmissorNFCe = class
@@ -95,7 +95,7 @@ begin
    FACBrNFe := TACBrNFe.Create(nil);
    FACBrNFe.Configuracoes.WebServices.IntervaloTentativas := Configuracoes.NFCe.IntervaloTentativas;
    FACBrNFe.Configuracoes.WebServices.Tentativas          := Configuracoes.NFCe.Tentativas;
-   FACBrNFe.Configuracoes.WebServices.UF                  := Configuracoes.Empresa.estado;
+   FACBrNFe.Configuracoes.WebServices.UF                  := Configuracoes.Empresa.Enderecos[0].Cidade.Estado.sigla;
    FACbrNFe.Configuracoes.WebServices.Ambiente            := TpcnTipoAmbiente( IfThen( copy(Configuracoes.NFCe.Ambiente,1,1) = 'P',0,1) );
    FACBrNFe.Configuracoes.WebServices.Visualizar          := false; // Mensagens
    FACBrNFe.Configuracoes.Geral.FormaEmissao              := TpcnTipoEmissao(Configuracoes.NFCe.FormaEmissao);
@@ -193,11 +193,15 @@ procedure TServicoEmissorNFCe.GerarDadosProdutos(Venda: TVenda;
 var
   nX :Integer;
   total_itens, percent_correspondente :Real;
+  desconto_distribuido, desconto_correspondente, total_produto :Real;
 begin
-   //total_itens := ((Venda.Total + Venda.Desconto) - Venda.Tx_servico) - Venda.Couvert;
+   desconto_distribuido := 0;
+   total_produto := 0;
 
    for nX := 0 to (Venda.Itens.Count-1) do begin
     with NFCe.NFe.Det.Add do begin
+      desconto_correspondente := 0;
+
       { Dados do Produto }
       Prod.nItem    := (nX+1);
       Prod.cProd    := IntToStr(Venda.Itens.Items[nX].Produto.codigo);
@@ -209,7 +213,7 @@ begin
       Prod.uCom     := 'UN';//Venda.Itens.Items[nX].Produto.getUnidade;
       Prod.qCom     := Venda.Itens.Items[nX].Quantidade;
       Prod.vUnCom   := Venda.Itens.Items[nX].ValorUnitario;
-      Prod.vProd    := Venda.Itens.Items[nX].Total;
+      Prod.vProd    := roundTo(Venda.Itens.Items[nX].Total,-2);
       Prod.cEANTrib := '';//Venda.Itens.Items[nX].Produto.Codbar;
       Prod.uTrib    := 'UN';//Venda.Itens.Items[nX].Produto.getUnidade;
       Prod.qTrib    := Venda.Itens.Items[nX].Quantidade;
@@ -218,10 +222,20 @@ begin
       Prod.vFrete   := 0;
       Prod.vSeg     := 0;
 
-      if Venda.Desconto > 0 then begin
-        percent_correspondente := (Venda.Itens.Items[nX].Total * 100) / Venda.Total;
+      total_produto := total_produto + roundTo(Venda.Itens.Items[nX].Total,-2);
 
-        Prod.vDesc    := (percent_correspondente * Venda.Desconto)/100;
+      if Venda.Desconto > 0 then begin
+        percent_correspondente  := (Venda.Itens.Items[nX].Total * 100) / Venda.Total;
+        desconto_correspondente := (percent_correspondente * Venda.Desconto)/100;
+        { trunca para duas casas decimais }
+        desconto_correspondente := 0.01 * Trunc(100 * desconto_correspondente);
+
+        desconto_distribuido := desconto_distribuido + desconto_correspondente;
+
+        Prod.vDesc           := desconto_correspondente;
+
+        if (Venda.Itens.Count-1) = nX then
+          Prod.vDesc := desconto_correspondente + (Venda.Desconto - desconto_distribuido);
       end
       else
         Prod.vDesc    := 0;
@@ -289,7 +303,7 @@ begin
      NFCe.NFe.Dest.EnderDest.xCpl    := endereco.referencia;
      NFCe.NFe.Dest.EnderDest.xBairro := endereco.bairro;
      NFCe.NFe.Dest.EnderDest.cMun    := endereco.codigo_cidade;
-     NFCe.NFe.Dest.EnderDest.xMun    := endereco.cidade;
+     NFCe.NFe.Dest.EnderDest.xMun    := endereco.Cidade.nome;
      NFCe.NFe.Dest.EnderDest.UF      := endereco.uf;
      NFCe.NFe.Dest.EnderDest.CEP     := StrToIntDef(endereco.cep,0);
      NFCe.NFe.Dest.EnderDest.cPais   := 1058;
@@ -305,21 +319,21 @@ end;
 
 procedure TServicoEmissorNFCe.GerarEmitente(Empresa: TEmpresa; NFCe: NotaFiscal);
 begin
-   NFCe.NFe.Emit.CNPJCPF := Empresa.Cnpj;
-   NFCe.NFe.Emit.IE      := Empresa.IE;
-   NFCe.NFe.Emit.xNome   := Empresa.Razao_social;
-   NFCe.NFe.Emit.xFant   := Empresa.Nome_Fantasia;
+   NFCe.NFe.Emit.CNPJCPF := Empresa.CPF_CNPJ;
+   NFCe.NFe.Emit.IE      := Empresa.RG_IE;
+   NFCe.NFe.Emit.xNome   := Empresa.Razao;
+   NFCe.NFe.Emit.xFant   := Empresa.NomeFantasia;
 
    { Endereco }
-   NFCe.NFe.Emit.EnderEmit.fone    := Empresa.Telefone;
-   NFCe.NFe.Emit.EnderEmit.CEP     := Empresa.Cep;
-   NFCe.NFe.Emit.EnderEmit.xLgr    := Empresa.rua;
-   NFCe.NFe.Emit.EnderEmit.nro     := Empresa.numero;
-   NFCe.NFe.Emit.EnderEmit.xCpl    := Empresa.complemento;
-   NFCe.NFe.Emit.EnderEmit.xBairro := Empresa.bairro;
-   NFCe.NFe.Emit.EnderEmit.cMun    := Empresa.cod_municipio;
-   NFCe.NFe.Emit.EnderEmit.xMun    := Empresa.cidade;
-   NFCe.NFe.Emit.EnderEmit.UF      := Empresa.estado;
+   NFCe.NFe.Emit.EnderEmit.fone    := Empresa.Fone1;
+   NFCe.NFe.Emit.EnderEmit.CEP     := StrToInt(Empresa.Enderecos[0].cep);
+   NFCe.NFe.Emit.EnderEmit.xLgr    := Empresa.Enderecos[0].logradouro;
+   NFCe.NFe.Emit.EnderEmit.nro     := Empresa.Enderecos[0].numero;
+   NFCe.NFe.Emit.EnderEmit.xCpl    := Empresa.Enderecos[0].referencia;
+   NFCe.NFe.Emit.EnderEmit.xBairro := Empresa.Enderecos[0].bairro;
+   NFCe.NFe.Emit.EnderEmit.cMun    := Empresa.Enderecos[0].Cidade.codibge;
+   NFCe.NFe.Emit.EnderEmit.xMun    := Empresa.Enderecos[0].cidade.nome;
+   NFCe.NFe.Emit.EnderEmit.UF      := Empresa.Enderecos[0].Cidade.Estado.sigla;
    NFCe.NFe.Emit.EnderEmit.cPais   := 1058;
    NFCe.NFe.Emit.EnderEmit.xPais   := 'BRASIL';
 
@@ -348,8 +362,8 @@ begin
    end;
 
    NFCe.NFe.Ide.tpAmb    := TpcnTipoAmbiente( IfThen( copy(Configuracoes.NFCe.Ambiente,1,1) = 'P',0,1) );
-   NFCe.NFe.Ide.cUF      := UF_TO_CODUF(Configuracoes.Empresa.estado);
-   NFCe.NFe.Ide.cMunFG   := Configuracoes.Empresa.cod_municipio;
+   NFCe.NFe.Ide.cUF      := UF_TO_CODUF(Configuracoes.Empresa.Enderecos[0].Cidade.Estado.sigla);
+   NFCe.NFe.Ide.cMunFG   := Configuracoes.Empresa.Enderecos[0].Cidade.codibge;
    NFCe.NFe.Ide.finNFe   := fnNormal;
    NFCe.NFe.Ide.tpImp    := tiNFCe;
    NFCe.NFe.Ide.indFinal := cfConsumidorFinal;
@@ -375,7 +389,7 @@ end;
 procedure TServicoEmissorNFCe.GerarPagamentos(Venda: TVenda; NFCe: NotaFiscal);
 var Especificacao :TEspecificacaoMovimentosPorCodigoPedido;
     repositorio   :TREpositorio;
-    Movimentos    :TObjectList;
+    Movimentos    :TObjectList<TMovimento>;
     i             :integer;
     descontou_tx  :boolean;
     descontou_servicos :Boolean;
@@ -388,7 +402,7 @@ begin
   try
     Especificacao := TEspecificacaoMovimentosPorCodigoPedido.Create(Venda.Codigo_pedido);
     repositorio   := TFabricaRepositorio.GetRepositorio(TMovimento.ClassName);
-    Movimentos    := repositorio.GetListaPorEspecificacao( Especificacao, 'codigo_pedido = '+inttostr(Venda.Codigo_pedido));
+    Movimentos    := repositorio.GetListaPorEspecificacao<TMovimento>( Especificacao, 'codigo_pedido = '+inttostr(Venda.Codigo_pedido));
 
     if (Venda.Couvert + Venda.Tx_servico + Venda.Taxa_entrega) <= 0 then
       descontou_tx := true;
@@ -517,6 +531,7 @@ var  StringStream :TStringStream;
      repositorio  :TRepositorio;
      Especificacao :TEspecificacaoFiltraNFCe;
      NFCe          :TNFCe;
+     status, motivo :String;
 begin
     NFCe := nil;
     Especificacao := nil;
@@ -535,8 +550,10 @@ begin
     if self.FACBrNFe.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat <> 135 then
       raise Exception.Create('Falha ao enviar.'+#13#10+self.FACBrNFe.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo);
 
-    NFCe.status         := IntToStr( self.FACBrNFe.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat );
-    NFCe.Motivo         := self.FACBrNFe.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo;//'Cancelamento da NFC-e homologado';
+    status              := IntToStr( self.FACBrNFe.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat );
+    motivo              := self.FACBrNFe.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo;
+    NFCe.status         := IfThen(status = '135','100',status);
+    NFCe.Motivo         := IfThen(status = '135','Cancelamento da NFC-e homologado',motivo);
     NFCe.protocolo      := self.FACBrNFe.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.nProt;
     NFCe.dh_recebimento := self.FACBrNFe.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento;
     NFCe.justificativa  := Justificativa;

@@ -44,7 +44,7 @@ var
 begin
    Endereco:= TEndereco.Create;
    Endereco.codigo         := self.FQuery.FieldByName('codigo').AsInteger;
-   Endereco.codigo_cliente := self.FQuery.FieldByName('codigo_cliente').AsInteger;
+   Endereco.codigo_pessoa  := self.FQuery.FieldByName('codigo_pessoa').AsInteger;
    Endereco.cep            := self.FQuery.FieldByName('cep').AsString;
    Endereco.logradouro     := self.FQuery.FieldByName('logradouro').AsString;
    Endereco.numero         := self.FQuery.FieldByName('numero').AsString;
@@ -85,8 +85,8 @@ begin
    EnderecoAntigo := (AntigoObjeto as TEndereco);
    EnderecoNovo   := (Objeto       as TEndereco);
 
-   if (EnderecoAntigo.codigo_cliente <> EnderecoNovo.codigo_cliente) then
-     Auditoria.AdicionaCampoAlterado('codigo_cliente', IntToStr(EnderecoAntigo.codigo_cliente), IntToStr(EnderecoNovo.codigo_cliente));
+   if (EnderecoAntigo.codigo_pessoa <> EnderecoNovo.codigo_pessoa) then
+     Auditoria.AdicionaCampoAlterado('codigo_pessoa', IntToStr(EnderecoAntigo.codigo_pessoa), IntToStr(EnderecoNovo.codigo_pessoa));
 
    if (EnderecoAntigo.cep <> EnderecoNovo.cep) then
      Auditoria.AdicionaCampoAlterado('cep', EnderecoAntigo.cep, EnderecoNovo.cep);
@@ -120,7 +120,7 @@ var
 begin
   Endereco := (Objeto as TEndereco);
   Auditoria.AdicionaCampoExcluido('codigo'        , IntToStr(Endereco.codigo));
-  Auditoria.AdicionaCampoExcluido('codigo_cliente', IntToStr(Endereco.codigo_cliente));
+  Auditoria.AdicionaCampoExcluido('codigo_pessoa' ,    IntToStr(Endereco.codigo_pessoa));
   Auditoria.AdicionaCampoExcluido('cep'           , Endereco.cep);
   Auditoria.AdicionaCampoExcluido('logradouro'    , Endereco.logradouro);
   Auditoria.AdicionaCampoExcluido('numero'        , Endereco.numero);
@@ -137,7 +137,7 @@ var
 begin
   Endereco := (Objeto as TEndereco);
   Auditoria.AdicionaCampoIncluido('codigo'        ,    IntToStr(Endereco.codigo));
-  Auditoria.AdicionaCampoIncluido('codigo_cliente',    IntToStr(Endereco.codigo_cliente));
+  Auditoria.AdicionaCampoIncluido('codigo_pessoa' ,    IntToStr(Endereco.codigo_pessoa));
   Auditoria.AdicionaCampoIncluido('cep'           ,    Endereco.cep);
   Auditoria.AdicionaCampoIncluido('logradouro'    ,    Endereco.logradouro);
   Auditoria.AdicionaCampoIncluido('numero'        ,    Endereco.numero);
@@ -159,7 +159,7 @@ begin
   Endereco := (Objeto as TEndereco);
 
   self.FQuery.ParamByName('codigo').AsInteger         := Endereco.codigo;
-  self.FQuery.ParamByName('codigo_cliente').AsInteger := Endereco.codigo_cliente;
+  self.FQuery.ParamByName('codigo_pessoa').AsInteger  := Endereco.codigo_pessoa;
   self.FQuery.ParamByName('cep').AsString            := Endereco.cep;
   self.FQuery.ParamByName('logradouro').AsString     := Endereco.logradouro;
   self.FQuery.ParamByName('numero').AsString         := Endereco.numero;
@@ -195,8 +195,8 @@ end;
 
 function TRepositorioEndereco.SQLSalvar: String;
 begin
-  result := 'update or insert into ENDERECOS ( CODIGO ,CODIGO_CLIENTE ,CEP ,LOGRADOURO ,NUMERO ,REFERENCIA ,BAIRRO ,CODIGO_CIDADE ,UF, FONE) '+
-           '                      values ( :CODIGO , :CODIGO_CLIENTE , :CEP , :LOGRADOURO , :NUMERO , :REFERENCIA , :BAIRRO , :CODIGO_CIDADE , :UF, :FONE) ';
+  result := 'update or insert into ENDERECOS ( CODIGO, CODIGO_PESSOA ,CEP ,LOGRADOURO ,NUMERO ,REFERENCIA ,BAIRRO ,CODIGO_CIDADE ,UF, FONE) '+
+           '                      values ( :CODIGO, :CODIGO_PESSOA , :CEP , :LOGRADOURO , :NUMERO , :REFERENCIA , :BAIRRO , :CODIGO_CIDADE , :UF, :FONE) ';
 end;
 
 end.

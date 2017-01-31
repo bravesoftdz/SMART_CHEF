@@ -10,9 +10,9 @@ type
   TBuscaProduto = class(TFrame)
     StaticText1: TStaticText;
     StaticText2: TStaticText;
-    edtCodigo: TCurrencyEdit;
     btnBusca: TBitBtn;
     edtProduto: TEdit;
+    edtCodigo: TEdit;
     procedure edtProdutoEnter(Sender: TObject);
     procedure btnBuscaClick(Sender: TObject);
     procedure edtCodigoChange(Sender: TObject);
@@ -36,6 +36,7 @@ type
     procedure SetExecutarAposLimpar(const Value: TNotifyEvent);
 
   public
+    FSelecionado: Boolean;
     procedure limpa;
 
     property Produto  :TProduto read FProduto  write SetProduto;
@@ -67,7 +68,7 @@ end;
 procedure TBuscaProduto.limpa;
 begin
   Fcodigo := 0;
-  edtCodigo.Clear;
+  edtCodigo.Text:= '0';
   edtProduto.Clear;
 
   if assigned(FProduto) then
@@ -84,14 +85,16 @@ function TBuscaProduto.selecionaProduto: String;
 var condicao_boliche :String;
 begin
   Result := '';
-
+  FSelecionado:= False;
   if dm.Configuracoes.possui_boliche then
-    condicao_boliche := 'where codigo > 1';
-
-  frmPesquisaSimples := TFrmPesquisaSimples.Create(Self,'Select ativo, codigo, descricao, valor from produtos '+condicao_boliche+' order by codigo',
-                                                        'CODIGO', 'Selecione o Produto desejado...');
+    condicao_boliche := 'where codigo > 1'
+  else
+    condicao_boliche := 'where ativo = ''S''';
+  frmPesquisaSimples := TFrmPesquisaSimples.Create(Self,'Select ativo, codigo, descricao, referencia, valor from produtos '+condicao_boliche+' order by codigo',
+                                                        'CODIGO', 'Selecione o Produto desejado...',False,800,500);
 
   if frmPesquisaSimples.ShowModal = mrOk then begin
+    FSelecionado:= True;
     Result := frmPesquisaSimples.cds_retorno.Fields[0].AsString;
     edtCodigo.Text := Result;
     setaProduto;
@@ -105,15 +108,27 @@ var
    codigo        :integer;
    Especificacao :TEspecificacaoEstoquePorProduto;
 begin
-
   RepProduto := TFabricaRepositorio.GetRepositorio(TProduto.ClassName);
-  FProduto   := TProduto(RepProduto.Get(edtCodigo.AsInteger));
+  if Length(edtCodigo.Text) = 13 then
+  begin
+    with dm.qryGenerica do
+    begin
+      Close;
+      SQL.Clear;
+      SQL.Add('SELECT CODIGO FROM PRODUTOS WHERE CODBAR = :ncod');
+      ParamByName('ncod').AsString:= edtCodigo.Text;
+      Open;
+      FProduto   := TProduto(RepProduto.Get(Fields[0].AsInteger));
+    end;
+  end
+  else
+    FProduto   := TProduto(RepProduto.Get(edtCodigo.Text));
 
   codigo := IfThen(dm.Configuracoes.possui_boliche,1,0);
-  
+  FSelecionado:= False;
   if Assigned(FProduto) and (FProduto.codigo > codigo) then begin
-
-    edtCodigo.Value  := FProduto.Codigo;
+    FSelecionado:= True;
+    edtCodigo.Text   := IntToStr(FProduto.Codigo);
     edtProduto.Text  := FProduto.descricao;
     self.Fcodigo     := FProduto.codigo;
 
@@ -123,7 +138,7 @@ begin
 
     edtProduto.SetFocus;
     if Assigned(FProduto) and Assigned(FExecutarAposBuscar) then
-     self.FExecutarAposBuscar(FProduto);
+      self.FExecutarAposBuscar(FProduto);
   end
   else limpa;
 end;
@@ -131,7 +146,7 @@ end;
 procedure TBuscaProduto.Setcodigo(const Value: Integer);
 begin
   Fcodigo := value;
-  edtCodigo.AsInteger := value;
+  edtCodigo.Text := IntToStr(value);
   setaProduto;
 end;
 
@@ -154,7 +169,6 @@ procedure TBuscaProduto.edtProdutoEnter(Sender: TObject);
 begin
   if not Assigned(FProduto) or (FProduto.Codigo <= 0) then
     btnBusca.Click;
-
   keybd_event(VK_RETURN, 0, 0, 0);
 end;
 
@@ -166,14 +180,13 @@ end;
 procedure TBuscaProduto.edtCodigoChange(Sender: TObject);
 begin
   edtProduto.Clear;
-
-  if (self.edtCodigo.AsInteger <= 0) then
+  if (self.edtCodigo.Text = '0') then
     self.limpa;
 end;
 
 procedure TBuscaProduto.edtCodigoExit(Sender: TObject);
 begin
-  if edtCodigo.AsInteger > 0 then
+  if ((self.edtCodigo.Text) <> '0') and ((self.edtCodigo.Text) <> '') then
     buscaProduto;
 end;
 

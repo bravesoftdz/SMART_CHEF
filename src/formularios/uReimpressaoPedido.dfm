@@ -499,7 +499,6 @@ inherited frmReimpressaoPedido: TfrmReimpressaoPedido
       Origin = 'VALOR_TOTAL'
       DisplayFormat = ',0.00; ,0.00'
       Precision = 18
-      Size = 2
     end
     object qryPedidosCLIENTE: TStringField
       FieldName = 'CLIENTE'

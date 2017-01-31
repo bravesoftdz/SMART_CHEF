@@ -6,6 +6,7 @@ inherited frmFinalizaPedido: TfrmFinalizaPedido
   ClientWidth = 1227
   Font.Height = -13
   OnShow = FormShow
+  ExplicitLeft = -303
   ExplicitWidth = 1233
   ExplicitHeight = 653
   PixelsPerInch = 96

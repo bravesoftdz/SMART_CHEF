@@ -5,7 +5,7 @@ interface
 uses
   SysUtils,
   Contnrs,
-  Produto, Usuario, AdicionalItem;
+  Produto, Usuario, AdicionalItem, Generics.Collections;
 
 type
   TItem = class
@@ -18,7 +18,7 @@ type
     Fvalor: Real;
     FProduto :TProduto;
     Fquantidade: Real;
-    FAdicionais :TObjectList;
+    FAdicionais :TObjectList<TAdicionalItem>;
     Fimpresso :String;
     FvalorUnitario :Real;
     FCodigo_usuario :integer;
@@ -30,7 +30,7 @@ type
     FMotivoCancelamento :String;
 
     function GetProduto: TProduto;
-    function GetAdicionais: TObjectList;
+    function GetAdicionais: TObjectList<TAdicionalItem>;
 
     destructor Destroy;override;
     function GetUsuario: TUsuario;
@@ -44,7 +44,7 @@ type
     property codigo_produto :integer     read Fcodigo_produto write Fcodigo_produto;
     property hora           :TDateTime   read Fhora           write Fhora;
     property quantidade     :Real        read Fquantidade     write Fquantidade;
-    property Adicionais     :TObjectList read GetAdicionais   write FAdicionais;
+    property Adicionais     :TObjectList<TAdicionalItem> read GetAdicionais   write FAdicionais;
     property impresso       :String      read Fimpresso       write Fimpresso;
     property valor_Unitario  :Real       read FvalorUnitario  write FvalorUnitario;
     property codigo_usuario :integer     read FCodigo_usuario write FCodigo_usuario;
@@ -74,7 +74,7 @@ begin
   inherited;
 end;
 
-function TItem.GetAdicionais: TObjectList;
+function TItem.GetAdicionais: TObjectList<TAdicionalItem>;
 var
   Repositorio   :TRepositorio;
   Especificacao :TEspecificacaoAdicionalDoItem;
@@ -86,7 +86,7 @@ begin
       if not Assigned(self.FAdicionais) then begin
         Especificacao         := TEspecificacaoAdicionalDoItem.Create(self);
         Repositorio           := TFabricaRepositorio.GetRepositorio(TAdicionalItem.ClassName);
-        self.FAdicionais      := Repositorio.GetListaPorEspecificacao(Especificacao, 'CODIGO_ITEM ='+IntToStr(self.Codigo));
+        self.FAdicionais      := Repositorio.GetListaPorEspecificacao<TAdicionalItem>(Especificacao, 'CODIGO_ITEM ='+IntToStr(self.Codigo));
       end;
 
       result := self.FAdicionais;

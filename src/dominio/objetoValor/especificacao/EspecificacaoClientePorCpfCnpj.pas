@@ -33,7 +33,7 @@ function TEspecificacaoClientePorCpfCnpj.SatisfeitoPor(Objeto: TObject): Boolean
 var
   Cliente :TCliente;
 begin
-   Cliente := (Objeto as TCliente);
+   Cliente := TCliente(Objeto);
 
    result := false;
 

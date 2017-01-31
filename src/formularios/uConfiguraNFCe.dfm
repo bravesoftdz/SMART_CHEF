@@ -28,6 +28,7 @@ inherited frmConfiguraNFCe: TfrmConfiguraNFCe
   inherited pgGeral: TPageControl
     Width = 624
     Height = 410
+    ActivePage = tsDados
     ExplicitWidth = 624
     ExplicitHeight = 410
     inherited tsConsulta: TTabSheet

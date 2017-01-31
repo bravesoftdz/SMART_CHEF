@@ -121,11 +121,11 @@ var
 begin
   inherited;
 
-  Cliente := (Registro as TCliente);
+  Cliente := TCliente(Registro);
 
   self.cds.Edit;
   self.cdsCODIGO.AsInteger := Cliente.codigo;
-  self.cdsNOME.AsString    := Cliente.nome;
+  self.cdsNOME.AsString    := Cliente.Razao;
   self.cdsCPF.AsString     := Cliente.cpf_cnpj;
   self.cds.Post;
 end;
@@ -181,16 +181,36 @@ begin
    Cliente      := nil;
    Repositorio  := nil;
    Endereco     := nil;
-
    try
+     cdsendereco.AfterScroll := nil;
      Repositorio   := TFabricaRepositorio.GetRepositorio(TCliente.ClassName);
      Cliente       := TCliente(Repositorio.Get(StrToIntDef(self.edtCodigo.Text, 0)));
 
      if not Assigned(Cliente) then
       Cliente := TCliente.Create;
 
-     Cliente.nome          := self.edtNome.Text;
+     Cliente.Razao         := self.edtNome.Text;
      Cliente.cpf_cnpj      := self.cpfCnpj.edtCpf.Text;
+     Cliente.Pessoa        := self.cpfCnpj.pessoa;
+     Cliente.Tipo          := 'C';
+
+     cdsendereco.First;
+     while not cdsendereco.Eof do begin
+       if Assigned(Cliente.Enderecos) and (cdsenderecoCODIGO.AsInteger = 0) then
+         Cliente.Enderecos.Add(TEndereco.Create);
+
+       Cliente.Enderecos[cdsendereco.RecNo-1].codigo         := cdsenderecoCODIGO.AsInteger;
+       Cliente.Enderecos[cdsendereco.RecNo-1].codigo_pessoa  := codigo_cli1;
+       Cliente.Enderecos[cdsendereco.RecNo-1].cep            := cdsenderecoCEP.AsString;
+       Cliente.Enderecos[cdsendereco.RecNo-1].logradouro     := cdsenderecologradouro.AsString;
+       Cliente.Enderecos[cdsendereco.RecNo-1].numero         := cdsendereconumero.AsString;
+       Cliente.Enderecos[cdsendereco.RecNo-1].referencia     := cdsenderecoreferencia.AsString;
+       Cliente.Enderecos[cdsendereco.RecNo-1].bairro         := cdsenderecobairro.AsString;
+       Cliente.Enderecos[cdsendereco.RecNo-1].codigo_cidade  := cdsenderecocod_cidade.AsInteger;
+       Cliente.Enderecos[cdsendereco.RecNo-1].uf             := cdsenderecoUF.AsString;
+       Cliente.Enderecos[cdsendereco.RecNo-1].fone           := cdsenderecofone.AsString;
+       cdsendereco.Next;
+     end;
 
      Repositorio.Salvar(Cliente);
 
@@ -203,41 +223,12 @@ begin
      if (dm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
        Repositorio.Salvar_2(Cliente);
 
-     Rependereco := TFabricaRepositorio.GetRepositorio(TEndereco.ClassName);
-
-     cdsendereco.First;
-     while not cdsendereco.Eof do begin
-       Endereco := TEndereco(Rependereco.Get(cdsenderecoCODIGO.AsInteger));
-
-       if not Assigned(Endereco) then
-         Endereco := TEndereco.Create;
-
-       Endereco.codigo_cliente := codigo_cli1;
-       Endereco.cep            := cdsenderecoCEP.AsString;
-       Endereco.logradouro     := cdsenderecologradouro.AsString;
-       Endereco.numero         := cdsendereconumero.AsString;
-       Endereco.referencia     := cdsenderecoreferencia.AsString;
-       Endereco.bairro         := cdsenderecobairro.AsString;
-       Endereco.codigo_cidade  := cdsenderecocod_cidade.AsInteger;
-       Endereco.uf             := cdsenderecoUF.AsString;
-       Endereco.fone           := cdsenderecofone.AsString;
-
-       Rependereco.Salvar(Endereco);
-
-       Endereco.codigo_cliente := Cliente.codigo;
-       Rependereco.Salvar_2(Endereco);
-
-       cdsendereco.Next;
-     end;
-
      if not cdsEndDeletado.IsEmpty then begin
-
        cdsEndDeletado.First;
        while not cdsEndDeletado.Eof do begin
          Rependereco.RemoverPorIdentificador(cdsEndDeletadoCOD_END.AsInteger);
          cdsEndDeletado.Next;
        end;
-
      end;
 
      result := Cliente;
@@ -246,6 +237,7 @@ begin
      FreeAndNil(Repositorio);
      FreeAndNil(Rependereco);     
      FreeAndNil(Endereco);
+     cdsendereco.AfterScroll := cdsenderecoAfterScroll;
    end;
 end;
 
@@ -255,11 +247,11 @@ var
 begin
   inherited;
 
-  Cliente := (Registro as TCliente);
+  Cliente := TCliente(Registro);
 
   self.cds.Append;
   self.cdsCODIGO.AsInteger   := Cliente.codigo;
-  self.cdsNOME.AsString      := Cliente.nome;
+  self.cdsNOME.AsString      := Cliente.Razao;
   self.cdsCPF.AsString       := Cliente.cpf_cnpj; 
   self.cds.Post;
 end;
@@ -299,10 +291,10 @@ begin
     if not Assigned(Cliente) then exit;
 
     edtCodigo.Text              := IntToStr(Cliente.codigo);
-    self.edtNome.Text           :=  Cliente.nome;
+    self.edtNome.Text           :=  Cliente.razao;
     self.cpfCnpj.cpfCnpj        :=  Cliente.cpf_cnpj;
 
-    if assigned(Cliente.Enderecos) then begin
+    if assigned(Cliente.Enderecos) and (Cliente.Enderecos.count > 0) then begin
 
       for i := 0 to Cliente.Enderecos.Count - 1 do begin
 
@@ -366,7 +358,7 @@ begin
   result := false;
   
   if (self.EstadoTela = tetIncluir) or ((self.EstadoTela = tetAlterar) and (cpf_ao_alterar <> cpfCnpj.edtCpf.Text)) then
-    result := campo_por_campo('CLIENTES','CODIGO','CPF_CNPJ',cpfCnpj.edtCpf.Text) <> '';
+    result := campo_por_campo('PESSOAS','CODIGO','CPF_CNPJ',cpfCnpj.edtCpf.Text) <> '';
 end;
 
 procedure TfrmCadastroCliente.btnIncluirEndClick(Sender: TObject);
@@ -398,11 +390,7 @@ begin
   edtBairro.Text                   := cdsenderecobairro.AsString;
   edtFone.Text                     := cdsenderecofone.AsString;
   edtComplemento.Text              := cdsenderecoreferencia.AsString;
-  BuscaCidade1.edtCodCid.AsInteger := cdsenderecocod_cidade.AsInteger;
-
-  if BuscaCidade1.edtCodCid.AsInteger > 0 then
-    BuscaCidade1.edtCidadeEnter(nil);
-
+  BuscaCidade1.CodigoMunicipio     := cdsenderecocod_cidade.AsInteger;
 end;
 
 procedure TfrmCadastroCliente.limpa_endereco;

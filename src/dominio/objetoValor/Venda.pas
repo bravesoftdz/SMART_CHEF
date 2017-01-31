@@ -108,7 +108,7 @@ uses
   Classes,
   ExcecaoValorInvalido,
   SysUtils,
-  Contnrs,
+  Contnrs, math,
   CSTTributadoIntegralmente, NcmIBPT, CSOSNTributadoSNSemCredito,
   EspecificacaoClientePorCpfCnpj, FabricaRepositorio, Repositorio;
 
@@ -316,13 +316,14 @@ end;
 function TVenda.GetTotalBruto: Real;
 var
   nX :Integer;
+  total :real;
 begin
    try
       result := 0;
 
       for nX := 0 to (Itens.Count-1) do begin
         if Itens.Items[nX].Produto.tipo = 'P' then
-          result := result + Itens.Items[nX].Total;
+          result := result + roundTo(Itens.Items[nX].Total,-2);
       end;
    except
      result := 0;

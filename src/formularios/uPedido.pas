@@ -9,7 +9,7 @@ uses
   DBGrids, DBGridCBN, pngimage, Buttons, frameBuscaProduto, Produto, Mask,
   RXToolEdit, RXCurrEdit, Pedido, StrUtils, contnrs, Menus, MateriaPrima, Funcoes,
   ImgList, ComCtrls, ACBrBase, DateTimeUtilitario, ACBrDevice, Parametros,
-  frameBuscaCliente, System.ImageList;
+  frameBuscaCliente, System.ImageList, generics.collections;
 
 type
   TfrmPedido = class(TfrmPadrao)
@@ -201,6 +201,8 @@ type
     procedure edtCpfKeyPress(Sender: TObject; var Key: Char);
     procedure edtTelefoneExit(Sender: TObject);
     procedure btnFinalizaRapidoClick(Sender: TObject);
+    procedure edtQuantidadeEnter(Sender: TObject);
+    procedure edtPrecoEnter(Sender: TObject);
 
   private
     Parametros           :TParametros;
@@ -233,7 +235,7 @@ type
 
   private
     procedure Salva_Pedido(const mantem_na_tela :boolean = false);
-    procedure Salva_Pedido_pos_recebimento(const recebendo :boolean = false; const finalizando :boolean = false);
+    procedure Salva_Pedido_pos_recebimento(imprimePedido :Boolean; const recebendo :boolean = false; const finalizando :boolean = false);
     procedure Salva_movimento(Pedido :TPedido);
 
     procedure salva_recebimento_por_item;
@@ -281,7 +283,7 @@ begin
   carrega_padroes;
   FItensDeletados      := TStringList.Create;
   FAdicionaisDeletados := TStringList.Create;
-  label19.Caption      := IfThen(dm.Configuracoes.Utiliza_comandas, 'N° comanda', 'N° mesa');
+  label19.Caption      :=  'N° comanda'; //IfThen(dm.Configuracoes.Utiliza_comandas, 'N° comanda', 'N° mesa');
   label1.Visible       := dm.Configuracoes.Utiliza_comandas;
   cbMesa.Visible       := dm.Configuracoes.Utiliza_comandas;
   cbmesa.ItemIndex     := IfThen(dm.Configuracoes.Utiliza_comandas, -1, 0);
@@ -390,7 +392,7 @@ begin
   cdsItens.Post;
 
   BuscaProduto1.limpa;
-  edtQuantidade.Clear;
+  edtQuantidade.Value:= 1;
   edtPreco.Clear;
 
   calcula_totais;
@@ -515,6 +517,7 @@ begin
 end;
 
 procedure TfrmPedido.finalizaPedido(const rapido: Boolean);
+var imprimePedido :Boolean;
 begin
   if not confere_obrigatorios then
     exit;
@@ -546,11 +549,16 @@ begin
            buscaComanda1.Pedido;
          end;
 
-         Salva_Pedido_pos_recebimento(true, (frmFinalizaPedido.edtTotalRestante.value = 0) );
+         imprimePedido := true;
+         if dm.Configuracoes.perguntaImprimirPedido then
+           imprimePedido := confirma('Deseja imprimir pedido?');
+
+         Salva_Pedido_pos_recebimento(imprimePedido, true, frmFinalizaPedido.pagamento_completo );
 
          buscaComanda1.CodigoPedido := Self.Fcodigo_pedido;
 
-         if not (frmFinalizaPedido.cdsItensPrePagos.IsEmpty) and (frmFinalizaPedido.edtTotalRestante.Value > 0) then
+         if (imprimePedido)and((dm.Configuracoes.impressoes_parciais) and not (frmFinalizaPedido.cdsItensPrePagos.IsEmpty) and (frmFinalizaPedido.edtTotalRestante.Value > 0)) then
+          //or (not (dm.Configuracoes.impressoes_parciais) and (frmFinalizaPedido.pagamento_completo)) then
             cria_imprime_pedido_parcial;
 
          if not (frmFinalizaPedido.ckbSC.Checked) and (produtos_no_pedido > 0) and (buscaComanda1.Pedido.sts_recebimento = 'F') then begin
@@ -797,10 +805,10 @@ begin
     avisar('Primeiramente selecione a comanda desejada.');
     buscaComanda1.edtNumeroComanda.SetFocus;
   end
-  else if not (cbMesa.ItemIndex >= 0) then begin
+  {else if not (cbMesa.ItemIndex >= 0) then begin
     avisar('A mesa não foi informada.');
     cbmesa.SetFocus;
-  end
+  end}
   else if cdsItens.IsEmpty then begin
     avisar('Ao menos 1 item deve ser inserido ao pedido.');
     BuscaProduto1.edtCodigo.SetFocus;
@@ -816,7 +824,7 @@ end;
 procedure TfrmPedido.Salva_Pedido(const mantem_na_tela :boolean);
 var repositorio   :TRepositorio;
     Item          :TItem;
-    Itens         :TObjectList;
+    Itens         :TObjectList<TItem>;
     AdicionalItem :TAdicionalItem;
     Caminho_externo :String;
     before_Conect  :TNotifyEvent;
@@ -858,7 +866,7 @@ begin
    buscaComanda1.Pedido.acrescimo       := edtValorAcrescimo.Value;
    buscaComanda1.Pedido.valor_total     := edtTotalPedido.Value;
 
-   Itens := TObjectList.Create;
+   Itens := TObjectList<TItem>.Create;
    Item  := nil;
 
    cdsItens.First;
@@ -893,7 +901,7 @@ begin
      if not cdsAdicionais.IsEmpty then begin
 
        AdicionalItem   := nil;
-       Item.Adicionais := TObjectList.Create;
+       Item.Adicionais := TObjectList<TAdicionalItem>.Create;
 
        {inclui o item adicional no item}
        cdsAdicionais.First;
@@ -963,7 +971,7 @@ begin
  end;
 end;
 
-procedure TfrmPedido.Salva_Pedido_pos_recebimento(const recebendo :boolean = false; const finalizando :boolean = false);
+procedure TfrmPedido.Salva_Pedido_pos_recebimento(imprimePedido :Boolean;const recebendo :boolean = false; const finalizando :boolean = false);
 var repositorio   :TRepositorio;
     Item          :TItem;
     Itens         :TObjectList;
@@ -1002,7 +1010,9 @@ begin
 
      if finalizando then begin
        Baixa_estoque(Pedido);
-       imprimir_pedido(false);
+
+       if imprimePedido then
+         imprimir_pedido(false);
      end;
    end;
 
@@ -1077,7 +1087,9 @@ end;
 procedure TfrmPedido.btnCancelarClick(Sender: TObject);
 begin
   limpa_dados_pedido;
-  pnlDados.Enabled          := false;
+  if pnlDados.Enabled then
+    pnlDados.Enabled          := false;
+
   buscaComanda1.Enabled     := true;
   buscaComanda1.edtNumeroComanda.SetFocus;
   btnImprimirPedido.Visible := false;
@@ -1416,7 +1428,7 @@ end;
 procedure TfrmPedido.Salva_movimento(Pedido :TPedido);
 var repositorio :TRepositorio;
     Movimento   :TMovimento;
-    Movimentos  :TObjectList;
+    Movimentos  :TObjectList<TMovimento>;
     Especificacao :TEspecificacaoMovimentosPorCodigoPedido;
     i :integer;
     achou :Boolean;
@@ -1429,7 +1441,7 @@ begin
     repositorio   := TFabricaRepositorio.GetRepositorio(TMovimento.ClassName);
     Especificacao := TEspecificacaoMovimentosPorCodigoPedido.Create( Pedido.codigo );
 
-    Movimentos    := repositorio.GetListaPorEspecificacao( Especificacao );
+    Movimentos    := repositorio.GetListaPorEspecificacao<TMovimento>( Especificacao );
 
     frmFinalizaPedido.cdsMoedas.First;
     while not frmFinalizaPedido.cdsMoedas.Eof do begin
@@ -1480,7 +1492,7 @@ begin
   lbUsuario.Caption         := '- '+fdm.UsuarioLogado.Nome;
   btnFinalizar.Visible      := AnsiMatchText(dm.UsuarioLogado.Departamento.nome, ['CAIXA','SERVIDOR']);
   btnAgrupa.Visible         := (AnsiMatchText(dm.UsuarioLogado.Departamento.nome, ['CAIXA','SERVIDOR'])) and (dm.Configuracoes.Utiliza_comandas);
-  btnLiberarComanda.Visible := AnsiMatchText(dm.UsuarioLogado.Departamento.nome, ['CAIXA','SERVIDOR']) and (dm.Configuracoes.possui_dispensadora);
+  btnLiberarComanda.Visible := AnsiMatchText(dm.UsuarioLogado.Departamento.nome, ['CAIXA','SERVIDOR']); // and (dm.Configuracoes.possui_dispensadora);
 
   Parametros                := TParametros.Create;
 
@@ -1975,7 +1987,10 @@ end;
 procedure TfrmPedido.buscaComanda1edtNumeroComandaExit(Sender: TObject);
 begin
   inherited;
-  buscaComanda1.efetua_busca;
+  {if buscaComanda1.edtNumeroComanda.Text = '' then
+    buscaComanda1btnBuscaClick(Self)
+  else}
+    buscaComanda1.efetua_busca;
 
 end;
 
@@ -2020,7 +2035,7 @@ begin
        lbCliente.Font.Color := IfThen(assigned(Cliente), $0000B300, $00FF8000);
 
        if assigned(Cliente) then begin
-         edtCliente.Text  := Cliente.nome;
+         edtCliente.Text  := Cliente.Razao;
 
          if assigned(Cliente.Enderecos) and (Cliente.Enderecos.count > 0) then
            edtTelefone.Text := TEndereco(Cliente.Enderecos.Items[0]).fone;
@@ -2038,6 +2053,20 @@ procedure TfrmPedido.edtCpfKeyPress(Sender: TObject; var Key: Char);
 begin
   If not( key in['0'..'9',#08] ) then 
     key:=#0;
+end;
+
+procedure TfrmPedido.edtPrecoEnter(Sender: TObject);
+begin
+  if not Assigned(BuscaProduto1.Produto) then
+    BuscaProduto1.edtCodigo.SetFocus;
+
+end;
+
+procedure TfrmPedido.edtQuantidadeEnter(Sender: TObject);
+begin
+  if not Assigned(BuscaProduto1.Produto) then
+    BuscaProduto1.edtCodigo.SetFocus;
+
 end;
 
 procedure TfrmPedido.salva_recebimento_por_item;
@@ -2086,9 +2115,7 @@ end;
 procedure TfrmPedido.cria_imprime_pedido_parcial;
 var repositorio :TRepositorioPedido;
 begin
-
   repositorio.imprime_pedido(buscaComanda1.Pedido, dm.UsuarioLogado.Departamento, '', frmFinalizaPedido.cdsItensPrePagos);
-
 end;
 
 procedure TfrmPedido.edtTelefoneExit(Sender: TObject);

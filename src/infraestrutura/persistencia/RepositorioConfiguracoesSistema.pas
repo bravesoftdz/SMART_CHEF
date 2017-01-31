@@ -52,6 +52,8 @@ begin
    ConfiguracoesSistema.possui_delivery         := self.FQuery.FieldByName('possui_delivery').AsString = '0';
    ConfiguracoesSistema.imp_dep_espacada        := self.FQuery.FieldByName('imp_dep_espacada').AsString = '0';
    ConfiguracoesSistema.desconto_pedido         := self.FQuery.FieldByName('desconto_pedido').AsString = '0';
+   ConfiguracoesSistema.impressoes_parciais     := self.FQuery.FieldByName('impressoes_parciais').AsString = '0';
+   ConfiguracoesSistema.perguntaImprimirPedido  := self.FQuery.FieldByName('pergunta_imprimir_pedido').AsString = '0';
 
    result := ConfiguracoesSistema;
 end;
@@ -105,8 +107,14 @@ begin
    if (ConfiguracoesSistemaAntigo.imp_dep_espacada <> ConfiguracoesSistemaNovo.imp_dep_espacada) then
      Auditoria.AdicionaCampoAlterado('imp_dep_espacada', IfThen(ConfiguracoesSistemaAntigo.imp_dep_espacada,'0','1'), IfThen(ConfiguracoesSistemaNovo.imp_dep_espacada,'0','1'));
 
-if (ConfiguracoesSistemaAntigo.desconto_pedido <> ConfiguracoesSistemaNovo.desconto_pedido) then
+   if (ConfiguracoesSistemaAntigo.desconto_pedido <> ConfiguracoesSistemaNovo.desconto_pedido) then
      Auditoria.AdicionaCampoAlterado('desconto_pedido', IfThen(ConfiguracoesSistemaAntigo.desconto_pedido,'0','1'), IfThen(ConfiguracoesSistemaNovo.desconto_pedido,'0','1'));
+
+   if (ConfiguracoesSistemaAntigo.impressoes_parciais <> ConfiguracoesSistemaNovo.impressoes_parciais) then
+     Auditoria.AdicionaCampoAlterado('impressoes_parciais', IfThen(ConfiguracoesSistemaAntigo.impressoes_parciais,'0','1'), IfThen(ConfiguracoesSistemaNovo.impressoes_parciais,'0','1'));
+
+   if (ConfiguracoesSistemaAntigo.perguntaImprimirPedido <> ConfiguracoesSistemaNovo.perguntaImprimirPedido) then
+     Auditoria.AdicionaCampoAlterado('pergunta_imprimir_pedido', IfThen(ConfiguracoesSistemaAntigo.perguntaImprimirPedido,'0','1'), IfThen(ConfiguracoesSistemaNovo.perguntaImprimirPedido,'0','1'));
 end;
 
 procedure TRepositorioConfiguracoesSistema.SetCamposExcluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -123,6 +131,8 @@ begin
   Auditoria.AdicionaCampoExcluido('possui_delivery'    , IfThen(ConfiguracoesSistema.possui_delivery,'0','1'));
   Auditoria.AdicionaCampoExcluido('imp_dep_espacada'    , IfThen(ConfiguracoesSistema.imp_dep_espacada,'0','1'));
   Auditoria.AdicionaCampoExcluido('desconto_pedido'    , IfThen(ConfiguracoesSistema.desconto_pedido,'0','1'));
+  Auditoria.AdicionaCampoExcluido('impressoes_parciais' , IfThen(ConfiguracoesSistema.impressoes_parciais,'0','1'));
+  Auditoria.AdicionaCampoExcluido('pergunta_imprimir_pedido' , IfThen(ConfiguracoesSistema.perguntaImprimirPedido,'0','1'));
 end;
 
 procedure TRepositorioConfiguracoesSistema.SetCamposIncluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -139,6 +149,8 @@ begin
   Auditoria.AdicionaCampoIncluido('possui_delivery'    , IfThen(ConfiguracoesSistema.possui_delivery,'0','1'));
   Auditoria.AdicionaCampoIncluido('imp_dep_espacada'    , IfThen(ConfiguracoesSistema.imp_dep_espacada,'0','1'));
   Auditoria.AdicionaCampoIncluido('desconto_pedido'    , IfThen(ConfiguracoesSistema.desconto_pedido,'0','1'));
+  Auditoria.AdicionaCampoIncluido('impressoes_parciais' , IfThen(ConfiguracoesSistema.impressoes_parciais,'0','1'));
+  Auditoria.AdicionaCampoIncluido('pergunta_imprimir_pedido' , IfThen(ConfiguracoesSistema.perguntaImprimirPedido,'0','1'));
 end;
 
 procedure TRepositorioConfiguracoesSistema.SetIdentificador(Objeto: TObject; Identificador: Variant);
@@ -160,6 +172,8 @@ begin
   self.FQuery.ParamByName('possui_delivery').AsInteger     := IfThen(ConfiguracoesSistema.possui_delivery,0,1);
   self.FQuery.ParamByName('imp_dep_espacada').AsInteger    := IfThen(ConfiguracoesSistema.imp_dep_espacada,0,1);
   self.FQuery.ParamByName('desconto_pedido').AsInteger     := IfThen(ConfiguracoesSistema.desconto_pedido,0,1);
+  self.FQuery.ParamByName('impressoes_parciais').AsInteger := IfThen(ConfiguracoesSistema.impressoes_parciais,0,1);
+  self.FQuery.ParamByName('pergunta_imprimir_pedido').AsInteger := IfThen(ConfiguracoesSistema.perguntaImprimirPedido,0,1);
 end;
 
 function TRepositorioConfiguracoesSistema.SQLGet: String;
@@ -184,8 +198,12 @@ end;
 
 function TRepositorioConfiguracoesSistema.SQLSalvar: String;
 begin
-  result := 'update or insert into CONFIGURACOES_SISTEMA (CODIGO ,POSSUI_BOLICHE ,POSSUI_DISPENSADORA ,DUAS_VIAS_PEDIDO, preco_produto_alteravel, Utiliza_comandas, possui_delivery, imp_dep_espacada, desconto_pedido) '+
-           '                      values ( :CODIGO , :POSSUI_BOLICHE , :POSSUI_DISPENSADORA , :DUAS_VIAS_PEDIDO, :preco_produto_alteravel, :Utiliza_comandas, :possui_delivery, :imp_dep_espacada, :desconto_pedido) ';
+  result := 'update or insert into CONFIGURACOES_SISTEMA (CODIGO ,POSSUI_BOLICHE ,POSSUI_DISPENSADORA ,DUAS_VIAS_PEDIDO, '+
+            '                                             preco_produto_alteravel, Utiliza_comandas, possui_delivery,    '+
+            '                                             imp_dep_espacada, desconto_pedido, impressoes_parciais, pergunta_imprimir_pedido) '+
+            '                                     values ( :CODIGO , :POSSUI_BOLICHE , :POSSUI_DISPENSADORA , :DUAS_VIAS_PEDIDO, '+
+            '                                              :preco_produto_alteravel, :Utiliza_comandas, :possui_delivery,        '+
+            '                                              :imp_dep_espacada, :desconto_pedido, :impressoes_parciais, :pergunta_imprimir_pedido) ';
 end;
 
 end.

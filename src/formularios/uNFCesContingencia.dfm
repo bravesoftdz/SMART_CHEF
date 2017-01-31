@@ -10,7 +10,7 @@ inherited frmNFCesContingencia: TfrmNFCesContingencia
   object Label1: TLabel [0]
     Left = 191
     Top = 35
-    Width = 255
+    Width = 254
     Height = 17
     Caption = '<Dois cliques> seleciona a NFC-e desejada'
     Font.Charset = DEFAULT_CHARSET
@@ -23,7 +23,7 @@ inherited frmNFCesContingencia: TfrmNFCesContingencia
   object Label2: TLabel [1]
     Left = 191
     Top = 5
-    Width = 297
+    Width = 296
     Height = 17
     Caption = 'NFC-es em conting'#234'ncia (pendentes para envio)'
     Font.Charset = DEFAULT_CHARSET
@@ -36,8 +36,12 @@ inherited frmNFCesContingencia: TfrmNFCesContingencia
   inherited pnlPropaganda: TPanel
     Top = 448
     Width = 895
+    TabOrder = 3
+    ExplicitTop = 448
+    ExplicitWidth = 895
     inherited Shape8: TShape
       Width = 893
+      ExplicitWidth = 893
     end
   end
   object pnlBotoes: TPanel
@@ -46,7 +50,7 @@ inherited frmNFCesContingencia: TfrmNFCesContingencia
     Width = 172
     Height = 448
     Align = alLeft
-    TabOrder = 1
+    TabOrder = 0
     object Shape12: TShape
       Left = 1
       Top = 1
@@ -393,7 +397,7 @@ inherited frmNFCesContingencia: TfrmNFCesContingencia
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
-    TabOrder = 3
+    TabOrder = 1
     OnClick = chkSelecionarClick
   end
   object qryPedidos: TFDQuery
@@ -423,7 +427,6 @@ inherited frmNFCesContingencia: TfrmNFCesContingencia
       Origin = 'VALOR_TOTAL'
       DisplayFormat = ',0.00; ,0.00'
       Precision = 18
-      Size = 2
     end
     object qryPedidosCLIENTE: TStringField
       FieldName = 'CLIENTE'

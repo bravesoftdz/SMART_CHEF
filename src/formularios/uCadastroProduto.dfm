@@ -5,7 +5,6 @@ inherited frmCadastroProduto: TfrmCadastroProduto
   ClientHeight = 602
   ClientWidth = 670
   OnDestroy = FormDestroy
-  ExplicitTop = -30
   ExplicitWidth = 676
   ExplicitHeight = 630
   PixelsPerInch = 96
@@ -16,12 +15,12 @@ inherited frmCadastroProduto: TfrmCadastroProduto
   end
   inherited pnlBotoes: TPanel
     Height = 567
-    ExplicitHeight = 516
+    ExplicitHeight = 567
   end
   inherited pnlPropaganda: TPanel
     Top = 567
     Width = 670
-    ExplicitTop = 516
+    ExplicitTop = 567
     ExplicitWidth = 670
     inherited Shape8: TShape
       Width = 668
@@ -31,16 +30,19 @@ inherited frmCadastroProduto: TfrmCadastroProduto
   inherited pgGeral: TPageControl
     Width = 527
     Height = 567
+    ActivePage = tsDados
     ExplicitWidth = 527
-    ExplicitHeight = 516
+    ExplicitHeight = 567
     inherited tsConsulta: TTabSheet
+      ExplicitLeft = 0
+      ExplicitTop = 0
       ExplicitWidth = 519
       ExplicitHeight = 536
       inherited gridConsulta: TDBGridCBN
         Left = 0
         Top = 0
         Width = 519
-        Height = 486
+        Height = 513
         Columns = <
           item
             Expanded = False
@@ -64,21 +66,21 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           end>
       end
       inherited lblAjudaSelecionar: TStaticText
-        Top = 420
+        Top = 516
         Width = 222
         Align = alNone
         Visible = False
-        ExplicitTop = 420
+        ExplicitTop = 516
       end
     end
     inherited tsDados: TTabSheet
       ExplicitWidth = 519
-      ExplicitHeight = 485
+      ExplicitHeight = 536
       inherited pnlDados: TPanel
         Width = 519
         Height = 536
         ExplicitWidth = 519
-        ExplicitHeight = 485
+        ExplicitHeight = 536
         DesignSize = (
           519
           536)
@@ -103,9 +105,9 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           ExplicitHeight = 532
         end
         object Image1: TImage
-          Left = -24
-          Top = 268
-          Width = 546
+          Left = 11
+          Top = 310
+          Width = 505
           Height = 31
           Picture.Data = {
             0954506E67496D61676589504E470D0A1A0A0000000D49484452000007080000
@@ -1040,7 +1042,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
         end
         object lblRazao: TLabel
           Left = 25
-          Top = 25
+          Top = 17
           Width = 119
           Height = 15
           Caption = 'Descri'#231#227'o do produto'
@@ -1053,7 +1055,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
         end
         object Label12: TLabel
           Left = 24
-          Top = 73
+          Top = 65
           Width = 29
           Height = 15
           Caption = 'Valor'
@@ -1066,7 +1068,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
         end
         object Label1: TLabel
           Left = 330
-          Top = 170
+          Top = 210
           Width = 35
           Height = 15
           Caption = 'Ativo?'
@@ -1079,7 +1081,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
         end
         object Label2: TLabel
           Left = 12
-          Top = 16
+          Top = 8
           Width = 11
           Height = 21
           AutoSize = False
@@ -1093,7 +1095,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
         end
         object Label3: TLabel
           Left = 12
-          Top = 64
+          Top = 56
           Width = 11
           Height = 21
           AutoSize = False
@@ -1106,8 +1108,8 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           ParentFont = False
         end
         object Label5: TLabel
-          Left = 12
-          Top = 272
+          Left = 15
+          Top = 319
           Width = 495
           Height = 13
           Caption = 
@@ -1123,7 +1125,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
         end
         object Label8: TLabel
           Left = 405
-          Top = 23
+          Top = 15
           Width = 24
           Height = 15
           Caption = 'Tipo'
@@ -1136,7 +1138,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
         end
         object Label9: TLabel
           Left = 391
-          Top = 14
+          Top = 6
           Width = 11
           Height = 21
           AutoSize = False
@@ -1148,9 +1150,74 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           Font.Style = [fsBold]
           ParentFont = False
         end
+        object lblCodBar: TLabel
+          Left = 150
+          Top = 65
+          Width = 62
+          Height = 15
+          Caption = 'C'#243'd. Barras'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 3815994
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object lblReferencia: TLabel
+          Left = 335
+          Top = 65
+          Width = 61
+          Height = 15
+          Caption = 'Refer'#234'ncia'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 3815994
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object lblUnEnt: TLabel
+          Left = 23
+          Top = 257
+          Width = 74
+          Height = 15
+          Caption = 'Unid. Entrada'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 3815994
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object lblUnSaida: TLabel
+          Left = 253
+          Top = 257
+          Width = 61
+          Height = 15
+          Caption = 'Unid. Sa'#237'da'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 3815994
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object lblMultiplicador: TLabel
+          Left = 103
+          Top = 280
+          Width = 58
+          Height = 15
+          Caption = 'Equivale a:'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 3815994
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
         object lbPrecoCusto: TStaticText
           Left = 416
-          Top = 170
+          Top = 210
           Width = 86
           Height = 19
           Caption = 'Pre'#231'o de custo'
@@ -1160,12 +1227,12 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           Font.Name = 'Segoe UI'
           Font.Style = [fsBold]
           ParentFont = False
-          TabOrder = 20
+          TabOrder = 24
           Visible = False
         end
         object lbEstoque: TStaticText
           Left = 142
-          Top = 170
+          Top = 210
           Width = 48
           Height = 19
           Caption = 'Estoque'
@@ -1175,12 +1242,12 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           Font.Name = 'Segoe UI'
           Font.Style = [fsBold]
           ParentFont = False
-          TabOrder = 18
+          TabOrder = 23
           Visible = False
         end
         object StaticText1: TStaticText
           Left = 284
-          Top = 124
+          Top = 164
           Width = 63
           Height = 19
           Caption = 'Tributa'#231#227'o'
@@ -1190,11 +1257,11 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           Font.Name = 'Segoe UI'
           Font.Style = [fsBold]
           ParentFont = False
-          TabOrder = 16
+          TabOrder = 21
         end
         object lbAliquota: TStaticText
           Left = 416
-          Top = 124
+          Top = 164
           Width = 82
           Height = 19
           Caption = 'Al'#237'quota ICMS'
@@ -1204,11 +1271,11 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           Font.Name = 'Segoe UI'
           Font.Style = [fsBold]
           ParentFont = False
-          TabOrder = 15
+          TabOrder = 20
         end
         object edtProduto: TEdit
-          Left = 25
-          Top = 41
+          Left = 23
+          Top = 33
           Width = 368
           Height = 21
           CharCase = ecUpperCase
@@ -1231,8 +1298,8 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           Visible = False
         end
         object edtValor: TCurrencyEdit
-          Left = 24
-          Top = 91
+          Left = 23
+          Top = 83
           Width = 105
           Height = 21
           AutoSize = False
@@ -1247,23 +1314,23 @@ inherited frmCadastroProduto: TfrmCadastroProduto
         end
         object cbAtivo: TComboBox
           Left = 330
-          Top = 188
+          Top = 228
           Width = 71
           Height = 21
           Style = csDropDownList
-          TabOrder = 11
+          TabOrder = 15
           Items.Strings = (
             'SIM'
             'N'#195'O')
         end
         inline ListaGrupo: TListaCampo
           Left = 320
-          Top = 72
+          Top = 107
           Width = 182
           Height = 47
-          TabOrder = 5
+          TabOrder = 8
           ExplicitLeft = 320
-          ExplicitTop = 72
+          ExplicitTop = 107
           ExplicitWidth = 182
           ExplicitHeight = 47
           inherited Label4: TLabel
@@ -1285,9 +1352,9 @@ inherited frmCadastroProduto: TfrmCadastroProduto
         end
         object gridItens: TDBGridCBN
           Left = 24
-          Top = 352
-          Width = 467
-          Height = 158
+          Top = 392
+          Width = 473
+          Height = 118
           Hint = 
             'Pressione Ctrl + Alt + F2 para configurar as colunas'#13'Pressione C' +
             'trl + Alt + F3 para configurar as cores'#13'Pressione Ctrl + Alt + F' +
@@ -1305,7 +1372,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           ParentFont = False
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 12
+          TabOrder = 29
           TitleFont.Charset = DEFAULT_CHARSET
           TitleFont.Color = clWindowText
           TitleFont.Height = -11
@@ -1370,12 +1437,12 @@ inherited frmCadastroProduto: TfrmCadastroProduto
         end
         inline BuscaMateriaPrima1: TBuscaMateriaPrima
           Left = 24
-          Top = 305
+          Top = 347
           Width = 369
           Height = 43
-          TabOrder = 13
+          TabOrder = 27
           ExplicitLeft = 24
-          ExplicitTop = 305
+          ExplicitTop = 347
           ExplicitWidth = 369
           inherited StaticText1: TStaticText
             Width = 48
@@ -1407,8 +1474,8 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           end
         end
         object btnAddMateria: TBitBtn
-          Left = 408
-          Top = 319
+          Left = 416
+          Top = 361
           Width = 81
           Height = 23
           Caption = 'Adiciona'
@@ -1480,44 +1547,48 @@ inherited frmCadastroProduto: TfrmCadastroProduto
             9B009B9B9B009B9B9B00536A5300034103000019000000230000002300000019
             000003410300536A53009B9B9B009B9B9B009B9B9B009B9B9B00}
           NumGlyphs = 2
-          TabOrder = 14
+          TabOrder = 28
           OnClick = btnAddMateriaClick
         end
         inline ListaDepartamento: TListaCampo
-          Left = 138
-          Top = 72
-          Width = 184
+          Left = 137
+          Top = 107
+          Width = 185
           Height = 47
-          TabOrder = 4
-          ExplicitLeft = 138
-          ExplicitTop = 72
-          ExplicitWidth = 184
+          TabOrder = 7
+          ExplicitLeft = 137
+          ExplicitTop = 107
+          ExplicitWidth = 185
           ExplicitHeight = 47
           inherited Label4: TLabel
             Left = 1
-            Top = -7
+            Top = -6
             ExplicitLeft = 1
-            ExplicitTop = -7
+            ExplicitTop = -6
           end
           inherited staTitulo: TStaticText
             Left = 14
+            Top = 3
             ExplicitLeft = 14
+            ExplicitTop = 3
           end
           inherited comListaCampo: TComboBox
             Left = 13
+            Top = 20
             Width = 167
             ExplicitLeft = 13
+            ExplicitTop = 20
             ExplicitWidth = 167
           end
         end
         inline BuscaNCM1: TBuscaNCM
           Left = 4
-          Top = 119
+          Top = 159
           Width = 267
           Height = 47
-          TabOrder = 6
+          TabOrder = 9
           ExplicitLeft = 4
-          ExplicitTop = 119
+          ExplicitTop = 159
           ExplicitWidth = 267
           ExplicitHeight = 47
           inherited Label7: TLabel
@@ -1583,7 +1654,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
         end
         object cbTipo: TComboBox
           Left = 405
-          Top = 41
+          Top = 33
           Width = 97
           Height = 21
           Style = csDropDownList
@@ -1596,20 +1667,20 @@ inherited frmCadastroProduto: TfrmCadastroProduto
         end
         object edtICMS: TCurrencyEdit
           Left = 416
-          Top = 142
+          Top = 182
           Width = 86
           Height = 21
           AutoSize = False
           DisplayFormat = '% ,0.00;-,0.00'
-          TabOrder = 8
+          TabOrder = 11
         end
         object cbTributacao: TComboBox
           Left = 283
-          Top = 142
+          Top = 182
           Width = 118
           Height = 21
           Style = csDropDownList
-          TabOrder = 7
+          TabOrder = 10
           Items.Strings = (
             'Tributado'
             'Isento'
@@ -1617,8 +1688,8 @@ inherited frmCadastroProduto: TfrmCadastroProduto
             'Substitui'#231#227'o')
         end
         object StaticText2: TStaticText
-          Left = 25
-          Top = 170
+          Left = 23
+          Top = 210
           Width = 48
           Height = 19
           Caption = 'Preparo'
@@ -1628,15 +1699,15 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           Font.Name = 'Segoe UI'
           Font.Style = [fsBold]
           ParentFont = False
-          TabOrder = 17
+          TabOrder = 22
         end
         object cbPreparo: TComboBox
-          Left = 24
-          Top = 188
+          Left = 23
+          Top = 228
           Width = 105
           Height = 21
           Style = csDropDownList
-          TabOrder = 9
+          TabOrder = 12
           Items.Strings = (
             'CHAPA'
             'FOG'#195'O'
@@ -1646,28 +1717,28 @@ inherited frmCadastroProduto: TfrmCadastroProduto
         end
         object edtEstoque: TCurrencyEdit
           Left = 142
-          Top = 188
+          Top = 228
           Width = 77
           Height = 21
           AutoSize = False
           DisplayFormat = ' ,0.00;-,0.00'
           Enabled = False
-          TabOrder = 10
+          TabOrder = 13
           Visible = False
         end
         object edtPrecoCusto: TCurrencyEdit
           Left = 416
-          Top = 188
+          Top = 228
           Width = 86
           Height = 21
           AutoSize = False
           DisplayFormat = ' ,0.00;-,0.00'
-          TabOrder = 19
+          TabOrder = 16
           Visible = False
         end
         object lbEstoqueMin: TStaticText
           Left = 236
-          Top = 170
+          Top = 210
           Width = 75
           Height = 19
           Caption = 'Estoque M'#237'n.'
@@ -1677,22 +1748,22 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           Font.Name = 'Segoe UI'
           Font.Style = [fsBold]
           ParentFont = False
-          TabOrder = 21
+          TabOrder = 25
           Visible = False
         end
         object edtEstoqueMin: TCurrencyEdit
           Left = 236
-          Top = 188
+          Top = 228
           Width = 77
           Height = 21
           AutoSize = False
           DisplayFormat = ' ,0.00;-,0.00'
-          TabOrder = 22
+          TabOrder = 14
           Visible = False
         end
         object StaticText3: TStaticText
-          Left = 25
-          Top = 218
+          Left = 23
+          Top = 110
           Width = 78
           Height = 19
           Caption = 'Altera pre'#231'o?'
@@ -1702,18 +1773,65 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           Font.Name = 'Segoe UI'
           Font.Style = [fsBold]
           ParentFont = False
-          TabOrder = 24
+          TabOrder = 26
         end
         object cbAlteraPreco: TComboBox
-          Left = 24
-          Top = 236
+          Left = 23
+          Top = 128
           Width = 105
           Height = 21
           Style = csDropDownList
-          TabOrder = 23
+          TabOrder = 6
           Items.Strings = (
             'SIM'
             'N'#195'O')
+        end
+        object edtCodBar: TEdit
+          Left = 147
+          Top = 83
+          Width = 167
+          Height = 21
+          CharCase = ecUpperCase
+          MaxLength = 13
+          TabOrder = 4
+        end
+        object edtReferencia: TEdit
+          Left = 335
+          Top = 83
+          Width = 167
+          Height = 21
+          CharCase = ecUpperCase
+          MaxLength = 18
+          TabOrder = 5
+        end
+        object edtUNEntrada: TEdit
+          Left = 23
+          Top = 275
+          Width = 74
+          Height = 21
+          CharCase = ecUpperCase
+          MaxLength = 13
+          TabOrder = 17
+        end
+        object edtUNSaida: TEdit
+          Left = 253
+          Top = 275
+          Width = 74
+          Height = 21
+          CharCase = ecUpperCase
+          MaxLength = 13
+          TabOrder = 19
+        end
+        object edtMultiplicador: TCurrencyEdit
+          Left = 167
+          Top = 275
+          Width = 77
+          Height = 21
+          AutoSize = False
+          DisplayFormat = ' ,0.00;-,0.00'
+          MinValue = 1.000000000000000000
+          TabOrder = 18
+          Value = 1.000000000000000000
         end
       end
     end

@@ -62,12 +62,7 @@ inherited frmNFCes: TfrmNFCes
   inherited pnlPropaganda: TPanel
     Top = 393
     Width = 1068
-    ExplicitTop = 393
-    ExplicitWidth = 1068
-    inherited Shape8: TShape
-      Width = 1066
-      ExplicitWidth = 1066
-    end
+    TabOrder = 6
   end
   object DBGridCBN1: TDBGridCBN
     Left = 148
@@ -84,7 +79,7 @@ inherited frmNFCes: TfrmNFCes
     Font.Style = []
     Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit]
     ParentFont = False
-    TabOrder = 1
+    TabOrder = 0
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
     TitleFont.Height = -11
@@ -204,7 +199,7 @@ inherited frmNFCes: TfrmNFCes
     Height = 21
     Date = 42220.383775347230000000
     Time = 42220.383775347230000000
-    TabOrder = 2
+    TabOrder = 1
   end
   object dtpFim: TDateTimePicker
     Left = 284
@@ -213,7 +208,7 @@ inherited frmNFCes: TfrmNFCes
     Height = 21
     Date = 42220.383775347230000000
     Time = 42220.383775347230000000
-    TabOrder = 3
+    TabOrder = 2
   end
   object btnBusca: TBitBtn
     Left = 412
@@ -248,7 +243,7 @@ inherited frmNFCes: TfrmNFCes
       E5B24EDB931ADC981EDD971EDD971EDC961ADD951BDF9920E09D29E19F2AE2A0
       29E0AA43E2AF52E4B054F9ECD3F4DBACF0CC89F1CB7DEFC56DEFC56DF0C56CF4
       CD7AF4CE7CF0C56EEFC56DEFC66DF1CA7EF2CE8BF5DBADFAECD3}
-    TabOrder = 4
+    TabOrder = 3
     OnClick = btnBuscaClick
   end
   object pnlRodape: TPanel
@@ -260,6 +255,7 @@ inherited frmNFCes: TfrmNFCes
     BevelOuter = bvNone
     Caption = 'c'
     TabOrder = 5
+    ExplicitHeight = 428
     DesignSize = (
       144
       393)
@@ -483,7 +479,7 @@ inherited frmNFCes: TfrmNFCes
     Width = 113
     Height = 17
     Caption = 'Selecionar todas'
-    TabOrder = 6
+    TabOrder = 4
     OnClick = chTodasClick
   end
   object cdsNFCes: TClientDataSet

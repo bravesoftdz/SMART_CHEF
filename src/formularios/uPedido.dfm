@@ -8,8 +8,6 @@ inherited frmPedido: TfrmPedido
   OnClose = FormClose
   OnDestroy = FormDestroy
   OnShow = FormShow
-  ExplicitLeft = 7
-  ExplicitTop = -48
   ExplicitWidth = 1226
   ExplicitHeight = 718
   PixelsPerInch = 96
@@ -2019,15 +2017,15 @@ inherited frmPedido: TfrmPedido
         ExplicitWidth = 82
       end
       inherited edtNumeroComanda: TEdit
-        Left = 0
-        Top = -1
+        Left = -2
+        Top = -3
         Width = 81
         Height = 25
         Font.Name = 'Segoe UI'
         OnChange = buscaComanda1edtNumeroComandaChange
         OnExit = buscaComanda1edtNumeroComandaExit
-        ExplicitLeft = 0
-        ExplicitTop = -1
+        ExplicitLeft = -2
+        ExplicitTop = -3
         ExplicitWidth = 81
         ExplicitHeight = 25
       end
@@ -7450,7 +7448,7 @@ inherited frmPedido: TfrmPedido
         Transparent = True
       end
       object Label22: TLabel
-        Left = 362
+        Left = 365
         Top = 41
         Width = 33
         Height = 17
@@ -7463,9 +7461,9 @@ inherited frmPedido: TfrmPedido
         ParentFont = False
       end
       inline BuscaProduto1: TBuscaProduto
-        Left = 14
+        Left = 3
         Top = 44
-        Width = 339
+        Width = 360
         Height = 44
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -7475,54 +7473,60 @@ inherited frmPedido: TfrmPedido
         ParentFont = False
         TabOrder = 0
         OnExit = BuscaProduto1Exit
-        ExplicitLeft = 14
+        ExplicitLeft = 3
         ExplicitTop = 44
-        ExplicitWidth = 339
+        ExplicitWidth = 360
         ExplicitHeight = 44
         inherited StaticText1: TStaticText
+          Left = 3
           Top = -3
           Width = 47
           Height = 21
           Font.Height = -13
           Font.Name = 'Segoe UI'
+          ExplicitLeft = 3
           ExplicitTop = -3
           ExplicitWidth = 47
           ExplicitHeight = 21
         end
         inherited StaticText2: TStaticText
-          Left = 92
+          Left = 115
           Top = -3
           Width = 51
           Height = 21
           Font.Height = -13
           Font.Name = 'Segoe UI'
-          ExplicitLeft = 92
+          ExplicitLeft = 115
           ExplicitTop = -3
           ExplicitWidth = 51
           ExplicitHeight = 21
         end
-        inherited edtCodigo: TCurrencyEdit
-          Width = 60
-          Font.Height = -12
-          Font.Name = 'Segoe UI'
-          ParentCtl3D = False
-          ParentFont = False
-          ExplicitWidth = 60
-        end
         inherited btnBusca: TBitBtn
-          Left = 64
-          ExplicitLeft = 64
+          Left = 89
+          ExplicitLeft = 89
         end
         inherited edtProduto: TEdit
-          Left = 92
-          Width = 245
+          Left = 115
+          Width = 243
           Height = 23
           Font.Height = -12
           Font.Name = 'Segoe UI'
           ParentCtl3D = False
           ParentFont = False
-          ExplicitLeft = 92
-          ExplicitWidth = 245
+          ExplicitLeft = 115
+          ExplicitWidth = 243
+          ExplicitHeight = 23
+        end
+        inherited edtCodigo: TEdit
+          Left = 3
+          Width = 85
+          Height = 23
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          ParentCtl3D = False
+          ParentFont = False
+          ExplicitLeft = 3
+          ExplicitWidth = 85
           ExplicitHeight = 23
         end
       end
@@ -7616,6 +7620,7 @@ inherited frmPedido: TfrmPedido
         Height = 22
         AutoSize = False
         Ctl3D = True
+        DecimalPlaces = 4
         DisplayFormat = '0'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -7625,12 +7630,14 @@ inherited frmPedido: TfrmPedido
         ParentCtl3D = False
         ParentFont = False
         TabOrder = 2
+        Value = 1.000000000000000000
+        OnEnter = edtQuantidadeEnter
       end
       object edtPreco: TCurrencyEdit
-        Left = 362
+        Left = 365
         Top = 60
         Width = 62
-        Height = 22
+        Height = 23
         AutoSize = False
         Ctl3D = True
         DisplayFormat = ',0.00; ,0.00'
@@ -7642,6 +7649,7 @@ inherited frmPedido: TfrmPedido
         ParentCtl3D = False
         ParentFont = False
         TabOrder = 1
+        OnEnter = edtPrecoEnter
       end
     end
     object grpObservacao: TGroupBox
@@ -7963,7 +7971,7 @@ inherited frmPedido: TfrmPedido
       Left = 80
       Top = 3
       Width = 366
-      Height = 21
+      Height = 23
       Ctl3D = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -8010,7 +8018,7 @@ inherited frmPedido: TfrmPedido
       Left = 547
       Top = 3
       Width = 103
-      Height = 21
+      Height = 23
       Ctl3D = False
       EditMask = '!\(99\)9999-9999;0;_'
       Font.Charset = DEFAULT_CHARSET
@@ -8029,7 +8037,7 @@ inherited frmPedido: TfrmPedido
       Left = 714
       Top = 3
       Width = 151
-      Height = 21
+      Height = 23
       Ctl3D = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -8428,7 +8436,7 @@ inherited frmPedido: TfrmPedido
     Left = 632
     Top = 313
     Bitmap = {
-      494C010104000900680010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104000900980010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

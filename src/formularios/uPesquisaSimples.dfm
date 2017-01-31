@@ -5,13 +5,14 @@ inherited frmPesquisaSimples: TfrmPesquisaSimples
   ClientWidth = 764
   OldCreateOrder = True
   Scaled = False
+  ExplicitWidth = 770
+  ExplicitHeight = 387
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlPropaganda: TPanel
     Top = 289
     Width = 764
     TabOrder = 2
-    Visible = False
     ExplicitTop = 289
     ExplicitWidth = 764
     inherited Shape8: TShape
@@ -245,8 +246,8 @@ inherited frmPesquisaSimples: TfrmPesquisaSimples
     ConfCores.Titulo.Tipo.Name = 'MS Sans Serif'
     ConfCores.Titulo.Tipo.Style = []
     Ordenavel = True
-    TipoBusca.ListarApenasEncontrados = False
-    TipoBusca.QualquerParte = False
+    TipoBusca.ListarApenasEncontrados = True
+    TipoBusca.QualquerParte = True
     SalvaConfiguracoes = False
   end
   object ds: TDataSource

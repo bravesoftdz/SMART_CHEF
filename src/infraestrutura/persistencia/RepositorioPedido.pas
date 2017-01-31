@@ -65,13 +65,13 @@ implementation
 
 uses
   SysUtils,
-  StrUtils, Classes, AdicionalItem, MateriaPrima, Math, uModulo, Produto;
+  StrUtils, Classes, AdicionalItem, MateriaPrima, Math, uModulo, Produto, uImpressaoPedido;
 
 { TRepositorioPedido }
 
 function TRepositorioPedido.CondicaoSQLGetAll: String;
 begin
-  result := ' WHERE '+FCondicao;
+  result := ' WHERE '+FIdentificador;
 end;
 
 procedure TRepositorioPedido.ExecutaDepoisDeSalvar(Objeto: TObject);
@@ -182,9 +182,16 @@ begin
        assinou := true;
 
          if(Printer.PrinterIndex >= 0)then begin
-           impressora_padrao := impressoraPadrao;
-           AssignFile(Arq, impressora_padrao);
-           ReWrite(Arq);
+           try
+             impressora_padrao := impressoraPadrao;
+             AssignFile(Arq, impressora_padrao);
+             ReWrite(Arq);
+           Except
+             on e:Exception do
+              begin
+                raise Exception.Create('Erro ao imprimir pedido no departamento.'+#13#10+'Favor verifique se a impressora desejada está como padrão.');
+              end;
+           end;
          end
          else
            raise Exception.Create('Nenhuma impressora Padrão foi detectada');
@@ -194,12 +201,12 @@ begin
 
        Writeln(Arq, StringOfChar(' ', 48- (length(DateTimeToStr(now))+1) ) + DateTimeToStr(now));
        Writeln(Arq, StringOfChar('-',48));
-       Writeln(Arq, '  '+I_NEGRITO+StringOfChar(' ',TRUNC((46-length(dm.Empresa.Nome_Fantasia)) /2))+dm.Empresa.Nome_Fantasia+ F_NEGRITO);
-       Writeln(Arq, '  '+dm.Empresa.Cidade+' / '+dm.Empresa.Estado);
-       Writeln(Arq, '  '+'FONE: '+  TStringUtilitario.MascaraFone(dm.Empresa.Telefone));
+       Writeln(Arq, '  '+I_NEGRITO+StringOfChar(' ',TRUNC((46-length(dm.Empresa.NomeFantasia)) /2))+dm.Empresa.NomeFantasia+ F_NEGRITO);
+       Writeln(Arq, '  '+dm.Empresa.Enderecos[0].Cidade.nome+' / '+dm.Empresa.Enderecos[0].Cidade.Estado.sigla);
+       Writeln(Arq, '  '+'FONE: '+  TStringUtilitario.MascaraFone(dm.Empresa.Fone1));
 
-       if dm.Empresa.site <> '' then
-         Writeln(Arq, '  '+dm.Empresa.site);
+       //if dm.Empresa.site <> '' then
+       //  Writeln(Arq, '  '+dm.Empresa.site);
 
        Writeln(Arq, StringOfChar('-',48));
 
@@ -511,7 +518,11 @@ begin
 
       for i := 0 to Departamentos.Count - 1 do begin
 
-         imprime( Pedido);
+         frmImpressaoPedido := TfrmImpressaoPedido.Create(nil);
+         frmImpressaoPedido.imprime(Pedido);
+         frmImpressaoPedido.Release;
+         frmImpressaoPedido := nil;
+//         imprime( Pedido);
            
          repositorio.Salvar(Pedido);
       end;
@@ -702,7 +713,7 @@ end;
 
 function TRepositorioPedido.SQLGetAll: String;
 begin
-  result := 'select * from Pedidos '+ IfThen(FCondicao = '','', CondicaoSQLGetAll) +' order by data desc';
+  result := 'select * from Pedidos '+ IfThen(FIdentificador = '','', CondicaoSQLGetAll) +' order by data desc';
 end;
 
 function TRepositorioPedido.SQLGetExiste(campo: String): String;

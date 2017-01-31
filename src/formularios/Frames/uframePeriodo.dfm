@@ -9,49 +9,17 @@ object framePeriodo: TframePeriodo
   object StaticText2: TStaticText
     Left = 105
     Top = 0
-    Width = 49
+    Width = 50
     Height = 17
     Caption = 'Data final'
-    TabOrder = 3
+    TabOrder = 0
   end
   object StaticText1: TStaticText
     Left = 1
     Top = 0
-    Width = 56
+    Width = 55
     Height = 17
     Caption = 'Data inicial'
-    TabOrder = 2
-  end
-  object edtDtI: TFocusMaskEdit
-    Left = 0
-    Top = 15
-    Width = 88
-    Height = 21
-    EditMask = '##/##/####;1;_'
-    MaxLength = 10
-    TabOrder = 0
-    Text = '  /  /    '
-    OnEnter = edtDtIEnter
-    OnExit = edtDtIExit
-    Padrao = True
-  end
-  object edtDtF: TFocusMaskEdit
-    Left = 104
-    Top = 15
-    Width = 89
-    Height = 21
-    EditMask = '##/##/####;1;_'
-    MaxLength = 10
     TabOrder = 1
-    Text = '  /  /    '
-    OnEnter = edtDtIEnter
-    OnExit = edtDtIExit
-    Padrao = True
-  end
-  object balao: TMarcianoBallon
-    TipoIcone = tiErro
-    TituloDefault = 'Erro'
-    Autor = 'Marciano Bandeira'
-    Left = 136
   end
 end

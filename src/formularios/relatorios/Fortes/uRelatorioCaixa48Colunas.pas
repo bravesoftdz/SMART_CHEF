@@ -54,7 +54,8 @@ begin
     repositorio   := TFabricaRepositorio.GetRepositorio(TCaixa.ClassName);
     Caixa         := TCaixa( repositorio.GetPorEspecificacao( especificacao ) );
 
-    Caixa.imprime_48Colunas;
+    if assigned(Caixa) then
+      Caixa.imprime_48Colunas;
 
   finally
     FreeAndNil(Caixa);

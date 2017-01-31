@@ -283,7 +283,7 @@ var codigo_item, codigo_estoque :integer;
     descricao, unidade_medida :String;
 begin
   try
-    if (BuscaProduto1.edtCodigo.Value <= 0) and (BuscaDispensa1.edtCodigo.value <=0 ) then
+    if (BuscaProduto1.edtCodigo.Text = '') and (BuscaDispensa1.edtCodigo.value <=0 ) then
       Exit
     else begin
 

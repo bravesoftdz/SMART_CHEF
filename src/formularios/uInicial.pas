@@ -83,6 +83,10 @@ type
     Reimpressodopedido1: TMenuItem;
     BotaoImgPedidos: TBotaoImg;
     BotaoImgCaixa: TBotaoImg;
+    Fornecedores1: TMenuItem;
+    EntradaNFExml1: TMenuItem;
+    CFOPscorrespondentes1: TMenuItem;
+    SangriaeReforo1: TMenuItem;
     procedure Perfisdeacesso1Click(Sender: TObject);
     procedure Usurios1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -143,6 +147,10 @@ type
     procedure Reimpressodopedido1Click(Sender: TObject);
     procedure BotaoImg1Label1Click(Sender: TObject);
     procedure BotaoImgCaixaLabel1Click(Sender: TObject);
+    procedure Fornecedores1Click(Sender: TObject);
+    procedure EntradaNFExml1Click(Sender: TObject);
+    procedure CFOPscorrespondentes1Click(Sender: TObject);
+    procedure SangriaeReforo1Click(Sender: TObject);
 
   private
     procedure SalvaPedido;
@@ -181,8 +189,9 @@ uses uCadastroPerfilAcesso, PermissoesAcesso, uCadastroUsuario, uCadastroGrupo, 
      ParametrosNFCe, uModulo, StrUtils, MateriaPrima, EspecificacaoCaixaPorData, Caixa, uCadastroComanda,
      Usuario, Departamento, DateTimeUtilitario, uRelatorioVendas, uSuporteTecnico, uPedidosEmAberto, Comanda,
      uCadastroDispensa, uEntradaSaidaMercadoria, Produto, uRelatorioAtendimentos, uRelatorioPedidos, uRelatorioEstoque,
-     uRelatorioEntradaSaida, uRelatorioCaixa48Colunas, uRelatorioItensDeletados, uConfiguraNFCe, uNFCes,
-     uConfiguracoesSistema, uCadastroCliente, uRelatorioProdutos, funcoes, uRelatorioCuponsFiscais;
+     uRelatorioEntradaSaida, uRelatorioCaixa48Colunas, uRelatorioItensDeletados, uConfiguraNFCe, uNFCes, uCadastroFornecedor,
+     uConfiguracoesSistema, uCadastroCliente, uRelatorioProdutos, funcoes, uRelatorioCuponsFiscais, uImpressaoPedido,
+     uEntradaNota, uCadastroCfopCorrespondente, uLancaSangriaReforco;
 
 {$R *.dfm}
 
@@ -203,7 +212,6 @@ begin
 
   if not confirma('Deseja realmente sair do sistema?') then
     abort;
-
 end;
 
 procedure TfrmInicial.Grupos1Click(Sender: TObject);
@@ -235,7 +243,7 @@ begin
     avisar('ATENÇÃO! Para ter acesso a tela de vendas, é necessário abrir o caixa.');
     Exit;
   end;
-                                                                     
+
   try
     Repositorio       := TFabricaRepositorio.GetRepositorio(TParametrosNFCe.ClassName);
     ConfiguracaoNFCe  := TParametrosNFCe(Repositorio.Get(1));
@@ -310,6 +318,11 @@ begin
 
     RxFolderMonitor2.Active     := true;
   end;
+end;
+
+procedure TfrmInicial.Fornecedores1Click(Sender: TObject);
+begin
+  AbreForm(TfrmCadastroFornecedor, paCadastroFornecedor);
 end;
 
 procedure TfrmInicial.RxFolderMonitor1Change(Sender: TObject);
@@ -396,7 +409,7 @@ begin
 
          if not assigned(Pedido) then begin
            Pedido       := TPedido.Create;
-           Pedido.Itens := TObjectList.Create;
+           Pedido.Itens := TObjectList<TItem>.Create;
            Pedido.data  := StrToDateTime(vXMLDoc.DocumentElement.ChildNodes['data'].text);
          end;
 
@@ -420,7 +433,7 @@ begin
          {se tiver endereço, tem cliente}
          if Pedido.Codigo_endereco > 0 then begin
            codigo_cliente         := Campo_por_campo('ENDERECOS', 'CODIGO_CLIENTE', 'CODIGO', IntToStr(Pedido.Codigo_endereco));
-           Pedido.cpf_cliente     := Campo_por_campo('CLIENTES', 'CPF_CNPJ', 'CODIGO', codigo_cliente);
+           Pedido.cpf_cliente     := Campo_por_campo('PESSOAS', 'CPF_CNPJ', 'CODIGO', codigo_cliente);
 
            if Pedido.codigo_comanda = 0 then
              PEdido.taxa_entrega := dm.Empresa.taxa_entrega;
@@ -454,7 +467,7 @@ begin
              NoItem := NoItem.ChildNodes.FindNode('adicionais');
 
              if assigned(NoItem) then begin
-               Item.Adicionais := TObjectList.Create;
+               Item.Adicionais := TObjectList<TAdicionalItem>.Create;
 
                for j := 0 to NoItem.ChildNodes.Count - 1 do begin
 
@@ -471,7 +484,7 @@ begin
              end;
 
              if not assigned(Pedido.Itens) then
-               Pedido.Itens := TObjectList.create;
+               Pedido.Itens := TObjectList<TItem>.create;
 
              Pedido.Itens.Add( Item );
 
@@ -583,7 +596,7 @@ end;
 procedure TfrmInicial.verifica_pendencia;
 var Especificacao :TEspecificacaoPedidosComItemNaoImpresso;
     repositorio   :TRepositorio;
-    Pedidos       :TObjectList;
+    Pedidos       :TObjectList<TPedido>;
 begin
   repositorio   := nil;
   Especificacao := nil;
@@ -591,7 +604,7 @@ begin
   try
     repositorio   := TFabricaRepositorio.GetRepositorio(TPedido.ClassName);
     Especificacao := TEspecificacaoPedidosComItemNaoImpresso.Create;
-    Pedidos       := repositorio.GetListaPorEspecificacao(Especificacao, 'SITUACAO = ''A'' ');
+    Pedidos       := repositorio.GetListaPorEspecificacao<TPedido>(Especificacao, 'SITUACAO = ''A'' ');
 
     if assigned(Pedidos) and (Pedidos.Count > 0) then
       Mostra_pendentes;
@@ -919,7 +932,7 @@ begin
 
          if not assigned(Pedido) then begin
            Pedido       := TPedido.Create;
-           Pedido.Itens := TObjectList.Create;
+           Pedido.Itens := TObjectList<TItem>.Create;
            Pedido.data  := Date;
          end;
 
@@ -1061,7 +1074,11 @@ begin
     repositorioPedido := TRepositorioPedido.Create;
     Pedido            := TPedido(repositorioPedido.Get(codigo_pedido));
 
-    repositorioPedido.imprime( Pedido );
+    frmImpressaoPedido := TFrmImpressaoPedido.Create(nil);
+    frmImpressaoPedido.imprime(Pedido);
+    frmImpressaoPedido.Release;
+    frmImpressaoPedido := nil;
+    //repositorioPedido.imprime( Pedido );
 
   Except
     Mostra_pendentes;
@@ -1194,6 +1211,11 @@ begin
     inherited;
 end;
 
+procedure TfrmInicial.SangriaeReforo1Click(Sender: TObject);
+begin
+  AbreForm(TfrmLancaSangriaReforco, paLancaSangriaReforco);
+end;
+
 procedure TfrmInicial.ServidorClientConnect(Sender: TObject;
   Socket: TCustomWinSocket);
 begin
@@ -1284,9 +1306,19 @@ begin
   AbreForm(TfrmRelatorioEntradaSaida, paRelatorioEntradaSaida);
 end;
 
+procedure TfrmInicial.EntradaNFExml1Click(Sender: TObject);
+begin
+  AbreForm(TfrmEntradaNota, paEntradaNotaPorXml);
+end;
+
 procedure TfrmInicial.Caixa48colunas1Click(Sender: TObject);
 begin
-  AbreForm(TfrmRelatorioCaixa48Colunas, paRelatorioCaixa48Colunas); 
+  AbreForm(TfrmRelatorioCaixa48Colunas, paRelatorioCaixa48Colunas);
+end;
+
+procedure TfrmInicial.CFOPscorrespondentes1Click(Sender: TObject);
+begin
+  AbreForm(TfrmCadastroCfopCorrespondente, paCadastroCFOPsCorrespondentes);
 end;
 
 procedure TfrmInicial.ItensDeletados1Click(Sender: TObject);

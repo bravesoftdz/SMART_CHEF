@@ -2,8 +2,8 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
   Left = 514
   Top = 387
   Caption = 'Relat'#243'rio Caixa 48 colunas'
-  ClientHeight = 123
-  ClientWidth = 378
+  ClientHeight = 122
+  ClientWidth = 379
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,6 +11,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  Position = poDesktopCenter
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
@@ -31,17 +32,18 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
     Left = 0
     Top = 0
     Width = 129
-    Height = 123
+    Height = 122
     Align = alLeft
     TabOrder = 0
     object Shape12: TShape
       Left = 1
       Top = 1
       Width = 127
-      Height = 121
+      Height = 120
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119
+      ExplicitHeight = 121
     end
     object BitBtn1: TBitBtn
       Left = 11

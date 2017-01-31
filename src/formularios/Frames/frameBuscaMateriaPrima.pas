@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, MateriaPrima, StdCtrls, Buttons, Mask, RXToolEdit, RXCurrEdit, Produto,
-  ProdutoHasMAteria, Contnrs;
+  ProdutoHasMAteria, Contnrs, generics.Collections;
 
 type
   TBuscaMateriaPrima = class(TFrame)
@@ -201,7 +201,7 @@ function TBuscaMateriaPrima.produto_valido(codigo_materia :integer): Boolean;
 var repositorio    :TRepositorio;
     codigo_produto :integer;
     Especificacao  :TEspecificacaoProdutosQueContemMateria;
-    ProdutosHasMaterias :TObjectList;
+    ProdutosHasMaterias :TObjectList<TProdutoHasMateria>;
     i              :integer;
 begin
  try
@@ -211,7 +211,7 @@ begin
 
    repositorio         := TFabricaRepositorio.GetRepositorio(TProdutoHasMateria.ClassName);
    Especificacao       := TEspecificacaoProdutosQueContemMateria.Create(codigo_materia);
-   ProdutosHasMaterias := repositorio.GetListaPorEspecificacao(Especificacao);
+   ProdutosHasMaterias := repositorio.GetListaPorEspecificacao<TProdutoHasMateria>(Especificacao);
 
    for i := 0 to ProdutosHasMaterias.Count - 1 do begin
      if (ProdutosHasMaterias.Items[i] as TProdutoHasMateria).produto.codigo_grupo = self.FProduto.codigo_grupo then begin

@@ -4,7 +4,7 @@ interface
 
 uses
   SysUtils,
-  Contnrs, NcmIBPT;
+  Contnrs, NcmIBPT, Estoque, Generics.Collections;
 
 type
   TProduto = class
@@ -15,22 +15,24 @@ type
     Fvalor: Real;
     Fativo: String;
     Fdescricao: String;
-    FListaMaterias :TObjectList;
     Fcodigo_departamento: Integer;
     Fcodigo_ibpt: integer;
     FNcmIBPT: TNcmIBPT;
     FTipo :String;
-    Ficms :REal;
+    Ficms :Real;
     FTributacao :String;
     FPreparo    :String;
     FPreco_custo :Real;
     FAlteraPreco: String;
+    Fcodbar: String;
+    Freferencia: String;
+    FEstoque :TEstoque;
 
-    function GetListaMaterias: TobjectList;
     function GetNcmIBPT :TNcmIBPT;                                      
     function GetIcmsParaECF :String;
 
     procedure SetNcmIBPT(const Value: TNcmIBPT);
+    function GetEstoque: TEstoque;
 
   public
     property codigo              :integer read Fcodigo              write Fcodigo;
@@ -47,18 +49,42 @@ type
     property preparo             :String  read FPreparo             write FPreparo;
     property preco_custo         :Real    read FPreco_custo         write FPreco_custo;
     property altera_preco        :String  read FAlteraPreco         write FAlteraPreco;
+    property codbar              :String  read Fcodbar              write Fcodbar;
+    property referencia          :String  read Freferencia          write Freferencia;
 
     property NcmIBPT             :TNcmIBPT read GetNcmIBPT write SetNcmIBPT;
 
-    property ListaMaterias       :TobjectList read GetListaMaterias;
+    property Estoque             :TEstoque read GetEstoque write FEstoque;
 
 end;
 
 implementation
 
-uses repositorio, fabricaRepositorio, EspecificacaoMateriasDoProduto, ProdutoHasMateria;
+uses repositorio, fabricaRepositorio, EspecificacaoMateriasDoProduto, EspecificacaoEstoquePorProduto;
 
 { TProduto }
+
+function TProduto.GetEstoque: TEstoque;
+var Especificacao :TEspecificacaoEstoquePorProduto;
+    Repositorio   :TRepositorio;
+begin
+ try
+   Repositorio   := nil;
+   Especificacao := nil;
+
+   if not assigned(FEstoque) then
+   begin
+     Especificacao  := TEspecificacaoEstoquePorProduto.Create(self);
+     Repositorio    := TFabricaRepositorio.GetRepositorio(TEstoque.ClassName);
+     FEstoque       := TEstoque( repositorio.GetPorEspecificacao( Especificacao ) );
+   end;
+
+   result := FEstoque;
+ finally
+   FreeAndNil(Repositorio);
+   FreeAndNil(Especificacao);
+ end;
+end;
 
 function TProduto.GetIcmsParaECF: String;
 begin
@@ -66,28 +92,6 @@ begin
 
   if (Result[1] in ['T','S']) and (length(Result) = 1) then
     Result := FloatToStr(self.icms) + Result;
-end;
-
-function TProduto.GetListaMaterias: TobjectList;
-var
-  Repositorio   :TRepositorio;
-  Especificacao :TEspecificacaoMateriasDoProduto;
-begin
-   Repositorio    := nil;
-   Especificacao  := nil;
-   
-   try
-      if not Assigned(self.FListaMaterias) then begin
-        Especificacao         := TEspecificacaoMateriasDoProduto.Create(self.Fcodigo);
-        Repositorio           := TFabricaRepositorio.GetRepositorio(TProdutoHasMateria.ClassName);
-        self.FListaMaterias   := Repositorio.GetListaPorEspecificacao(Especificacao);
-      end;
-
-      result := self.FListaMaterias;
-   finally
-     FreeAndNil(Especificacao);
-     FreeAndNil(Repositorio);
-   end;
 end;
 
 function TProduto.GetNcmIBPT: TNcmIBPT;

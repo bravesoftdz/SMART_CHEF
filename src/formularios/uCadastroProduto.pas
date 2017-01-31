@@ -6,8 +6,8 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, uCadastroPadrao, DB, DBClient, StdCtrls, Grids, DBGrids,
   DBGridCBN, ComCtrls, Buttons, ExtCtrls, contnrs, frameListaCampo, Mask,
-   RXToolEdit, RXCurrEdit, Math, pngimage, frameBuscaMateriaPrima, ImgList,
-  frameBuscaNCM;
+  RXToolEdit, RXCurrEdit, Math, pngimage, frameBuscaMateriaPrima, ImgList,
+  frameBuscaNCM, Generics.Collections, ProdutoHasMateria, pcnNFe;
 
 type
   TfrmCadastroProduto = class(TfrmCadastroPadrao)
@@ -53,6 +53,16 @@ type
     edtEstoqueMin: TCurrencyEdit;
     cbAlteraPreco: TComboBox;
     StaticText3: TStaticText;
+    edtCodBar: TEdit;
+    lblCodBar: TLabel;
+    edtReferencia: TEdit;
+    lblReferencia: TLabel;
+    lblUnEnt: TLabel;
+    edtUNEntrada: TEdit;
+    edtUNSaida: TEdit;
+    lblUnSaida: TLabel;
+    lblMultiplicador: TLabel;
+    edtMultiplicador: TCurrencyEdit;
     procedure FormShow(Sender: TObject);
     procedure btnAddMateriaClick(Sender: TObject);
     procedure gridItensKeyDown(Sender: TObject; var Key: Word;
@@ -62,6 +72,8 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure cbTipoChange(Sender: TObject);
   private
+    FProdutoNfe :TProd;
+
     { Altera um registro existente no CDS de consulta }
     procedure AlterarRegistroNoCDS(Registro :TObject); override;
 
@@ -90,6 +102,10 @@ type
   private
     procedure adicionaMateria(codigo, codigo_materia :Integer; descricao :String);
     procedure remove_materia;
+    procedure SetprodutoNfe(const Value: TProd);
+
+  public
+    property produtoNfe :TProd read FprodutoNfe write SetprodutoNfe;
   end;
 
 var
@@ -98,7 +114,7 @@ var
 implementation
 
 uses Produto, repositorio, fabricarepositorio, StrUtils, uPadrao,
-  MateriaPrima, ProdutoHasMateria, NcmIBPT, Estoque, EspecificacaoEstoquePorProduto;
+  MateriaPrima, NcmIBPT, Estoque, EspecificacaoEstoquePorProduto;
 
 {$R *.dfm}
 
@@ -173,6 +189,7 @@ begin
    Especificacao := nil;
 
    try
+   try
      Repositorio := TFabricaRepositorio.GetRepositorio(TProduto.ClassName);
      Produto     := TProduto(Repositorio.Get(StrToIntDef(self.edtCodigo.Text, 0)));
 
@@ -187,7 +204,9 @@ begin
      Produto.ativo               := copy(cbAtivo.Items[cbAtivo.ItemIndex],1,1);
      Produto.codigo_departamento := ListaDepartamento.CodCampo;
      Produto.icms                := edtICMS.Value;
-     Produto.preco_custo         := edtPrecoCusto.Value; 
+     Produto.preco_custo         := edtPrecoCusto.Value;
+     Produto.codbar              := self.edtCodBar.Text;
+     Produto.referencia          := self.edtReferencia.Text;
 
      if assigned(BuscaNCM1.NCM) then
        Produto.codigo_ibpt         := BuscaNCM1.NCM.codigo;
@@ -201,8 +220,18 @@ begin
        3 : Produto.tributacao := IfThen(cbTipo.ItemIndex = 0,'FF','SF');
      end;
 
-     Produto.preparo := cbPreparo.Items[ cbPreparo.itemIndex ];
+     Produto.preparo      := cbPreparo.Items[ cbPreparo.itemIndex ];
      Produto.altera_preco := IfThen(cbAlteraPreco.ItemIndex = 0, 'S', 'N');
+
+     { * * * SALVA ESTOQUE DO PRODUTO * * * }
+     if not assigned( Produto.Estoque ) then
+       Produto.Estoque := TEstoque.Create;
+
+     Produto.Estoque.unidade_medida := edtUNSaida.Text;
+     Produto.Estoque.unidade_entrada:= edtUNEntrada.Text;
+     Produto.Estoque.multiplicador  := edtMultiplicador.Value;
+     Produto.Estoque.pecas          := 1;
+     Produto.Estoque.quantidade_min := edtEstoqueMin.Value;
 
      Repositorio.Salvar(Produto);
 
@@ -214,7 +243,6 @@ begin
 
 
      { * * * SALVA MATÉRIAS-PRIMAS DO PRODUTO * * * }
-
      if not cdsMaterias.IsEmpty then begin
 
         Repositorio          := TFabricaRepositorio.GetRepositorio(TProdutoHasMateria.ClassName);
@@ -242,34 +270,24 @@ begin
 
      end;
 
-     { * * * SALVA ESTOQUE DO PRODUTO * * * }
-
-     if (edtEstoque.Value > 0) or (edtEstoqueMin.Value > 0) then begin
-
-        Especificacao        := TEspecificacaoEstoquePorProduto.Create(Produto);
-        Repositorio          := TFabricaRepositorio.GetRepositorio(TEstoque.ClassName);
-        Estoque              := TEstoque( repositorio.GetPorEspecificacao( Especificacao ) );
-
-        if not assigned( Estoque ) then
-          Estoque := TEstoque.Create;
-
-        Estoque.codigo_produto := Produto.codigo;
-      //  Estoque.quantidade     := edtEstoque.Value;
-        Estoque.unidade_medida := 'UN';
-        Estoque.pecas          := 1;
-        Estoque.quantidade_min := edtEstoqueMin.Value;
-
-        Repositorio.Salvar(Estoque);  
-
-     end;
-
      result := Produto;
+
+   if assigned(FProdutoNfe) then
+      self.ModalResult := MrOk;
+
+   Except
+    on e : Exception do
+      begin
+        if assigned(FProdutoNfe) then
+           self.ModalResult := MrCancel;
+
+      end;
+   end;
 
    finally
      FreeAndNil(Repositorio);
      if assigned(ProdutoHasMateria) then  FreeAndNil(ProdutoHasMateria);
-     if assigned(Estoque)           then  FreeAndNil(Estoque);
-    if assigned(Especificacao)     then  FreeAndNil(Especificacao);
+     if assigned(Especificacao)     then  FreeAndNil(Especificacao);
    end;
 end;
 
@@ -308,15 +326,21 @@ begin
   edtPrecoCusto.Clear;
   edtEstoque.Clear;
   edtEstoqueMin.Clear;
+  edtCodBar.Clear;
+  edtReferencia.Clear;
+  edtUNSaida.Clear;
+  edtUNEntrada.Clear;
+  edtMultiplicador.Clear;
 end;
 
 procedure TfrmCadastroProduto.MostrarDados;
 var
-  Produto                              :TProduto;
-  RepositorioProduto                   :TRepositorio;
-  Especificacao                        :TEspecificacaoEstoquePorProduto;
-  Estoque                              :TEstoque;
+  Produto               :TProduto;
+  RepositorioProduto    :TRepositorio;
+  Especificacao         :TEspecificacaoEstoquePorProduto;
+  Estoque               :TEstoque;
   i :integer;
+  listaDeMaterias       :TObjectList<TProdutoHasMateria>;
 begin
   inherited;
 
@@ -344,6 +368,8 @@ begin
     self.cbPreparo.ItemIndex        := cbPreparo.Items.IndexOf(Produto.preparo);
     self.cbAlteraPreco.ItemIndex    := IfThen(Produto.altera_preco = 'S', 0, 1);
     self.edtPrecoCusto.Value        := Produto.preco_custo;
+    self.edtCodBar.Text             := Produto.codbar;
+    self.edtReferencia.Text         := Produto.referencia;
 
     case AnsiIndexStr(UpperCase(Produto.tributacao), ['T', 'II','NN','FF','S','SI','SN','SF']) of
      0,4 : cbTributacao.ItemIndex := 0;
@@ -352,13 +378,15 @@ begin
      3,7 : cbTributacao.ItemIndex := 3;
     end;
 
-    if not assigned(Produto.ListaMaterias) then Exit;
+    listaDeMaterias := TProdutoHasMateria.MateriasDoProduto(Produto.codigo);
 
-    for i := 0 to Produto.ListaMaterias.Count - 1 do begin
+    if not assigned(listaDeMaterias) then Exit;
 
-      adicionaMateria(TProdutoHasMateria(Produto.ListaMaterias.Items[i]).codigo,
-                      TMateriaPrima(TProdutoHasMateria(Produto.ListaMaterias.Items[i]).materia_prima).codigo,
-                      TMateriaPrima(TProdutoHasMateria(Produto.ListaMaterias.Items[i]).materia_prima).descricao);
+    for i := 0 to listaDeMaterias.Count - 1 do begin
+
+      adicionaMateria(TProdutoHasMateria(listaDeMaterias.Items[i]).codigo,
+                      TMateriaPrima(TProdutoHasMateria(listaDeMaterias.Items[i]).materia_prima).codigo,
+                      TMateriaPrima(TProdutoHasMateria(listaDeMaterias.Items[i]).materia_prima).descricao);
     end;
 
     Especificacao      := TEspecificacaoEstoquePorProduto.Create(Produto);
@@ -370,10 +398,14 @@ begin
 
     edtEstoque.Value           := Estoque.quantidade;
     edtEstoqueMin.Value        := Estoque.quantidade_min;
+    edtUNSaida.Text            := Estoque.unidade_medida;
+    edtUNEntrada.Text          := Estoque.unidade_entrada;
+    edtMultiplicador.Value     := Estoque.multiplicador;
 
   finally
      FreeAndNil(RepositorioProduto);
      FreeAndNil(Produto);
+     FreeAndNil(listaDeMaterias);
      if assigned(Estoque)           then  FreeAndNil(Estoque);
      if assigned(Especificacao)     then  FreeAndNil(Especificacao);
   end;
@@ -416,6 +448,10 @@ begin
       avisar('É necessário informar o preparo');
       cbPreparo.setFocus;
   end
+  else if edtUNSaida.Text = '' then begin
+      avisar('É necessário informar a unidade de saída do produto');
+      edtUNSaida.setFocus;
+  end
   else
     result := true;
 end;
@@ -423,6 +459,14 @@ end;
 procedure TfrmCadastroProduto.FormShow(Sender: TObject);
 begin
   inherited;
+  if assigned(FProdutoNfe) then begin
+    btnIncluir.Click;
+    edtProduto.Text        := FProdutoNfe.xProd;
+    BuscaNCM1.edtNCM.Text  := FProdutoNfe.NCM;
+    edtUNEntrada.Text      := UPPERCASE(copy(FProdutoNfe.uCom,1,3));
+    edtPrecoCusto.Value    := FProdutoNfe.vUnCom;
+  end;
+
   ListaGrupo.setValores('select * from grupos', 'Descricao', 'Grupo');
   ListaGrupo.executa;
 
@@ -478,6 +522,11 @@ begin
   cdsMaterias.Delete;
 end;
 
+procedure TfrmCadastroProduto.SetprodutoNfe(const Value: TProd);
+begin
+  FprodutoNfe := Value;
+end;
+
 procedure TfrmCadastroProduto.btnSalvarClick(Sender: TObject);
 begin
   inherited;
@@ -487,6 +536,9 @@ end;
 
 procedure TfrmCadastroProduto.btnCancelarClick(Sender: TObject);
 begin
+  if assigned(FProdutoNfe) then
+    self.ModalResult := MrCancel;
+
   inherited;
   if not fdm.conexao.TxOptions.AutoCommit then
     fdm.conexao.Rollback;
@@ -517,6 +569,16 @@ begin
   edtEstoqueMin.Visible      := (cbTipo.ItemIndex <> 1);
   lbPrecoCusto.Visible       := (cbTipo.ItemIndex <> 1);
   edtPrecoCusto.Visible      := (cbTipo.ItemIndex <> 1);
+  lblCodBar.Visible          := (cbTipo.ItemIndex <> 1);
+  edtCodBar.Visible          := (cbTipo.ItemIndex <> 1);
+  lblReferencia.Visible      := (cbTipo.ItemIndex <> 1);
+  edtReferencia.Visible      := (cbTipo.ItemIndex <> 1);
+  lblUnSaida.Visible         := (cbTipo.ItemIndex <> 1);
+  edtUNSaida.Visible         := (cbTipo.ItemIndex <> 1);
+  lblUnEnt.Visible           := (cbTipo.ItemIndex <> 1);
+  edtUNEntrada.Visible       := (cbTipo.ItemIndex <> 1);
+  lblMultiplicador.Visible   := (cbTipo.ItemIndex <> 1);
+  edtMultiplicador.Visible   := (cbTipo.ItemIndex <> 1);
 end;
 
 end.

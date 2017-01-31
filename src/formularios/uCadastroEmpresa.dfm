@@ -3,7 +3,9 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
   Top = 200
   Caption = 'Cadastro de Empresas'
   ClientHeight = 514
-  ClientWidth = 571
+  ClientWidth = 594
+  ExplicitWidth = 600
+  ExplicitHeight = 542
   PixelsPerInch = 96
   TextHeight = 13
   inherited Splitter1: TSplitter
@@ -20,54 +22,51 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
   end
   inherited pnlPropaganda: TPanel
     Top = 479
-    Width = 571
+    Width = 594
     ExplicitTop = 479
     ExplicitWidth = 571
     inherited Shape8: TShape
-      Width = 569
+      Width = 592
       ExplicitWidth = 569
     end
   end
   inherited pgGeral: TPageControl
     Left = 144
-    Width = 427
+    Width = 450
     Height = 479
+    ActivePage = TabSheet2
     ExplicitLeft = 144
-    ExplicitWidth = 427
+    ExplicitWidth = 450
     ExplicitHeight = 479
     inherited tsConsulta: TTabSheet
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 419
+      ExplicitHeight = 448
       DesignSize = (
-        419
+        442
         448)
       inherited gridConsulta: TDBGridCBN
         Left = 0
         Top = 0
-        Width = 417
+        Width = 440
         Height = 436
       end
       inherited lblAjudaSelecionar: TStaticText
-        Top = 419
+        Top = 436
         Width = 222
         Align = alNone
-        ExplicitTop = 419
+        ExplicitTop = 436
       end
     end
     inherited tsDados: TTabSheet
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 419
+      ExplicitHeight = 448
       inherited pnlDados: TPanel
-        Width = 419
+        Width = 442
         Height = 448
         ExplicitWidth = 419
         ExplicitHeight = 448
         DesignSize = (
-          419
+          442
           448)
         inherited lblCamposObrigatorios: TLabel
           Top = 427
@@ -81,7 +80,7 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
         end
         inherited Shape2: TShape
           Top = 16
-          Width = 418
+          Width = 441
           Height = 446
           ExplicitTop = 16
           ExplicitWidth = 418
@@ -129,9 +128,9 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
         object Label4: TLabel
           Left = 32
           Top = 160
-          Width = 21
+          Width = 36
           Height = 17
-          Caption = 'Site'
+          Caption = 'E-mail'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -13
@@ -145,32 +144,6 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
           Width = 50
           Height = 17
           Caption = 'Telefone'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Segoe UI'
-          Font.Style = []
-          ParentFont = False
-        end
-        object Label15: TLabel
-          Left = 138
-          Top = 203
-          Width = 41
-          Height = 17
-          Caption = 'Cidade'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Segoe UI'
-          Font.Style = []
-          ParentFont = False
-        end
-        object Label16: TLabel
-          Left = 31
-          Top = 291
-          Width = 40
-          Height = 17
-          Caption = 'Estado'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -13
@@ -218,24 +191,11 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
           ParentFont = False
         end
         object lbbairro: TLabel
-          Left = 128
+          Left = 32
           Top = 290
           Width = 35
           Height = 17
           Caption = 'Bairro'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Segoe UI'
-          Font.Style = []
-          ParentFont = False
-        end
-        object Label20: TLabel
-          Left = 32
-          Top = 203
-          Width = 72
-          Height = 17
-          Caption = 'C'#243'd. Cidade'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -13
@@ -328,7 +288,7 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
           TabOrder = 4
           OnKeyPress = edtInscricaoKeyPress
         end
-        object edtSite: TEdit
+        object edtEmail: TEdit
           Left = 32
           Top = 177
           Width = 354
@@ -343,52 +303,8 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
           Height = 21
           EditMask = '(##)####-####;0; '
           MaxLength = 13
-          TabOrder = 6
-          Text = ''
-        end
-        object edtCidade: TEdit
-          Left = 138
-          Top = 220
-          Width = 249
-          Height = 21
-          CharCase = ecUpperCase
           TabOrder = 7
-        end
-        object cmbUF: TComboBox
-          Left = 31
-          Top = 308
-          Width = 83
-          Height = 21
-          Style = csDropDownList
-          TabOrder = 8
-          Items.Strings = (
-            'AC'
-            'AL'
-            'AP'
-            'AM'
-            'BA'
-            'CE'
-            'DF'
-            'ES'
-            'GO'
-            'MA'
-            'MT'
-            'MS'
-            'MG'
-            'PA'
-            'PB'
-            'PR'
-            'PE'
-            'PI'
-            'RJ'
-            'RN'
-            'RS'
-            'RO'
-            'RR'
-            'SC'
-            'SP'
-            'SE'
-            'TO')
+          Text = ''
         end
         object edtCep: TMaskEdit
           Left = 31
@@ -397,7 +313,7 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
           Height = 21
           EditMask = '#####-###;0; '
           MaxLength = 9
-          TabOrder = 9
+          TabOrder = 8
           Text = ''
         end
         object edtRua: TEdit
@@ -406,40 +322,23 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
           Width = 249
           Height = 21
           CharCase = ecUpperCase
-          TabOrder = 10
+          TabOrder = 9
         end
         object edtNumero: TEdit
           Left = 296
           Top = 263
           Width = 90
           Height = 21
-          TabOrder = 11
+          TabOrder = 10
           OnKeyPress = edtInscricaoKeyPress
         end
         object edtBairro: TEdit
-          Left = 128
+          Left = 32
           Top = 308
-          Width = 258
+          Width = 354
           Height = 21
           CharCase = ecUpperCase
-          TabOrder = 12
-        end
-        object edtCodigoCidade: TCurrencyEdit
-          Left = 32
-          Top = 220
-          Width = 89
-          Height = 22
-          AutoSize = False
-          Color = clWhite
-          DisplayFormat = '0'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -12
-          Font.Name = 'Segoe UI'
-          Font.Style = []
-          Anchors = [akLeft, akBottom]
-          ParentFont = False
-          TabOrder = 13
+          TabOrder = 11
         end
         object edtComplemento: TEdit
           Left = 31
@@ -447,17 +346,86 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
           Width = 354
           Height = 21
           CharCase = ecUpperCase
-          TabOrder = 14
+          TabOrder = 12
+        end
+        inline BuscaCidade1: TBuscaCidade
+          Left = 31
+          Top = 197
+          Width = 365
+          Height = 46
+          TabOrder = 6
+          ExplicitLeft = 31
+          ExplicitTop = 197
+          ExplicitWidth = 365
+          ExplicitHeight = 46
+          inherited StaticText3: TStaticText
+            Left = 331
+            Top = 5
+            Width = 19
+            Height = 21
+            Font.Height = -13
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            Transparent = True
+            ExplicitLeft = 331
+            ExplicitTop = 5
+            ExplicitWidth = 19
+            ExplicitHeight = 21
+          end
+          inherited StaticText2: TStaticText
+            Left = 92
+            Top = 5
+            Width = 45
+            Height = 21
+            Font.Height = -13
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            Transparent = True
+            ExplicitLeft = 92
+            ExplicitTop = 5
+            ExplicitWidth = 45
+            ExplicitHeight = 21
+          end
+          inherited StaticText1: TStaticText
+            Top = 5
+            Width = 47
+            Height = 21
+            Font.Height = -13
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            Transparent = True
+            ExplicitTop = 5
+            ExplicitWidth = 47
+            ExplicitHeight = 21
+          end
+          inherited edtCidade: TEdit
+            Left = 93
+            Width = 230
+            ExplicitLeft = 93
+            ExplicitWidth = 230
+          end
+          inherited edtUF: TEdit
+            Left = 330
+            Width = 25
+            ExplicitLeft = 330
+            ExplicitWidth = 25
+          end
+        end
+        object edtCodEndereco: TCurrencyEdit
+          Left = 184
+          Top = 194
+          Width = 65
+          Height = 21
+          DisplayFormat = '0'
+          TabOrder = 13
+          Visible = False
         end
       end
     end
     object TabSheet1: TTabSheet
       Caption = 'Padr'#245'es'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 419
       object pnlPadroes: TPanel
         Left = 0
         Top = -1
@@ -1005,6 +973,272 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
               'Isento'
               'N'#227'o Incid'#234'ncia'
               'Substitui'#231#227'o')
+          end
+        end
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Config. NF-e'
+      ImageIndex = 3
+      ExplicitWidth = 419
+      object PageControl2: TPageControl
+        Left = 0
+        Top = 0
+        Width = 442
+        Height = 448
+        ActivePage = TabSheet3
+        Align = alClient
+        TabOrder = 0
+        ExplicitTop = 27
+        ExplicitHeight = 421
+        object TabSheet3: TTabSheet
+          Caption = 'NF-e'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Vani'
+          Font.Style = []
+          ParentFont = False
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
+          object gpbAliquotas: TGroupBox
+            Left = 11
+            Top = 127
+            Width = 410
+            Height = 98
+            Caption = ' Al'#237'quotas '
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 2
+            object Label16: TLabel
+              Left = 13
+              Top = 30
+              Width = 70
+              Height = 17
+              Caption = 'Cr'#233'dito S.N.'
+            end
+            object Label20: TLabel
+              Left = 109
+              Top = 30
+              Width = 30
+              Height = 17
+              Caption = 'ICMS'
+            end
+            object Label21: TLabel
+              Left = 205
+              Top = 30
+              Width = 17
+              Height = 17
+              Caption = 'PIS'
+            end
+            object Label22: TLabel
+              Left = 301
+              Top = 30
+              Width = 44
+              Height = 17
+              Caption = 'COFINS'
+            end
+            object edtCreditoSN: TDBCurrencyEdit
+              Left = 13
+              Top = 54
+              Width = 80
+              Height = 25
+              DisplayFormat = ' ,0.00;- ,0.00'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = 12418084
+              Font.Height = -13
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
+              TabOrder = 0
+              OnChange = edtCreditoSNChange
+            end
+            object edtIcms: TDBCurrencyEdit
+              Left = 109
+              Top = 54
+              Width = 80
+              Height = 25
+              DisplayFormat = ' ,0.00;- ,0.00'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = 12418084
+              Font.Height = -13
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
+              TabOrder = 1
+            end
+            object edtCofins: TDBCurrencyEdit
+              Left = 301
+              Top = 54
+              Width = 80
+              Height = 25
+              DisplayFormat = ' ,0.00;- ,0.00'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = 12418084
+              Font.Height = -13
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
+              TabOrder = 3
+            end
+            object edtPis: TDBCurrencyEdit
+              Left = 205
+              Top = 54
+              Width = 80
+              Height = 25
+              DisplayFormat = ' ,0.00;- ,0.00'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = 12418084
+              Font.Height = -13
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
+              TabOrder = 2
+            end
+          end
+          object rgpRegime: TRadioGroup
+            Left = 11
+            Top = 7
+            Width = 139
+            Height = 106
+            Caption = ' Regime tribut'#225'rio '
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            Items.Strings = (
+              'Simples nacional'
+              'Lucro presumido'
+              'Lucro real')
+            ParentFont = False
+            TabOrder = 0
+          end
+          object memoObsGeradaSistema: TMemo
+            Left = 13
+            Top = 286
+            Width = 410
+            Height = 100
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 3
+          end
+          object BitBtn1: TBitBtn
+            Left = 294
+            Top = 248
+            Width = 131
+            Height = 32
+            Caption = ' Limpar observa'#231#227'o'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 4
+          end
+          object edtSequenciaNF: TEdit
+            Left = 297
+            Top = 239
+            Width = 70
+            Height = 25
+            CharCase = ecUpperCase
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = 12418084
+            Font.Height = -13
+            Font.Name = 'Segoe UI'
+            Font.Style = [fsBold]
+            MaxLength = 10
+            ParentFont = False
+            TabOrder = 5
+            Visible = False
+          end
+          object GroupBox3: TGroupBox
+            Left = 160
+            Top = 15
+            Width = 261
+            Height = 97
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+            object Label30: TLabel
+              Left = 12
+              Top = 11
+              Width = 58
+              Height = 17
+              Caption = 'Ambiente:'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Segoe UI'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label15: TLabel
+              Left = 12
+              Top = 57
+              Width = 100
+              Height = 17
+              Caption = 'Tipo de emiss'#227'o:'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Segoe UI'
+              Font.Style = []
+              ParentFont = False
+            end
+            object cmbAmbiente: TComboBox
+              Left = 124
+              Top = 8
+              Width = 125
+              Height = 25
+              Style = csDropDownList
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlack
+              Font.Height = -13
+              Font.Name = 'Segoe UI'
+              Font.Style = []
+              ItemIndex = 1
+              ParentFont = False
+              TabOrder = 0
+              Text = 'HOMOLOGA'#199#195'O'
+              Items.Strings = (
+                'PRODU'#199#195'O'
+                'HOMOLOGA'#199#195'O')
+            end
+            object cmbTipoEmissao: TComboBox
+              Left = 124
+              Top = 56
+              Width = 125
+              Height = 25
+              Style = csDropDownList
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Segoe UI'
+              Font.Style = []
+              ItemIndex = 0
+              ParentFont = False
+              TabOrder = 1
+              Text = '1-NORMAL'
+              Items.Strings = (
+                '1-NORMAL'
+                '7-SVCRS')
+            end
           end
         end
       end

@@ -5,7 +5,8 @@ interface
 uses
   DB,
   Auditoria,
-  Repositorio;
+  Repositorio,
+  FabricaRepositorio;
 
 type
   TRepositorioProduto = class(TRepositorio)
@@ -14,10 +15,11 @@ type
     function Get             (Dataset :TDataSet) :TObject; overload; override;
     function GetNomeDaTabela                     :String;            override;
     function GetIdentificador(Objeto :TObject)   :Variant;           override;
-    function GetRepositorio                     :TRepositorio;       override;    
+    function GetRepositorio                     :TRepositorio;       override;
 
   protected
     function SQLGet                      :String;            override;
+
     function SQLSalvar                   :String;            override;
     function SQLGetAll                   :String;            override;
     function SQLRemover                  :String;            override;
@@ -30,6 +32,8 @@ type
     procedure SetParametros   (Objeto :TObject                        ); override;
     procedure SetIdentificador(Objeto :TObject; Identificador :Variant); override;
 
+  protected
+    procedure ExecutaDepoisDeSalvar (Objeto :TObject); override;
   //==============================================================================
   // Auditoria
   //==============================================================================
@@ -38,15 +42,35 @@ type
     procedure SetCamposAlterados(Auditoria :TAuditoria; AntigoObjeto, Objeto :TObject); override;
     procedure SetCamposExcluidos(Auditoria :TAuditoria;               Objeto :TObject); override;
 
+
 end;
 
 implementation
 
 uses
   SysUtils,
-  Produto;
+  Produto, Estoque;
 
 { TRepositorioProduto }
+
+procedure TRepositorioProduto.ExecutaDepoisDeSalvar(Objeto: TObject);
+var Produto      :TProduto;
+    repositorio  :TRepositorio;
+begin
+ try
+   repositorio    := nil;
+   Produto        := (Objeto as TProduto);
+   repositorio    := TFabricaRepositorio.GetRepositorio(TEstoque.ClassName);
+
+   if assigned(Produto.Estoque) then begin
+     Produto.Estoque.codigo_produto := Produto.codigo;
+     repositorio.Salvar( Produto.Estoque );
+   end;
+
+ finally
+   FreeAndNil(repositorio);
+ end;
+end;
 
 function TRepositorioProduto.Get(Dataset: TDataSet): TObject;
 var
@@ -66,6 +90,8 @@ begin
    Produto.preparo             := self.FQuery.FieldByName('preparo').AsString;
    Produto.preco_custo         := self.FQuery.FieldByName('preco_custo').AsFloat;
    Produto.altera_preco        := self.FQuery.FieldByName('altera_preco').AsString;
+   Produto.codbar              := self.FQuery.FieldByName('codbar').AsString;
+   Produto.referencia          := self.FQuery.FieldByName('referencia').AsString;
 
    result := Produto;
 end;
@@ -133,6 +159,13 @@ begin
 
    if (ProdutoAntigo.altera_preco <> ProdutoNovo.altera_preco) then
     Auditoria.AdicionaCampoAlterado('altera_preco', ProdutoAntigo.altera_preco, ProdutoNovo.altera_preco);
+
+   if (ProdutoAntigo.codbar <> ProdutoNovo.codbar) then
+    Auditoria.AdicionaCampoAlterado('codbar', ProdutoAntigo.codbar, ProdutoNovo.codbar);
+
+   if (ProdutoAntigo.referencia <> ProdutoNovo.referencia) then
+    Auditoria.AdicionaCampoAlterado('referencia', ProdutoAntigo.referencia, ProdutoNovo.referencia);
+
 end;
 
 procedure TRepositorioProduto.SetCamposExcluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -154,6 +187,8 @@ begin
    Auditoria.AdicionaCampoExcluido('preparo',             Produto.preparo);
    Auditoria.AdicionaCampoExcluido('preco_custo',         FloatToStr(Produto.preco_custo));
    Auditoria.AdicionaCampoExcluido('altera_preco',        Produto.altera_preco);
+   Auditoria.AdicionaCampoExcluido('codbar',              Produto.codbar);
+   Auditoria.AdicionaCampoExcluido('referencia',              Produto.referencia);
 end;
 
 procedure TRepositorioProduto.SetCamposIncluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -175,6 +210,8 @@ begin
    Auditoria.AdicionaCampoIncluido('preparo',             Produto.preparo);
    Auditoria.AdicionaCampoIncluido('preco_custo',         FloatToStr(Produto.preco_custo));
    Auditoria.AdicionaCampoIncluido('altera_preco',        Produto.altera_preco);
+   Auditoria.AdicionaCampoIncluido('codbar',      Produto.codbar);
+   Auditoria.AdicionaCampoIncluido('referencia',      Produto.referencia);
 end;
 
 procedure TRepositorioProduto.SetIdentificador(Objeto: TObject;
@@ -208,6 +245,8 @@ begin
    self.FQuery.ParamByName('preparo').AsString              := Produto.preparo;
    self.FQuery.ParamByName('preco_custo').AsFloat           := Produto.preco_custo;
    self.FQuery.ParamByName('altera_preco').AsString         := Produto.altera_preco;
+   self.FQuery.ParamByName('codbar').AsString               := Produto.codbar;
+   self.FQuery.ParamByName('referencia').AsString           := Produto.referencia;
 end;
 
 function TRepositorioProduto.SQLGet: String;
@@ -232,8 +271,8 @@ end;
 
 function TRepositorioProduto.SQLSalvar: String;
 begin
-   result := 'update or insert into Produtos ( codigo,  codigo_grupo,  descricao,  valor,  ativo,  codigo_departamento,  codigo_ibpt,  tipo,  icms,  tributacao, preparo, preco_custo, altera_preco) '+
-             '                        values (:codigo, :codigo_grupo, :descricao, :valor, :ativo, :codigo_departamento, :codigo_ibpt, :tipo, :icms, :tributacao, :preparo, :preco_custo, :altera_preco) ';
+   result := 'update or insert into Produtos ( codigo,  codigo_grupo,  descricao,  valor,  ativo,  codigo_departamento,  codigo_ibpt,  tipo,  icms,  tributacao, preparo, preco_custo, altera_preco, codbar, referencia) '+
+             '                        values (:codigo, :codigo_grupo, :descricao, :valor, :ativo, :codigo_departamento, :codigo_ibpt, :tipo, :icms, :tributacao, :preparo, :preco_custo, :altera_preco, :codbar, :referencia) ';
 end;
 
 end.

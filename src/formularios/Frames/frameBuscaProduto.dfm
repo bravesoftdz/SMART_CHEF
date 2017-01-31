@@ -33,17 +33,6 @@ object BuscaProduto: TBuscaProduto
     ParentFont = False
     TabOrder = 1
   end
-  object edtCodigo: TCurrencyEdit
-    Left = 0
-    Top = 16
-    Width = 64
-    Height = 21
-    AutoSize = False
-    DisplayFormat = '0'
-    TabOrder = 2
-    OnChange = edtCodigoChange
-    OnExit = edtCodigoExit
-  end
   object btnBusca: TBitBtn
     Left = 65
     Top = 14
@@ -129,5 +118,16 @@ object BuscaProduto: TBuscaProduto
     ReadOnly = True
     TabOrder = 4
     OnEnter = edtProdutoEnter
+  end
+  object edtCodigo: TEdit
+    Left = 0
+    Top = 16
+    Width = 62
+    Height = 21
+    MaxLength = 13
+    TabOrder = 2
+    Text = '0'
+    OnChange = edtCodigoChange
+    OnExit = edtCodigoExit
   end
 end

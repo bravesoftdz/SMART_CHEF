@@ -1281,7 +1281,6 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
       ProviderFlags = []
       ReadOnly = True
       Precision = 18
-      Size = 2
     end
     object qryVendasVLR_UNI: TBCDField
       AutoGenerateValue = arDefault
@@ -1291,28 +1290,17 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
       ReadOnly = True
       DisplayFormat = ',0.00; ,0.00'
       Precision = 18
-      Size = 2
     end
     object qryVendasQTD_FRACIONADO: TIntegerField
       FieldName = 'QTD_FRACIONADO'
     end
-    object qryVendasVLR_TOTAL_IT: TBCDField
-      AutoGenerateValue = arDefault
+    object qryVendasVLR_TOTAL_IT: TFMTBCDField
       FieldName = 'VLR_TOTAL_IT'
-      Origin = 'VLR_TOTAL_IT'
-      ProviderFlags = []
-      ReadOnly = True
-      DisplayFormat = ',0.00; ,0.00'
-      Precision = 18
+      Size = 0
     end
-    object qryVendasVLR_TOTAL_AD: TBCDField
-      AutoGenerateValue = arDefault
+    object qryVendasVLR_TOTAL_AD: TFMTBCDField
       FieldName = 'VLR_TOTAL_AD'
-      Origin = 'VLR_TOTAL_AD'
-      ProviderFlags = []
-      ReadOnly = True
-      DisplayFormat = ',0.00; ,0.00'
-      Precision = 18
+      Size = 0
     end
   end
 end

@@ -1111,6 +1111,7 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
       ExplicitHeight = 41
       inherited Label4: TLabel
         Left = 97
+        Visible = False
         ExplicitLeft = 97
       end
       inherited staTitulo: TStaticText
@@ -1321,7 +1322,10 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
       Origin = 'VALOR_TOTAL'
       DisplayFormat = ',0.00; ,0.00'
       Precision = 18
-      Size = 2
+    end
+    object qryPedidosTOT_ITEM: TFMTBCDField
+      FieldName = 'TOT_ITEM'
+      Size = 0
     end
     object qryPedidosDESCRICAO: TStringField
       FieldName = 'DESCRICAO'
@@ -1335,13 +1339,6 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
     object qryPedidosQTD_ITEM: TBCDField
       FieldName = 'QTD_ITEM'
       Origin = 'QTD_ITEM'
-      Precision = 18
-      Size = 2
-    end
-    object qryPedidosTOT_ITEM: TBCDField
-      FieldName = 'TOT_ITEM'
-      Origin = 'TOT_ITEM'
-      DisplayFormat = ',0.00; ,0.00'
       Precision = 18
     end
     object qryPedidosDESCONTO: TBCDField
@@ -1376,16 +1373,14 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
       FieldName = 'QTD_ADICIONAL'
       Origin = 'QTD_ADICIONAL'
     end
-    object qryPedidosTOT_ADICIONAL: TBCDField
-      FieldName = 'TOT_ADICIONAL'
-      Origin = 'TOT_ADICIONAL'
-      DisplayFormat = ',0.00; ,0.00'
-      Precision = 18
-    end
     object qryPedidosAGRUPADAS: TStringField
       FieldName = 'AGRUPADAS'
       Origin = 'AGRUPADAS'
       Size = 80
+    end
+    object qryPedidosTOT_ADICIONAL: TFMTBCDField
+      FieldName = 'TOT_ADICIONAL'
+      Size = 0
     end
   end
 end

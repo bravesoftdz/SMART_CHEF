@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, StrUtils,
   Dialogs, uPadrao, StdCtrls, Mask, RXToolEdit, RXCurrEdit, ExtCtrls, ComCtrls, AcbrDevice,
-  ImgList, pngimage, Buttons, Contnrs, Caixa, AcbrEcf, ConfiguracaoECF, StringUtilitario;
+  ImgList, pngimage, Buttons, Contnrs, Caixa, AcbrEcf, ConfiguracaoECF, StringUtilitario,
+  generics.collections;
 
 type
   TfrmCaixa = class(TfrmPadrao)
@@ -73,7 +74,7 @@ var
 implementation
 
 uses Repositorio, FabricaRepositorio, Funcoes, EspecificacaoMovimentosPorCodigoCaixa, Movimento,
-  Pedido, uModulo, EspecificacaoCaixaPorData, Empresa, Math,
+  Pedido, uModulo, EspecificacaoCaixaPorData, Empresa, Math, SangriaReforco,
   ConfiguracoesSistema;
 
 {$R *.dfm}
@@ -278,32 +279,9 @@ begin
 end;
 
 function TfrmCaixa.CalculaValorCaixa(Caixa :TCaixa): Real;
-var
-  Especificacao : TEspecificacaoMovimentosPorCodigoCaixa;
-  Movimentos    : TObjectList;
-  repositorio   : TRepositorio;
-  i             : integer;
 begin
-  result        := 0;
-  Especificacao := nil;
-  repositorio   := nil;
-
-  try
-    repositorio   := TFabricaRepositorio.GetRepositorio(TMovimento.ClassName);
-    Especificacao := TEspecificacaoMovimentosPorCodigoCaixa.Create(Caixa);
-    Movimentos    := repositorio.GetListaPorEspecificacao(Especificacao, 'DATA >= '''+DateTimeToStr(Caixa.data_abertura)+'''');
-
-    if not assigned(Movimentos) then
-      Exit;
-      
-    for i := 0 to Movimentos.Count - 1 do
-      result := result + TMovimento(Movimentos.Items[i]).valor_pago;
-      
-  Finally
-    FreeAndNil(Especificacao);
-    FreeAndNil(repositorio);
-    Movimentos.Free;    
-  end;
+  result := 0;
+  result := Caixa.Total_Geral;
 end;
 
 procedure TfrmCaixa.BitBtn1Click(Sender: TObject);
@@ -324,7 +302,6 @@ begin
   imgCxAberto.Visible    := (estadoTela = 'ABERTO');
   imgCxFechado.Visible   := not (estadoTela = 'ABERTO');
   edtCouvert.Enabled     := not (estadoTela = 'ABERTO');
-  //edtPercTxServ.Enabled  := not (estadoTela = 'ABERTO');
   edtTaxaEntrega.Enabled := not (estadoTela = 'ABERTO');
 
 

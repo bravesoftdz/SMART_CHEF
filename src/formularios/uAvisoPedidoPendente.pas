@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, uPadrao, ImgList, pngimage, ExtCtrls, ContNrs, StdCtrls,
-  Buttons, Grids, DBGrids, DBGridCBN, DB, DBClient;
+  Buttons, Grids, DBGrids, DBGridCBN, DB, DBClient, generics.collections;
 
 type
   TfrmAvisoPedidoPendente = class(TfrmPadrao)
@@ -60,7 +60,7 @@ var
 implementation
 
 uses EspecificacaoPedidosComItemNaoImpresso, Repositorio, FabricaRepositorio, Pedido, Item, AdicionalItem, Produto,
-  StrUtils, MateriaPrima, RepositorioPedido, uInicial;
+  StrUtils, MateriaPrima, RepositorioPedido, uInicial, uImpressaoPedido;
 
 {$R *.dfm}
 
@@ -81,7 +81,7 @@ end;
 procedure TfrmAvisoPedidoPendente.busca_pendentes;
 var Especificacao :TEspecificacaoPedidosComItemNaoImpresso;
     repositorio   :TRepositorio;
-    Pedidos       :TObjectList;
+    Pedidos       :TObjectList<TPedido>;
     i, j, k       :integer;
 begin
   repositorio   := nil;
@@ -99,7 +99,7 @@ begin
 
     repositorio   := TFabricaRepositorio.GetRepositorio(TPedido.ClassName);
     Especificacao := TEspecificacaoPedidosComItemNaoImpresso.Create;
-    Pedidos       := repositorio.GetListaPorEspecificacao(Especificacao, 'SITUACAO = ''A'' ');
+    Pedidos       := repositorio.GetListaPorEspecificacao<TPedido>(Especificacao, 'SITUACAO = ''A'' ');
 
     for i := 0 to Pedidos.Count - 1 do
       for j := 0 to (Pedidos.Items[i] as TPedido).Itens.Count - 1 do begin
@@ -207,7 +207,12 @@ begin
     while not cdsSelecionados.Eof do begin
       Pedido := TPedido(repositorio.Get(cdsSelecionadosCODIGO.AsInteger));
 
-      (repositorio as TRepositorioPedido).imprime(Pedido);
+      frmImpressaoPedido := TFrmImpressaoPedido.Create(nil);
+      frmImpressaoPedido.imprime(Pedido);
+      frmImpressaoPedido.Release;
+      frmImpressaoPedido := nil;
+
+      //(repositorio as TRepositorioPedido).imprime(Pedido);
       //repositorio.Salvar(Pedido);
 
       cdsSelecionados.Next;

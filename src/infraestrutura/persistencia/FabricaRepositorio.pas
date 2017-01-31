@@ -50,7 +50,18 @@ uses
   RepositorioConfiguracoesSistema,
   RepositorioCliente,
   RepositorioEndereco,
-  CampoAlteracaoAuditoria;
+  RepositorioFornecedor,
+  CampoAlteracaoAuditoria,
+  RepositorioCFOPCorrespondente,
+  RepositorioProdutoFornecedor,
+  RepositorioPessoa,
+  RepositorioSangriaReforco,
+  RepositorioNotaFiscal,
+  RepositorioItemNotaFiscal,
+  RepositorioNaturezaOperacao,
+  RepositorioCidade,
+  RepositorioEstado,
+  RepositorioConfiguracoesNF;
 
 
 { TFabricaRepositorio }
@@ -91,6 +102,17 @@ begin
    else if (NomeDaEntidade  = 'TConfiguracoesSistema')      then result := TRepositorioConfiguracoesSistema.Create
    else if (NomeDaEntidade  = 'TCliente')                   then result := TRepositorioCliente.Create
    else if (NomeDaEntidade  = 'TEndereco')                  then result := TRepositorioEndereco.Create
+   else if (NomeDaEntidade  = 'TFornecedor')                then result := TRepositorioFornecedor.Create
+   else if (NomeDaEntidade  = 'TCFOPCorrespondente')        then result := TRepositorioCFOPCorrespondente.Create
+   else if (NomeDaEntidade  = 'TProdutoFornecedor')         then result := TRepositorioProdutoFornecedor.Create
+   else if (NomeDaEntidade  = 'TPessoa')                    then result := TRepositorioPessoa.Create
+   else if (NomeDaEntidade  = 'TSangriaReforco')            then result := TRepositorioSangriaReforco.Create
+   else if (NomeDaEntidade  = 'TNotaFiscal')                then result := TRepositorioNotaFiscal.Create
+   else if (NomeDaEntidade  = 'TItemNotaFiscal')            then result := TRepositorioItemNotaFiscal.Create
+   else if (NomeDaEntidade  = 'TNaturezaOperacao')          then result := TRepositorioNaturezaOperacao.Create
+   else if (NomeDaEntidade  = 'TCidade')                    then result := TRepositorioCidade.Create
+   else if (NomeDaEntidade  = 'TEstado')                    then result := TRepositorioEstado.Create
+   else if (NomeDaEntidade  = 'TConfiguracoesNF')           then result := TRepositorioConfiguracoesNF.Create
 
    else begin
      dm.LogErros.AdicionaErro('FabricaRepositorio', 'TExcecaoRepositorioNaoEncontrado', 'Repositório para a '+ NomeDaEntidade + ' não foi encontrado!');

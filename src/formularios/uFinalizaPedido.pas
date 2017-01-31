@@ -145,6 +145,7 @@ type
 
     function total_prepago(codigo_item :integer) :Real;
     function valor_item(quantidade :Real) :Real;
+    function getPagamentoCompleto: Boolean;
 
   public
     codigo_pedido :integer;
@@ -153,7 +154,8 @@ type
     procedure preenche_cds(cds :TClientDataSet);
 
   public
-    property finalizaRapido :Boolean  read FFinalizaRapido  write FFinalizaRapido;
+    property finalizaRapido :Boolean     read FFinalizaRapido  write FFinalizaRapido;
+    property pagamento_completo :Boolean read getPagamentoCompleto;
   end;
 
 var
@@ -261,6 +263,11 @@ begin
   inherited;
 end;
 
+function TfrmFinalizaPedido.getPagamentoCompleto: Boolean;
+begin
+  result:=  (edtTotalRestante.Value = 0);
+end;
+
 procedure TfrmFinalizaPedido.gridAgrupaKeyDown(Sender: TObject;
   var Key: Word; Shift: TShiftState);
 begin
@@ -338,6 +345,8 @@ begin
     DBGrid1.PopupMenu              := nil;
     cmbTipoMoeda.SetFocus;
     cmbTipoMoeda.OnEnter           := cmbTipoMoedaEnter;
+    cmbTipoMoeda.ItemIndex         := 0;
+    edtValorPago.SetFocus;
   end;
 end;
 
@@ -759,6 +768,8 @@ begin
     cdsItens.Next;
   end;
 
+  edtPagando.Value := edtPagando.Value - edtDesconto.Value;
+
   cdsItens.EnableControls;
   cdsItens.RecNo := linha;
 end;
@@ -981,7 +992,7 @@ end;
 procedure TfrmFinalizaPedido.carrega_movimentos;
 var repositorio :TRepositorio;
     Movimento   :TMovimento;
-    Movimentos  :TObjectList;
+    Movimentos  :TObjectList<TMovimento>;
     Especificacao :TEspecificacaoMovimentosPorCodigoPedido;
     i :integer;
 begin
@@ -993,7 +1004,7 @@ begin
     repositorio   := TFabricaRepositorio.GetRepositorio(TMovimento.ClassName);
     Especificacao := TEspecificacaoMovimentosPorCodigoPedido.Create( codigo_pedido );
 
-    Movimentos    := repositorio.GetListaPorEspecificacao( Especificacao );
+    Movimentos    := repositorio.GetListaPorEspecificacao<TMovimento>( Especificacao );
 
     if assigned(Movimentos) then
        for i := 0 to Movimentos.Count - 1 do begin

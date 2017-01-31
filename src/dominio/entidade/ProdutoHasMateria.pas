@@ -6,7 +6,8 @@ uses
   SysUtils,
   Contnrs,
   MateriaPrima,
-  Produto;
+  Produto,
+  Generics.Collections;
 
 type
   TProdutoHasMateria = class
@@ -34,11 +35,13 @@ type
     property materia_prima  :TMateriaPrima read GetMateriaPrima;
     property produto        :TProduto      read GetProduto write Setproduto;
 
+    class function MateriasDoProduto(codigoProduto :integer) :TObjectList<TProdutoHasMateria>;
+
 end;
 
 implementation
 
-uses repositorio, fabricaRepositorio;
+uses repositorio, fabricaRepositorio, EspecificacaoMateriasDoProduto;
 { TProdutoHasMateria }
 
 function TProdutoHasMateria.GetMateriaPrima: TMateriaPrima;
@@ -75,6 +78,24 @@ begin
       result := self.FProduto;
 
    finally
+     FreeAndNil(Repositorio);
+   end;
+end;
+
+class function TProdutoHasMateria.MateriasDoProduto(codigoProduto: integer): TObjectList<TProdutoHasMateria>;
+var
+  Repositorio   :TRepositorio;
+  Especificacao :TEspecificacaoMateriasDoProduto;
+begin
+   Repositorio    := nil;
+   Especificacao  := nil;
+
+   try
+     Especificacao  := TEspecificacaoMateriasDoProduto.Create(codigoProduto);
+     Repositorio    := TFabricaRepositorio.GetRepositorio(TProdutoHasMateria.ClassName);
+     result         := Repositorio.GetListaPorEspecificacao<TProdutoHasMateria>(Especificacao);
+   finally
+     FreeAndNil(Especificacao);
      FreeAndNil(Repositorio);
    end;
 end;

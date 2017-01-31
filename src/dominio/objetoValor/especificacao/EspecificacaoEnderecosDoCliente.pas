@@ -34,7 +34,7 @@ var Endereco :TEndereco;
 begin
   Endereco := TEndereco(Objeto);
 
-  result := Endereco.codigo_cliente = self.FCodigo_cliente;
+  result := Endereco.codigo_pessoa = self.FCodigo_cliente;
 end;
 
 end.

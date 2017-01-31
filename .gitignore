@@ -46,3 +46,9 @@ src/infraestrutura/servico/atualizacao/.#ServicoAtualizadorBD.pas.1.6
 src/infraestrutura/servico/atualizacao/.#ServicoAtualizadorBD.pas.1.7
 src/dominio/servico/__history/ServicoEmissorNFCe.pas.~29~
 src/dominio/servico/__history/
+FinalizaProcessosSmart/Unit1.dfm
+FinalizaProcessosSmart/Unit1.pas
+FinalizaProcessosSmart/icon_notification_error_comp.ico
+FinalizaProcessosSmart/prjFinalizaProcessosSmart.stat
+FinalizaProcessosSmart/prjFinalizaProcessosSmart_Icon.ico
+*.ini

@@ -170,6 +170,8 @@ begin
   end;
   
   try
+    if True then
+
     edtUF.SetFocus;
   except
   end;

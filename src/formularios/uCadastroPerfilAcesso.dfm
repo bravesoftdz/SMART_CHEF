@@ -8,6 +8,8 @@ inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
   OldCreateOrder = True
   OnKeyPress = FormKeyPress
   OnShow = FormShow
+  ExplicitWidth = 847
+  ExplicitHeight = 537
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlPropaganda: TPanel
@@ -34,10 +36,6 @@ inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
     object TabSheet1: TTabSheet
       Caption = '[ F1 ] Perfis Cadastrados'
       OnExit = TabSheet1Exit
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         696
         443)
@@ -129,10 +127,6 @@ inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
       Caption = '[ F2 ] Permiss'#245'es do Perfil'
       ImageIndex = 2
       OnEnter = TabSheet4Enter
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object panBusca: TPanel
         Left = 0
         Top = 0
@@ -307,10 +301,6 @@ inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
         object TabSheet3: TTabSheet
           Caption = 'Permiss'#245'es b'#225'sicas'
           Enabled = False
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object chk1: TCheckBox
             Left = 8
             Top = 8
@@ -399,14 +389,26 @@ inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
             Caption = 'Cadastrar clientes'
             TabOrder = 10
           end
+          object chk32: TCheckBox
+            Left = 8
+            Top = 272
+            Width = 153
+            Height = 17
+            Caption = 'Cadastrar fornecedores'
+            TabOrder = 11
+          end
+          object chk34: TCheckBox
+            Left = 8
+            Top = 296
+            Width = 193
+            Height = 17
+            Caption = 'Cadastrar CFOPs Correspondentes'
+            TabOrder = 12
+          end
         end
         object TabSheet5: TTabSheet
           Caption = 'Movimentos'
           ImageIndex = 4
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object chk19: TCheckBox
             Left = 8
             Top = 8
@@ -415,14 +417,18 @@ inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
             Caption = 'Entrada e sa'#237'da de mercadoria'
             TabOrder = 0
           end
+          object chk33: TCheckBox
+            Left = 8
+            Top = 32
+            Width = 177
+            Height = 17
+            Caption = 'Entrada NFe por arquivo .XML'
+            TabOrder = 1
+          end
         end
         object TabSheet7: TTabSheet
           Caption = 'Permiss'#245'es Altera'#231#227'o/Cadastro'
           ImageIndex = 4
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object chk4: TCheckBox
             Left = 8
             Top = 8
@@ -443,10 +449,6 @@ inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
         object TabSheet2: TTabSheet
           Caption = 'Permiss'#245'es Venda'
           ImageIndex = 3
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object chk8: TCheckBox
             Left = 8
             Top = 8
@@ -503,14 +505,18 @@ inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
             Caption = 'Reimprimir Pedido'
             TabOrder = 6
           end
+          object chk35: TCheckBox
+            Left = 8
+            Top = 176
+            Width = 185
+            Height = 17
+            Caption = 'Lan'#231'ar Sangria/Refor'#231'o do Caixa'
+            TabOrder = 7
+          end
         end
         object TabSheet6: TTabSheet
           Caption = 'Permiss'#245'es Relat'#243'rios'
           ImageIndex = 3
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object chk15: TCheckBox
             Left = 8
             Top = 8
@@ -915,7 +921,7 @@ inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
     Params = <>
     ProviderName = 'dsp'
     Left = 500
-    Top = 56
+    Top = 48
     object cdsCODIGO: TIntegerField
       FieldName = 'CODIGO'
       Required = True
@@ -932,10 +938,10 @@ inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
   object ds: TDataSource
     DataSet = cds
     Left = 460
-    Top = 56
+    Top = 48
   end
   object dsp: TDataSetProvider
     Left = 540
-    Top = 56
+    Top = 48
   end
 end

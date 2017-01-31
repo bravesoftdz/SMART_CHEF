@@ -39,7 +39,7 @@ begin
     result := true;
 
   if result then
-    if TRIM(TNFce(Objeto).chave) = '' then
+    if (TRIM(TNFce(Objeto).chave) = '') or (TNFCe(Objeto).status <> '100') then
       result := false;
 
 end;

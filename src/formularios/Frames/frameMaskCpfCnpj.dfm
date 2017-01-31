@@ -25,6 +25,7 @@ object MaskCpfCnpj: TMaskCpfCnpj
     EditMask = '99\.999\.999/9999\-99;0; '
     MaxLength = 18
     TabOrder = 1
+    Text = ''
   end
   object comPessoa: TComboBox
     Left = 10
@@ -32,7 +33,6 @@ object MaskCpfCnpj: TMaskCpfCnpj
     Width = 83
     Height = 21
     Style = csDropDownList
-    ItemHeight = 13
     ItemIndex = 1
     TabOrder = 0
     Text = 'JUR'#205'DICA'

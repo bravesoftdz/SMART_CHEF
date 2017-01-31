@@ -2,26 +2,22 @@ unit FormaPagamento;
 
 interface
 
+uses SysUtils, Contnrs;
+
 type
   TFormaPagamento = class
 
   private
-    FDescricao: String;
-
-  private
-    procedure SetDescricao(const Value: String);
+    Fcodigo :Integer;
+    Fdescricao :String;
 
   public
-    property Descricao :String read FDescricao write SetDescricao;
+    property codigo                :Integer read Fcodigo                write Fcodigo;
+    property descricao             :String read Fdescricao             write Fdescricao;
 end;
 
 implementation
 
 { TFormaPagamento }
-
-procedure TFormaPagamento.SetDescricao(const Value: String);
-begin
-  FDescricao := Value;
-end;
 
 end.

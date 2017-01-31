@@ -498,7 +498,6 @@ inherited frmPedidosEmAberto: TfrmPedidosEmAberto
     object cdsPedidosVALOR_TOTAL: TBCDField
       FieldName = 'VALOR_TOTAL'
       Precision = 18
-      Size = 2
     end
     object cdsPedidosNOME_CLIENTE: TStringField
       FieldName = 'NOME_CLIENTE'

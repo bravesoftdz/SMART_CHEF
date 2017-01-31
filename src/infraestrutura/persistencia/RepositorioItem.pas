@@ -52,7 +52,7 @@ uses
 
 function TRepositorioItem.CondicaoSQLGetAll: String;
 begin
-  result := ' WHERE '+FCondicao; 
+  result := ' WHERE '+FIdentificador;
 end;
 
 procedure TRepositorioItem.ExecutaDepoisDeSalvar(Objeto: TObject);
@@ -248,7 +248,7 @@ end;
 
 function TRepositorioItem.SQLGetAll: String;
 begin
-  result := 'select * from ItenS '+ IfThen(FCondicao = '','', CondicaoSQLGetAll) +' order by codigo';
+  result := 'select * from ItenS '+ IfThen(FIdentificador = '','', CondicaoSQLGetAll) +' order by codigo';
 end;
 
 function TRepositorioItem.SQLGetExiste(campo: String): String;

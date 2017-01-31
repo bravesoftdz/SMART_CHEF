@@ -24296,7 +24296,7 @@ object frmInicial: TfrmInicial
   end
   object gridConexoes: TDBGrid
     Left = 144
-    Top = 280
+    Top = 176
     Width = 369
     Height = 265
     DataSource = dsConexoes
@@ -32301,10 +32301,12 @@ object frmInicial: TfrmInicial
     end
   end
   object Menu: TMainMenu
-    Left = 160
-    Top = 160
     object Cadastros1: TMenuItem
       Caption = 'Cadastro'
+      object CFOPscorrespondentes1: TMenuItem
+        Caption = 'CFOPs correspondentes'
+        OnClick = CFOPscorrespondentes1Click
+      end
       object Clientes1: TMenuItem
         Caption = 'Clientes'
         OnClick = Clientes1Click
@@ -32324,6 +32326,10 @@ object frmInicial: TfrmInicial
       object Departamentos1: TMenuItem
         Caption = 'Departamentos'
         OnClick = Departamentos1Click
+      end
+      object Fornecedores1: TMenuItem
+        Caption = 'Fornecedores'
+        OnClick = Fornecedores1Click
       end
       object Grupos1: TMenuItem
         Caption = 'Grupos'
@@ -32355,6 +32361,10 @@ object frmInicial: TfrmInicial
       object EntradaSada1: TMenuItem
         Caption = 'Entrada/Sa'#237'da mercadoria'
         OnClick = EntradaSada1Click
+      end
+      object EntradaNFExml1: TMenuItem
+        Caption = 'Entrada NF-e (.xml)'
+        OnClick = EntradaNFExml1Click
       end
     end
     object Vendas1: TMenuItem
@@ -32388,6 +32398,10 @@ object frmInicial: TfrmInicial
       object AbrirFechar1: TMenuItem
         Caption = 'Abrir / Fechar'
         OnClick = AbrirFechar1Click
+      end
+      object SangriaeReforo1: TMenuItem
+        Caption = 'Sangria e Refor'#231'o'
+        OnClick = SangriaeReforo1Click
       end
     end
     object Relatrios1: TMenuItem

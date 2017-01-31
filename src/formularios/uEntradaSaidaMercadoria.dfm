@@ -81,20 +81,24 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
     inherited edtCodigo: TCurrencyEdit
       Left = 16
       Top = 24
+      Width = 85
       ExplicitLeft = 16
       ExplicitTop = 24
+      ExplicitWidth = 85
     end
     inherited btnBusca: TBitBtn
-      Left = 81
+      Left = 104
       Top = 22
-      ExplicitLeft = 81
+      ExplicitLeft = 104
       ExplicitTop = 22
     end
     inherited edtItem: TEdit
-      Left = 109
+      Left = 132
       Top = 24
-      ExplicitLeft = 109
+      Width = 321
+      ExplicitLeft = 132
       ExplicitTop = 24
+      ExplicitWidth = 321
     end
     inherited cmbUnidadeMedida: TComboBox
       Left = 470
@@ -126,12 +130,6 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
       ExplicitLeft = 109
       ExplicitTop = 8
     end
-    inherited edtCodigo: TCurrencyEdit
-      Left = 16
-      Top = 24
-      ExplicitLeft = 16
-      ExplicitTop = 24
-    end
     inherited btnBusca: TBitBtn
       Left = 81
       Top = 22
@@ -142,6 +140,12 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
       Left = 109
       Top = 24
       ExplicitLeft = 109
+      ExplicitTop = 24
+    end
+    inherited edtCodigo: TEdit
+      Left = 16
+      Top = 24
+      ExplicitLeft = 16
       ExplicitTop = 24
     end
   end

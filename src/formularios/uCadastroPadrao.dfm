@@ -5,6 +5,8 @@ inherited frmCadastroPadrao: TfrmCadastroPadrao
   ClientWidth = 704
   OldCreateOrder = True
   OnShow = FormShow
+  ExplicitWidth = 710
+  ExplicitHeight = 478
   PixelsPerInch = 96
   TextHeight = 13
   object Splitter1: TSplitter [0]
@@ -180,9 +182,6 @@ inherited frmCadastroPadrao: TfrmCadastroPadrao
       Height = 30
       Caption = ' &Cancelar   '
       Enabled = False
-      TabOrder = 0
-      TabStop = False
-      OnClick = btnCancelarClick
       Glyph.Data = {
         36080000424D3608000000000000360000002800000020000000100000000100
         2000000000000008000000000000000000000000000000000000FFFFFF00140E
@@ -251,6 +250,9 @@ inherited frmCadastroPadrao: TfrmCadastroPadrao
         8C0000008E00000089009B9B9B009B9B9B009B9B9B009B9B9B009B9B9B009B9B
         9B009B9B9B009B9B9B000000890000008E0000008C009B9B9B00}
       NumGlyphs = 2
+      TabOrder = 0
+      TabStop = False
+      OnClick = btnCancelarClick
     end
     object btnSalvar: TBitBtn
       Left = 8
@@ -259,9 +261,6 @@ inherited frmCadastroPadrao: TfrmCadastroPadrao
       Height = 30
       Caption = ' &Salvar        '
       Enabled = False
-      TabOrder = 1
-      TabStop = False
-      OnClick = btnSalvarClick
       Glyph.Data = {
         36080000424D3608000000000000360000002800000020000000100000000100
         2000000000000008000000000000000000000000000000000000C1761B00C275
@@ -330,14 +329,20 @@ inherited frmCadastroPadrao: TfrmCadastroPadrao
         1E0090661900846324008B6B30008B703400896B2E008A6C2E008A6C2F008E6F
         32009373370092723700826026008751000099958E009B9B9B00}
       NumGlyphs = 2
+      TabOrder = 1
+      TabStop = False
+      OnClick = btnSalvarClick
     end
   end
   inherited pnlPropaganda: TPanel
     Top = 415
     Width = 704
     TabOrder = 1
+    ExplicitTop = 415
+    ExplicitWidth = 704
     inherited Shape8: TShape
       Width = 702
+      ExplicitWidth = 702
     end
   end
   object pgGeral: TPageControl
@@ -345,7 +350,7 @@ inherited frmCadastroPadrao: TfrmCadastroPadrao
     Top = 0
     Width = 561
     Height = 415
-    ActivePage = tsDados
+    ActivePage = tsConsulta
     Align = alClient
     Style = tsFlatButtons
     TabOrder = 2
@@ -420,8 +425,8 @@ inherited frmCadastroPadrao: TfrmCadastroPadrao
         ConfCores.Titulo.Tipo.Name = 'MS Sans Serif'
         ConfCores.Titulo.Tipo.Style = []
         Ordenavel = True
-        TipoBusca.ListarApenasEncontrados = False
-        TipoBusca.QualquerParte = False
+        TipoBusca.ListarApenasEncontrados = True
+        TipoBusca.QualquerParte = True
         SalvaConfiguracoes = False
       end
       object lblAjudaSelecionar: TStaticText

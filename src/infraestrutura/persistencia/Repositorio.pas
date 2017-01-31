@@ -7,11 +7,11 @@ uses
   FireDAC.Comp.Client,
   uModulo,
   Variants,
-  Contnrs,
-  Auditoria,
+  Contnrs, Auditoria,
+  EventoExecutarOperacao,
   Especificacao,
-  Classes,
-  EventoExecutarOperacao, Dialogs, Forms, generics.collections;
+  Classes, Generics.Collections,
+  Dialogs, Forms;
 
 type TTipoAuditoria = (taInclusao, taAlteracao, taExclusao);
 
@@ -37,7 +37,7 @@ type
   // Métodos que retornam SQL.
   //==============================================================================
   protected
-    FCondicao :String;
+    FIdentificador :String;
 
     function SQLGet                            :String;            virtual;
     function CondicaoSQLGetAll                 :String;            virtual;
@@ -48,7 +48,7 @@ type
 
     function IsInsercao(Objeto :TObject)       :Boolean;           virtual;
     function IsComponente()                    :Boolean;           virtual;
-    function IsColecao()                       :Boolean;           virtual;
+    function IsColecao()                       :Boolean;           virtual; 
 
   protected
     procedure SetParametros   (Objeto          :TObject                        ); virtual;
@@ -64,9 +64,9 @@ type
   // Auditoria
   //==============================================================================
   protected
-    procedure SetCamposIncluidos(Auditoria :TAuditoria;               Objeto :TObject); virtual;
+ {   procedure SetCamposIncluidos(Auditoria :TAuditoria;               Objeto :TObject); virtual;
     procedure SetCamposAlterados(Auditoria :TAuditoria; AntigoObjeto, Objeto :TObject); virtual;
-    procedure SetCamposExcluidos(Auditoria :TAuditoria;               Objeto :TObject); virtual;
+    procedure SetCamposExcluidos(Auditoria :TAuditoria;               Objeto :TObject); virtual;  }
 
   public
     constructor Create;
@@ -80,8 +80,8 @@ type
     function GetListaPorIdentificador(const Identificador :Variant)                                     :TObjectList;
     function GetAll                                                                                     :TObjectList;
     function GetExiste               (const campo         :String;        const Identificador :Variant) :Boolean;
-    function GetPorEspecificacao     (Especificacao       :TEspecificacao; const condicao :String = '') :TObject;
-    function GetListaPorEspecificacao(Especificacao       :TEspecificacao; const condicao :String = '') :TObjectList;
+    function GetPorEspecificacao     (Especificacao       :TEspecificacao; const identificador :String = '') :TObject;
+    function GetListaPorEspecificacao<T :class>(Especificacao       :TEspecificacao; const identificador :String = '') :TObjectList<T>;
 
     //==============================================================================
     // Métodos de controle de transação.
@@ -103,6 +103,14 @@ type
     // Evento para atualizar a tela
     //==============================================================================
     procedure AdicionarEventoDeAtualizarTela(AtualizarTela :TEventoExecutarOperacao);
+
+   //==============================================================================
+   // Auditoria
+   //==============================================================================
+   protected
+     procedure SetCamposIncluidos(Auditoria :TAuditoria;               Objeto :TObject); virtual;
+     procedure SetCamposAlterados(Auditoria :TAuditoria; AntigoObjeto, Objeto :TObject); virtual;
+     procedure SetCamposExcluidos(Auditoria :TAuditoria;               Objeto :TObject); virtual;
 
    public
      class function HorarioBancoDeDados :TDateTime;
@@ -184,6 +192,7 @@ function TRepositorio.Salvar(Objeto: TObject): Boolean;
 var
   ObjetoAntigo :TObject;
   Repositorio  :TRepositorio;
+  infoAdc :String;
 begin
    Result := true;
    Repositorio  := self.GetRepositorio;
@@ -203,24 +212,25 @@ begin
 
        if self.IsInsercao(Objeto) then begin
           if not self.IsComponente then
-            self.SetIdentificador(Objeto, dm.GetValorGenerator('GEN_'+self.GetNomeDaTabela+'_ID','0'));
+            self.SetIdentificador(Objeto, dm.GetValorGenerator('GEN_'+self.GetNomeDaTabela+'_ID'));
 
-          self.GravaAuditoria(nil, Objeto, taInclusao);
-       end
-       else
-          self.GravaAuditoria(ObjetoAntigo, Objeto, taAlteracao);
+//          self.GravaAuditoria(nil, Objeto, taInclusao);
+       end;
+//       else
+//          self.GravaAuditoria(ObjetoAntigo, Objeto, taAlteracao);
 
        self.ExecutaDepoisDeSalvar(Objeto);
      finally
+
        FreeAndNil(Repositorio);
        FreeAndNil(ObjetoAntigo);
      end;
 
    except
      on E: Exception do begin
-      dm.LogErros.AdicionaErro('Repositorio', E.ClassName, E.Message);
+      dm.LogErros.AdicionaErro('Repositorio', E.ClassName, E.Message + ' '+ Objeto.ClassName +' '+ Self.classname);
       Result := false;
-      raise Exception.create('Erro ao salvar.'+#13#10+'Para mais informações consulte o log de erros.');
+      raise Exception.create('Erro ao salvar!'+#13#10+'Para mais informações, consulte o log de erros.');
      end;
    end;
 end;
@@ -240,7 +250,7 @@ begin
        self.FQuery.Connection     := dm.FDConnection;
        self.FQuery.SQL.Clear;
        self.FQuery.SQL.Add(self.SQLSalvar);
-       
+
        self.SetParametros(Objeto);
 
        if not self.IsInsercao(Objeto) then
@@ -366,13 +376,13 @@ end;
   Retorno:    TObject
 -------------------------------------------------------------------------------}
 function TRepositorio.GetPorEspecificacao(
-  Especificacao: TEspecificacao; const condicao :String): TObject;
+  Especificacao: TEspecificacao; const identificador :String): TObject;
 begin
    try
      result := nil;
 
      self.FQuery.SQL.Clear;
-     FCondicao := condicao;
+     FIdentificador := identificador;
      self.FQuery.SQL.Add(self.SQLGetAll);
      self.FQuery.Open;
 
@@ -388,6 +398,7 @@ begin
         self.FQuery.Next;
         FreeAndNil(result);
      end;
+
 
      result := nil; // se não sair no while, não encontrou
 
@@ -408,8 +419,8 @@ end;
   Parâmetros: Especificacao: TEspecificacao
   Retorno:    TList
 -------------------------------------------------------------------------------}
-function TRepositorio.GetListaPorEspecificacao(
-  Especificacao: TEspecificacao; const condicao :String): TObjectList;
+function TRepositorio.GetListaPorEspecificacao<T>(
+  Especificacao: TEspecificacao; const identificador :String): TObjectList<T>;
 var
   obj :TObject;
 begin
@@ -417,18 +428,17 @@ begin
      result := nil;
 
      self.FQuery.SQL.Clear;
-     FCondicao := condicao;
+     FIdentificador := identificador;
      self.FQuery.SQL.Add(self.SQLGetAll);
      self.FQuery.Open;
 
      if self.FQuery.IsEmpty then exit;
 
-     result := TObjectList.Create(true);
+     result := TObjectList<T>.Create(true);
 
      while not self.FQuery.Eof do begin
         obj := self.Get(self.FQuery);
 
-        //Sleep(1);
         Application.ProcessMessages;
         { Se o objeto não é nulo e atende a especificação então ele é adicionado na lista
           para ser retornado.                                                           }
@@ -451,6 +461,21 @@ end;
 function TRepositorio.GetNomeDaTabela: String;
 begin
     raise TExcecaoMetodoNaoImplementado.Create(self.ClassName, 'GetNomeDaTabela: String;');
+end;
+
+procedure TRepositorio.SetCamposAlterados(Auditoria: TAuditoria; AntigoObjeto, Objeto: TObject);
+begin
+
+end;
+
+procedure TRepositorio.SetCamposExcluidos(Auditoria: TAuditoria; Objeto: TObject);
+begin
+
+end;
+
+procedure TRepositorio.SetCamposIncluidos(Auditoria: TAuditoria; Objeto: TObject);
+begin
+
 end;
 
 procedure TRepositorio.SetIdentificador(Objeto :TObject; Identificador :Variant);
@@ -476,7 +501,7 @@ begin
 
      self.FQuery.ExecSQL;
 
-     self.GravaAuditoria(nil, Objeto, taExclusao);
+ //    self.GravaAuditoria(nil, Objeto, taExclusao);
    except
      on E: Exception do
       dm.LogErros.AdicionaErro('Repositorio', E.ClassName, E.Message);
@@ -497,7 +522,7 @@ procedure TRepositorio.ExecutaDepoisDeSalvar;
 begin
    {}
 end;
-
+              {
 procedure TRepositorio.GravaAuditoria(AntigoObjeto, Objeto: TObject; TipoAuditoria :TTipoAuditoria);
 var
   Repositorio     :TRepositorio;
@@ -526,22 +551,48 @@ end;
 
 procedure TRepositorio.SetCamposAlterados(Auditoria :TAuditoria; AntigoObjeto, Objeto :TObject);
 begin
-  { Método a ser implementado nas sub-classes }
+  // Método a ser implementado nas sub-classes
 end;
 
 procedure TRepositorio.SetCamposExcluidos(Auditoria :TAuditoria;               Objeto :TObject);
 begin
-  { Método a ser implementado nas sub-classes }
+  // Método a ser implementado nas sub-classes
 end;
 
 procedure TRepositorio.SetCamposIncluidos(Auditoria :TAuditoria;               Objeto :TObject);
 begin
-   { Método a ser implementado nas sub-classes }
-end;
+   // Método a ser implementado nas sub-classes
+end;              }
 
 function TRepositorio.GetRepositorio: TRepositorio;
 begin
     raise TExcecaoMetodoNaoImplementado.Create(self.ClassName, 'GetRepositorio: TRepositorio;');
+end;
+
+procedure TRepositorio.GravaAuditoria(AntigoObjeto, Objeto: TObject; TipoAuditoria: TTipoAuditoria);
+var
+  Repositorio     :TRepositorio;
+  Auditoria       :TAuditoria;
+begin
+   Auditoria       := nil;
+   Repositorio     := nil;
+
+   try
+       Auditoria                 := TAuditoria.Create(dm.UsuarioLogado, self.GetNomeDaTabela, dm.NomeDoTerminal);
+
+       if      (TipoAuditoria = taInclusao)  then self.SetCamposIncluidos(Auditoria, Objeto)
+       else if (TipoAuditoria = taAlteracao) then self.SetCamposAlterados(Auditoria, AntigoObjeto, Objeto)
+       else if (TipoAuditoria = taExclusao)  then self.SetCamposExcluidos(Auditoria, Objeto);
+
+       if not Auditoria.TemCamposParaPersistir then exit;
+
+       Repositorio := TFabricaRepositorio.GetRepositorio(TAuditoria.ClassName);
+       Repositorio.Salvar(Auditoria);
+
+   finally
+     FreeAndNil(Auditoria);
+     FreeAndNil(Repositorio);
+   end;
 end;
 
 class function TRepositorio.HorarioBancoDeDados: TDateTime;
@@ -659,7 +710,7 @@ begin
      self.FQuery.Params[0].Value := Identificador;
      self.FQuery.ExecSQL;
 
-    // self.GravaAuditoria(nil, Objeto, taExclusao);
+     //self.GravaAuditoria(nil, Objeto, taExclusao);
    except
      on E: Exception do
       dm.LogErros.AdicionaErro('Repositorio', E.ClassName, E.Message);

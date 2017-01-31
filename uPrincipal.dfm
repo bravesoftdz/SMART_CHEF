@@ -1,9 +1,11 @@
 object frmPrincipal: TfrmPrincipal
   Left = 341
   Top = 331
+  AlphaBlend = True
+  AlphaBlendValue = 2
   Caption = 'Finaliza Smart'
-  ClientHeight = 109
-  ClientWidth = 269
+  ClientHeight = 68
+  ClientWidth = 179
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

@@ -1,17 +1,20 @@
-unit RepositorioCliente;
+unit repositorioCliente;
 
 interface
 
-uses DB, Auditoria, Repositorio;
+uses
+  DB,
+  Repositorio,
+  RepositorioPessoa;
 
 type
-  TRepositorioCliente = class(TRepositorio)
+  TRepositorioCliente = class(TRepositorioPessoa)
 
   protected
     function Get             (Dataset :TDataSet) :TObject; overload; override;
     function GetNomeDaTabela                     :String;            override;
     function GetIdentificador(Objeto :TObject)   :Variant;           override;
-    function GetRepositorio                     :TRepositorio;       override;
+    function GetRepositorio                      :TRepositorio;      override;
 
   protected
     function SQLGet                      :String;            override;
@@ -22,130 +25,104 @@ type
 
   protected
     function IsInsercao(Objeto :TObject) :Boolean;           override;
+
   protected
     procedure SetParametros   (Objeto :TObject                        ); override;
     procedure SetIdentificador(Objeto :TObject; Identificador :Variant); override;
 
-  protected
-    procedure SetCamposIncluidos(Auditoria :TAuditoria;               Objeto :TObject); override;
-    procedure SetCamposAlterados(Auditoria :TAuditoria; AntigoObjeto, Objeto :TObject); override;
-    procedure SetCamposExcluidos(Auditoria :TAuditoria;               Objeto :TObject); override;
+  //==============================================================================
+  // Métodos de persistência no banco dados.
+  //==============================================================================
+  public
+    function Salvar (Objeto              :TObject) :Boolean; override;
+    function Remover(Objeto              :TObject) :Boolean; override;
 end;
 
 implementation
 
-uses SysUtils, Cliente;
+uses
+  Pessoa,
+  TipoRegimeTributario,
+  SysUtils, FabricaRepositorio, ConfiguracoesNF, ConfiguracoesNFEmail, ParametrosNFCe, Endereco;
 
 { TRepositorioCliente }
 
 function TRepositorioCliente.Get(Dataset: TDataSet): TObject;
-var
-  Cliente :TCliente;
 begin
-   Cliente:= TCliente.Create;
-   Cliente.codigo        := self.FQuery.FieldByName('codigo').AsInteger;
-   Cliente.nome          := self.FQuery.FieldByName('nome').AsString;
-   Cliente.cpf_cnpj      := self.FQuery.FieldByName('cpf_cnpj').AsString;
-
-   result := Cliente;
+   result := inherited Get(DataSet);
 end;
 
 function TRepositorioCliente.GetIdentificador(Objeto: TObject): Variant;
 begin
-  result := TCliente(Objeto).Codigo;
+   result := TPessoa(Objeto).codigo;
 end;
 
 function TRepositorioCliente.GetNomeDaTabela: String;
 begin
-  result := 'CLIENTES';
+   result := inherited GetNomeDaTabela;
 end;
 
 function TRepositorioCliente.GetRepositorio: TRepositorio;
 begin
-  result := TRepositorioCliente.Create;
+   result := TRepositorioCliente.Create;
 end;
 
 function TRepositorioCliente.IsInsercao(Objeto: TObject): Boolean;
 begin
-  result := (TCliente(Objeto).Codigo <= 0);
+   result := (TPessoa(Objeto).codigo <= 0);
 end;
 
-procedure TRepositorioCliente.SetCamposAlterados(Auditoria :TAuditoria; AntigoObjeto, Objeto :TObject);
+function TRepositorioCliente.Remover(Objeto: TObject): Boolean;
 var
-  ClienteAntigo :TCliente;
-  ClienteNovo :TCliente;
+  RepositorioPessoa :TRepositorio;
 begin
-   ClienteAntigo := (AntigoObjeto as TCliente);
-   ClienteNovo   := (Objeto       as TCliente);
+   RepositorioPessoa := TFabricaRepositorio.GetRepositorio(TPessoa.ClassName);
 
-   if (ClienteAntigo.nome <> ClienteNovo.nome) then
-     Auditoria.AdicionaCampoAlterado('nome', ClienteAntigo.nome, ClienteNovo.nome);
-
-   if (ClienteAntigo.cpf_cnpj <> ClienteNovo.cpf_cnpj) then
-     Auditoria.AdicionaCampoAlterado('cpf_cnpj', ClienteAntigo.cpf_cnpj, ClienteNovo.cpf_cnpj);
-
+   try
+     result := inherited Remover(Objeto);
+   finally
+     FreeAndNil(RepositorioPessoa);
+   end;
 end;
 
-procedure TRepositorioCliente.SetCamposExcluidos(Auditoria :TAuditoria;               Objeto :TObject);
-var
-  Cliente :TCliente;
+function TRepositorioCliente.Salvar(Objeto: TObject): Boolean;
 begin
-  Cliente := (Objeto as TCliente);
-  Auditoria.AdicionaCampoExcluido('codigo'       , IntToStr(Cliente.codigo));
-  Auditoria.AdicionaCampoExcluido('nome'         , Cliente.nome);
-  Auditoria.AdicionaCampoExcluido('cpf_cnpj'     , Cliente.cpf_cnpj);
-end;
-
-procedure TRepositorioCliente.SetCamposIncluidos(Auditoria :TAuditoria;               Objeto :TObject);
-var
-  Cliente :TCliente;
-begin
-  Cliente := (Objeto as TCliente);
-  Auditoria.AdicionaCampoIncluido('codigo'       ,    IntToStr(Cliente.codigo));
-  Auditoria.AdicionaCampoIncluido('nome'         ,    Cliente.nome);
-  Auditoria.AdicionaCampoIncluido('cpf_cnpj'     ,    Cliente.cpf_cnpj);
+   Result := inherited Salvar(Objeto);
 end;
 
 procedure TRepositorioCliente.SetIdentificador(Objeto: TObject; Identificador: Variant);
 begin
-  TCliente(Objeto).Codigo := Integer(Identificador);
+  inherited SetIdentificador(Objeto, Identificador);
 end;
-procedure TRepositorioCliente.SetParametros(Objeto: TObject);
-var
-  Cliente :TCliente;
-begin
-  Cliente := (Objeto as TCliente);
 
-  self.FQuery.ParamByName('codigo').AsInteger        := Cliente.codigo;
-  self.FQuery.ParamByName('nome').AsString          := Cliente.nome;
-  self.FQuery.ParamByName('cpf_cnpj').AsString      := Cliente.cpf_cnpj;
+procedure TRepositorioCliente.SetParametros(Objeto: TObject);
+begin
+   inherited SetParametros(Objeto);
 end;
 
 function TRepositorioCliente.SQLGet: String;
 begin
-  result := 'select * from CLIENTES where codigo = :ncod';
+   result := inherited SQLGet;
 end;
 
 function TRepositorioCliente.SQLGetAll: String;
 begin
-  result := 'select * from CLIENTES order by 1';
+   result := inherited SQLGetAll+ ' WHERE TIPO = ''C''  order by 1';
 end;
 
 function TRepositorioCliente.SQLGetExiste(campo: String): String;
 begin
-  result := 'select '+ campo +' from CLIENTES where '+ campo +' = :ncampo';
+  result := inherited SQLGetExiste(campo);
 end;
 
 function TRepositorioCliente.SQLRemover: String;
 begin
-  result := ' delete from CLIENTES where codigo = :codigo ';
+   result := inherited SQLRemover;
 end;
 
 function TRepositorioCliente.SQLSalvar: String;
 begin
-  result := 'update or insert into CLIENTES (CODIGO ,NOME ,CPF_CNPJ ) '+
-           '                      values ( :CODIGO , :NOME , :CPF_CNPJ) ';
+   result := inherited SQLSalvar;
 end;
-
 end.
 

@@ -5,7 +5,7 @@ interface
 uses
   SysUtils,
   Contnrs,
-  Usuario, Cliente, Item, Endereco;
+  Usuario, Cliente, Item, Endereco, Generics.Collections;
 
 type
   TPedido = class
@@ -21,7 +21,7 @@ type
     Fdesconto: Real;
     Facrescimo: Real;
     Fsituacao: String;
-    FItens   :TObjectList;
+    FItens   :TObjectList<TItem>;
     FCriouListaItens :Boolean;
     FTaxa_servico :Real;
     FTipo_moeda  :String;
@@ -38,7 +38,7 @@ type
     FSts_recebimento: String;
     FEmContingencia: String;
 
-    function GetItens: TObjectList;
+    function GetItens: TObjectList<TItem>;
     function GetTotal_produtos: Real;
     function GetTotal_servicos: Real;
     function GetCliente: TCliente;
@@ -74,7 +74,7 @@ type
     property paraRetiradaLocal :Boolean   read GetPedidoRetiradaLocal;
 
   public
-    property Itens           :TObjectList read GetItens       write FItens;
+    property Itens           :TObjectList<TItem> read GetItens       write FItens;
     property Total_produtos  :Real      read GetTotal_produtos;
     property Total_servicos  :Real      read GetTotal_servicos;
     property Endereco        :TEndereco read GetEndereco;
@@ -142,7 +142,7 @@ begin
   result := FEndereco;
 end;
 
-function TPedido.GetItens: TObjectList;
+function TPedido.GetItens: TObjectList<TItem>;
 var
   Repositorio   :TRepositorio;
   Especificacao :TEspecificacaoItensDoPedido;
@@ -154,7 +154,7 @@ begin
       if not Assigned(self.FItens) then begin
         Especificacao         := TEspecificacaoItensDoPedido.Create(self);
         Repositorio           := TFabricaRepositorio.GetRepositorio(TItem.ClassName);
-        self.FItens           := Repositorio.GetListaPorEspecificacao(Especificacao, 'CODIGO_PEDIDO ='+IntToStr(self.Codigo));
+        self.FItens           := Repositorio.GetListaPorEspecificacao<TItem>(Especificacao, 'CODIGO_PEDIDO ='+IntToStr(self.Codigo));
         FCriouListaItens      := true;
       end;
 

@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, uCadastroPadrao, ExtCtrls, RXToolEdit, RXCurrEdit, Mask,
   frameMaskCpfCnpj, StdCtrls, DB, DBClient, Grids, DBGrids,
-  DBGridCBN, ComCtrls, Buttons, contnrs, ImgList, pngimage, FileCtrl;
+  DBGridCBN, ComCtrls, Buttons, contnrs, ImgList, pngimage, FileCtrl, frameBuscaCidade, RxDBCurrEdit;
 
 type
   TfrmCadastroEmpresa = class(TfrmCadastroPadrao)
@@ -22,7 +22,7 @@ type
     edtFantasia: TEdit;
     CpfCnpj: TMaskCpfCnpj;
     edtInscricao: TEdit;
-    edtSite: TEdit;
+    edtEmail: TEdit;
     edtFone: TMaskEdit;
     TabSheet1: TTabSheet;
     pnlPadroes: TPanel;
@@ -55,10 +55,6 @@ type
     Label11: TLabel;
     cbTributacaoCouvert: TComboBox;
     Shape3: TShape;
-    edtCidade: TEdit;
-    Label15: TLabel;
-    cmbUF: TComboBox;
-    Label16: TLabel;
     edtCep: TMaskEdit;
     Label17: TLabel;
     edtRua: TEdit;
@@ -67,10 +63,31 @@ type
     Label19: TLabel;
     edtBairro: TEdit;
     lbbairro: TLabel;
-    edtCodigoCidade: TCurrencyEdit;
-    Label20: TLabel;
     edtComplemento: TEdit;
     lbcomp: TLabel;
+    BuscaCidade1: TBuscaCidade;
+    edtCodEndereco: TCurrencyEdit;
+    TabSheet2: TTabSheet;
+    PageControl2: TPageControl;
+    TabSheet3: TTabSheet;
+    gpbAliquotas: TGroupBox;
+    Label16: TLabel;
+    Label20: TLabel;
+    Label21: TLabel;
+    Label22: TLabel;
+    edtCreditoSN: TDBCurrencyEdit;
+    edtIcms: TDBCurrencyEdit;
+    edtCofins: TDBCurrencyEdit;
+    edtPis: TDBCurrencyEdit;
+    rgpRegime: TRadioGroup;
+    memoObsGeradaSistema: TMemo;
+    BitBtn1: TBitBtn;
+    edtSequenciaNF: TEdit;
+    GroupBox3: TGroupBox;
+    cmbAmbiente: TComboBox;
+    Label30: TLabel;
+    Label15: TLabel;
+    cmbTipoEmissao: TComboBox;
     procedure edtInscricaoKeyPress(Sender: TObject; var Key: Char);
     procedure rgDiaCouvertClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
@@ -79,6 +96,7 @@ type
     procedure btnBolicheClick(Sender: TObject);
     procedure btnDispensadoraClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure edtCreditoSNChange(Sender: TObject);
   private
     { Altera um registro existente no CDS de consulta }
     procedure AlterarRegistroNoCDS(Registro :TObject); override;
@@ -112,7 +130,7 @@ var
 implementation
 
 uses Empresa, repositorio, fabricarepositorio, Math, uPadrao, StrUtils,
-  uModulo;
+  uModulo, Endereco;
 
 {$R *.dfm}
 
@@ -128,7 +146,7 @@ begin
 
   self.cds.Edit;
   self.cdsCODIGO.AsInteger  := Empresa.codigo;
-  self.cdsRAZAO.AsString    := Empresa.Razao_social;
+  self.cdsRAZAO.AsString    := Empresa.Razao;
   self.cds.Post;
 end;
 
@@ -189,12 +207,13 @@ begin
      if not Assigned(Empresa) then
       Empresa := TEmpresa.Create;
 
-     Empresa.Razao_social       := self.edtRazao.Text;
-     Empresa.Nome_Fantasia      := self.edtFantasia.Text;
-     Empresa.Cnpj               := CpfCnpj.edtCpf.Text;
-     Empresa.IE                 := edtInscricao.Text;
-     Empresa.Telefone           := edtFone.Text;
-     Empresa.Site               := edtSite.Text;
+     Empresa.Razao              := self.edtRazao.Text;
+     Empresa.NomeFantasia       := edtFantasia.Text;
+     Empresa.CPF_CNPJ           := CpfCnpj.edtCpf.Text;
+     Empresa.RG_IE              := edtInscricao.Text;
+     Empresa.Fone1              := edtFone.Text;
+     Empresa.Email              := edtEmail.Text;
+     Empresa.Fone1              := edtFone.Text;
      Empresa.Quantidade_mesas   := edtQuantidadeMesas.AsInteger;
      //Empresa.Couvert            := (rgDiaCouvert.ItemIndex = 0);
      //Empresa.Valor_couvert      := edtValorCouvert.Value;
@@ -218,13 +237,41 @@ begin
 
      Empresa.diretorio_boliche      := edtCaminhoBoliche.Text;
      Empresa.diretorio_dispensadora := edtCaminhoDispensadora.Text;
-     empresa.Cidade                 := edtCidade.Text;
-     Empresa.Estado                 := cmbUF.Items[cmbUF.itemIndex];
-     Empresa.CEP                    := StrToInt(edtCep.Text);
-     Empresa.RUA                    := edtRua.Text;
-     Empresa.numero                 := edtNumero.Text;
-     Empresa.bairro                 := edtBairro.Text;
-     Empresa.complemento            := edtComplemento.Text;
+
+
+     { * * * SALVA ENDEREÇO * * * }
+     if Assigned(Empresa.Enderecos) and (Empresa.Enderecos.Count = 0) then
+         Empresa.Enderecos.Add(TEndereco.Create);
+
+     Empresa.Enderecos[0].codigo         := edtCodEndereco.AsInteger;
+     Empresa.Enderecos[0].codigo_pessoa  := strToInt(edtCodigo.Text);
+     Empresa.Enderecos[0].cep            := edtCep.text;
+     Empresa.Enderecos[0].logradouro     := edtRua.text;
+     Empresa.Enderecos[0].numero         := edtNumero.text;
+     Empresa.Enderecos[0].referencia     := edtComplemento.text;
+     Empresa.Enderecos[0].bairro         := edtBairro.text;
+     Empresa.Enderecos[0].codigo_cidade  := BuscaCidade1.edtCodCid.AsInteger;
+     Empresa.Enderecos[0].uf             := BuscaCidade1.edtUF.Text;
+     Empresa.Enderecos[0].fone           := edtFone.Text;
+
+     { Configurações NF }
+     try
+       Empresa.AdicionarConfiguracoesNFe(edtCreditoSN.Value, edtIcms.Value,
+                                         edtPis.Value, edtCofins.Value,
+                                         '', cmbAmbiente.Items[cmbAmbiente.ItemIndex][1],
+                                         '',
+                                         StrToInt(copy(cmbTipoEmissao.Items[cmbTipoEmissao.ItemIndex],1,1)),
+                                         rgpRegime.ItemIndex,
+                                         memoObsGeradaSistema.Text, StrToInt(edtSequenciaNF.Text));
+
+     except
+       on E: Exception do begin
+          if (Pos('AmbienteNFe', e.Message) > 0) then begin
+            self.cmbAmbiente.SetFocus;
+            raise Exception.Create('Ambiente é um campo obrigatório!');
+          end;
+       end;
+     end;
 
      Repositorio.Salvar(Empresa);
 
@@ -254,7 +301,7 @@ begin
 
   self.cds.Append;
   self.cdsCODIGO.AsInteger   := Empresa.codigo;
-  self.cdsRAZAO.AsString     := Empresa.Razao_social;
+  self.cdsRAZAO.AsString     := Empresa.Razao;
   self.cds.Post;
 end;
 
@@ -266,7 +313,7 @@ begin
   CpfCnpj.Limpa;
   edtInscricao.Clear;
   edtFone.Clear;
-  edtSite.Clear;
+  edtEmail.Clear;
   edtQuantidadeMesas.Clear;
   rgDiaCouvert.ItemIndex := -1;
   edtValorCouvert.Clear;
@@ -277,7 +324,7 @@ begin
   cbTributacaoTxServico.ItemIndex := -1;
   edtCaminhoBoliche.Clear;
   edtCaminhoDispensadora.Clear;
-  edtCodigoCidade.Clear;
+  BuscaCidade1.limpa;
   edtRua.Clear;
   edtNumero.Clear;
   edtBairro.Clear;
@@ -302,12 +349,12 @@ begin
     if not Assigned(Empresa) then exit;
 
     self.edtCodigo.Text               := IntToStr(Empresa.codigo);
-    self.edtRazao.Text                := Empresa.Razao_social;
-    self.edtFantasia.Text             := Empresa.Nome_Fantasia;
-    self.CpfCnpj.cpfCnpj              := Empresa.Cnpj;
-    self.edtInscricao.Text            := Empresa.IE;
-    self.edtFone.Text                 := Empresa.Telefone;
-    self.edtSite.Text                 := Empresa.Site;
+    self.edtRazao.Text                := Empresa.Razao;
+    self.edtFantasia.Text             := Empresa.NomeFantasia;
+    self.CpfCnpj.cpfCnpj              := Empresa.CPF_CNPJ;
+    self.edtInscricao.Text            := Empresa.RG_IE;
+    self.edtFone.Text                 := Empresa.Fone1;
+    self.edtEmail.Text                := Empresa.Email;
     self.edtQuantidadeMesas.asInteger := Empresa.Quantidade_mesas;
 //    self.rgDiaCouvert.ItemIndex       := IfThen(Empresa.Couvert, 0, 1);
     self.edtAliqCouvert.Value         := Empresa.Aliquota_couvert;
@@ -331,14 +378,35 @@ begin
 
     self.edtCaminhoBoliche.Text      := Empresa.diretorio_boliche;
     self.edtCaminhoDispensadora.Text := Empresa.diretorio_dispensadora;
-    self.edtCidade.Text              := Empresa.Cidade;
-    self.cmbUF.ItemIndex             := self.cmbUF.Items.IndexOf(Empresa.Estado);
-    self.edtCodigoCidade.AsInteger   := Empresa.cod_municipio;
-    self.edtRua.Text                 := Empresa.rua;
-    self.edtNumero.Text              := Empresa.numero;
-    self.edtBairro.Text              := Empresa.bairro;
-    self.edtCep.Text                 := IntToStr(Empresa.cep);
-    self.edtComplemento.Text         := Empresa.complemento;
+
+    { * * * CARREGA ENDEREÇO * * * }
+    edtCodEndereco.AsInteger := Empresa.Enderecos.Items[0].codigo;
+    edtCep.Text              := Empresa.Enderecos.Items[0].cep;
+    edtRua.Text              := Empresa.Enderecos.Items[0].logradouro;
+    edtBairro.Text           := Empresa.Enderecos.Items[0].bairro;
+    edtNumero.Text           := Empresa.Enderecos.Items[0].numero;
+    edtComplemento.Text      := Empresa.Enderecos.Items[0].referencia;
+    BuscaCidade1.CodigoMunicipio := Empresa.Enderecos.Items[0].codigo_cidade;
+    edtFone.Text             := Empresa.Enderecos.Items[0].fone;
+
+    if Assigned(Empresa.ConfiguracoesNF) then
+    begin
+      self.rgpRegime.ItemIndex    := Empresa.ConfiguracoesNF.CRT;
+
+      if (Empresa.ConfiguracoesNF.ambiente_nfe = 'P') then
+        self.cmbAmbiente.ItemIndex := 0
+      else
+        self.cmbAmbiente.ItemIndex := 1;
+
+      self.cmbTipoEmissao.ItemIndex := IfThen(Empresa.ConfiguracoesNF.Tipo_emissao = 1, 0, 1);
+
+      self.edtCreditoSN.Value   := Empresa.ConfiguracoesNF.aliq_cred_sn;
+      self.edtIcms.Value        := Empresa.ConfiguracoesNF.aliq_icms;
+      self.edtPis.Value         := Empresa.ConfiguracoesNF.aliq_pis;
+      self.edtCofins.Value      := Empresa.ConfiguracoesNF.aliq_cofins;
+      memoObsGeradaSistema.Text := Empresa.ConfiguracoesNF.ObsGeradaPeloSistema;
+      self.edtSequenciaNF.Text  := IntToStr(Empresa.ConfiguracoesNF.SequenciaNotaFiscal);
+    end;
 
   finally
     FreeAndNil(Repositorio);
@@ -388,6 +456,15 @@ begin
   end   }
   else
     result := true;
+end;
+
+procedure TfrmCadastroEmpresa.edtCreditoSNChange(Sender: TObject);
+begin
+  memoObsGeradaSistema.Text :=
+  'DOCUMENTO EMITIDO POR ME OU EPP OPTANTE PELO SIMPLES NACIONAL NAO GERA DIREITO A CREDITO FISCAL DE IPI. '                     +
+  'PERMITE O APROVEITAMENTO DO CREDITO DE ICMS NO VALOR DE '+ FormatFloat('R$ ,0.00;R$ -,0.00', self.edtCreditoSN.Value)+' '+
+  'CORRESPONDENTE A ALÍQUOTA DE '+FormatFloat('#0.00%', self.edtCreditoSN.Value)+', NOS TERMOS DO ART.23 DA '            +
+  'LC 123/2006 VLR. DO ICMS DESTACADO EM S/NF = '+FormatFloat('R$ ,0.00;R$ -,0.00', self.edtCreditoSN.Value);
 end;
 
 procedure TfrmCadastroEmpresa.edtInscricaoKeyPress(Sender: TObject;

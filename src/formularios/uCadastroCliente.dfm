@@ -4,6 +4,8 @@ inherited frmCadastroCliente: TfrmCadastroCliente
   Caption = 'Cadastro de Clientes'
   ClientHeight = 536
   ClientWidth = 682
+  ExplicitWidth = 688
+  ExplicitHeight = 564
   PixelsPerInch = 96
   TextHeight = 13
   inherited Splitter1: TSplitter
@@ -27,13 +29,12 @@ inherited frmCadastroCliente: TfrmCadastroCliente
   inherited pgGeral: TPageControl
     Width = 539
     Height = 501
+    ActivePage = tsDados
     ExplicitWidth = 539
     ExplicitHeight = 501
     inherited tsConsulta: TTabSheet
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 531
+      ExplicitHeight = 470
       inherited gridConsulta: TDBGridCBN
         Width = 513
         Height = 509
@@ -59,8 +60,9 @@ inherited frmCadastroCliente: TfrmCadastroCliente
       end
       inherited lblAjudaSelecionar: TStaticText
         Top = 453
-        Width = 222
+        Width = 531
         ExplicitTop = 453
+        ExplicitWidth = 531
       end
     end
     inherited tsDados: TTabSheet
@@ -542,6 +544,8 @@ inherited frmCadastroCliente: TfrmCadastroCliente
     end
   end
   inherited cds: TClientDataSet
+    Left = 159
+    Top = 160
     object cdsCODIGO: TIntegerField
       FieldName = 'CODIGO'
     end
