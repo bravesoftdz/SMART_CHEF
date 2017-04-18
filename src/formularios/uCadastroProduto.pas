@@ -7,7 +7,7 @@ uses
   Dialogs, uCadastroPadrao, DB, DBClient, StdCtrls, Grids, DBGrids,
   DBGridCBN, ComCtrls, Buttons, ExtCtrls, contnrs, frameListaCampo, Mask,
   RXToolEdit, RXCurrEdit, Math, pngimage, frameBuscaMateriaPrima, ImgList,
-  frameBuscaNCM, Generics.Collections, ProdutoHasMateria, pcnNFe;
+  frameBuscaNCM, Generics.Collections, ProdutoHasMateria, pcnNFe, System.ImageList;
 
 type
   TfrmCadastroProduto = class(TfrmCadastroPadrao)
@@ -17,7 +17,7 @@ type
     edtCodigo: TEdit;
     edtValor: TCurrencyEdit;
     cbAtivo: TComboBox;
-    Label1: TLabel;
+    lbAtivo: TLabel;
     ListaGrupo: TListaCampo;
     cdsCODIGO: TIntegerField;
     cdsDESCRICAO: TStringField;
@@ -42,7 +42,7 @@ type
     edtICMS: TCurrencyEdit;
     lbAliquota: TStaticText;
     cbTributacao: TComboBox;
-    StaticText1: TStaticText;
+    lbTributacao: TStaticText;
     StaticText2: TStaticText;
     cbPreparo: TComboBox;
     edtEstoque: TCurrencyEdit;
@@ -52,10 +52,10 @@ type
     lbEstoqueMin: TStaticText;
     edtEstoqueMin: TCurrencyEdit;
     cbAlteraPreco: TComboBox;
-    StaticText3: TStaticText;
+    lbAlteraPreco: TStaticText;
     edtCodBar: TEdit;
     lblCodBar: TLabel;
-    edtReferencia: TEdit;
+    edtCodigoBalanca: TEdit;
     lblReferencia: TLabel;
     lblUnEnt: TLabel;
     edtUNEntrada: TEdit;
@@ -63,6 +63,13 @@ type
     lblUnSaida: TLabel;
     lblMultiplicador: TLabel;
     edtMultiplicador: TCurrencyEdit;
+    cbAdicional: TComboBox;
+    lbAdicional: TLabel;
+    cdsMateriasADICIONAL: TStringField;
+    ImageList1: TImageList;
+    cdsATIVO: TStringField;
+    edtReferencia: TEdit;
+    Label1: TLabel;
     procedure FormShow(Sender: TObject);
     procedure btnAddMateriaClick(Sender: TObject);
     procedure gridItensKeyDown(Sender: TObject; var Key: Word;
@@ -71,6 +78,9 @@ type
     procedure btnCancelarClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure cbTipoChange(Sender: TObject);
+    procedure gridItensDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure gridConsultaDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure gridItensCellClick(Column: TColumn);
   private
     FProdutoNfe :TProd;
 
@@ -100,7 +110,7 @@ type
     function VerificaDados :Boolean;                   override;
 
   private
-    procedure adicionaMateria(codigo, codigo_materia :Integer; descricao :String);
+    procedure adicionaMateria(codigo, codigo_materia :Integer; descricao :String; adicional :Boolean);
     procedure remove_materia;
     procedure SetprodutoNfe(const Value: TProd);
 
@@ -132,6 +142,7 @@ begin
   self.cdsCODIGO.AsInteger   := Produto.codigo;
   self.cdsDESCRICAO.AsString := Produto.descricao;
   self.cdsVALOR.AsFloat      := Produto.valor;
+  self.cdsATIVO.AsString     := IfThen(Produto.ativo, 'S', 'N');
   self.cds.Post;
 end;
 
@@ -201,17 +212,23 @@ begin
        
      Produto.descricao           := self.edtProduto.Text;
      Produto.valor               := self.edtValor.Value;
-     Produto.ativo               := copy(cbAtivo.Items[cbAtivo.ItemIndex],1,1);
+     Produto.ativo               := cbAtivo.ItemIndex = 0;
      Produto.codigo_departamento := ListaDepartamento.CodCampo;
      Produto.icms                := edtICMS.Value;
      Produto.preco_custo         := edtPrecoCusto.Value;
      Produto.codbar              := self.edtCodBar.Text;
      Produto.referencia          := self.edtReferencia.Text;
+     Produto.codigo_balanca      := self.edtCodigoBalanca.Text;
 
      if assigned(BuscaNCM1.NCM) then
        Produto.codigo_ibpt         := BuscaNCM1.NCM.codigo;
 
-     Produto.tipo                := copy(cbTipo.Items[cbTipo.itemIndex],1,1);
+     case cbTipo.itemIndex of
+       0 : Produto.tipo := 'P';
+       1 : Produto.tipo := 'S';
+       2 : Produto.tipo := 'M';
+       3 : Produto.tipo := 'C';
+     end;
 
      case cbTributacao.ItemIndex of
        0 : Produto.tributacao := IfThen(cbTipo.ItemIndex = 0,'T','S');
@@ -223,15 +240,19 @@ begin
      Produto.preparo      := cbPreparo.Items[ cbPreparo.itemIndex ];
      Produto.altera_preco := IfThen(cbAlteraPreco.ItemIndex = 0, 'S', 'N');
 
-     { * * * SALVA ESTOQUE DO PRODUTO * * * }
-     if not assigned( Produto.Estoque ) then
-       Produto.Estoque := TEstoque.Create;
+     //se for produto composto ou produto-materia, controla estoque
+     if pos(Produto.tipo, 'PM') > 0 then
+     begin
+       { * * * SALVA ESTOQUE DO PRODUTO * * * }
+       if not assigned( Produto.Estoque ) then
+         Produto.Estoque := TEstoque.Create;
 
-     Produto.Estoque.unidade_medida := edtUNSaida.Text;
-     Produto.Estoque.unidade_entrada:= edtUNEntrada.Text;
-     Produto.Estoque.multiplicador  := edtMultiplicador.Value;
-     Produto.Estoque.pecas          := 1;
-     Produto.Estoque.quantidade_min := edtEstoqueMin.Value;
+       Produto.Estoque.unidade_medida := edtUNSaida.Text;
+       Produto.Estoque.unidade_entrada:= edtUNEntrada.Text;
+       Produto.Estoque.multiplicador  := edtMultiplicador.Value;
+       Produto.Estoque.pecas          := 1;
+       Produto.Estoque.quantidade_min := edtEstoqueMin.Value;
+     end;
 
      Repositorio.Salvar(Produto);
 
@@ -256,6 +277,7 @@ begin
 
           ProdutoHasMateria.codigo_produto := Produto.codigo;
           ProdutoHasMateria.codigo_materia := cdsMateriasCODIGO_MATERIA.AsInteger;
+          ProdutoHasMateria.Adicional      := cdsMateriasADICIONAL.AsString = 'SIM';
 
           Repositorio.Salvar( ProdutoHasMateria );
 
@@ -303,6 +325,7 @@ begin
   self.cdsCODIGO.AsInteger   := Produto.codigo;
   self.cdsDESCRICAO.AsString := Produto.descricao;
   self.cdsVALOR.AsFloat      := Produto.valor;
+  self.cdsATIVO.AsString     := IfThen(Produto.ativo, 'S', 'N');
   self.cds.Post;
 end;
 
@@ -328,9 +351,11 @@ begin
   edtEstoqueMin.Clear;
   edtCodBar.Clear;
   edtReferencia.Clear;
+  edtCodigoBalanca.Clear;
   edtUNSaida.Clear;
   edtUNEntrada.Clear;
   edtMultiplicador.Clear;
+  cbAdicional.ItemIndex := 0;
 end;
 
 procedure TfrmCadastroProduto.MostrarDados;
@@ -343,12 +368,10 @@ var
   listaDeMaterias       :TObjectList<TProdutoHasMateria>;
 begin
   inherited;
-
   Produto              := nil;
   RepositorioProduto   := nil;
   Especificacao        := nil;
   Estoque              := nil;
-
   try
     RepositorioProduto  := TFabricaRepositorio.GetRepositorio(TProduto.ClassName);
     Produto             := TProduto(RepositorioProduto.Get(self.cdsCODIGO.AsInteger));
@@ -359,10 +382,17 @@ begin
     self.ListaGrupo.CodCampo        := Produto.codigo_grupo;
     self.edtProduto.Text            := Produto.descricao;
     self.edtValor.Value             := Produto.valor;
-    self.cbAtivo.ItemIndex          := cbAtivo.Items.IndexOf( IfThen(Produto.ativo = 'N','NÃO', 'SIM') );
+    self.cbAtivo.ItemIndex          := IfThen(Produto.ativo, 0, 1);
     self.ListaDepartamento.CodCampo := Produto.codigo_departamento;
     self.BuscaNCM1.codigo           := Produto.codigo_ibpt;
-    self.cbTipo.ItemIndex           := cbTipo.Items.IndexOf( IfThen(Produto.tipo = 'S', 'SERVIÇO', 'PRODUTO') );
+
+    case AnsiIndexStr(UpperCase(Produto.tipo), ['P', 'S', 'M', 'C']) of
+      0 : self.cbTipo.ItemIndex := 0;
+      1 : self.cbTipo.ItemIndex := 1;
+      2 : self.cbTipo.ItemIndex := 2;
+      3 : self.cbTipo.ItemIndex := 3;
+    end;
+
     cbTipoChange(nil);
     self.edtICMS.Value              := Produto.icms;
     self.cbPreparo.ItemIndex        := cbPreparo.Items.IndexOf(Produto.preparo);
@@ -370,6 +400,7 @@ begin
     self.edtPrecoCusto.Value        := Produto.preco_custo;
     self.edtCodBar.Text             := Produto.codbar;
     self.edtReferencia.Text         := Produto.referencia;
+    self.edtCodigoBalanca.Text      := Produto.codigo_balanca;
 
     case AnsiIndexStr(UpperCase(Produto.tributacao), ['T', 'II','NN','FF','S','SI','SN','SF']) of
      0,4 : cbTributacao.ItemIndex := 0;
@@ -382,14 +413,13 @@ begin
 
     if not assigned(listaDeMaterias) then Exit;
 
-    for i := 0 to listaDeMaterias.Count - 1 do begin
-
+    for i := 0 to listaDeMaterias.Count - 1 do
       adicionaMateria(TProdutoHasMateria(listaDeMaterias.Items[i]).codigo,
                       TMateriaPrima(TProdutoHasMateria(listaDeMaterias.Items[i]).materia_prima).codigo,
-                      TMateriaPrima(TProdutoHasMateria(listaDeMaterias.Items[i]).materia_prima).descricao);
-    end;
+                      TMateriaPrima(TProdutoHasMateria(listaDeMaterias.Items[i]).materia_prima).descricao,
+                      TProdutoHasMateria(listaDeMaterias.Items[i]).Adicional);
 
-    Especificacao      := TEspecificacaoEstoquePorProduto.Create(Produto);
+    Especificacao      := TEspecificacaoEstoquePorProduto.Create(Produto.codigo);
     RepositorioProduto := TFabricaRepositorio.GetRepositorio(TEstoque.ClassName);
     Estoque            := TEstoque( RepositorioProduto.GetPorEspecificacao( Especificacao ) );
 
@@ -401,7 +431,6 @@ begin
     edtUNSaida.Text            := Estoque.unidade_medida;
     edtUNEntrada.Text          := Estoque.unidade_entrada;
     edtMultiplicador.Value     := Estoque.multiplicador;
-
   finally
      FreeAndNil(RepositorioProduto);
      FreeAndNil(Produto);
@@ -448,7 +477,7 @@ begin
       avisar('É necessário informar o preparo');
       cbPreparo.setFocus;
   end
-  else if edtUNSaida.Text = '' then begin
+  else if (edtUNSaida.Text = '') and (cbTipo.ItemIndex in [0,2]) then begin
       avisar('É necessário informar a unidade de saída do produto');
       edtUNSaida.setFocus;
   end
@@ -459,45 +488,100 @@ end;
 procedure TfrmCadastroProduto.FormShow(Sender: TObject);
 begin
   inherited;
-  if assigned(FProdutoNfe) then begin
-    btnIncluir.Click;
-    edtProduto.Text        := FProdutoNfe.xProd;
-    BuscaNCM1.edtNCM.Text  := FProdutoNfe.NCM;
-    edtUNEntrada.Text      := UPPERCASE(copy(FProdutoNfe.uCom,1,3));
-    edtPrecoCusto.Value    := FProdutoNfe.vUnCom;
-  end;
-
+  cdsMaterias.CreateDataSet;
   ListaGrupo.setValores('select * from grupos', 'Descricao', 'Grupo');
   ListaGrupo.executa;
 
   ListaDepartamento.setValores('select * from departamentos', 'Nome', 'Departamento');
   ListaDepartamento.executa;
 
-  cdsMaterias.CreateDataSet;
+  if assigned(FProdutoNfe) then begin
+    btnIncluir.Click;
+    edtProduto.Text        := FProdutoNfe.xProd;
+    BuscaNCM1.codigoNCM    := FProdutoNfe.NCM;
+    edtUNEntrada.Text      := UPPERCASE(copy(FProdutoNfe.uCom,1,3));
+    edtPrecoCusto.Value    := FProdutoNfe.vUnCom;
+  end;
 end;
 
 procedure TfrmCadastroProduto.btnAddMateriaClick(Sender: TObject);
 begin
   if BuscaMateriaPrima1.edtCodigo.Value > 0 then
-    adicionaMateria(0, BuscaMateriaPrima1.MateriaPrima.codigo, BuscaMateriaPrima1.MateriaPrima.descricao);
+    adicionaMateria(0, BuscaMateriaPrima1.MateriaPrima.codigo, BuscaMateriaPrima1.MateriaPrima.descricao, cbAdicional.ItemIndex = 0);
 
   BuscaMateriaPrima1.limpa;  
   BuscaMateriaPrima1.edtCodigo.SetFocus;  
 end;
 
-procedure TfrmCadastroProduto.adicionaMateria(codigo, codigo_materia :Integer; descricao :String);
+procedure TfrmCadastroProduto.adicionaMateria(codigo, codigo_materia :Integer; descricao :String; adicional :Boolean);
 begin
   if not cdsMaterias.Locate('CODIGO_MATERIA',BuscaMateriaPrima1.edtCodigo.AsInteger,[]) then begin
     cdsMaterias.Append;
     cdsMateriasCODIGO.AsInteger         := codigo;
     cdsMateriasCODIGO_MATERIA.AsInteger := codigo_materia;
     cdsMateriasDESCRICAO.AsString       := descricao;
+    cdsMateriasADICIONAL.AsString       := IfThen(adicional, 'SIM', 'NÃO');
     cdsMaterias.Post;
   end
   else begin
     avisar('Esta matéria-prima já foi adicionada');
     BuscaMateriaPrima1.limpa;
     BuscaMateriaPrima1.edtCodigo.SetFocus;
+  end;
+end;
+
+procedure TfrmCadastroProduto.gridConsultaDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  inherited;
+  if Column.Field = cdsATIVO then begin
+    TDBGridCBN(Sender).Canvas.FillRect(Rect);
+
+    if cdsATIVO.asString = 'S' then
+      ImageList1.Draw(TDBGridCBN(Sender).Canvas, Rect.Left +20, Rect.Top , 0, true)
+    else
+      ImageList1.Draw(TDBGridCBN(Sender).Canvas, Rect.Left +20, Rect.Top , 1, true);
+  end;
+end;
+
+procedure TfrmCadastroProduto.gridItensCellClick(Column: TColumn);
+begin
+  if Column.FieldName = 'ADICIONAL' then
+  begin
+    cdsMaterias.Edit;
+    if cdsMaterias.FieldByName('ADICIONAL').AsString = 'SIM' then
+      cdsMaterias.FieldByName('ADICIONAL').AsString := 'NÃO'
+    else
+      cdsMaterias.FieldByName('ADICIONAL').AsString := 'SIM' ;
+    cdsMaterias.Post;
+  end;
+end;
+
+procedure TfrmCadastroProduto.gridItensDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  Check1: Integer;
+  R1: TRect;
+begin
+  inherited;
+  {if Column.Field = cdsMateriasADICIONAL then begin
+    TDBGridCBN(Sender).Canvas.FillRect(Rect);
+
+    if cdsMateriasADICIONAL.asString = 'S' then
+      ImageList1.Draw(TDBGridCBN(Sender).Canvas, Rect.Left +20, Rect.Top , 0, true);
+  end;}
+
+  if Column.FieldName = 'ADICIONAL' then
+  begin
+    gridItens.Canvas.FillRect(Rect);
+    Check1 := 0;
+    if cdsMaterias.FieldByName('ADICIONAL').AsString = 'SIM' then
+      Check1 := DFCS_CHECKED
+    else
+      Check1 := 0;
+    R1 := Rect;
+    InflateRect(R1,-2,-2);
+    DrawFrameControl(gridItens.Canvas.Handle,R1,DFC_BUTTON, DFCS_BUTTONCHECK or Check1);
   end;
 end;
 
@@ -563,22 +647,44 @@ begin
   cbPreparo.Visible          := (cbTipo.ItemIndex <> 1);
   StaticText2.Visible        := (cbTipo.ItemIndex <> 1);
   lbAliquota.Caption         := IfThen((cbTipo.ItemIndex <> 1), 'Alíquota ICMS', 'Alíquota ISS');
-  lbEstoque.Visible          := (cbTipo.ItemIndex <> 1);
-  edtEstoque.Visible         := (cbTipo.ItemIndex <> 1);
-  lbEstoqueMin.Visible       := (cbTipo.ItemIndex <> 1);
-  edtEstoqueMin.Visible      := (cbTipo.ItemIndex <> 1);
+  lbEstoque.Visible          := not(cbTipo.ItemIndex in [1,3]);
+  edtEstoque.Visible         := not(cbTipo.ItemIndex in [1,3]);
+  lbEstoqueMin.Visible       := not(cbTipo.ItemIndex in [1,3]);
+  edtEstoqueMin.Visible      := not(cbTipo.ItemIndex in [1,3]);
   lbPrecoCusto.Visible       := (cbTipo.ItemIndex <> 1);
   edtPrecoCusto.Visible      := (cbTipo.ItemIndex <> 1);
   lblCodBar.Visible          := (cbTipo.ItemIndex <> 1);
   edtCodBar.Visible          := (cbTipo.ItemIndex <> 1);
   lblReferencia.Visible      := (cbTipo.ItemIndex <> 1);
   edtReferencia.Visible      := (cbTipo.ItemIndex <> 1);
-  lblUnSaida.Visible         := (cbTipo.ItemIndex <> 1);
-  edtUNSaida.Visible         := (cbTipo.ItemIndex <> 1);
-  lblUnEnt.Visible           := (cbTipo.ItemIndex <> 1);
-  edtUNEntrada.Visible       := (cbTipo.ItemIndex <> 1);
-  lblMultiplicador.Visible   := (cbTipo.ItemIndex <> 1);
-  edtMultiplicador.Visible   := (cbTipo.ItemIndex <> 1);
+  edtCodigoBalanca.Visible   := (cbTipo.ItemIndex <> 1);
+  lblUnSaida.Visible         := not(cbTipo.ItemIndex in [1,3]);
+  edtUNSaida.Visible         := not(cbTipo.ItemIndex in [1,3]);
+  lblUnEnt.Visible           := not(cbTipo.ItemIndex in [1,3]);
+  edtUNEntrada.Visible       := not(cbTipo.ItemIndex in [1,3]);
+  lblMultiplicador.Visible   := not(cbTipo.ItemIndex in [1,3]);
+  edtMultiplicador.Visible   := not(cbTipo.ItemIndex in [1,3]);
+  cbAdicional.Visible        := (cbTipo.ItemIndex <> 1);
+  lbAdicional.Visible        := (cbTipo.ItemIndex <> 1);
+
+  lbAlteraPreco.Left         := IfThen(cbTipo.ItemIndex = 1, 224,  39);
+  lbAlteraPreco.Top          := IfThen(cbTipo.ItemIndex = 1, 65,  110);
+  cbAlteraPreco.Left         := IfThen(cbTipo.ItemIndex = 1, 224,  39);
+  cbAlteraPreco.Top          := IfThen(cbTipo.ItemIndex = 1, 83,  128);
+  listaDepartamento.Left     := IfThen(cbTipo.ItemIndex = 1, 338, 153);
+  ListaDepartamento.Top      := IfThen(cbTipo.ItemIndex = 1, 62,  107);
+  lbTributacao.Left          := IfThen(cbTipo.ItemIndex = 1, 225, 300);
+  lbTributacao.Top           := IfThen(cbTipo.ItemIndex = 1, 117, 164);
+  cbTributacao.Left          := IfThen(cbTipo.ItemIndex = 1, 224, 299);
+  cbTributacao.Top           := IfThen(cbTipo.ItemIndex = 1, 135, 182);
+  lbAliquota.Left            := IfThen(cbTipo.ItemIndex = 1, 357, 432);
+  lbAliquota.Top             := IfThen(cbTipo.ItemIndex = 1, 117, 164);
+  edtIcms.Left               := IfThen(cbTipo.ItemIndex = 1, 357, 432);
+  edtICMS.Top                := IfThen(cbTipo.ItemIndex = 1, 135, 182);
+  lbAtivo.Left               := IfThen(cbTipo.ItemIndex = 1, 457, 356);
+  lbativo.Top                := IfThen(cbTipo.ItemIndex = 1, 117, 210);
+  cbAtivo.Left               := IfThen(cbTipo.ItemIndex = 1, 457, 356);
+  cbAtivo.Top                := IfThen(cbTipo.ItemIndex = 1, 135, 228);
 end;
 
 end.

@@ -3,17 +3,16 @@ unit EspecificacaoEstoquePorProduto;
 interface
 
 uses
-  Especificacao,
-  Produto;
+  Especificacao;
 
 type
   TEspecificacaoEstoquePorProduto = class(TEspecificacao)
 
   private
-    FProduto :TProduto;
+    FCodigoProduto :integer;
 
   public
-    constructor Create(Produto :TProduto);
+    constructor Create(codigoProduto :integer);
 
   public
     function SatisfeitoPor(Objeto :TObject): Boolean; override;
@@ -25,9 +24,9 @@ uses Estoque;
 
 { TEspecificacaoEstoquePorProduto }
 
-constructor TEspecificacaoEstoquePorProduto.Create(Produto: TProduto);
+constructor TEspecificacaoEstoquePorProduto.Create(codigoProduto: integer);
 begin
-  self.FProduto := Produto;
+  self.FCodigoProduto := codigoProduto;
 end;
 
 function TEspecificacaoEstoquePorProduto.SatisfeitoPor(Objeto: TObject): Boolean;
@@ -36,7 +35,7 @@ var
 begin
    Estoque := (Objeto as TEstoque);
 
-   result := (Estoque.codigo_produto = self.FProduto.codigo);
+   result := (Estoque.codigo_produto = self.FCodigoProduto);
 end;
 
 end.

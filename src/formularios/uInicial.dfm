@@ -32351,6 +32351,10 @@ object frmInicial: TfrmInicial
         Caption = 'Produtos'
         OnClick = Produto1Click
       end
+      object ransportadora1: TMenuItem
+        Caption = 'Transportadora'
+        OnClick = ransportadora1Click
+      end
       object Usurios1: TMenuItem
         Caption = 'Usu'#225'rios'
         OnClick = Usurios1Click
@@ -32365,6 +32369,10 @@ object frmInicial: TfrmInicial
       object EntradaNFExml1: TMenuItem
         Caption = 'Entrada NF-e (.xml)'
         OnClick = EntradaNFExml1Click
+      end
+      object ConfirmaEntradaEstoque1: TMenuItem
+        Caption = 'Confirma Entrada Estoque'
+        OnClick = ConfirmaEntradaEstoque1Click
       end
     end
     object Vendas1: TMenuItem
@@ -32384,8 +32392,12 @@ object frmInicial: TfrmInicial
           OnClick = Visualizaremitidas1Click
         end
       end
+      object NFe1: TMenuItem
+        Caption = 'Monitor NF-e'
+        OnClick = NFe1Click
+      end
       object Visualizarpedidosemaberto1: TMenuItem
-        Caption = 'Visualizar pedidos em aberto'
+        Caption = 'Visualizar/Cancelar Pedido'
         OnClick = Visualizarpedidosemaberto1Click
       end
       object Reimpressodopedido1: TMenuItem
@@ -32411,7 +32423,7 @@ object frmInicial: TfrmInicial
         OnClick = Atendimentos1Click
       end
       object Caixa48colunas1: TMenuItem
-        Caption = 'Caixa [48 colunas]'
+        Caption = 'Caixa'
         OnClick = Caixa48colunas1Click
       end
       object CuponsFiscais1: TMenuItem
@@ -32441,6 +32453,10 @@ object frmInicial: TfrmInicial
       object Vendas2: TMenuItem
         Caption = 'Vendas'
         OnClick = Vendas2Click
+      end
+      object NotasFiscaisEntrada1: TMenuItem
+        Caption = 'Notas Fiscais Entrada'
+        OnClick = NotasFiscaisEntrada1Click
       end
     end
     object SuporteTcnico1: TMenuItem

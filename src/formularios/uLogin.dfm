@@ -6,6 +6,7 @@ inherited frmLogin: TfrmLogin
   ClientHeight = 254
   ClientWidth = 653
   OldCreateOrder = True
+  OnShow = FormShow
   ExplicitWidth = 653
   ExplicitHeight = 254
   PixelsPerInch = 96

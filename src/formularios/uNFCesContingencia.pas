@@ -167,6 +167,9 @@ begin
    Pedido       := TPedido(repositorio.Get(qryPedidosCODIGO.AsInteger));
 
    NFCe.Emitir(Pedido);
+
+   Pedido.emContingencia := 'N';
+   repositorio.Salvar(Pedido);
  finally
    FreeAndNil(NFCe);
    FreeAndNil(Pedido);

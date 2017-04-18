@@ -13,7 +13,7 @@ type
     Fcodigo_grupo: integer;
     Fcodigo: integer;
     Fvalor: Real;
-    Fativo: String;
+    Fativo: Boolean;
     Fdescricao: String;
     Fcodigo_departamento: Integer;
     Fcodigo_ibpt: integer;
@@ -25,8 +25,9 @@ type
     FPreco_custo :Real;
     FAlteraPreco: String;
     Fcodbar: String;
-    Freferencia: String;
+    FCodigo_balanca: String;
     FEstoque :TEstoque;
+    FReferencia: String;
 
     function GetNcmIBPT :TNcmIBPT;                                      
     function GetIcmsParaECF :String;
@@ -39,7 +40,7 @@ type
     property codigo_grupo        :integer read Fcodigo_grupo        write Fcodigo_grupo;
     property descricao           :String  read Fdescricao           write Fdescricao;
     property valor               :Real    read Fvalor               write Fvalor;
-    property ativo               :String  read Fativo               write Fativo;
+    property ativo               :Boolean read Fativo               write Fativo;
     property codigo_departamento :Integer read Fcodigo_departamento write Fcodigo_departamento;
     property codigo_ibpt         :integer read Fcodigo_ibpt         write Fcodigo_ibpt;
     property tipo                :String  read FTipo                write FTipo;
@@ -50,7 +51,8 @@ type
     property preco_custo         :Real    read FPreco_custo         write FPreco_custo;
     property altera_preco        :String  read FAlteraPreco         write FAlteraPreco;
     property codbar              :String  read Fcodbar              write Fcodbar;
-    property referencia          :String  read Freferencia          write Freferencia;
+    property referencia          :String  read FReferencia          write FReferencia;
+    property codigo_balanca      :String  read FCodigo_balanca      write FCodigo_balanca;
 
     property NcmIBPT             :TNcmIBPT read GetNcmIBPT write SetNcmIBPT;
 
@@ -74,7 +76,7 @@ begin
 
    if not assigned(FEstoque) then
    begin
-     Especificacao  := TEspecificacaoEstoquePorProduto.Create(self);
+     Especificacao  := TEspecificacaoEstoquePorProduto.Create(self.codigo);
      Repositorio    := TFabricaRepositorio.GetRepositorio(TEstoque.ClassName);
      FEstoque       := TEstoque( repositorio.GetPorEspecificacao( Especificacao ) );
    end;

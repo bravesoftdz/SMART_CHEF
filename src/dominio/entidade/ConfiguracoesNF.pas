@@ -70,7 +70,7 @@ end;
 
 implementation
 
-uses Funcoes, ExcecaoParametroInvalido, Repositorio, FabricaRepositorio;
+uses Funcoes, ExcecaoParametroInvalido, Repositorio, FabricaRepositorio, uModulo;
 
 { TConfiguracoesNF }
 

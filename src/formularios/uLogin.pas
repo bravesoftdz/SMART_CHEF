@@ -18,6 +18,7 @@ type
 
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   public
@@ -108,5 +109,18 @@ begin
 
     inherited;
   end;
+
+procedure TfrmLogin.FormShow(Sender: TObject);
+begin
+  try
+    dm.verificaVersaoBDs;
+  Except
+    on e :Exception do
+    begin
+      avisar(e.Message);
+      Application.Terminate;
+    end;
+  end;
+end;
 
 end.

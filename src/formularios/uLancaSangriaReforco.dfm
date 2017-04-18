@@ -1,13 +1,13 @@
 inherited frmLancaSangriaReforco: TfrmLancaSangriaReforco
   Caption = 'Lan'#231'amento de Sangria/Refor'#231'o do Caixa'
-  ClientHeight = 269
-  ClientWidth = 564
-  ExplicitWidth = 570
-  ExplicitHeight = 297
+  ClientHeight = 267
+  ClientWidth = 673
+  ExplicitWidth = 679
+  ExplicitHeight = 295
   PixelsPerInch = 96
   TextHeight = 13
   object lblCodBar: TLabel [0]
-    Left = 382
+    Left = 526
     Top = 31
     Width = 97
     Height = 15
@@ -20,7 +20,7 @@ inherited frmLancaSangriaReforco: TfrmLancaSangriaReforco
     ParentFont = False
   end
   object Label1: TLabel [1]
-    Left = 174
+    Left = 166
     Top = 31
     Width = 92
     Height = 15
@@ -33,7 +33,7 @@ inherited frmLancaSangriaReforco: TfrmLancaSangriaReforco
     ParentFont = False
   end
   object Label2: TLabel [2]
-    Left = 174
+    Left = 166
     Top = 87
     Width = 54
     Height = 15
@@ -45,13 +45,26 @@ inherited frmLancaSangriaReforco: TfrmLancaSangriaReforco
     Font.Style = [fsBold]
     ParentFont = False
   end
+  object Label3: TLabel [3]
+    Left = 346
+    Top = 31
+    Width = 92
+    Height = 15
+    Caption = 'Tipo movimento'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = 3815994
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
   inherited pnlPropaganda: TPanel
-    Top = 234
-    Width = 564
+    Top = 232
+    Width = 673
     ExplicitTop = 234
     ExplicitWidth = 564
     inherited Shape8: TShape
-      Width = 562
+      Width = 671
       ExplicitWidth = 562
     end
   end
@@ -59,15 +72,15 @@ inherited frmLancaSangriaReforco: TfrmLancaSangriaReforco
     Left = 0
     Top = 0
     Width = 129
-    Height = 234
+    Height = 232
     Align = alLeft
     TabOrder = 1
-    ExplicitHeight = 182
+    ExplicitHeight = 234
     object Shape12: TShape
       Left = 1
       Top = 1
       Width = 127
-      Height = 232
+      Height = 230
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119
@@ -229,9 +242,9 @@ inherited frmLancaSangriaReforco: TfrmLancaSangriaReforco
     end
   end
   object cmbTipo: TComboBox
-    Left = 174
+    Left = 166
     Top = 48
-    Width = 169
+    Width = 163
     Height = 25
     Style = csDropDownList
     Font.Charset = DEFAULT_CHARSET
@@ -249,7 +262,7 @@ inherited frmLancaSangriaReforco: TfrmLancaSangriaReforco
       'Refor'#231'o do caixa')
   end
   object edtValor: TCurrencyEdit
-    Left = 382
+    Left = 526
     Top = 48
     Width = 115
     Height = 25
@@ -263,9 +276,9 @@ inherited frmLancaSangriaReforco: TfrmLancaSangriaReforco
     TabOrder = 3
   end
   object mmoDescricao: TMemo
-    Left = 174
+    Left = 166
     Top = 104
-    Width = 323
+    Width = 475
     Height = 65
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -274,5 +287,25 @@ inherited frmLancaSangriaReforco: TfrmLancaSangriaReforco
     Font.Style = []
     ParentFont = False
     TabOrder = 4
+  end
+  object cmbTipoMoeda: TComboBox
+    Left = 346
+    Top = 48
+    Width = 163
+    Height = 25
+    Style = csDropDownList
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ItemIndex = 0
+    ParentFont = False
+    TabOrder = 5
+    Text = '< SELECIONE MOEDA >'
+    Items.Strings = (
+      '< SELECIONE MOEDA >'
+      'Dinheiro'
+      'Cheque')
   end
 end

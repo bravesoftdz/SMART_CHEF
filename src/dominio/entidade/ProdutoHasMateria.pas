@@ -18,6 +18,7 @@ type
     Fcodigo: integer;
     FMateriaPrima  :TMateriaPrima;
     FProduto: TProduto;
+    FAdicional: Boolean;
 
     procedure Setcodigo(const Value: integer);
     procedure Setcodigo_materia(const Value: integer);
@@ -31,6 +32,7 @@ type
     property codigo         :integer read Fcodigo         write Setcodigo;
     property codigo_produto :integer read Fcodigo_produto write Setcodigo_produto;
     property codigo_materia :integer read Fcodigo_materia write Setcodigo_materia;
+    property Adicional      :Boolean read FAdicional      write FAdicional;
 
     property materia_prima  :TMateriaPrima read GetMateriaPrima;
     property produto        :TProduto      read GetProduto write Setproduto;

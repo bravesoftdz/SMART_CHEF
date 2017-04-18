@@ -28,6 +28,8 @@ function impressoraPadrao:String;
 function ApenasNumeros(const Texto: String): String;
 function retorna_estado(const codigo_estado :integer; const uf :String):Variant;
 function zeroEsquerda(texto :String; tamMax :integer) :String;
+function DataSEFAZToDateTime(const Data: String): TDateTime;
+function cortaCasasDecimais(valor :Real; casasDesejadas :integer) :Real;
 
 implementation
 
@@ -50,6 +52,49 @@ begin
       if Texto[nX] in ['0'..'9'] Then
         result := result + Texto[nX];
   end;
+end;
+
+function cortaCasasDecimais(valor :Real; casasDesejadas :integer) :Real;
+var i :integer;
+begin
+  for i := 0 to casasDesejadas -1 do
+    valor := valor * 10;
+
+  valor := trunc(valor);
+
+  for i := 0 to casasDesejadas -1 do
+    valor := valor / 10;
+
+  Result := valor;
+end;
+
+function DataSEFAZToDateTime(const Data: String): TDateTime;
+var
+  Ano, Mes, Dia, Hora, Minuto, Segundo, Milisegundo: Word;
+  cData :String;
+  cHoras :String;
+  cAno, cMes, cDia, cHora, cMinuto, cSegundo, cMilisegundo :String;
+begin
+   //1234567890 1 23456789
+   { 2013-10-29 T 13:24:49 }
+   cData := Copy(Data, 1,  10);
+   cAno  := Copy(cData, 1, 4);
+   cMes  := Copy(cData, 6,  2);
+   cDia  := Copy(cData, 9, 2);
+
+   cHoras   := Copy(Data, 12, 8);
+   cHora    := Copy(cHoras, 1, 2);
+   cMinuto  := Copy(cHoras, 4, 2);
+   cSegundo := Copy(cHoras, 7, 2);
+
+   Ano     := StrToIntDef(cAno, 0);
+   Mes     := StrToIntDef(cMes, 0);
+   Dia     := StrToIntDef(cDia, 0);
+   Hora    := StrToIntDef(cHora, 0);
+   Minuto  := StrToIntDef(cMinuto, 0);
+   Segundo := StrToIntDef(cSegundo, 0);
+
+   result := EncodeDateTime(Ano, Mes, Dia, Hora, Minuto, Segundo, 0);
 end;
 
 function zeroEsquerda(texto :String; tamMax :integer) :String;

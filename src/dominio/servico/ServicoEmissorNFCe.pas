@@ -9,7 +9,7 @@ uses
   ACBrNFeNotasFiscais,
   ACBrDANFCeFortesFr,
   ContNrs, DateTimeUtilitario, Classes, AcbrNfe,  pcnConversao, pcnNFe,
-  pcnRetInutNFe, pcnRetConsSitNFe, pcnCCeNFe, ACBrNFeWebServices,
+  pcnRetInutNFe, pcnRetConsSitNFe, pcnCCeNFe, ACBrNFeWebServices, NFCe,
   pcnEventoNFe, pcnConversaoNFe,   pcnProcNFe, funcoes, Pedido, Generics.Collections;
 
 type
@@ -34,7 +34,7 @@ type
     procedure GerarTransportador(Venda :TVenda; NFCe :NotaFiscal);
     procedure GerarPagamentos (Venda :TVenda; NFCe :NotaFiscal);
 
-    procedure Salva_retorno_envio(codigo_pedido, numero_lote :integer);
+    procedure Salva_retorno_envio(codigo_pedido :integer);
     procedure Salva_retorno_cancelamento(Justificativa :String);
   public
     constructor Create(Configuracoes :TParametros);
@@ -44,6 +44,7 @@ type
     procedure Emitir(Pedido :TPedido);
     procedure CancelarNFCe(XML: TStringStream; Justificativa :String);
     procedure reimprimir(XML :String);
+    procedure ConsultaNFCe(NFCe :TNFCe);
 end;
 
 implementation
@@ -55,7 +56,7 @@ uses
   Item,
   Produto, Movimento,
   Token, EspecificacaoMovimentosPorCodigoPedido,
-  ParametrosDANFE, NcmIBPT, ItemVenda, Dialogs, Repositorio, FabricaRepositorio, NFCe, uModulo, StrUtils, Math, EspecificacaoFiltraNFCe,
+  ParametrosDANFE, NcmIBPT, ItemVenda, Dialogs, Repositorio, FabricaRepositorio, uModulo, StrUtils, Math, EspecificacaoFiltraNFCe,
   Cliente, MaskUtils, AdicionalItem;
 
 { TServicoEmissorNFCe }
@@ -119,13 +120,14 @@ begin
 
 
    { DANFE (Configurações da Impressão do DANFE)}
-   FACBrNFeDANFe                   := TACBrNFeDANFCeFortes.Create(nil);
-   FACBrNFeDANFe.TipoDANFE         := tiNFCe;
-   FACBrNFeDANFe.ACBrNFe           := self.FACBrNFe;
-   FACBrNFeDANFe.MostrarPreview    := FParametros.NFCe.DANFE.VisualizarImpressao;
-   FACBrNFeDANFe.ViaConsumidor     := FParametros.NFCe.DANFE.ViaConsumidor;
-   FACBrNFeDANFe.ImprimirItens     := FParametros.NFCe.DANFE.ImprimirItens;
-   FACBrNFeDANFe.Impressora        := impressoraPadrao;
+   FACBrNFeDANFe                       := TACBrNFeDANFCeFortes.Create(nil);
+   FACBrNFeDANFe.TipoDANFE             := tiNFCe;
+   FACBrNFeDANFe.ACBrNFe               := self.FACBrNFe;
+   FACBrNFeDANFe.MostrarPreview        := FParametros.NFCe.DANFE.VisualizarImpressao;
+   FACBrNFeDANFe.ViaConsumidor         := FParametros.NFCe.DANFE.ViaConsumidor;
+   FACBrNFeDANFe.ImprimirItens         := FParametros.NFCe.DANFE.ImprimirItens;
+   FACBrNFeDANFe.ImprimeDescAcrescItem := false;
+   FACBrNFeDANFe.Impressora            := impressoraPadrao;
 
    // FACBrNFeDANFe.ImprimirDANFE;
    // FACBrNFeDANFe.ImprimirDANFEResumido();
@@ -149,15 +151,10 @@ procedure TServicoEmissorNFCe.Emitir(Pedido :TPedido);
 const
   IMPRIMIR = true;
   SINCRONO = true;
-var
-  numeroLote :integer;
 begin
   try
     GerarNFCe( gerarVenda(Pedido) );
-
     try
-      numeroLote := dm.GetValorGenerator('gen_lote_nfce','1');
-
       if FParametros.NFCe.justContingencia <> '' then
       begin
         FACBrNFe.NotasFiscais.Assinar;
@@ -165,20 +162,18 @@ begin
         FACBrNFe.NotasFiscais.Imprimir;
       end
       else
-        FACBrNFe.Enviar(numeroLote, IMPRIMIR, SINCRONO);
+        FACBrNFe.Enviar(FACBrNFe.NotasFiscais.Items[0].NFe.Ide.nNF, IMPRIMIR, SINCRONO);
 
     Except
       On E: Exception do begin
-        dm.GetValorGenerator('gen_lote_nfce','-1');
-        dm.GetValorGenerator('gen_nrnota_nfce','-1');
+        if not Assigned(Pedido.NFCe) then
+          dm.GetValorGenerator('gen_nrnota_nfce','-1');
         dm.LogErros.AdicionaErro('ServicoEmissorNFCe','Envio',e.Message);
         raise Exception.Create(e.Message);
       end;
     end;
 
-    {se nao for em contingencia, salva xml}
-    if FParametros.NFCe.justContingencia = '' then
-      Salva_retorno_envio(Pedido.codigo, numeroLote);
+    Salva_retorno_envio(Pedido.codigo);
 
   Except
     On E: Exception do begin
@@ -276,6 +271,48 @@ begin
 
 end;
 
+procedure TServicoEmissorNFCe.ConsultaNFCe(NFCe :TNFCe);
+var Venda :TVenda;
+    StringStream: TStringStream;
+    Pedido :TPedido;
+begin
+  try
+    Pedido := TPedido.PedidoPorCodigo(NFCe.codigo_pedido);
+
+    GerarNFCe( gerarVenda(Pedido) );
+    NFCe.nr_nota       := FACBrNFe.NotasFiscais.Items[0].NFe.Ide.cNF;
+    NFCe.codigo_pedido := Pedido.codigo;
+
+    FACBrNFe.Configuracoes.Geral.ValidarDigest := False;
+    FACBrNFe.NotasFiscais.Assinar;
+    FACBrNFe.Consultar;
+    FACBrNFe.NotasFiscais.GerarNFe;
+    FACBrNFe.WebServices.Consulta.NFeChave := copy(FACBrNFe.NotasFiscais.Items[0].NFe.infNFe.ID,4,44);
+    FACBrNFe.WebServices.Consulta.Executar;
+
+    FACBrNFe.Configuracoes.Geral.ValidarDigest := true;
+    NFCe.status          := intToStr(FACBrNFe.WebServices.Consulta.cStat);
+    NFCe.motivo          := FACBrNFe.WebServices.Consulta.XMotivo;
+    NFCe.protocolo       := FACBrNFe.WebServices.Consulta.Protocolo;
+    NFCe.dh_recebimento  := FACBrNFe.WebServices.Consulta.DhRecbto;
+
+    if NFCe.dh_recebimento < strToDate('01/01/1900') then
+      NFCe.dh_recebimento  := Date;
+
+    if assigned(Pedido) then
+    begin
+      NFCe.chave := copy(FACBrNFe.NotasFiscais.Items[0].NFe.infNFe.ID,4,44);
+      NFCe.serie := IntToStr(FACBrNFe.NotasFiscais.Items[0].NFe.ide.serie);
+    end;
+
+    StringStream         := TStringStream.Create( FACBrNFe.NotasFiscais.Items[0].gerarXML );
+
+    NFCe.XML.LoadFromStream(StringStream);
+  finally
+    FreeAndNil(Pedido);
+  end;
+end;
+
 procedure TServicoEmissorNFCe.GerarDestinatario(Venda :TVenda; NFCe: NotaFiscal);
 var endereco :TEndereco;
     repositorio :TRepositorio;
@@ -289,7 +326,8 @@ begin
    NFCe.NFe.Dest.indIEDest         := inNaoContribuinte;
 
    if assigned(Venda.Cliente) and
-      ((assigned(Venda.Cliente.Enderecos) and (Venda.Cliente.Enderecos.count > 0)) or (venda.Codigo_endereco > 0)) then begin
+      ((assigned(Venda.Cliente.Enderecos) and (Venda.Cliente.Enderecos.count > 0)) or (venda.Codigo_endereco > 0)) then
+   begin
 
      if venda.Codigo_endereco > 0 then begin
        repositorio := TFabricaRepositorio.GetRepositorio(TEndereco.ClassName);
@@ -303,7 +341,8 @@ begin
      NFCe.NFe.Dest.EnderDest.xCpl    := endereco.referencia;
      NFCe.NFe.Dest.EnderDest.xBairro := endereco.bairro;
      NFCe.NFe.Dest.EnderDest.cMun    := endereco.codigo_cidade;
-     NFCe.NFe.Dest.EnderDest.xMun    := endereco.Cidade.nome;
+     if assigned(endereco.Cidade) then
+       NFCe.NFe.Dest.EnderDest.xMun    := endereco.Cidade.nome;
      NFCe.NFe.Dest.EnderDest.UF      := endereco.uf;
      NFCe.NFe.Dest.EnderDest.CEP     := StrToIntDef(endereco.cep,0);
      NFCe.NFe.Dest.EnderDest.cPais   := 1058;
@@ -478,18 +517,21 @@ var valor_adicionais :Real;
     i, x :integer;
 begin
   try
-    result               := TVenda.Create;
+    result                 := TVenda.Create;
+    result.Data            := Pedido.data;
+    result.Codigo_pedido   := Pedido.codigo;
 
-    result.Data          := Pedido.data;
-    result.Codigo_pedido := Pedido.codigo;
-    result.NumeroNFe     := dm.GetValorGenerator('gen_nrnota_nfce','1');//StrToInt(Maior_Valor_Cadastrado('NFCE_RETORNO', 'CODIGO'))+1; // criar tab. de retorno da nf p/ poder pegar tb o cod. da nf
-   // Venda.Acrescimo     := buscaComanda1.Pedido.acrescimo;
-    result.Desconto      := Pedido.desconto;
-    result.Couvert       := Pedido.couvert;
-    result.Tx_servico    := Pedido.taxa_servico;
-    result.Taxa_entrega  := Pedido.taxa_entrega;
-    result.Cpf_cliente   := Pedido.cpf_cliente;
-    result.nome_cliente  := Pedido.nome_cliente;
+    if assigned(Pedido.NFCe) then
+      result.NumeroNFe     := Pedido.NFCe.nr_nota
+    else
+      result.NumeroNFe     := dm.GetValorGenerator('gen_nrnota_nfce','1');
+
+    result.Desconto        := Pedido.desconto;
+    result.Couvert         := Pedido.couvert;
+    result.Tx_servico      := Pedido.taxa_servico;
+    result.Taxa_entrega    := Pedido.taxa_entrega;
+    result.Cpf_cliente     := Pedido.cpf_cliente;
+    result.nome_cliente    := Pedido.nome_cliente;
     result.Codigo_endereco := Pedido.Codigo_endereco;
 
     for i := 0 to Pedido.Itens.Count - 1 do begin
@@ -552,7 +594,7 @@ begin
 
     status              := IntToStr( self.FACBrNFe.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat );
     motivo              := self.FACBrNFe.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo;
-    NFCe.status         := IfThen(status = '135','100',status);
+    NFCe.status         := IfThen(status = '135','101',status);
     NFCe.Motivo         := IfThen(status = '135','Cancelamento da NFC-e homologado',motivo);
     NFCe.protocolo      := self.FACBrNFe.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.nProt;
     NFCe.dh_recebimento := self.FACBrNFe.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento;
@@ -573,7 +615,7 @@ begin
   end;
 end;
 
-procedure TServicoEmissorNFCe.Salva_retorno_envio(codigo_pedido, numero_lote: integer);
+procedure TServicoEmissorNFCe.Salva_retorno_envio(codigo_pedido: integer);
 var NFCe :TNFCe;
     repositorio :TRepositorio;
     StringStream: TStringStream;
@@ -584,10 +626,11 @@ begin
     repositorio := TFabricaRepositorio.GetRepositorio(TNFCE.ClassName);
     NFCe        := TNFCE.Create;
 
+    NFCe.codigo         := StrToIntDef(Campo_por_campo('NFCE','CODIGO','CODIGO_PEDIDO',IntToStr(codigo_pedido)),0);
     NFCe.nr_nota        := FACBrNFe.NotasFiscais.Items[0].NFe.Ide.nNF;
     NFCe.codigo_pedido  := codigo_pedido;
     NFCe.serie          := IntToStr(FACBrNFe.NotasFiscais.Items[0].NFe.Ide.serie);
-    NFCe.chave          := FACBrNFe.NotasFiscais.Items[0].NFe.procNFe.chNFe;
+    NFCe.chave          := copy(FACBrNFe.NotasFiscais.Items[0].NFe.infNFe.ID,4,44);
     NFCe.protocolo      := FACBrNFe.NotasFiscais.Items[0].NFe.procNFe.nProt;
     NFCe.dh_recebimento := FACBrNFe.NotasFiscais.Items[0].NFe.procNFe.dhRecbto;
     NFCe.status         := intToStr( FACBrNFe.NotasFiscais.Items[0].NFe.procNFe.cStat );

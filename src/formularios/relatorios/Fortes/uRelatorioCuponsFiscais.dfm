@@ -2,11 +2,11 @@ inherited frmRelatorioCuponsFiscais: TfrmRelatorioCuponsFiscais
   Left = 356
   Top = 268
   Caption = 'Relat'#243'rio de Cupons Fiscais'
-  ClientHeight = 280
-  ClientWidth = 622
+  ClientHeight = 224
+  ClientWidth = 603
   OnShow = FormShow
-  ExplicitWidth = 628
-  ExplicitHeight = 308
+  ExplicitWidth = 609
+  ExplicitHeight = 252
   PixelsPerInch = 96
   TextHeight = 13
   object RLReport1: TRLReport [0]
@@ -138,11 +138,24 @@ inherited frmRelatorioCuponsFiscais: TfrmRelatorioCuponsFiscais
       object RLLabel3: TRLLabel
         Left = 615
         Top = 2
-        Width = 38
+        Width = 74
         Height = 16
-        Caption = 'Valor'
+        Caption = 'Valor Total'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel8: TRLLabel
+        Left = 259
+        Top = 3
+        Width = 282
+        Height = 16
+        Caption = 'Dinheiro     Crt Cr'#233'dito   Crt D'#233'bito   Cheque'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = -1
         Font.Height = -13
         Font.Name = 'Arial'
         Font.Style = [fsBold]
@@ -188,17 +201,65 @@ inherited frmRelatorioCuponsFiscais: TfrmRelatorioCuponsFiscais
         DataSource = ds
         Text = ''
       end
+      object RLDBText4: TRLDBText
+        Left = 258
+        Top = 2
+        Width = 65
+        Height = 16
+        Alignment = taRightJustify
+        DataField = 'DINHEIRO'
+        DataSource = ds
+        Text = ''
+      end
+      object RLDBText5: TRLDBText
+        Left = 321
+        Top = 2
+        Width = 74
+        Height = 16
+        Alignment = taRightJustify
+        DataField = 'CARTCRED'
+        DataSource = ds
+        Text = ''
+      end
+      object RLDBText6: TRLDBText
+        Left = 406
+        Top = 2
+        Width = 65
+        Height = 16
+        Alignment = taRightJustify
+        DataField = 'CARTDEB'
+        DataSource = ds
+        Text = ''
+      end
+      object RLDBText7: TRLDBText
+        Left = 484
+        Top = 2
+        Width = 59
+        Height = 16
+        Alignment = taRightJustify
+        DataField = 'CHEQUE'
+        DataSource = ds
+        Text = ''
+      end
     end
     object RLBand4: TRLBand
       Left = 39
       Top = 171
       Width = 716
-      Height = 22
+      Height = 43
       AlignToBottom = True
       BandType = btSummary
+      object RLDraw7: TRLDraw
+        Left = -30
+        Top = 0
+        Width = 746
+        Height = 22
+        Brush.Color = 14540253
+        Pen.Style = psClear
+      end
       object RLDBResult1: TRLDBResult
         Left = 608
-        Top = 2
+        Top = 23
         Width = 87
         Height = 16
         DataField = 'VALOR'
@@ -208,7 +269,7 @@ inherited frmRelatorioCuponsFiscais: TfrmRelatorioCuponsFiscais
       end
       object RLLabel7: TRLLabel
         Left = 479
-        Top = 2
+        Top = 23
         Width = 87
         Height = 16
         Caption = 'Total Geral >'
@@ -219,15 +280,72 @@ inherited frmRelatorioCuponsFiscais: TfrmRelatorioCuponsFiscais
         Font.Style = [fsBold]
         ParentFont = False
       end
+      object RLLabel9: TRLLabel
+        Left = 19
+        Top = 3
+        Width = 282
+        Height = 16
+        Caption = 'Dinheiro     Crt Cr'#233'dito   Crt D'#233'bito   Cheque'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = 3552822
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLDBResult2: TRLDBResult
+        Left = 5
+        Top = 23
+        Width = 104
+        Height = 16
+        Alignment = taRightJustify
+        DataField = 'DINHEIRO'
+        DataSource = ds
+        Info = riSum
+        Text = ''
+      end
+      object RLDBResult3: TRLDBResult
+        Left = 68
+        Top = 23
+        Width = 113
+        Height = 16
+        Alignment = taRightJustify
+        DataField = 'CARTCRED'
+        DataSource = ds
+        Info = riSum
+        Text = ''
+      end
+      object RLDBResult4: TRLDBResult
+        Left = 149
+        Top = 23
+        Width = 104
+        Height = 16
+        Alignment = taRightJustify
+        DataField = 'CARTDEB'
+        DataSource = ds
+        Info = riSum
+        Text = ''
+      end
+      object RLDBResult5: TRLDBResult
+        Left = 219
+        Top = 23
+        Width = 98
+        Height = 16
+        Alignment = taRightJustify
+        DataField = 'CHEQUE'
+        DataSource = ds
+        Info = riSum
+        Text = ''
+      end
     end
   end
   inherited pnlPropaganda: TPanel
-    Top = 245
-    Width = 622
-    ExplicitTop = 245
-    ExplicitWidth = 622
+    Top = 189
+    Width = 603
+    ExplicitTop = 189
+    ExplicitWidth = 603
     inherited Shape8: TShape
-      Width = 620
+      Width = 601
       ExplicitWidth = 620
     end
   end
@@ -328,14 +446,14 @@ inherited frmRelatorioCuponsFiscais: TfrmRelatorioCuponsFiscais
     Left = 0
     Top = 0
     Width = 129
-    Height = 245
+    Height = 189
     Align = alLeft
     TabOrder = 2
     object Shape12: TShape
       Left = 1
       Top = 1
       Width = 127
-      Height = 243
+      Height = 187
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119
@@ -493,6 +611,7 @@ inherited frmRelatorioCuponsFiscais: TfrmRelatorioCuponsFiscais
         9B009B9B9B009B9B9B00807F9A003A3795000102920009089300}
       NumGlyphs = 2
       TabOrder = 1
+      OnClick = BitBtn3Click
     end
   end
   object ds: TDataSource
@@ -520,5 +639,29 @@ inherited frmRelatorioCuponsFiscais: TfrmRelatorioCuponsFiscais
       FieldName = 'VALOR'
       DisplayFormat = ',0.00; ,0.00'
     end
+    object cdsDINHEIRO: TFloatField
+      FieldName = 'DINHEIRO'
+      DisplayFormat = ',0.00; ,0.00'
+    end
+    object cdsCHEQUE: TFloatField
+      FieldName = 'CHEQUE'
+      DisplayFormat = ',0.00; ,0.00'
+    end
+    object cdsCARTCRED: TFloatField
+      FieldName = 'CARTCRED'
+      DisplayFormat = ',0.00; ,0.00'
+    end
+    object cdsCARTDEB: TFloatField
+      FieldName = 'CARTDEB'
+      DisplayFormat = ',0.00; ,0.00'
+    end
+  end
+  object RLPDFFilter1: TRLPDFFilter
+    DocumentInfo.Creator = 
+      'FortesReport Community Edition v4.0 \251 Copyright '#169' 1999-2015 F' +
+      'ortes Inform'#225'tica'
+    DisplayName = 'Documento PDF'
+    Left = 304
+    Top = 144
   end
 end

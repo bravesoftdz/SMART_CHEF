@@ -61,8 +61,27 @@ uses
   RepositorioNaturezaOperacao,
   RepositorioCidade,
   RepositorioEstado,
-  RepositorioConfiguracoesNF;
-
+  RepositorioConfiguracoesNF,
+  RepositorioFormaPagamento,
+  RepositorioIcms00,
+  RepositorioIpiTrib,
+  RepositorioPisAliq,
+  RepositorioCofinsAliq,
+  RepositorioIcmsSn101,
+  RepositorioIpiNt,
+  RepositorioPisNt,
+  RepositorioCofinsNt,
+  RepositorioObservacoesNotaFiscal,
+  RepositorioTotaisNotaFiscal,
+  RepositorioItemAvulso,
+  RepositorioLoteNfe,
+  RepositorioNFe,
+  RepositorioRetornoNFe,
+  RepositorioRetornoLoteNFe,
+  RepositorioVolumesNotaFiscal,
+  RepositorioTransportadora,
+  RepositorioCFOP,
+  RepositorioConfiguracoesNFEmail;
 
 { TFabricaRepositorio }
 
@@ -113,6 +132,26 @@ begin
    else if (NomeDaEntidade  = 'TCidade')                    then result := TRepositorioCidade.Create
    else if (NomeDaEntidade  = 'TEstado')                    then result := TRepositorioEstado.Create
    else if (NomeDaEntidade  = 'TConfiguracoesNF')           then result := TRepositorioConfiguracoesNF.Create
+   else if (NomeDaEntidade  = 'TFormaPagamento')            then result := TRepositorioFormaPagamento.Create
+   else if (NomeDaEntidade  = 'TIcms00')                    then result := TRepositorioIcms00.Create
+   else if (NomeDaEntidade  = 'TIpiTrib')                   then result := TRepositorioIpiTrib.Create
+   else if (NomeDaEntidade  = 'TPisAliq')                   then result := TRepositorioPisAliq.Create
+   else if (NomeDaEntidade  = 'TCofinsAliq')                then result := TRepositorioCofinsAliq.Create
+   else if (NomeDaEntidade  = 'TIcmsSn101')                 then result := TRepositorioIcmsSn101.Create
+   else if (NomeDaEntidade  = 'TIpiNt')                     then result := TRepositorioIpiNt.Create
+   else if (NomeDaEntidade  = 'TPisNt')                     then result := TRepositorioPisNt.Create
+   else if (NomeDaEntidade  = 'TCofinsNt')                  then result := TRepositorioCofinsNt.Create
+   else if (NomeDaEntidade  = 'TObservacaoNotaFiscal')      then result := TRepositorioObservacoesNotaFiscal.Create
+   else if (NomeDaEntidade  = 'TTotaisNotaFiscal')          then result := TRepositorioTotaisNotaFiscal.Create
+   else if (NomeDaEntidade  = 'TItemAvulso')                then result := TRepositorioItemAvulso.Create
+   else if (NomeDaEntidade  = 'TLoteNFe')                   then result := TRepositorioLoteNfe.Create
+   else if (NomeDaEntidade  = 'TNFe')                       then result := TRepositorioNFe.Create
+   else if (NomeDaEntidade  = 'TRetornoLoteNFe')            then result := TRepositorioRetornoLoteNFe.Create
+   else if (NomeDaEntidade  = 'TRetornoNFe')                then result := TRepositorioRetornoNFe.Create
+   else if (NomeDaEntidade  = 'TVolumesNotaFiscal')         then result := TRepositorioVolumesNotaFiscal.Create
+   else if (NomeDaEntidade  = 'TTransportadora')            then result := TRepositorioTransportadora.Create
+   else if (NomeDaEntidade  = 'TCFOP')                      then result := TRepositorioCFOP.Create
+   else if (NomeDaEntidade  = 'TConfiguracoesNFEmail')      then result := TRepositorioConfiguracoesNFEmail.Create
 
    else begin
      dm.LogErros.AdicionaErro('FabricaRepositorio', 'TExcecaoRepositorioNaoEncontrado', 'Repositório para a '+ NomeDaEntidade + ' não foi encontrado!');

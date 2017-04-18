@@ -6,7 +6,9 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, uPadrao, StdCtrls, Buttons, pngimage, ExtCtrls, Grids, DBGrids,
   DB, DBClient, xmldom, Provider, Xmlxform, XMLIntf, msxmldom, XMLDoc,
-  ComCtrls, Contnrs, RLReport, generics.collections, AcbrNFe;
+  ComCtrls, Contnrs, RLReport, generics.collections, AcbrNFe, RLFilters, RLPDFFilter, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client, pcnConversao;
 
 type
   TfrmRelatorioCuponsFiscais = class(TfrmPadrao)
@@ -47,11 +49,27 @@ type
     cdsCODIGO: TIntegerField;
     cdsDATA: TDateField;
     cdsVALOR: TFloatField;
+    RLPDFFilter1: TRLPDFFilter;
+    RLDraw7: TRLDraw;
+    RLLabel9: TRLLabel;
+    cdsDINHEIRO: TFloatField;
+    cdsCHEQUE: TFloatField;
+    cdsCARTCRED: TFloatField;
+    cdsCARTDEB: TFloatField;
+    RLLabel8: TRLLabel;
+    RLDBText4: TRLDBText;
+    RLDBText5: TRLDBText;
+    RLDBText6: TRLDBText;
+    RLDBText7: TRLDBText;
+    RLDBResult2: TRLDBResult;
+    RLDBResult3: TRLDBResult;
+    RLDBResult4: TRLDBResult;
+    RLDBResult5: TRLDBResult;
     procedure BitBtn2Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure chkPeriodoGeralClick(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
   private
-
     procedure imprimir;
   public
     { Public declarations }
@@ -77,7 +95,7 @@ var repositorio :TRepositorio;
     Nfces       :TObjectList<TNFCe>;
     Especificacao :TEspecificacaoNFCe;
     dt_i, dt_f  :TDateTime;
-    nx :integer;
+    nx, i :integer;
     FAcbrNfe: TACBrNFe;
     FXMLStringList    :TStringList;
 begin
@@ -103,9 +121,20 @@ begin
       FAcbrNfe.NotasFiscais.LoadFromString(FXMLStringList.Text);
 
       cds.Append;
-      cdsCODIGO.AsInteger := FAcbrNfe.NotasFiscais.Items[0].NFe.Ide.cNF;
-      cdsDATA.AsDateTime  := FAcbrNfe.NotasFiscais.Items[0].NFe.Ide.dEmi;
-      cdsVALOR.AsFloat    := FAcbrNfe.NotasFiscais.Items[0].NFe.Total.ICMSTot.vNF;
+      cdsCODIGO.AsInteger := FAcbrNfe.NotasFiscais.Items[nx].NFe.Ide.cNF;
+      cdsDATA.AsDateTime  := FAcbrNfe.NotasFiscais.Items[nx].NFe.Ide.dEmi;
+      cdsVALOR.AsFloat    := FAcbrNfe.NotasFiscais.Items[nx].NFe.Total.ICMSTot.vNF;
+
+      for i := 0 to  FAcbrNfe.NotasFiscais.Items[nx].NFe.pag.Count -1 do
+      begin
+        case FAcbrNfe.NotasFiscais.Items[nx].NFe.pag[i].tPag of
+          fpDinheiro      : cdsDINHEIRO.AsFloat := cdsDINHEIRO.AsFloat + FAcbrNfe.NotasFiscais.Items[nx].NFe.pag[i].vPag;
+          fpCheque        : cdsCHEQUE.AsFloat   := cdsCHEQUE.AsFloat + FAcbrNfe.NotasFiscais.Items[nx].NFe.pag[i].vPag;
+          fpCartaoCredito : cdsCARTCRED.AsFloat := cdsCARTCRED.AsFloat + FAcbrNfe.NotasFiscais.Items[nx].NFe.pag[i].vPag;
+          fpCartaoDebito  : cdsCARTDEB.AsFloat  := cdsCARTDEB.AsFloat + FAcbrNfe.NotasFiscais.Items[nx].NFe.pag[i].vPag;
+        end;
+      end;
+
       cds.Post;
     end;
 
@@ -126,6 +155,12 @@ begin
   cds.CreateDataSet;
   dtpInicio.DateTime := strToDateTime(DateToStr(Date)+' 00:00:00');
   dtpFim.DateTime    := strToDateTime(DateToStr(Date)+' 23:59:59');
+end;
+
+procedure TfrmRelatorioCuponsFiscais.BitBtn3Click(Sender: TObject);
+begin
+  inherited;
+  self.Close;
 end;
 
 procedure TfrmRelatorioCuponsFiscais.chkPeriodoGeralClick(Sender: TObject);

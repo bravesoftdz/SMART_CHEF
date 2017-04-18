@@ -42,7 +42,8 @@ begin
    result := TTotaisNotaFiscal.Create(Dataset.FieldByName('frete').AsFloat,
                                       Dataset.FieldByName('seguro').AsFloat,
                                       Dataset.FieldByName('desconto').AsFloat,
-                                      Dataset.FieldByName('outras_despesas').AsFloat);
+                                      Dataset.FieldByName('outras_despesas').AsFloat,
+                                      Dataset.FieldByName('subst_tributaria').AsFloat);
 
    TTotaisNotaFiscal(result).PercentualDescontoFatura := Dataset.FieldByName('percentual_desconto_fatura').AsFloat;
 end;
@@ -84,6 +85,7 @@ begin
    inherited SetParametro('seguro',                     Obj.Seguro);
    inherited SetParametro('desconto',                   Obj.Descontos);
    inherited SetParametro('outras_despesas',            Obj.OutrasDespesas);
+   inherited SetParametro('subst_tributaria',           Obj.SubstTributaria);
    inherited SetParametro('percentual_desconto_fatura', Obj.PercentualDescontoFatura);
    inherited SetParametro('total',                      Obj.TotalNF);
    inherited SetParametro('produtos',                   Obj.TotalProdutos);
@@ -106,10 +108,10 @@ end;
 
 function TRepositorioTotaisNotaFiscal.SQLSalvar: String;
 begin
-   result := 'update or insert into '+self.GetNomeDaTabela+'  (codigo_nota_fiscal,  frete, seguro, desconto, outras_despesas, '+
-                                                           '   percentual_desconto_fatura, total, produtos)              '+
+   result := 'update or insert into '+self.GetNomeDaTabela+'  (codigo_nota_fiscal,  frete, seguro, desconto, outras_despesas,       '+
+                                                           '   percentual_desconto_fatura, total, produtos, subst_tributaria)       '+
                                                       'values (:codigo_nota_fiscal,  :frete,  :seguro, :desconto, :outras_despesas, '+
-                                                           '   :percentual_desconto_fatura, :total, :produtos)           ';
+                                                           '   :percentual_desconto_fatura, :total, :produtos, :subst_tributaria)   ';
 end;
 
 end.

@@ -1,9 +1,9 @@
 object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
   Left = 514
   Top = 387
-  Caption = 'Relat'#243'rio Caixa 48 colunas'
-  ClientHeight = 122
-  ClientWidth = 379
+  Caption = 'Relat'#243'rio de Caixa'
+  ClientHeight = 178
+  ClientWidth = 480
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,8 +16,8 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 176
-    Top = 40
+    Left = 168
+    Top = 25
     Width = 110
     Height = 13
     Caption = 'Data do movimento'
@@ -28,18 +28,844 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
     Font.Style = [fsBold]
     ParentFont = False
   end
+  object RLReport1: TRLReport
+    Left = 151
+    Top = 156
+    Width = 794
+    Height = 1123
+    Margins.LeftMargin = 5.000000000000000000
+    Margins.RightMargin = 5.000000000000000000
+    Borders.Sides = sdCustom
+    Borders.DrawLeft = True
+    Borders.DrawTop = True
+    Borders.DrawRight = True
+    Borders.DrawBottom = True
+    DataSource = dsMovimentos
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Arial'
+    Font.Style = []
+    Visible = False
+    BeforePrint = RLReport1BeforePrint
+    object RLSubDetail1: TRLSubDetail
+      Left = 20
+      Top = 397
+      Width = 754
+      Height = 164
+      DataSource = dsMovimentos
+      object RLBand4: TRLBand
+        Left = 0
+        Top = 29
+        Width = 754
+        Height = 24
+        Color = 16053492
+        ParentColor = False
+        Transparent = False
+        BeforePrint = RLBand4BeforePrint
+        object RLDBText5: TRLDBText
+          Left = 1
+          Top = 3
+          Width = 65
+          Height = 14
+          DataField = 'CODPEDIDO'
+          DataSource = dsMovimentos
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
+          Text = ''
+          Transparent = False
+        end
+        object RLDBText6: TRLDBText
+          Left = 83
+          Top = 4
+          Width = 56
+          Height = 14
+          DataField = 'DINHEIRO'
+          DataSource = dsMovimentos
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
+          Text = ''
+          Transparent = False
+        end
+        object RLDBText7: TRLDBText
+          Left = 254
+          Top = 4
+          Width = 67
+          Height = 14
+          DataField = 'CRTCREDITO'
+          DataSource = dsMovimentos
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
+          Text = ''
+          Transparent = False
+        end
+        object RLDBText8: TRLDBText
+          Left = 651
+          Top = 4
+          Width = 45
+          Height = 14
+          DataField = 'CHEQUE'
+          DataSource = dsMovimentos
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
+          Text = ''
+          Transparent = False
+        end
+        object RLDBText9: TRLDBText
+          Left = 451
+          Top = 4
+          Width = 61
+          Height = 14
+          DataField = 'CRTDEBITO'
+          DataSource = dsMovimentos
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
+          Text = ''
+          Transparent = False
+        end
+      end
+      object RLBand3: TRLBand
+        Left = 0
+        Top = 0
+        Width = 754
+        Height = 29
+        BandType = btColumnHeader
+        object RLDraw6: TRLDraw
+          Left = 0
+          Top = 5
+          Width = 754
+          Height = 24
+          Brush.Color = 15722727
+          Pen.Style = psDot
+        end
+        object RLLabel23: TRLLabel
+          Left = 3
+          Top = 10
+          Width = 697
+          Height = 16
+          Caption = 
+            'N'#186' Pedido    Dinheiro                             Cart. Cr'#233'dito ' +
+            '                            Cart. D'#233'bito                        ' +
+            '       Cheque'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+      end
+    end
+    object RLBand1: TRLBand
+      Left = 20
+      Top = 39
+      Width = 754
+      Height = 317
+      BandType = btTitle
+      object RLDraw5: TRLDraw
+        Left = 0
+        Top = 259
+        Width = 754
+        Height = 26
+        Brush.Color = 15987933
+        Pen.Style = psDot
+      end
+      object RLDraw4: TRLDraw
+        Left = 0
+        Top = 107
+        Width = 582
+        Height = 24
+        Brush.Color = 16119285
+        Pen.Style = psClear
+      end
+      object RLDraw3: TRLDraw
+        Left = 0
+        Top = 155
+        Width = 582
+        Height = 24
+        Brush.Color = 16119285
+        Pen.Style = psClear
+      end
+      object RLDraw2: TRLDraw
+        Left = 618
+        Top = 76
+        Width = 136
+        Height = 133
+        Brush.Color = 15987441
+        Pen.Style = psDot
+      end
+      object RLDraw1: TRLDraw
+        Left = 0
+        Top = 209
+        Width = 754
+        Height = 26
+        Brush.Color = 16642773
+        Pen.Style = psDot
+      end
+      object RLLabel11: TRLLabel
+        Left = -2
+        Top = 67
+        Width = 760
+        Height = 16
+        Caption = 
+          '----------------------------------------------------------------' +
+          '----------------------------------------------------------------' +
+          '-------------------------------------------------------------'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object RLLabel1: TRLLabel
+        Left = 0
+        Top = 169
+        Width = 756
+        Height = 16
+        Caption = 
+          '----------------------------------------------------------------' +
+          '----------------------------------------------------------------' +
+          '------------------------------------------------------------'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object RLLabel2: TRLLabel
+        Left = 253
+        Top = 16
+        Width = 212
+        Height = 22
+        Alignment = taCenter
+        Caption = 'RELAT'#211'RIO DE CAIXA'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -19
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel3: TRLLabel
+        Left = 14
+        Top = 54
+        Width = 25
+        Height = 16
+        Caption = 'Dia'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object rlbDia: TRLLabel
+        Left = 43
+        Top = 54
+        Width = 23
+        Height = 16
+        Caption = 'Dia'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object RLLabel4: TRLLabel
+        Left = 216
+        Top = 86
+        Width = 79
+        Height = 16
+        Caption = 'Cart. D'#233'bito'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel5: TRLLabel
+        Left = 315
+        Top = 86
+        Width = 84
+        Height = 16
+        Caption = 'Cart. Cr'#233'dito'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel6: TRLLabel
+        Left = 419
+        Top = 86
+        Width = 58
+        Height = 16
+        Caption = 'Dinheiro'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel7: TRLLabel
+        Left = 515
+        Top = 86
+        Width = 53
+        Height = 16
+        Caption = 'Cheque'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel8: TRLLabel
+        Left = 120
+        Top = 110
+        Width = 63
+        Height = 16
+        Caption = 'Vendas >'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel9: TRLLabel
+        Left = 120
+        Top = 134
+        Width = 66
+        Height = 16
+        Caption = 'Sangria >'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel10: TRLLabel
+        Left = 120
+        Top = 158
+        Width = 65
+        Height = 16
+        Caption = 'Refor'#231'o >'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object rlCartDebito: TRLLabel
+        Left = 222
+        Top = 110
+        Width = 73
+        Height = 16
+        Alignment = taRightJustify
+        Caption = 'Cart. D'#233'bito'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object rlCartCredito: TRLLabel
+        Left = 322
+        Top = 110
+        Width = 77
+        Height = 16
+        Alignment = taRightJustify
+        Caption = 'Cart. Cr'#233'dito'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object rlDinheiro: TRLLabel
+        Left = 426
+        Top = 110
+        Width = 51
+        Height = 16
+        Alignment = taRightJustify
+        Caption = 'Dinheiro'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object rlCheque: TRLLabel
+        Left = 520
+        Top = 110
+        Width = 48
+        Height = 16
+        Alignment = taRightJustify
+        Caption = 'Cheque'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object rlDinheiroSan: TRLLabel
+        Left = 426
+        Top = 134
+        Width = 51
+        Height = 16
+        Alignment = taRightJustify
+        Caption = 'Dinheiro'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object rlChequeSan: TRLLabel
+        Left = 520
+        Top = 134
+        Width = 48
+        Height = 16
+        Alignment = taRightJustify
+        Caption = 'Cheque'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object rlDinheiroRef: TRLLabel
+        Left = 426
+        Top = 158
+        Width = 51
+        Height = 16
+        Alignment = taRightJustify
+        Caption = 'Dinheiro'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object rlChequeRef: TRLLabel
+        Left = 520
+        Top = 158
+        Width = 48
+        Height = 16
+        Alignment = taRightJustify
+        Caption = 'Cheque'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object RLLabel19: TRLLabel
+        Left = 697
+        Top = 86
+        Width = 47
+        Height = 16
+        Alignment = taRightJustify
+        Caption = 'TOTAL'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object rlTotVenda: TRLLabel
+        Left = 696
+        Top = 110
+        Width = 48
+        Height = 16
+        Alignment = taRightJustify
+        Caption = 'Cheque'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object rlTotSan: TRLLabel
+        Left = 696
+        Top = 134
+        Width = 48
+        Height = 16
+        Alignment = taRightJustify
+        Caption = 'Cheque'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object rlTotRef: TRLLabel
+        Left = 696
+        Top = 158
+        Width = 48
+        Height = 16
+        Alignment = taRightJustify
+        Caption = 'Cheque'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object rlTotalGeral: TRLLabel
+        Left = 669
+        Top = 187
+        Width = 75
+        Height = 16
+        Alignment = taRightJustify
+        Caption = 'Total Geral'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel12: TRLLabel
+        Left = 654
+        Top = 134
+        Width = 8
+        Height = 16
+        Alignment = taRightJustify
+        Caption = '-'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object RLLabel13: TRLLabel
+        Left = 652
+        Top = 158
+        Width = 12
+        Height = 16
+        Alignment = taRightJustify
+        Caption = '+'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object rlTotDinheiro: TRLLabel
+        Left = 419
+        Top = 215
+        Width = 58
+        Height = 16
+        Alignment = taRightJustify
+        Caption = 'Dinheiro'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = 2894892
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object rlTotCheque: TRLLabel
+        Left = 515
+        Top = 215
+        Width = 53
+        Height = 16
+        Alignment = taRightJustify
+        Caption = 'Cheque'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = 2894892
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object rlMontante: TRLLabel
+        Left = 691
+        Top = 215
+        Width = 53
+        Height = 16
+        Alignment = taRightJustify
+        Caption = 'Cheque'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = 2894892
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel15: TRLLabel
+        Left = 120
+        Top = 238
+        Width = 128
+        Height = 16
+        Caption = 'Valor de abertura >'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object rlAbertura: TRLLabel
+        Left = 685
+        Top = 239
+        Width = 59
+        Height = 16
+        Alignment = taRightJustify
+        Caption = 'Abertura'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = 2894892
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object rlMontanteTotal: TRLLabel
+        Left = 708
+        Top = 264
+        Width = 36
+        Height = 16
+        Alignment = taRightJustify
+        Caption = 'Total'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel17: TRLLabel
+        Left = 120
+        Top = 264
+        Width = 134
+        Height = 16
+        Caption = 'Montante do caixa >'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel16: TRLLabel
+        Left = 3
+        Top = 300
+        Width = 74
+        Height = 16
+        Caption = 'Movimento'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+        BeforePrint = RLLabel16BeforePrint
+      end
+      object RLLabel18: TRLLabel
+        Left = 99
+        Top = 299
+        Width = 38
+        Height = 16
+        Caption = 'Valor'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+        BeforePrint = RLLabel16BeforePrint
+      end
+      object RLLabel20: TRLLabel
+        Left = 163
+        Top = 299
+        Width = 47
+        Height = 16
+        Caption = 'Moeda'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+        BeforePrint = RLLabel16BeforePrint
+      end
+      object RLLabel21: TRLLabel
+        Left = 229
+        Top = 299
+        Width = 66
+        Height = 16
+        Caption = 'Descri'#231#227'o'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+        BeforePrint = RLLabel16BeforePrint
+      end
+      object RLLabel24: TRLLabel
+        Left = 653
+        Top = 299
+        Width = 52
+        Height = 16
+        Caption = 'Usu'#225'rio'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+        BeforePrint = RLLabel16BeforePrint
+      end
+    end
+    object RLSubDetail2: TRLSubDetail
+      Left = 20
+      Top = 356
+      Width = 754
+      Height = 41
+      DataSource = ds
+      object RLBand2: TRLBand
+        Left = 0
+        Top = 0
+        Width = 754
+        Height = 24
+        object RLDBText1: TRLDBText
+          Left = 7
+          Top = 5
+          Width = 27
+          Height = 14
+          DataField = 'TIPO'
+          DataSource = ds
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
+          Text = ''
+        end
+        object RLDBText2: TRLDBText
+          Left = 109
+          Top = 5
+          Width = 37
+          Height = 14
+          Alignment = taRightJustify
+          DataField = 'VALOR'
+          DataSource = ds
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
+          Text = ''
+        end
+        object RLDBText3: TRLDBText
+          Left = 160
+          Top = 5
+          Width = 42
+          Height = 14
+          DataField = 'MOEDA'
+          DataSource = ds
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
+          Text = ''
+        end
+        object RLDBText4: TRLDBText
+          Left = 229
+          Top = 5
+          Width = 420
+          Height = 16
+          AutoSize = False
+          DataField = 'DESCRICAO'
+          DataSource = ds
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
+          Text = ''
+        end
+        object RLDBText10: TRLDBText
+          Left = 655
+          Top = 5
+          Width = 51
+          Height = 14
+          DataField = 'USUARIO'
+          DataSource = ds
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
+          Text = ''
+        end
+      end
+    end
+  end
   object pnlBotoes: TPanel
     Left = 0
     Top = 0
     Width = 129
-    Height = 122
+    Height = 178
     Align = alLeft
-    TabOrder = 0
+    TabOrder = 1
+    ExplicitHeight = 162
     object Shape12: TShape
       Left = 1
       Top = 1
       Width = 127
-      Height = 120
+      Height = 176
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119
@@ -200,13 +1026,89 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
       OnClick = BitBtn2Click
     end
   end
-  object DateTimePicker1: TDateTimePicker
-    Left = 176
-    Top = 56
+  object dtpDiaMovimento: TDateTimePicker
+    Left = 168
+    Top = 41
     Width = 153
     Height = 21
     Date = 42184.595173969910000000
     Time = 42184.595173969910000000
-    TabOrder = 1
+    TabOrder = 0
+  end
+  object chk48: TCheckBox
+    Left = 168
+    Top = 80
+    Width = 153
+    Height = 17
+    Caption = 'Impress'#227'o 48 colunas'
+    TabOrder = 2
+  end
+  object RLPDFFilter1: TRLPDFFilter
+    DocumentInfo.Creator = 
+      'FortesReport Community Edition v4.0 \251 Copyright '#169' 1999-2015 F' +
+      'ortes Inform'#225'tica'
+    DisplayName = 'Documento PDF'
+    Left = 176
+    Top = 88
+  end
+  object cds: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 376
+    Top = 24
+    object cdsTIPO: TStringField
+      FieldName = 'TIPO'
+      Size = 10
+    end
+    object cdsVALOR: TFloatField
+      FieldName = 'VALOR'
+      DisplayFormat = ',0.00; ,0.00'
+    end
+    object cdsDESCRICAO: TStringField
+      FieldName = 'DESCRICAO'
+      Size = 100
+    end
+    object cdsMOEDA: TStringField
+      FieldName = 'MOEDA'
+      Size = 25
+    end
+    object cdsUSUARIO: TStringField
+      FieldName = 'USUARIO'
+    end
+  end
+  object ds: TDataSource
+    DataSet = cds
+    Left = 376
+    Top = 72
+  end
+  object cdsMovimentos: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 440
+    Top = 24
+    object cdsMovimentosCODPEDIDO: TIntegerField
+      FieldName = 'CODPEDIDO'
+    end
+    object cdsMovimentosDINHEIRO: TStringField
+      FieldName = 'DINHEIRO'
+      Size = 100
+    end
+    object cdsMovimentosCRTCREDITO: TStringField
+      FieldName = 'CRTCREDITO'
+      Size = 100
+    end
+    object cdsMovimentosCRTDEBITO: TStringField
+      FieldName = 'CRTDEBITO'
+      Size = 100
+    end
+    object cdsMovimentosCHEQUE: TStringField
+      FieldName = 'CHEQUE'
+      Size = 100
+    end
+  end
+  object dsMovimentos: TDataSource
+    DataSet = cdsMovimentos
+    Left = 440
+    Top = 72
   end
 end

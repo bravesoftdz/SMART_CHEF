@@ -61,6 +61,22 @@ type
     versao50: TMemo;
     versao51: TMemo;
     versao52: TMemo;
+    versao53: TMemo;
+    versao54: TMemo;
+    versao55: TMemo;
+    versao56: TMemo;
+    versao58: TMemo;
+    versao59: TMemo;
+    versao57: TMemo;
+    versao60: TMemo;
+    versao61: TMemo;
+    versao62: TMemo;
+    versao63: TMemo;
+    versao64: TMemo;
+    versao65: TMemo;
+    versao66: TMemo;
+    versao67: TMemo;
+    versao68: TMemo;
     procedure qry2ExecuteError(Sender: TObject; Error, SQLText: String;
       LineIndex: Integer; var Ignore: Boolean);
     procedure qry2ParseError(Sender: TObject; Error, SQLText: String;
@@ -86,7 +102,7 @@ var
   frmScript: TfrmScript;
 
 const
-  UltimaVersaoSistema = 52;
+  UltimaVersaoSistema = 68;
   ScriptExterno = '<<SCRIPT EXTERNO>>';
 
 implementation

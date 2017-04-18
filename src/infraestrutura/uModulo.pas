@@ -96,6 +96,7 @@ type
   public
      procedure AbreConexaoBancoDeDados;
      procedure FechaConexaoBancoDeDados;
+     procedure verificaVersaoBDs;
 
      function GetConsulta                            :TFDQuery; overload;
      function GetConsulta(const SQL         :String) :TFDQuery; overload;
@@ -120,6 +121,27 @@ uses
 {$R *.dfm}
 
 { Tdm }
+
+procedure Tdm.verificaVersaoBDs;
+var versaoBDPrincipal, versaoBDSecundario :integer;
+begin
+  qryGenerica.Connection := FDConnection;
+  qryGenerica.Close;
+  qryGenerica.SQL.Text := 'SELECT VERSAO_BANCO_DE_DADOS VERSAO FROM PARAMETROS';
+  qryGenerica.Open;
+
+  versaoBDSecundario := qryGenerica.fieldByName('versao').AsInteger;
+
+  qryGenerica.Connection := FConexaoBancoDeDados;
+  qryGenerica.Close;
+  qryGenerica.SQL.Text := 'SELECT VERSAO_BANCO_DE_DADOS VERSAO FROM PARAMETROS';
+  qryGenerica.Open;
+
+  versaoBDPrincipal := qryGenerica.fieldByName('versao').AsInteger;
+
+  if versaoBDPrincipal <> versaoBDSecundario then
+    raise Exception.Create('BDs com versões incompatíveis');
+end;
 
 function Tdm.verifica_caixa_esta_aberto :Boolean;
 var
@@ -242,7 +264,6 @@ begin
        self.FConexaoBancoDeDados.Connected              := true;
 
        FDConnection.Connected  := true;
-
      except
        on E: Exception do
         raise TExcecaoBancoDeDadosInvalido.Create;

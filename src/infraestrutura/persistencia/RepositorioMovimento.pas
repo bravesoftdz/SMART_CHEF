@@ -2,7 +2,7 @@ unit RepositorioMovimento;
 
 interface
 
-uses DB, Auditoria, Repositorio;
+uses DB, Auditoria, Repositorio, System.StrUtils;
 
 type
   TRepositorioMovimento = class(TRepositorio)
@@ -38,11 +38,6 @@ implementation
 uses SysUtils, Movimento, Funcoes;
 
 { TRepositorioMovimento }
-
-function TRepositorioMovimento.CondicaoSQLGetAll: String;
-begin
-  result := ' WHERE '+FIdentificador+'';
-end;
 
 function TRepositorioMovimento.Get(Dataset: TDataSet): TObject;
 var
@@ -154,7 +149,12 @@ end;
 
 function TRepositorioMovimento.SQLGetAll: String;
 begin
-  result := 'select * from MOVIMENTOS';
+  result := 'select * from MOVIMENTOS'+ IfThen(FIdentificador = '','', CondicaoSQLGetAll);
+end;
+
+function TRepositorioMovimento.CondicaoSQLGetAll: String;
+begin
+  result := ' WHERE '+FIdentificador;
 end;
 
 function TRepositorioMovimento.SQLGetExiste(campo: String): String;

@@ -78,6 +78,7 @@ begin
    RepPisNt        := nil;
    RepCofinsNt     := nil;
 
+
    try
      if Assigned(It.Icms00) then begin
         RepIcms00 := TFabricaRepositorio.GetRepositorio(TIcms00.ClassName);

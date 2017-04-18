@@ -10,7 +10,7 @@ uses
 
 type
   TfrmCaixa = class(TfrmPadrao)
-    edtValor: TCurrencyEdit;
+    edtValorAbertura: TCurrencyEdit;
     Label1: TLabel;
     edtDataCorrente: TEdit;
     Label2: TLabel;
@@ -45,6 +45,14 @@ type
     btnAlterarCouvert: TBitBtn;
     btnAlterarTxServ: TBitBtn;
     btnAlterarEntrega: TBitBtn;
+    edtVlrDinheiro: TCurrencyEdit;
+    Label12: TLabel;
+    edtVlrCartDebito: TCurrencyEdit;
+    Label13: TLabel;
+    edtVlrCheque: TCurrencyEdit;
+    Label14: TLabel;
+    Label15: TLabel;
+    edtVlrCartCredito: TCurrencyEdit;
     procedure btnAbreCaixaClick(Sender: TObject);
     procedure btnFechaCaixaClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -62,7 +70,6 @@ type
     procedure Carrega_dados_caixa;
     function AbreCaixa :Boolean;
     procedure FechaCaixa;
-    function CalculaValorCaixa(Caixa :TCaixa) :Real;
     procedure ConfiguraTela(estadoTela:String);
 
     procedure alterarTaxas;
@@ -112,7 +119,7 @@ begin
     else begin
       Caixa := TCaixa.Create;
       Caixa.data_abertura  := now;
-      Caixa.valor_abertura := edtValor.Value;
+      Caixa.valor_abertura := edtValorAbertura.Value;
 
       repositorio.Salvar( Caixa );
 
@@ -149,7 +156,7 @@ begin
     Caixa               := TCaixa(repositorio.Get(edtCodigo.AsInteger));
 
     Caixa.data_fechamento  := now;
-    Caixa.valor_fechamento := edtValor.Value;
+    Caixa.valor_fechamento := Caixa.TotalEmCaixa;
 
     repositorio.Salvar( Caixa );
 
@@ -165,9 +172,9 @@ procedure TfrmCaixa.btnAbreCaixaClick(Sender: TObject);
 var taxa_entrega :String;
 begin
   try
-    if edtValor.Value <= 0 then begin
+    if edtValorAbertura.Value <= 0 then begin
       avisar('Favor informar o valor com que o caixa será iniciado.');
-      edtValor.SetFocus;
+      edtValorAbertura.SetFocus;
     end
     else begin
 
@@ -176,7 +183,7 @@ begin
 
       if not confirma('ATENÇÃO! As opções de couvert artístico e taxa de serviço não poderão ser alteradas após a abertura do caixa.'+#13#10+
                       'Confirma abertura do caixa com os seguintes valores:'+#13#10
-                      +#13#10+ TStringUtilitario.CaracterAEsquerda(' ','Valor do caixa '+FormatFloat('R$  ,0.00; -,0.00;',edtValor.Value),60)
+                      +#13#10+ TStringUtilitario.CaracterAEsquerda(' ','Valor abertura '+FormatFloat('R$  ,0.00; -,0.00;',edtValorAbertura.Value),60)
                       +#13#10+ TStringUtilitario.CaracterAEsquerda(' ','Couvert artístico '+FormatFloat('R$  ,0.00; -,0.00;',edtCouvert.Value),65)
                       +#13#10+ TStringUtilitario.CaracterAEsquerda(' ','% Taxa de serviço '+FormatFloat('%  ,0.00; -,0.00;',edtPercTxServ.Value), 65)
                       +IfThen(dm.Configuracoes.possui_delivery, #13#10+taxa_entrega, '')) then
@@ -222,7 +229,7 @@ begin
   Empresa              := nil;
   repositorioEmpresa   := nil;
 
-  edtValor.Clear;
+  edtValorAbertura.Clear;
   ConfiguraTela('FECHADO');
 
   try
@@ -232,7 +239,10 @@ begin
     if not assigned(Caixa) then
       exit;
 
-    edtValor.Value            := Caixa.valor_abertura + CalculaValorCaixa(Caixa);
+    if (Caixa.data_fechamento > 0) then
+      edtValorAbertura.Value := Caixa.valor_fechamento
+    else
+      edtValorAbertura.Value := Caixa.valor_abertura;
 
     repositorioEmpresa   := TFabricaRepositorio.GetRepositorio(TEmpresa.ClassName);
     Empresa              := TEmpresa( repositorioEmpresa.Get(1) );
@@ -249,13 +259,18 @@ begin
       Exit;
 
 
+    Caixa.atualizaValores;
     edtCodigo.AsInteger       := Caixa.codigo;
     lblAbertura.Caption       := FormatDateTime('dd/mm/yyyy  -  hh:mm:ss', Caixa.data_abertura);
-    edtValor.Value            := Caixa.valor_abertura + CalculaValorCaixa(Caixa);
+    edtValorAbertura.Value    := Caixa.valor_abertura;
     lblValorAbertura.Caption  := FormatFloat('R$  ,0.00; -,0.00;', Caixa.valor_abertura);
 
-    ConfiguraTela('ABERTO');
+    edtVlrDinheiro.Value      := Caixa.Total_dinheiro - Caixa.Total_sangria_dinheiro + Caixa.Total_reforco_dinheiro;
+    edtVlrCheque.Value        := Caixa.Total_cheque - Caixa.Total_sangria_cheque  + Caixa.Total_reforco_cheque;
+    edtVlrCartDebito.Value    := Caixa.Total_cartaoD;
+    edtVlrCartCredito.Value   := Caixa.Total_cartaoC;
 
+    ConfiguraTela('ABERTO');
   Finally
     FreeAndNil(repositorio);
     FreeAndNil(Caixa);
@@ -275,13 +290,7 @@ begin
   Carrega_dados_caixa;
 
   if not pnlAberto.Visible then
-    edtValor.SetFocus;
-end;
-
-function TfrmCaixa.CalculaValorCaixa(Caixa :TCaixa): Real;
-begin
-  result := 0;
-  result := Caixa.Total_Geral;
+    edtValorAbertura.SetFocus;
 end;
 
 procedure TfrmCaixa.BitBtn1Click(Sender: TObject);
@@ -293,9 +302,9 @@ end;
 procedure TfrmCaixa.ConfiguraTela(estadoTela: String);
 begin
   pnlAberto.Visible      := (estadoTela = 'ABERTO');
-  edtValor.ReadOnly      := (estadoTela = 'ABERTO');
+  edtValorAbertura.ReadOnly      := (estadoTela = 'ABERTO');
   lblStatus.Caption      := estadoTela;
-  edtValor.ReadOnly      := (estadoTela = 'ABERTO');
+  edtValorAbertura.ReadOnly      := (estadoTela = 'ABERTO');
   pnlAberto.Visible      := (estadoTela = 'ABERTO');
   btnFechaCaixa.Enabled  := (estadoTela = 'ABERTO');
   btnAbreCaixa.Enabled   := not (estadoTela = 'ABERTO');
@@ -380,3 +389,5 @@ begin
 end;
 
 end.
+
+

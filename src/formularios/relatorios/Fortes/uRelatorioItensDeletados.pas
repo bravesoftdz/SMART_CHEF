@@ -8,7 +8,7 @@ uses
   frameBuscaUsuario, ZAbstractRODataset, ZAbstractDataset, ZDataset,
   FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
-  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client, RLFilters, RLPDFFilter;
 
 type
   TfrmRelatorioItensDeletados = class(TfrmPadrao)
@@ -71,6 +71,7 @@ type
     qryItensDelDATA: TDateField;
     qryItensDelDESCRICAO: TStringField;
     qryItensDelNOME: TStringField;
+    RLPDFFilter1: TRLPDFFilter;
     procedure FormShow(Sender: TObject);
     procedure BitBtn2Click(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);

@@ -78,7 +78,8 @@ begin
                                               Dataset.FieldByName('tipo_frete').AsInteger,
                                               Dataset.FieldByName('entrada_saida').AsString,
                                               Dataset.FieldByName('finalidade').AsString,
-                                              Dataset.FieldByName('nfe_referenciada').AsString);
+                                              Dataset.FieldByName('nfe_referenciada').AsString,
+                                              Dataset.FieldByName('entrou_estoque').AsString);
 end;
 
 function TRepositorioNotaFiscal.GetIdentificador(Objeto: TObject): Variant;
@@ -138,9 +139,9 @@ begin
         if Assigned(self.FAtualizarTela) then
           self.FAtualizarTela;
 
-        codigo_item := StrToIntDef( Campo_por_campo('ITENS_NOTAS_FISCAIS','CODIGO','CODIGO_NOTA_FISCAL', IntToStr(notaFiscal.CodigoNotaFiscal),
-                                                                              'CODIGO_PRODUTO',IntToStr(TItemNotaFiscal(NotaFiscal.Itens[nX]).Produto.Codigo)), 0);
-        TItemNotaFiscal(NotaFiscal.Itens[nX]).Codigo := codigo_item;
+        {codigo_item := StrToIntDef( Campo_por_campo('ITENS_NOTAS_FISCAIS','CODIGO','CODIGO_NOTA_FISCAL', IntToStr(notaFiscal.CodigoNotaFiscal),
+                                                    'CODIGO_PRODUTO',IntToStr(TItemNotaFiscal(NotaFiscal.Itens[nX]).Produto.Codigo)), 0);
+        TItemNotaFiscal(NotaFiscal.Itens[nX]).Codigo := codigo_item;    }
         TItemNotaFiscal(NotaFiscal.Itens[nX]).CodigoNotaFiscal := notaFiscal.CodigoNotaFiscal;
         RepItens.Salvar(NotaFiscal.Itens[nX]);
      end;
@@ -248,9 +249,9 @@ begin
   inherited SetParametro('codigo_destinatario',    obj.Destinatario.Codigo);
 
   if assigned( obj.FormaPagamento ) then
-    inherited SetParametro('codigo_fpagto',        obj.FormaPagamento.Codigo);
-  //else
-  //  inherited SetParametro('codigo_fpagto',        1); //uma qualquer apenas para passar (impor. xml entrada)
+    inherited SetParametro('codigo_fpagto',        obj.FormaPagamento.Codigo)
+  else
+    inherited SetParametro('codigo_fpagto',        1); //uma qualquer apenas para passar (impor. xml entrada)
 
   inherited SetParametro('data_emissao',           obj.DataEmissao);
   inherited SetParametro('data_saida',             obj.DataSaida);
@@ -262,6 +263,7 @@ begin
   inherited SetParametro('entrada_saida',          obj.Entrada_saida );
   inherited SetParametro('finalidade',             obj.Finalidade );
   inherited SetParametro('nfe_referenciada',       obj.NFe_referenciada );
+  inherited SetParametro('entrou_estoque',         obj.EntrouEstoque );
 end;
 
 function TRepositorioNotaFiscal.SQLGet: String;
@@ -285,9 +287,9 @@ function TRepositorioNotaFiscal.SQLSalvar: String;
 begin
    result := ' update or insert into ' + self.GetNomeDaTabela +
              '        (codigo, numero_nota_fiscal, codigo_natureza, serie, codigo_emitente, codigo_destinatario, codigo_fpagto, data_emissao,         '+
-             '         data_saida, codigo_transportadora, tipo_frete, entrada_saida, finalidade, nfe_referenciada)                                    '+
+             '         data_saida, codigo_transportadora, tipo_frete, entrada_saida, finalidade, nfe_referenciada, entrou_estoque)                                    '+
              ' values (:codigo, :numero_nota_fiscal, :codigo_natureza, :serie, :codigo_emitente, :codigo_destinatario, :codigo_fpagto, :data_emissao, '+
-             '         :data_saida, :codigo_transportadora, :tipo_frete, :entrada_saida, :finalidade, :nfe_referenciada)                              ';
+             '         :data_saida, :codigo_transportadora, :tipo_frete, :entrada_saida, :finalidade, :nfe_referenciada, :entrou_estoque)                              ';
 end;
 
 end.

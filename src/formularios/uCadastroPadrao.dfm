@@ -1,6 +1,7 @@
 inherited frmCadastroPadrao: TfrmCadastroPadrao
   Left = 288
   Top = 207
+  BorderIcons = [biSystemMenu]
   ClientHeight = 450
   ClientWidth = 704
   OldCreateOrder = True

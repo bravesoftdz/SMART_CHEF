@@ -2,15 +2,16 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
   Left = 513
   Top = 321
   Caption = 'Relat'#243'rio de Estoque'
-  ClientHeight = 212
-  ClientWidth = 560
+  ClientHeight = 445
+  ClientWidth = 566
   OnShow = FormShow
-  ExplicitWidth = 566
+  ExplicitWidth = 572
+  ExplicitHeight = 473
   PixelsPerInch = 96
   TextHeight = 13
   object RLReport1: TRLReport [0]
-    Left = 147
-    Top = 161
+    Left = 400
+    Top = 384
     Width = 1123
     Height = 794
     Margins.LeftMargin = 5.000000000000000000
@@ -29,6 +30,7 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
     Font.Style = []
     PageSetup.Orientation = poLandscape
     Visible = False
+    BeforePrint = RLReport1BeforePrint
     object RLBand1: TRLBand
       Left = 20
       Top = 39
@@ -108,6 +110,84 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
         Font.Name = 'Arial'
         Font.Style = []
         ParentFont = False
+      end
+      object RLDraw4: TRLDraw
+        Left = 293
+        Top = 65
+        Width = 15
+        Height = 14
+        Angle = 179.000000000000000000
+        Brush.Color = 5460991
+        Color = clWhite
+        DrawKind = dkTriangle
+        ParentColor = False
+        Transparent = False
+      end
+      object RLLabel7: TRLLabel
+        Left = 315
+        Top = 62
+        Width = 105
+        Height = 17
+        Caption = 'Estoque negativo'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+      end
+      object RLDraw3: TRLDraw
+        Left = 465
+        Top = 62
+        Width = 15
+        Height = 14
+        Angle = 179.000000000000000000
+        Brush.Color = 60652
+        Color = clWhite
+        DrawKind = dkTriangle
+        ParentColor = False
+        Transparent = False
+      end
+      object RLLabel12: TRLLabel
+        Left = 487
+        Top = 59
+        Width = 161
+        Height = 17
+        Caption = 'Estoque abaixo do m'#237'nimo'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+      end
+      object RLDraw5: TRLDraw
+        Left = 674
+        Top = 62
+        Width = 15
+        Height = 14
+        Angle = 179.000000000000000000
+        Brush.Color = 16442558
+        Color = clWhite
+        DrawKind = dkTriangle
+        ParentColor = False
+        Transparent = False
+      end
+      object RLLabel13: TRLLabel
+        Left = 695
+        Top = 59
+        Width = 157
+        Height = 17
+        Caption = 'Acima do estoque m'#237'nimo'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Segoe UI'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
       end
     end
     object RLBand3: TRLBand
@@ -220,112 +300,186 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
         Transparent = False
       end
     end
-    object RLBand2: TRLBand
+    object RLGroup1: TRLGroup
       Left = 20
       Top = 145
       Width = 1083
-      Height = 24
-      Borders.Sides = sdCustom
-      Borders.DrawLeft = False
-      Borders.DrawTop = False
-      Borders.DrawRight = False
-      Borders.DrawBottom = False
-      Color = clWhite
-      ParentColor = False
-      Transparent = False
-      BeforePrint = RLBand2BeforePrint
-      object RLDBText2: TRLDBText
-        Left = 4
-        Top = 5
-        Width = 33
-        Height = 16
-        DataField = 'TIPO'
-        DataSource = dsEstoque
-        Text = ''
-        Transparent = False
-      end
-      object RLDBText1: TRLDBText
-        Left = 90
-        Top = 5
-        Width = 117
-        Height = 16
-        DataField = 'DESCRICAO_ITEM'
-        DataSource = dsEstoque
-        Text = ''
-        Transparent = False
-      end
-      object RLDBText3: TRLDBText
-        Left = 586
-        Top = 5
-        Width = 118
-        Height = 16
-        Alignment = taCenter
-        DataField = 'UNIDADE_MEDIDA'
-        DataSource = dsEstoque
-        Text = ''
-        Transparent = False
-      end
-      object RLDBText4: TRLDBText
-        Left = 777
-        Top = 5
-        Width = 87
-        Height = 16
-        Alignment = taRightJustify
-        DataField = 'QUANTIDADE'
-        DataSource = dsEstoque
-        Text = ''
-        Transparent = False
-        BeforePrint = RLDBText4BeforePrint
-      end
-      object RLDBText5: TRLDBText
-        Left = 870
-        Top = 5
-        Width = 101
-        Height = 16
-        Alignment = taRightJustify
-        DataField = 'PRECO_CUSTO'
-        DataSource = dsEstoque
-        Text = ''
-        Transparent = False
-      end
-      object RLDBText6: TRLDBText
-        Left = 1030
-        Top = 5
-        Width = 44
-        Height = 16
-        Alignment = taRightJustify
-        DataField = 'TOTAL'
-        DataSource = dsEstoque
-        Text = ''
-        Transparent = False
-      end
-      object RLDBText7: TRLDBText
-        Left = 659
-        Top = 5
-        Width = 117
-        Height = 16
-        Alignment = taRightJustify
-        DataField = 'QUANTIDADE_MIN'
-        DataSource = dsEstoque
-        Text = ''
-        Transparent = False
-      end
-      object RLDraw2: TRLDraw
-        Left = 869
-        Top = 6
-        Width = 15
-        Height = 14
-        Angle = 179.000000000000000000
-        Brush.Color = 5460991
+      Height = 90
+      DataFields = 'CODFORN'
+      object RLBand2: TRLBand
+        Left = 0
+        Top = 24
+        Width = 1083
+        Height = 24
+        Borders.Sides = sdCustom
+        Borders.DrawLeft = False
+        Borders.DrawTop = False
+        Borders.DrawRight = False
+        Borders.DrawBottom = False
         Color = clWhite
-        DrawKind = dkTriangle
         ParentColor = False
         Transparent = False
+        BeforePrint = RLBand2BeforePrint
+        object RLDBText2: TRLDBText
+          Left = 4
+          Top = 5
+          Width = 33
+          Height = 16
+          DataField = 'TIPO'
+          DataSource = dsEstoque
+          Text = ''
+          Transparent = False
+        end
+        object RLDBText1: TRLDBText
+          Left = 90
+          Top = 5
+          Width = 117
+          Height = 16
+          DataField = 'DESCRICAO_ITEM'
+          DataSource = dsEstoque
+          Text = ''
+          Transparent = False
+        end
+        object RLDBText3: TRLDBText
+          Left = 586
+          Top = 5
+          Width = 118
+          Height = 16
+          Alignment = taCenter
+          DataField = 'UNIDADE_MEDIDA'
+          DataSource = dsEstoque
+          Text = ''
+          Transparent = False
+        end
+        object RLDBText4: TRLDBText
+          Left = 777
+          Top = 5
+          Width = 87
+          Height = 16
+          Alignment = taRightJustify
+          DataField = 'QUANTIDADE'
+          DataSource = dsEstoque
+          Text = ''
+          Transparent = False
+          BeforePrint = RLDBText4BeforePrint
+        end
+        object RLDBText5: TRLDBText
+          Left = 870
+          Top = 5
+          Width = 101
+          Height = 16
+          Alignment = taRightJustify
+          DataField = 'PRECO_CUSTO'
+          DataSource = dsEstoque
+          Text = ''
+          Transparent = False
+        end
+        object RLDBText6: TRLDBText
+          Left = 1030
+          Top = 5
+          Width = 44
+          Height = 16
+          Alignment = taRightJustify
+          DataField = 'TOTAL'
+          DataSource = dsEstoque
+          Text = ''
+          Transparent = False
+        end
+        object RLDBText7: TRLDBText
+          Left = 659
+          Top = 5
+          Width = 117
+          Height = 16
+          Alignment = taRightJustify
+          DataField = 'QUANTIDADE_MIN'
+          DataSource = dsEstoque
+          Text = ''
+          Transparent = False
+        end
+        object RLDraw2: TRLDraw
+          Left = 869
+          Top = 6
+          Width = 15
+          Height = 14
+          Angle = 179.000000000000000000
+          Brush.Color = 5460991
+          Color = clWhite
+          DrawKind = dkTriangle
+          ParentColor = False
+          Transparent = False
+        end
+      end
+      object RLBand4: TRLBand
+        Left = 0
+        Top = 48
+        Width = 1083
+        Height = 24
+        BandType = btSummary
+        Borders.Sides = sdCustom
+        Borders.DrawLeft = False
+        Borders.DrawTop = True
+        Borders.DrawRight = False
+        Borders.DrawBottom = False
+        object RLDBResult1: TRLDBResult
+          Left = 986
+          Top = 4
+          Width = 88
+          Height = 16
+          Alignment = taRightJustify
+          DataField = 'TOTAL'
+          DataSource = dsEstoque
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 2763306
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Info = riSum
+          ParentFont = False
+          Text = ''
+        end
+      end
+      object RLBand5: TRLBand
+        Left = 0
+        Top = 0
+        Width = 1083
+        Height = 24
+        AlignToBottom = True
+        BandType = btColumnHeader
+        Borders.Sides = sdCustom
+        Borders.DrawLeft = False
+        Borders.DrawTop = False
+        Borders.DrawRight = False
+        Borders.DrawBottom = True
+        Borders.Style = bsBDiagonal
+        object rldbGrupo: TRLDBText
+          Left = 98
+          Top = 4
+          Width = 95
+          Height = 16
+          DataField = 'FORNECEDOR'
+          DataSource = dsEstoque
+          Text = ''
+          Transparent = False
+        end
+        object rlGrupo: TRLLabel
+          Left = 8
+          Top = 3
+          Width = 86
+          Height = 17
+          Caption = 'Fornecedor >'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Transparent = False
+        end
       end
     end
-    object RLBand4: TRLBand
+    object RLBand6: TRLBand
       Left = 20
-      Top = 169
+      Top = 235
       Width = 1083
       Height = 24
       AlignToBottom = True
@@ -335,66 +489,32 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
       Borders.DrawTop = True
       Borders.DrawRight = False
       Borders.DrawBottom = False
-      object RLDBResult1: TRLDBResult
-        Left = 983
+      object RLDBResult3: TRLDBResult
+        Left = 986
         Top = 4
-        Width = 83
+        Width = 88
         Height = 16
         Alignment = taRightJustify
         DataField = 'TOTAL'
         DataSource = dsEstoque
-        Info = riSum
-        Text = ''
-      end
-      object RLLabel7: TRLLabel
-        Left = 889
-        Top = 3
-        Width = 90
-        Height = 17
-        Caption = 'TOTAL GERAL'
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
+        Font.Color = 2763306
         Font.Height = -13
-        Font.Name = 'Segoe UI'
+        Font.Name = 'Arial'
         Font.Style = [fsBold]
+        Info = riSum
         ParentFont = False
-        Transparent = False
-      end
-      object RLDraw3: TRLDraw
-        Left = 13
-        Top = 6
-        Width = 15
-        Height = 14
-        Angle = 179.000000000000000000
-        Brush.Color = 5460991
-        Color = clWhite
-        DrawKind = dkTriangle
-        ParentColor = False
-        Transparent = False
-      end
-      object RLLabel12: TRLLabel
-        Left = 35
-        Top = 3
-        Width = 161
-        Height = 17
-        Caption = 'Estoque abaixo do m'#237'nimo'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Height = -13
-        Font.Name = 'Segoe UI'
-        Font.Style = []
-        ParentFont = False
-        Transparent = False
+        Text = ''
       end
     end
   end
   inherited pnlPropaganda: TPanel
-    Top = 177
-    Width = 560
-    ExplicitTop = 177
-    ExplicitWidth = 560
+    Top = 410
+    Width = 566
+    ExplicitTop = 410
+    ExplicitWidth = 566
     inherited Shape8: TShape
-      Width = 558
+      Width = 564
       ExplicitWidth = 558
     end
   end
@@ -416,17 +536,18 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
     Left = 0
     Top = 0
     Width = 129
-    Height = 177
+    Height = 410
     Align = alLeft
     TabOrder = 2
     object Shape12: TShape
       Left = 1
       Top = 1
       Width = 127
-      Height = 175
+      Height = 408
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119
+      ExplicitHeight = 175
     end
     object BitBtn1: TBitBtn
       Left = 11
@@ -588,7 +709,7 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
     Top = 66
     Width = 401
     Height = 34
-    TabOrder = 4
+    TabOrder = 3
     object chkAbaixo: TCheckBox
       Left = 8
       Top = 12
@@ -601,12 +722,12 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
     end
   end
   object GroupBox2: TGroupBox
-    Left = 151
+    Left = 144
     Top = 106
     Width = 401
     Height = 56
     Caption = ' Alerta quantidade do estoque atual '
-    TabOrder = 5
+    TabOrder = 4
     object Label1: TLabel
       Left = 184
       Top = 29
@@ -618,14 +739,143 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
       Left = 78
       Top = 24
       Width = 99
-      Height = 21
-      AutoSize = False
+      Height = 25
       DisplayFormat = '% ,0.00;-,0.00'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Segoe UI'
+      Font.Style = []
       MaxValue = 100.000000000000000000
       MinValue = 5.000000000000000000
+      ParentFont = False
       TabOrder = 0
       Value = 5.000000000000000000
       OnEnter = edtPercentAcimaEnter
+    end
+  end
+  object rgpAgrupamento: TRadioGroup
+    Left = 144
+    Top = 168
+    Width = 401
+    Height = 57
+    Caption = ' Filtro de agrupamento '
+    Columns = 3
+    ItemIndex = 0
+    Items.Strings = (
+      'N'#227'o agrupar'
+      'Fornecedor'
+      'Grupo')
+    TabOrder = 6
+  end
+  object GroupBox3: TGroupBox
+    Left = 144
+    Top = 231
+    Width = 401
+    Height = 66
+    Caption = ' Filtro Fornecedor '
+    TabOrder = 7
+    inline buscaFornecedor1: TBuscaFornecedor
+      Left = 11
+      Top = 9
+      Width = 394
+      Height = 56
+      TabOrder = 0
+      ExplicitLeft = 11
+      ExplicitTop = 9
+      ExplicitWidth = 394
+      ExplicitHeight = 56
+      inherited StaticText2: TStaticText
+        Left = 84
+        Visible = False
+        ExplicitLeft = 84
+      end
+      inherited StaticText1: TStaticText
+        Visible = False
+      end
+      inherited edtCodigo: TCurrencyEdit
+        Width = 50
+        Height = 25
+        AutoSize = True
+        Font.Height = -13
+        ExplicitWidth = 50
+        ExplicitHeight = 25
+      end
+      inherited btnBusca: TBitBtn
+        Left = 54
+        Top = 19
+        Width = 28
+        Height = 28
+        ExplicitLeft = 54
+        ExplicitTop = 19
+        ExplicitWidth = 28
+        ExplicitHeight = 28
+      end
+      inherited edtNome: TEdit
+        Left = 85
+        Width = 290
+        Height = 25
+        AutoSize = True
+        Font.Height = -13
+        ExplicitLeft = 85
+        ExplicitWidth = 290
+        ExplicitHeight = 25
+      end
+    end
+  end
+  object GroupBox4: TGroupBox
+    Left = 144
+    Top = 308
+    Width = 401
+    Height = 69
+    Caption = ' Filtro Grupo '
+    TabOrder = 8
+    inline buscaGrupo1: TbuscaGrupo
+      Left = 11
+      Top = 11
+      Width = 382
+      Height = 56
+      TabOrder = 0
+      ExplicitLeft = 11
+      ExplicitTop = 11
+      ExplicitWidth = 382
+      inherited StaticText1: TStaticText
+        Visible = False
+      end
+      inherited StaticText2: TStaticText
+        Left = 86
+        Visible = False
+        ExplicitLeft = 86
+      end
+      inherited edtCodigo: TCurrencyEdit
+        Width = 50
+        Height = 25
+        AutoSize = True
+        Font.Height = -13
+        Font.Name = 'Segoe UI'
+        ParentFont = False
+        ExplicitWidth = 50
+        ExplicitHeight = 25
+      end
+      inherited btnBusca: TBitBtn
+        Left = 54
+        Width = 28
+        Height = 28
+        ExplicitLeft = 54
+        ExplicitWidth = 28
+        ExplicitHeight = 28
+      end
+      inherited edtGrupo: TEdit
+        Left = 85
+        Width = 290
+        Height = 25
+        Font.Height = -13
+        Font.Name = 'Segoe UI'
+        ParentFont = False
+        ExplicitLeft = 85
+        ExplicitWidth = 290
+        ExplicitHeight = 25
+      end
     end
   end
   object dsEstoque: TDataSource
@@ -642,24 +892,60 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
     Top = 112
   end
   object qryEstoque: TFDQuery
+    OnCalcFields = qryEstoqueCalcFields
     SQL.Strings = (
       
-        'select e.codigo, iif(e.codigo_produto is null, e.codigo_dispensa' +
-        ', e.codigo_produto) codigo_item, e.unidade_medida, e.quantidade,' +
-        ' e.quantidade_min,'
+        'select iif(fr.codigo is null, 0, fr.codigo) codforn, iif(pf.codi' +
+        'go is null, '#39'SEM REPRESENTANTE ASSOCIADO'#39', fr.RAZAO) Fornecedor,' +
+        '      '
       
-        '       iif(pro.descricao is null, dis.descricao_item, pro.descri' +
-        'cao) descricao_item, iif(pro.descricao is null, '#39'DISPENSA'#39', '#39'PRO' +
-        'DUTO'#39') tipo,'
+        '       e.codigo, iif(e.codigo_produto is null, e.codigo_dispensa' +
+        ', e.codigo_produto) codigo_item, e.unidade_medida, e.quantidade,' +
+        ' '
+      
+        '       e.quantidade_min, iif(pro.descricao is null, dis.descrica' +
+        'o_item, pro.descricao) descricao_item, '
+      
+        '       iif(pro.descricao is null, '#39'DISPENSA'#39', '#39'PRODUTO'#39') tipo,  ' +
+        '        '
       
         '       iif(pro.descricao is null, dis.preco_custo, pro.preco_cus' +
-        'to) preco_custo'
-      ' from estoque e'
-      '  left join produtos pro  on pro.codigo = e.codigo_produto'
-      '  left join dispensa dis  on dis.codigo = e.codigo_dispensa'
-      'where not(pro.descricao is null)')
+        'to) preco_custo, pro.codigo_grupo, gr.descricao grupo'
+      
+        ' from estoque e                                                 ' +
+        '                                                                ' +
+        '                      '
+      
+        'left join produtos pro  on pro.codigo = e.codigo_produto        ' +
+        '                                                                ' +
+        '                    '
+      
+        'left join dispensa dis  on dis.codigo = e.codigo_dispensa       ' +
+        '                                                                ' +
+        '                    '
+      
+        'left join produto_fornecedor pf on pf.codigo_produto = e.codigo_' +
+        'produto                                                         ' +
+        '                    '
+      'left join pessoas  fr  on fr.codigo = pf.codigo_fornecedor'
+      'left join grupos   gr on gr.codigo = pro.codigo_grupo')
     Left = 344
     Top = 112
+    object qryEstoqueCODFORN: TIntegerField
+      AutoGenerateValue = arDefault
+      FieldName = 'CODFORN'
+      Origin = 'CODFORN'
+      ProviderFlags = []
+      ReadOnly = True
+    end
+    object qryEstoqueFORNECEDOR: TStringField
+      AutoGenerateValue = arDefault
+      FieldName = 'FORNECEDOR'
+      Origin = 'FORNECEDOR'
+      ProviderFlags = []
+      ReadOnly = True
+      Size = 60
+    end
     object qryEstoqueCODIGO: TIntegerField
       FieldName = 'CODIGO'
       Origin = 'CODIGO'
@@ -678,12 +964,6 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
       Origin = 'UNIDADE_MEDIDA'
       FixedChar = True
       Size = 3
-    end
-    object qryEstoqueQUANTIDADE: TBCDField
-      FieldName = 'QUANTIDADE'
-      Origin = 'QUANTIDADE'
-      Precision = 18
-      Size = 2
     end
     object qryEstoqueQUANTIDADE_MIN: TBCDField
       FieldName = 'QUANTIDADE_MIN'
@@ -716,6 +996,21 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
       ReadOnly = True
       DisplayFormat = ',0.00; ,0.00'
     end
+    object qryEstoqueCODIGO_GRUPO: TIntegerField
+      AutoGenerateValue = arDefault
+      FieldName = 'CODIGO_GRUPO'
+      Origin = 'CODIGO_GRUPO'
+      ProviderFlags = []
+      ReadOnly = True
+    end
+    object qryEstoqueGRUPO: TStringField
+      AutoGenerateValue = arDefault
+      FieldName = 'GRUPO'
+      Origin = 'DESCRICAO'
+      ProviderFlags = []
+      ReadOnly = True
+      Size = 60
+    end
     object qryEstoquePER_ACIMA: TFloatField
       FieldKind = fkCalculated
       FieldName = 'PER_ACIMA'
@@ -726,6 +1021,11 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
       FieldName = 'TOTAL'
       DisplayFormat = ',0.00; ,0.00'
       Calculated = True
+    end
+    object qryEstoqueQUANTIDADE: TBCDField
+      FieldName = 'QUANTIDADE'
+      Origin = 'QUANTIDADE'
+      Precision = 18
     end
   end
 end

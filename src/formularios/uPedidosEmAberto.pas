@@ -46,7 +46,7 @@ type
   end;
 
 var
-  frmPedidosEmAberto: TfrmPedidosEmAberto;
+  frmPedidos: TfrmPedidosEmAberto;
 
 implementation
 

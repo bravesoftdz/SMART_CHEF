@@ -18,6 +18,8 @@ type
     Label1: TLabel;
     mmoDescricao: TMemo;
     Label2: TLabel;
+    Label3: TLabel;
+    cmbTipoMoeda: TComboBox;
     procedure BitBtn1Click(Sender: TObject);
     procedure BitBtn2Click(Sender: TObject);
   private
@@ -62,6 +64,7 @@ begin
    sangriaReforco.tipo           := IfThen(cmbTipo.ItemIndex = 1, 'S', 'R');
    sangriaReforco.valor          := edtValor.Value;
    sangriaReforco.descricao      := mmoDescricao.Text;
+   sangriaReforco.tipo_moeda     := cmbTipoMoeda.ItemIndex;
    repositorio.Salvar(sangriaReforco);
 
    self.limparCampos;
@@ -91,6 +94,11 @@ begin
   begin
     avisar('Favor, selecione o tipo do movimento',2);
     cmbTipo.SetFocus;
+  end
+  else if cmbTipoMoeda.ItemIndex = 0 then
+  begin
+    avisar('Favor, selecione o tipo da moeda',2);
+    cmbTipoMoeda.SetFocus;
   end
   else if edtValor.Value <= 0 then
   begin

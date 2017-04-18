@@ -87,6 +87,10 @@ type
     EntradaNFExml1: TMenuItem;
     CFOPscorrespondentes1: TMenuItem;
     SangriaeReforo1: TMenuItem;
+    ConfirmaEntradaEstoque1: TMenuItem;
+    NotasFiscaisEntrada1: TMenuItem;
+    NFe1: TMenuItem;
+    ransportadora1: TMenuItem;
     procedure Perfisdeacesso1Click(Sender: TObject);
     procedure Usurios1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -151,6 +155,10 @@ type
     procedure EntradaNFExml1Click(Sender: TObject);
     procedure CFOPscorrespondentes1Click(Sender: TObject);
     procedure SangriaeReforo1Click(Sender: TObject);
+    procedure ConfirmaEntradaEstoque1Click(Sender: TObject);
+    procedure NotasFiscaisEntrada1Click(Sender: TObject);
+    procedure NFe1Click(Sender: TObject);
+    procedure ransportadora1Click(Sender: TObject);
 
   private
     procedure SalvaPedido;
@@ -183,15 +191,16 @@ var
 implementation
 
 uses uCadastroPerfilAcesso, PermissoesAcesso, uCadastroUsuario, uCadastroGrupo, uCadastroMateriaPrima,
-     uCadastroProduto, uPedido, Math, uCadastroEmpresa, uCaixa, Repositorio, FabricaRepositorio,
+     uCadastroProduto, uPedido, Math, uCadastroEmpresa, uCaixa, Repositorio, FabricaRepositorio, uMonitorControleNFe,
      EspecificacaoPedidoAbertoDaComanda, Pedido, Item, AdicionalItem, Empresa, uCadastroDepartamento,
      RepositorioPedido, uAvisoPedidoPendente, EspecificacaoPedidosComItemNaoImpresso, uNFCesContingencia,
      ParametrosNFCe, uModulo, StrUtils, MateriaPrima, EspecificacaoCaixaPorData, Caixa, uCadastroComanda,
-     Usuario, Departamento, DateTimeUtilitario, uRelatorioVendas, uSuporteTecnico, uPedidosEmAberto, Comanda,
+     Usuario, Departamento, DateTimeUtilitario, uRelatorioVendas, uSuporteTecnico, uPedidos, Comanda,
      uCadastroDispensa, uEntradaSaidaMercadoria, Produto, uRelatorioAtendimentos, uRelatorioPedidos, uRelatorioEstoque,
      uRelatorioEntradaSaida, uRelatorioCaixa48Colunas, uRelatorioItensDeletados, uConfiguraNFCe, uNFCes, uCadastroFornecedor,
      uConfiguracoesSistema, uCadastroCliente, uRelatorioProdutos, funcoes, uRelatorioCuponsFiscais, uImpressaoPedido,
-     uEntradaNota, uCadastroCfopCorrespondente, uLancaSangriaReforco;
+     uEntradaNota, uCadastroCfopCorrespondente, uLancaSangriaReforco, uConfirmaEntrada, uSupervisor, uRelatorioNotasFiscaisEntrada,
+     uCadastroTransportadora;
 
 {$R *.dfm}
 
@@ -810,6 +819,11 @@ begin
   AbreForm(TfrmConfiguraNFCe, paConfiguraECF);
 end;
 
+procedure TfrmInicial.ConfirmaEntradaEstoque1Click(Sender: TObject);
+begin
+  AbreForm(TfrmConfirmaEntrada, paConfirmaEntradaEstoque);
+end;
+
 procedure TfrmInicial.ServidorClientRead(Sender: TObject; Socket: TCustomWinSocket);
 var
    Texto  :String;
@@ -871,6 +885,16 @@ begin
   RxFolderMonitor2.Active := false;
   RenameFile(RxFolderMonitor2.FolderName+ '\' +nome_arquivo, RxFolderMonitor2.FolderName+ '\' +novo_nome);
   RxFolderMonitor2.Active := true;
+end;
+
+procedure TfrmInicial.NFe1Click(Sender: TObject);
+begin
+  AbreForm(TfrmMonitorControleNFe, paMonitorNFe);
+end;
+
+procedure TfrmInicial.NotasFiscaisEntrada1Click(Sender: TObject);
+begin
+  AbreForm(TfrmRelatorioNotasFiscaisEntrada, paRelatorioNotasFiscaisEntrada);
 end;
 
 procedure TfrmInicial.SalvaBoliche;
@@ -1149,7 +1173,7 @@ end;
 
 procedure TfrmInicial.Visualizarpedidosemaberto1Click(Sender: TObject);
 begin
-  AbreForm(TfrmPedidosEmAberto, paTelaPedidosEmAberto);
+  AbreForm(TfrmPedidos, paTelaPedidosEmAberto);
 end;
 
 procedure TfrmInicial.Comandas1Click(Sender: TObject);
@@ -1212,8 +1236,28 @@ begin
 end;
 
 procedure TfrmInicial.SangriaeReforo1Click(Sender: TObject);
+var usuario :TUsuario;
 begin
-  AbreForm(TfrmLancaSangriaReforco, paLancaSangriaReforco);
+  usuario := dm.UsuarioLogado;
+
+  try
+    frmSupervisor := TfrmSupervisor.Create(self);
+
+    frmSupervisor.Label1.Caption := 'Login';
+    frmSupervisor.Label4.Caption := 'Para acessar a tela de Sangria e Reforço';
+    frmSupervisor.Label5.Caption := 'informe seu login e senha:';
+
+    if frmSupervisor.ShowModal = mrOk then begin
+      dm.UsuarioLogado := frmSupervisor.usu;
+
+      AbreForm(TfrmLancaSangriaReforco, paLancaSangriaReforco);
+    end;
+
+  finally
+    dm.UsuarioLogado := usuario;
+    frmSupervisor.Release;
+    frmSupervisor := nil;
+  end;
 end;
 
 procedure TfrmInicial.ServidorClientConnect(Sender: TObject;
@@ -1399,6 +1443,11 @@ end;
 procedure TfrmInicial.Produtos1Click(Sender: TObject);
 begin
    AbreForm(TfrmRelatorioProdutos, paRelatorioProdutos);
+end;
+
+procedure TfrmInicial.ransportadora1Click(Sender: TObject);
+begin
+   AbreForm(TfrmCadastroTransportadora, paCadastroTransportadora);
 end;
 
 procedure TfrmInicial.CuponsFiscais1Click(Sender: TObject);

@@ -67,10 +67,10 @@ object frmSupervisor: TfrmSupervisor
       Height = 28
       Align = alBottom
       BevelOuter = bvNone
-      Caption = 'Favor, informe seu Login e senha...'
+      Caption = 'Favor, informe seu nome de usu'#225'rio e senha...'
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET
-      Font.Color = 1917954
+      Font.Color = -1
       Font.Height = -12
       Font.Name = 'Segoe UI'
       Font.Style = []
@@ -92,16 +92,16 @@ object frmSupervisor: TfrmSupervisor
       Top = -7
       Width = 445
       Height = 125
-      Brush.Color = 13153722
+      Brush.Color = 15589587
       Pen.Style = psClear
     end
     object Label1: TLabel
-      Left = 72
+      Left = 90
       Top = 28
-      Width = 69
+      Width = 51
       Height = 17
       Alignment = taRightJustify
-      Caption = 'Supervisor:'
+      Caption = 'Usu'#225'rio:'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = 394758
       Font.Height = -13

@@ -2,27 +2,16 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
   Left = 515
   Top = 99
   Caption = 'Relat'#243'rio de Pedidos'
-  ClientHeight = 274
-  ClientWidth = 580
+  ClientHeight = 315
+  ClientWidth = 581
   OnShow = FormShow
-  ExplicitWidth = 586
-  ExplicitHeight = 302
+  ExplicitWidth = 587
+  ExplicitHeight = 343
   PixelsPerInch = 96
   TextHeight = 13
-  inherited pnlPropaganda: TPanel
-    Top = 239
-    Width = 580
-    TabOrder = 4
-    ExplicitTop = 239
-    ExplicitWidth = 580
-    inherited Shape8: TShape
-      Width = 578
-      ExplicitWidth = 578
-    end
-  end
-  object RLReport1: TRLReport
-    Left = 147
-    Top = 208
+  object RLReport1: TRLReport [0]
+    Left = 184
+    Top = 240
     Width = 794
     Height = 1123
     Borders.Sides = sdCustom
@@ -435,21 +424,6 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
           Transparent = False
           BeforePrint = RLDBText16BeforePrint
         end
-        object RLDBText17: TRLDBText
-          Left = 137
-          Top = 22
-          Width = 76
-          Height = 15
-          DataField = 'AGRUPADAS'
-          DataSource = dsPedidos
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -12
-          Font.Name = 'Arial'
-          Font.Style = []
-          ParentFont = False
-          Text = ''
-        end
       end
       object RLGroup2: TRLGroup
         Left = 0
@@ -848,6 +822,75 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
         Font.Style = []
         ParentFont = False
       end
+      object RLLabel7: TRLLabel
+        Left = 19
+        Top = 65
+        Width = 282
+        Height = 16
+        Caption = 'Dinheiro     Crt Cr'#233'dito   Crt D'#233'bito   Cheque'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = 3552822
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object totDinheiro: TRLLabel
+        Left = 56
+        Top = 87
+        Width = 29
+        Height = 16
+        Alignment = taRightJustify
+        Caption = '0.00'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object totCredito: TRLLabel
+        Left = 128
+        Top = 87
+        Width = 29
+        Height = 16
+        Alignment = taRightJustify
+        Caption = '0.00'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object totDebito: TRLLabel
+        Left = 200
+        Top = 87
+        Width = 29
+        Height = 16
+        Alignment = taRightJustify
+        Caption = '0.00'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object totCheque: TRLLabel
+        Left = 272
+        Top = 87
+        Width = 29
+        Height = 16
+        Alignment = taRightJustify
+        Caption = '0.00'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
     end
     object RLBand6: TRLBand
       Left = 39
@@ -907,20 +950,71 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
         ParentFont = False
         Transparent = False
       end
+      object RLLabel16: TRLLabel
+        Left = 18
+        Top = 5
+        Width = 71
+        Height = 16
+        Caption = 'N'#186' PEDIDO'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel21: TRLLabel
+        Left = 136
+        Top = 5
+        Width = 70
+        Height = 16
+        Caption = 'COMANDA'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object RLLabel22: TRLLabel
+        Left = 280
+        Top = 5
+        Width = 41
+        Height = 16
+        Caption = 'MESA'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+    end
+  end
+  inherited pnlPropaganda: TPanel
+    Top = 280
+    Width = 581
+    TabOrder = 4
+    ExplicitTop = 279
+    ExplicitWidth = 586
+    inherited Shape8: TShape
+      Width = 579
+      ExplicitWidth = 578
     end
   end
   object pnlBotoes: TPanel
     Left = 0
     Top = 0
     Width = 129
-    Height = 239
+    Height = 280
     Align = alLeft
     TabOrder = 6
+    ExplicitHeight = 279
     object Shape12: TShape
       Left = 1
       Top = 1
       Width = 127
-      Height = 237
+      Height = 278
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119
@@ -1083,9 +1177,9 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
   end
   object rgpSituacao: TRadioGroup
     Left = 425
-    Top = 16
+    Top = 120
     Width = 144
-    Height = 105
+    Height = 70
     Caption = ' Situa'#231#227'o '
     ItemIndex = 0
     Items.Strings = (
@@ -1128,9 +1222,9 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
     end
   end
   object GroupBox1: TGroupBox
-    Left = 146
+    Left = 142
     Top = 15
-    Width = 273
+    Width = 275
     Height = 105
     Caption = ' Per'#237'odo '
     TabOrder = 0
@@ -1221,9 +1315,9 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
   end
   object grpLeiaute: TRadioGroup
     Left = 425
-    Top = 126
+    Top = 195
     Width = 144
-    Height = 107
+    Height = 65
     Caption = ' Leiaute '
     ItemIndex = 0
     Items.Strings = (
@@ -1233,9 +1327,9 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
   end
   object GroupBox2: TGroupBox
     Left = 142
-    Top = 192
+    Top = 201
     Width = 275
-    Height = 41
+    Height = 59
     TabOrder = 7
     object chkAgrupadas: TCheckBox
       Left = 16
@@ -1245,6 +1339,19 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
       Caption = 'Somente pedidos com comandas agrupadas'
       TabOrder = 0
     end
+  end
+  object rgpC: TRadioGroup
+    Left = 425
+    Top = 15
+    Width = 144
+    Height = 105
+    Caption = ' Situa'#231#227'o '
+    ItemIndex = 0
+    Items.Strings = (
+      'Todos'
+      'Com CPF'
+      'Sem CPF')
+    TabOrder = 8
   end
   object dsPedidos: TDataSource
     DataSet = qryPedidos
@@ -1295,10 +1402,6 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
       FieldName = 'CODPED'
       Origin = 'CODPED'
     end
-    object qryPedidosCODCOMANDA: TIntegerField
-      FieldName = 'CODCOMANDA'
-      Origin = 'CODCOMANDA'
-    end
     object qryPedidosMESA: TIntegerField
       FieldName = 'MESA'
       Origin = 'MESA'
@@ -1309,6 +1412,10 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
       DisplayFormat = ',0.00; ,0.00'
       Precision = 18
       Size = 2
+    end
+    object qryPedidosCODCOMANDA: TStringField
+      FieldName = 'CODCOMANDA'
+      Size = 7
     end
     object qryPedidosTAXA_SERVICO: TBCDField
       FieldName = 'TAXA_SERVICO'
@@ -1322,10 +1429,6 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
       Origin = 'VALOR_TOTAL'
       DisplayFormat = ',0.00; ,0.00'
       Precision = 18
-    end
-    object qryPedidosTOT_ITEM: TFMTBCDField
-      FieldName = 'TOT_ITEM'
-      Size = 0
     end
     object qryPedidosDESCRICAO: TStringField
       FieldName = 'DESCRICAO'
@@ -1344,6 +1447,7 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
     object qryPedidosDESCONTO: TBCDField
       FieldName = 'DESCONTO'
       Origin = 'DESCONTO'
+      DisplayFormat = ' ,0.00;-,0.00'
       Precision = 18
       Size = 2
     end
@@ -1372,6 +1476,7 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
     object qryPedidosQTD_ADICIONAL: TSmallintField
       FieldName = 'QTD_ADICIONAL'
       Origin = 'QTD_ADICIONAL'
+      DisplayFormat = ' ,0.00;-,0.00'
     end
     object qryPedidosAGRUPADAS: TStringField
       FieldName = 'AGRUPADAS'
@@ -1380,7 +1485,35 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
     end
     object qryPedidosTOT_ADICIONAL: TFMTBCDField
       FieldName = 'TOT_ADICIONAL'
+      DisplayFormat = ' ,0.00;-,0.00'
       Size = 0
+    end
+    object qryPedidosTOT_ITEM: TFMTBCDField
+      FieldName = 'TOT_ITEM'
+      DisplayFormat = ' ,0.00;-,0.00'
+    end
+  end
+  object qryMovimentos: TFDQuery
+    SQL.Strings = (
+      'select sum(mov.valor_pago) valor_pago, mov.tipo_moeda           '
+      'from movimentos mov                                             '
+      'left join pedidos          ped on ped.codigo = mov.codigo_pedido'
+      'group by mov.tipo_moeda'
+      'order by mov.tipo_moeda')
+    Left = 144
+    Top = 136
+    object qryMovimentosVALOR_PAGO: TBCDField
+      AutoGenerateValue = arDefault
+      FieldName = 'VALOR_PAGO'
+      Origin = 'VALOR_PAGO'
+      ProviderFlags = []
+      ReadOnly = True
+      Precision = 18
+      Size = 2
+    end
+    object qryMovimentosTIPO_MOEDA: TIntegerField
+      FieldName = 'TIPO_MOEDA'
+      Origin = 'TIPO_MOEDA'
     end
   end
 end

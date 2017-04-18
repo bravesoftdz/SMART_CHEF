@@ -35,6 +35,7 @@ type
     FEntrada_saida: String;
     FFinalidade   : String;
     FNFe_referenciada :String;
+    FEntrouEstoque :String;
     FNotaDeMaterias: Boolean;
     FNotaDeServico :Boolean;
 
@@ -198,7 +199,8 @@ type
                                      TipoFrete            :Integer;
                                      Entrada_saida        :String;
                                      Finalidade           :String;
-                                     NFe_referenciada     :String);
+                                     NFe_referenciada     :String;
+                                     EntrouEstoque        :String);
 
     destructor Destroy; override;
 
@@ -228,6 +230,7 @@ type
     property Entrada_saida    :String                  read FEntrada_saida      write SetEntrada_saida;
     property Finalidade       :String                  read FFinalidade         write SetFinalidade;
     property NFe_referenciada :String                  read FNFe_referenciada   write SetNFe_referenciada;
+    property EntrouEstoque    :String                  read FEntrouEstoque      write FEntrouEstoque;
     property NotaDeMaterias   :Boolean                 read GetNotaDeMaterias   write SetNotaDeMaterias;
     property NotaDeReducao    :Boolean                 read GetNotaDeReducao;
     property NotaDeServico    :Boolean                 read GetNotaDeServico;
@@ -496,7 +499,7 @@ begin
      self.FVolumes.codigoNotaFiscal := self.GetCodigo;
 
      { (Frete, Seguro, Desconto, OutrasDespesas :Real) }
-     self.FTotais := TTotaisNotaFiscal.Create(0, 0, 0, 0);
+     self.FTotais := TTotaisNotaFiscal.Create(0, 0, 0, 0, 0);
      self.FTotais.AdicionarBuscadorCodigoNotaFiscal(self.GetCodigo);
      self.FTotais.AdicionarBuscadorBaseCalculoICMS(self.GetBaseCalculoICMS);
      self.FTotais.AdicionarBuscadorICMS(self.GetICMS);
@@ -907,7 +910,8 @@ begin
           self.FVolumes := (Repositorio.Get(self.FCodigoNotaFiscal) as TVolumesNotaFiscal);
 
           try
-            self.FVolumes.CodigoNotaFiscal := self.GetCodigo;
+            if Assigned(self.FVolumes) then
+              self.FVolumes.CodigoNotaFiscal := self.GetCodigo;
           except
             on E: EAccessViolation do begin
               result := nil;
@@ -1220,7 +1224,7 @@ end;
 function TNotaFiscal.GetEnderecoEntrega: String;
 begin
    try
-      self.FLocalEntrega.ValidarCamposObrigatorios();
+     // self.FLocalEntrega.ValidarCamposObrigatorios();
       result := self.FLocalEntrega.ToString;
    except
      result := ''
@@ -1320,7 +1324,7 @@ constructor TNotaFiscal.CriarParaRepositorio(CodigoNotaFiscal: Integer;
   NumeroNotaFiscal, CodigoNatureza: Integer; TipoSerie: String;
   CodigoEmitente, CodigoDestinatario, CodigoFormaPagamento: Integer;
   DataEmissao, DataSaida: TDateTime; CodigoTransportadora,
-  TipoFrete: Integer; Entrada_saida, finalidade, Nfe_referenciada :String);
+  TipoFrete: Integer; Entrada_saida, finalidade, Nfe_referenciada, EntrouEstoque :String);
 begin
    self.FCodigoNotaFiscal           := CodigoNotaFiscal;
    self.FNumeroNotaFiscal           := NumeroNotaFiscal;
@@ -1346,6 +1350,7 @@ begin
    self.FEmpresa                    := nil;
    self.FItensAvulsos               := nil;
    SELF.FObservacoes                := nil;//TObservacaoNotaFiscal.Create;
+   self.FEntrouEstoque              := EntrouEstoque;
 end;
 
 function TNotaFiscal.GetTipoStatusNotaFiscal: TTipoStatusNotaFiscal;
@@ -1960,3 +1965,4 @@ begin
 end;
 
 end.
+

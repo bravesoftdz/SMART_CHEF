@@ -2,41 +2,43 @@ inherited frmCaixa: TfrmCaixa
   Left = 566
   Top = 374
   Caption = 'Caixa'
-  ClientHeight = 193
-  ClientWidth = 785
+  ClientHeight = 261
+  ClientWidth = 843
   Color = 15854311
   Font.Color = clBlack
   OnShow = FormShow
-  ExplicitWidth = 791
-  ExplicitHeight = 221
+  ExplicitWidth = 849
+  ExplicitHeight = 289
   PixelsPerInch = 96
   TextHeight = 13
   object Shape3: TShape [0]
     Left = 0
     Top = 0
-    Width = 785
+    Width = 843
     Height = 34
     Align = alTop
     Brush.Color = 14338236
     Pen.Color = clBtnFace
     Pen.Style = psClear
+    ExplicitWidth = 785
   end
   object Shape2: TShape [1]
     Left = 145
     Top = 81
-    Width = 642
-    Height = 114
+    Width = 698
+    Height = 180
     Pen.Color = 11908533
   end
   object Shape1: TShape [2]
     Left = 0
     Top = 34
-    Width = 785
+    Width = 843
     Height = 49
     Align = alTop
     Brush.Color = 13879746
     Pen.Color = clBtnFace
     Pen.Style = psClear
+    ExplicitWidth = 785
   end
   object Label4: TLabel [3]
     Left = 16
@@ -2748,7 +2750,7 @@ inherited frmCaixa: TfrmCaixa
     Transparent = True
   end
   object Label3: TLabel [9]
-    Left = 451
+    Left = 499
     Top = 90
     Width = 61
     Height = 17
@@ -2762,11 +2764,11 @@ inherited frmCaixa: TfrmCaixa
     Transparent = True
   end
   object Label1: TLabel [10]
-    Left = 621
+    Left = 666
     Top = 140
-    Width = 63
+    Width = 85
     Height = 17
-    Caption = 'Valor atual'
+    Caption = 'Valor abertura'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
@@ -2776,7 +2778,7 @@ inherited frmCaixa: TfrmCaixa
     Transparent = True
   end
   object Label9: TLabel [11]
-    Left = 450
+    Left = 498
     Top = 140
     Width = 103
     Height = 17
@@ -2790,7 +2792,7 @@ inherited frmCaixa: TfrmCaixa
     Transparent = True
   end
   object Label10: TLabel [12]
-    Left = 281
+    Left = 329
     Top = 140
     Width = 78
     Height = 17
@@ -2804,7 +2806,7 @@ inherited frmCaixa: TfrmCaixa
     Transparent = True
   end
   object Label11: TLabel [13]
-    Left = 620
+    Left = 665
     Top = 90
     Width = 95
     Height = 17
@@ -2819,7 +2821,7 @@ inherited frmCaixa: TfrmCaixa
     Visible = False
   end
   object Label2: TLabel [14]
-    Left = 281
+    Left = 329
     Top = 90
     Width = 59
     Height = 17
@@ -2832,9 +2834,65 @@ inherited frmCaixa: TfrmCaixa
     ParentFont = False
     Transparent = True
   end
-  object edtCodigo: TCurrencyEdit [15]
-    Left = 358
-    Top = 84
+  object Label12: TLabel [15]
+    Left = 161
+    Top = 204
+    Width = 84
+    Height = 17
+    Caption = 'Valor Dinheiro'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    Transparent = True
+  end
+  object Label13: TLabel [16]
+    Left = 499
+    Top = 204
+    Width = 105
+    Height = 17
+    Caption = 'Valor Cart. D'#233'bito'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    Transparent = True
+  end
+  object Label14: TLabel [17]
+    Left = 329
+    Top = 204
+    Width = 79
+    Height = 17
+    Caption = 'Valor Cheque'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    Transparent = True
+  end
+  object Label15: TLabel [18]
+    Left = 666
+    Top = 204
+    Width = 109
+    Height = 17
+    Caption = 'Valor Cart. Cr'#233'dito'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    Transparent = True
+  end
+  object edtCodigo: TCurrencyEdit [19]
+    Left = 406
+    Top = 152
     Width = 50
     Height = 25
     TabStop = False
@@ -2855,15 +2913,16 @@ inherited frmCaixa: TfrmCaixa
     Visible = False
   end
   inherited pnlPropaganda: TPanel
-    Top = 209
+    Top = 266
     Width = 776
     Align = alNone
     TabOrder = 5
     Visible = False
-    ExplicitTop = 209
+    ExplicitTop = 266
     ExplicitWidth = 776
     inherited Shape8: TShape
       Width = 774
+      ExplicitTop = -7
       ExplicitWidth = 774
     end
   end
@@ -2871,7 +2930,7 @@ inherited frmCaixa: TfrmCaixa
     Left = 0
     Top = 83
     Width = 145
-    Height = 110
+    Height = 178
     Align = alLeft
     Alignment = taLeftJustify
     BevelOuter = bvNone
@@ -3192,10 +3251,10 @@ inherited frmCaixa: TfrmCaixa
     OnClick = BitBtn1Click
   end
   object edtDataCorrente: TEdit
-    Left = 281
+    Left = 329
     Top = 109
     Width = 127
-    Height = 22
+    Height = 25
     AutoSize = False
     Ctl3D = False
     Enabled = False
@@ -3210,10 +3269,10 @@ inherited frmCaixa: TfrmCaixa
     TabOrder = 3
   end
   object edtHoraCorrente: TEdit
-    Left = 451
+    Left = 499
     Top = 109
     Width = 127
-    Height = 23
+    Height = 25
     AutoSize = False
     Ctl3D = False
     Enabled = False
@@ -3227,8 +3286,8 @@ inherited frmCaixa: TfrmCaixa
     ReadOnly = True
     TabOrder = 4
   end
-  object edtValor: TCurrencyEdit
-    Left = 622
+  object edtValorAbertura: TCurrencyEdit
+    Left = 666
     Top = 159
     Width = 127
     Height = 25
@@ -3247,7 +3306,7 @@ inherited frmCaixa: TfrmCaixa
     TabOrder = 2
   end
   object edtPercTxServ: TCurrencyEdit
-    Left = 451
+    Left = 499
     Top = 159
     Width = 127
     Height = 25
@@ -3269,7 +3328,7 @@ inherited frmCaixa: TfrmCaixa
     OnExit = edtPercTxServExit
   end
   object edtCouvert: TCurrencyEdit
-    Left = 281
+    Left = 329
     Top = 160
     Width = 127
     Height = 25
@@ -3291,7 +3350,7 @@ inherited frmCaixa: TfrmCaixa
     OnExit = edtCouvertExit
   end
   object edtTaxaEntrega: TCurrencyEdit
-    Left = 621
+    Left = 666
     Top = 109
     Width = 127
     Height = 25
@@ -3314,7 +3373,7 @@ inherited frmCaixa: TfrmCaixa
     OnExit = edtTaxaEntregaExit
   end
   object btnAlterarCouvert: TBitBtn
-    Left = 414
+    Left = 462
     Top = 157
     Width = 25
     Height = 25
@@ -3391,7 +3450,7 @@ inherited frmCaixa: TfrmCaixa
     OnClick = btnAlterarCouvertClick
   end
   object btnAlterarTxServ: TBitBtn
-    Left = 584
+    Left = 632
     Top = 157
     Width = 25
     Height = 25
@@ -3468,7 +3527,7 @@ inherited frmCaixa: TfrmCaixa
     OnClick = btnAlterarTxServClick
   end
   object btnAlterarEntrega: TBitBtn
-    Left = 752
+    Left = 797
     Top = 107
     Width = 25
     Height = 25
@@ -3542,5 +3601,93 @@ inherited frmCaixa: TfrmCaixa
     NumGlyphs = 2
     TabOrder = 13
     OnClick = btnAlterarEntregaClick
+  end
+  object edtVlrDinheiro: TCurrencyEdit
+    Left = 161
+    Top = 224
+    Width = 127
+    Height = 25
+    TabStop = False
+    AutoSize = False
+    Color = clWhite
+    Ctl3D = False
+    DisplayFormat = ',0.00; ,0.00'
+    Enabled = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentCtl3D = False
+    ParentFont = False
+    TabOrder = 14
+    OnChange = edtTaxaEntregaChange
+    OnExit = edtCouvertExit
+  end
+  object edtVlrCartDebito: TCurrencyEdit
+    Left = 499
+    Top = 224
+    Width = 127
+    Height = 25
+    TabStop = False
+    AutoSize = False
+    Color = clWhite
+    Ctl3D = False
+    DisplayFormat = ',0.00; ,0.00'
+    Enabled = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentCtl3D = False
+    ParentFont = False
+    TabOrder = 15
+    OnChange = edtTaxaEntregaChange
+    OnExit = edtCouvertExit
+  end
+  object edtVlrCheque: TCurrencyEdit
+    Left = 329
+    Top = 224
+    Width = 127
+    Height = 25
+    TabStop = False
+    AutoSize = False
+    Color = clWhite
+    Ctl3D = False
+    DisplayFormat = ',0.00; ,0.00'
+    Enabled = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentCtl3D = False
+    ParentFont = False
+    TabOrder = 16
+    OnChange = edtTaxaEntregaChange
+    OnExit = edtCouvertExit
+  end
+  object edtVlrCartCredito: TCurrencyEdit
+    Left = 666
+    Top = 224
+    Width = 127
+    Height = 25
+    TabStop = False
+    AutoSize = False
+    Color = clWhite
+    Ctl3D = False
+    DisplayFormat = ',0.00; ,0.00'
+    Enabled = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentCtl3D = False
+    ParentFont = False
+    TabOrder = 17
+    OnChange = edtTaxaEntregaChange
+    OnExit = edtCouvertExit
   end
 end

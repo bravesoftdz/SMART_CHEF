@@ -4,7 +4,7 @@ interface
 
 uses
   SysUtils,
-  Contnrs, Pedido;
+  Contnrs, Pedido, Generics.Collections;
 
 type
   TMovimento = class
@@ -29,14 +29,26 @@ type
     property valor_pago    :Real      read FValor_pago    write FValor_pago;
 
   public
+    class function MovimentosDoPedido(codigo_pedido :integer):TObjectList<TMovimento>;
+
+  private
+    destructor Destroy;override;
+  public
     property Pedido        :TPedido   read GetPedido;
 end;
 
 implementation
 
-uses repositorio, fabricaRepositorio;
+uses repositorio, fabricaRepositorio, EspecificacaoMovimentosPorCodigoPedido;
 
 { TMovimento }
+
+destructor TMovimento.Destroy;
+begin
+  if assigned(self.FPedido) then
+    FreeAndNil(FPedido);
+  inherited;
+end;
 
 function TMovimento.GetPedido: TPedido;
 var
@@ -55,6 +67,23 @@ begin
    finally
      FreeAndNil(Repositorio);
    end;
+end;
+
+class function TMovimento.MovimentosDoPedido(codigo_pedido :integer): TObjectList<TMovimento>;
+var repositorio :TRepositorio;
+    Especificacao :TEspecificacaoMovimentosPorCodigoPedido;
+begin
+  try
+    repositorio   := nil;
+    Especificacao := nil;
+    repositorio   := TFabricaRepositorio.GetRepositorio(TMovimento.ClassName);
+    Especificacao := TEspecificacaoMovimentosPorCodigoPedido.Create( codigo_pedido );
+
+    result        := repositorio.GetListaPorEspecificacao<TMovimento>( Especificacao );
+  finally
+    FreeAndNil(repositorio);
+    FreeAndNil(Especificacao);
+  end;
 end;
 
 end.

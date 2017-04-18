@@ -38,7 +38,8 @@ begin
     exit;
 
   self.edtFone.OnChange := nil;
-  if length(trim(copy(vFone, 5, 10))) > 9 then
+  Fone := vFone;
+{  if length(trim(copy(vFone, 5, 10))) > 9 then
   begin
     edtFone.EditMask := '\(99\)99999\-9999;0; ';
     edtFone.Text := apenasNumeros(vFone);
@@ -49,7 +50,7 @@ begin
     edtFone.EditMask := '\(99\)9999\-99999;0; ';
     edtFone.Text := apenasNumeros(vFone);
     edtFone.EditMask := '\(99\)9999\-99999;1; ';
-  end;
+  end;}
 
   self.edtFone.OnChange := edtFoneChange;
 end;
@@ -74,14 +75,20 @@ end;
 
 procedure TFone.SetFone(const Value: String);
 begin
-  FFone := Value;
+  FFone := apenasNumeros(Value);
 
-  if length(trim(FFone)) = 13 then
-    edtFone.EditMask := '\(99\)9999\-99999;1; '
-  else
+  if length(trim(FFone)) = 11 then
+  begin
+    edtFone.EditMask := '\(99\)99999\-9999;0; ';
+    edtFone.Text     := FFone;
     edtFone.EditMask := '\(99\)99999\-9999;1; ';
-
-  self.edtFone.Text := FFone;
+  end
+  else
+  begin
+    edtFone.EditMask := '\(99\)9999\-99999;0; ';
+    edtFone.Text     := FFone;
+    edtFone.EditMask := '\(99\)9999\-99999;1; ';
+  end;
 end;
 
 function TFone.validaData: Boolean;

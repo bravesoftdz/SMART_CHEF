@@ -1,0 +1,2 @@
+inherited BuscaEmpresa: TBuscaEmpresa
+end

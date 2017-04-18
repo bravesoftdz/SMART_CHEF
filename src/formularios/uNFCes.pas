@@ -9,7 +9,7 @@ uses
 
 type
   TfrmNFCes = class(TfrmPadrao)
-    DBGridCBN1: TDBGridCBN;
+    gridNFCe: TDBGridCBN;
     cdsNFCes: TClientDataSet;
     dsNFCes: TDataSource;
     dtpInicio: TDateTimePicker;
@@ -36,21 +36,25 @@ type
     lbSelecionados: TLabel;
     BitBtn1: TBitBtn;
     cdsNFCesVALOR_PEDIDO: TFloatField;
+    btnConsultar: TBitBtn;
+    cdsNFCesCODIGO: TIntegerField;
     procedure FormShow(Sender: TObject);
     procedure btnBuscaClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
     procedure btnGerarXmlClick(Sender: TObject);
     procedure cdsNFCesAfterScroll(DataSet: TDataSet);
-    procedure DBGridCBN1Enter(Sender: TObject);
-    procedure DBGridCBN1DrawColumnCell(Sender: TObject; const Rect: TRect;
+    procedure gridNFCeEnter(Sender: TObject);
+    procedure gridNFCeDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure chTodasClick(Sender: TObject);
-    procedure DBGridCBN1KeyDown(Sender: TObject; var Key: Word;
+    procedure gridNFCeKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure BitBtn1Click(Sender: TObject);
+    procedure btnConsultarClick(Sender: TObject);
   private
     procedure busca_NFCes;
     procedure marca_desmarca(marca, todas :Boolean);
+    procedure consultarNFCe;
 
   public
     { Public declarations }
@@ -96,6 +100,7 @@ begin
        Pedido := TPedido( Repositorio.Get(TNFCe( NFCes.Items[i] ).codigo_pedido) );
 
        cdsNFCes.Append;
+       cdsNFCesCODIGO.AsInteger        := TNFCe( NFCes.Items[i] ).codigo;
        cdsNFCesNR_NOTA.AsInteger       := TNFCe( NFCes.Items[i] ).nr_nota;
        cdsNFCesCODIGO_PEDIDO.AsInteger := TNFCe( NFCes.Items[i] ).codigo_pedido;
        cdsNFCesVALOR_PEDIDO.AsFloat    := Pedido.valor_total;
@@ -155,7 +160,7 @@ end;
 
 procedure TfrmNFCes.btnCancelarClick(Sender: TObject);
 var
-  idLote,vAux : String;
+  vAux : String;
   XML         : TStringStream;
   Servico     : TServicoEmissorNFCe;
   Parametro   :TParametros;
@@ -182,6 +187,29 @@ begin
      Avisar('Erro ao cancelar NFC-e.'+#13#10+e.Message);
    end;
  end;
+end;
+
+procedure TfrmNFCes.btnConsultarClick(Sender: TObject);
+begin
+  try
+    Aguarda('Consultando nfce...');
+    cdsNFCes.Filtered := false;
+    cdsNFCes.Filter   := 'TAG = 1';
+    cdsNFCes.Filtered := true;
+    cdsNFCes.First;
+
+    while not cdsNFCes.Eof do
+    begin
+      consultarNFCe;
+      cdsNFCes.Next;
+    end;
+
+    cdsNFCes.Filtered := false;
+    btnBusca.Click;
+    gridNFce.SetFocus;
+  finally
+    FimAguarda('');
+  end;
 end;
 
 procedure TfrmNFCes.btnGerarXmlClick(Sender: TObject);
@@ -224,21 +252,15 @@ begin
   btnCancelar.Enabled := false;
 
   if (cdsNFCesSTATUS.AsString = '100') then
-     if ((formatDateTime('dd/mm/yyyy',cdsNFCesDH_RECEBIMENTO.AsDateTime) = DateToStr(Date) ) and
-         (StrToInt(FormatDateTime('nn', (Time - StrToTime( formatDateTime('hh:mm:ss',cdsNFCesDH_RECEBIMENTO.AsDateTime))) )) < 30))
-      OR
-       ( StrToTime(FormatDateTime('hh:mm:ss',cdsNFCesDH_RECEBIMENTO.AsDateTime)) > StrToTime('23:30:00')) and (time < StrToTime('00:30:00'))
-     then
-       btnCancelar.Enabled := true;
-
+    btnCancelar.Enabled := (cdsNFCesDH_RECEBIMENTO.AsDateTime > (now - 7) );
 end;
 
-procedure TfrmNFCes.DBGridCBN1Enter(Sender: TObject);
+procedure TfrmNFCes.gridNFCeEnter(Sender: TObject);
 begin
   cdsNFCesAfterScroll(nil);
 end;
 
-procedure TfrmNFCes.DBGridCBN1DrawColumnCell(Sender: TObject;
+procedure TfrmNFCes.gridNFCeDrawColumnCell(Sender: TObject;
   const Rect: TRect; DataCol: Integer; Column: TColumn;
   State: TGridDrawState);
 begin
@@ -282,6 +304,34 @@ begin
     marca_desmarca(chTodas.Checked, true);
 end;
 
+procedure TfrmNFCes.consultarNFCe;
+var
+  Servico     :TServicoEmissorNFCe;
+  NFCe        :TNFCe;
+  repositorio :TRepositorio;
+  Parametros  :TParametros;
+begin
+ try
+ try
+   Parametros  := TParametros.Create;
+   Servico     := TServicoEmissorNFCe.Create(Parametros);
+   repositorio := TFabricaRepositorio.GetRepositorio(TNFCe.ClassName);
+   NFCe        := TNFCe(repositorio.Get(cdsNFCesCODIGO.AsInteger));
+
+   Servico.ConsultaNFCe(NFCe);
+   repositorio.Salvar(NFCe);
+ Except
+   On E: Exception do begin
+     Avisar('Erro ao consultar NFC-e.'+#13#10+e.Message);
+   end;
+ end;
+ finally
+   FreeAndNil(NFCe);
+   FreeAndNil(Servico);
+   FreeAndNil(repositorio);
+ end;
+end;
+
 procedure TfrmNFCes.marca_desmarca(marca, todas: Boolean);
 begin
   if cdsNFCes.IsEmpty then Exit;
@@ -310,7 +360,7 @@ begin
   btnGerarXml.Enabled := not (lbSelecionados.Caption = '0');  
 end;
 
-procedure TfrmNFCes.DBGridCBN1KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+procedure TfrmNFCes.gridNFCeKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if key = VK_space then
     marca_desmarca(cdsNFCesTAG.AsInteger = 0, false);

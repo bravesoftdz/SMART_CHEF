@@ -1,6 +1,7 @@
 object frmPadrao: TfrmPadrao
   Left = 361
   Top = 183
+  BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   ClientHeight = 312
   ClientWidth = 589

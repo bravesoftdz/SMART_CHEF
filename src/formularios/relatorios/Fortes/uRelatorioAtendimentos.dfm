@@ -2,11 +2,11 @@ inherited frmRelatorioAtendimentos: TfrmRelatorioAtendimentos
   Left = 290
   Top = 197
   Caption = 'Relat'#243'rio de Atendimentos'
-  ClientHeight = 213
-  ClientWidth = 859
+  ClientHeight = 188
+  ClientWidth = 665
   OnShow = FormShow
-  ExplicitWidth = 865
-  ExplicitHeight = 241
+  ExplicitWidth = 671
+  ExplicitHeight = 216
   PixelsPerInch = 96
   TextHeight = 13
   object Label2: TLabel [0]
@@ -442,12 +442,12 @@ inherited frmRelatorioAtendimentos: TfrmRelatorioAtendimentos
     end
   end
   inherited pnlPropaganda: TPanel
-    Top = 178
-    Width = 859
+    Top = 153
+    Width = 665
     ExplicitTop = 178
     ExplicitWidth = 859
     inherited Shape8: TShape
-      Width = 857
+      Width = 663
       ExplicitWidth = 857
     end
   end
@@ -455,17 +455,19 @@ inherited frmRelatorioAtendimentos: TfrmRelatorioAtendimentos
     Left = 0
     Top = 0
     Width = 129
-    Height = 178
+    Height = 153
     Align = alLeft
     TabOrder = 2
+    ExplicitHeight = 178
     object Shape12: TShape
       Left = 1
       Top = 1
       Width = 127
-      Height = 176
+      Height = 151
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119
+      ExplicitHeight = 176
     end
     object BitBtn1: TBitBtn
       Left = 11

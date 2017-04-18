@@ -19,31 +19,42 @@ type
     FTotal_cheque :Real;
     FTotal_cartaoC :Real;
     FTotal_cartaoD :Real;
-    FTotal_sangria :Real;
-    FTotal_reforco :Real;
-    FTotal_Geral: Real;
+    FTotal_sangria_cheque: Real;
+    FTotal_sangria_dinheiro: Real;
+    FTotal_reforco_cheque: Real;
+    FTotal_reforco_dinheiro: Real;
+    FTotalGeral :Real;
+    FTotalEmCaixa :Real;
+
     FMovimentos :TObjectList<TMovimento>;
     FSangriaReforco :TObjectList<TSangriaReforco>;
 
-    function GetTotalGeral: Real;
     function GetMovimentos: TObjectList<TMovimento>;
     function GetSangriaReforco: TObjectList<TSangriaReforco>;
+    function GetTotalGeral: Real;
+    function GetTotalEmCaixa: Real;
 
   public
+    procedure atualizaValores;
+
     property codigo           :integer   read Fcodigo           write Fcodigo;
     property data_abertura    :TDateTime read Fdata_abertura    write Fdata_abertura;
     property valor_abertura   :Real      read Fvalor_abertura   write Fvalor_abertura;
     property data_fechamento  :TDateTime read Fdata_fechamento  write Fdata_fechamento;
     property valor_fechamento :Real      read Fvalor_fechamento write Fvalor_fechamento;
 
-    property Total_dinheiro :Real        read FTotal_dinheiro;
-    property Total_cheque   :Real        read FTotal_cheque;
-    property Total_cartaoC   :Real       read FTotal_cartaoC;
-    property Total_cartaoD   :Real       read FTotal_cartaoD;
-    property Total_sangria   :Real       read FTotal_sangria;
-    property Total_reforco   :Real       read FTotal_reforco;
+    property Total_dinheiro  :Real        read FTotal_dinheiro;
+    property Total_cheque    :Real        read FTotal_cheque;
+    property Total_cartaoC   :Real        read FTotal_cartaoC;
+    property Total_cartaoD   :Real        read FTotal_cartaoD;
 
-    property Total_Geral     :Real       read GetTotalGeral;
+    property Total_sangria_dinheiro   :Real       read FTotal_sangria_dinheiro;
+    property Total_sangria_cheque     :Real       read FTotal_sangria_cheque;
+    property Total_reforco_dinheiro   :Real       read FTotal_reforco_dinheiro;
+    property Total_reforco_cheque     :Real       read FTotal_reforco_cheque;
+
+    property TotalGeral               :Real       read GetTotalGeral;
+    property TotalEmCaixa             :Real       read GetTotalEmCaixa;
 
     property movimentos       :TObjectList<TMovimento>      read GetMovimentos;
     property SangriasReforcos :TObjectList<TSangriaReforco> read GetSangriaReforco;
@@ -68,6 +79,17 @@ uses EspecificacaoMovimentosCaixa, FabricaRepositorio, Classes, StrUtils, Especi
 
 { TCaixa }
 
+procedure TCaixa.atualizaValores;
+begin
+   if assigned(FMovimentos) then
+     FreeAndNil(FMovimentos);
+   if assigned(FSangriaReforco) then
+     FreeAndNil(FSangriaReforco);
+
+   GetMovimentos;
+   GetSangriaReforco;
+end;
+
 constructor TCaixa.Create;
 begin
   FMovimentos := nil;
@@ -90,9 +112,8 @@ begin
   repositorio   := nil;
   especificacao := nil;
   try
-    if assigned(FMovimentos) then
-      freeAndNil(FMovimentos);
-
+    if not assigned(FMovimentos) then
+    begin
       self.FTotal_dinheiro := 0;
       self.FTotal_cheque   := 0;
       self.FTotal_cartaoC  := 0;
@@ -102,23 +123,24 @@ begin
 
       especificacao    := TEspecificacaoMovimentosCaixa.Create(self);
 
-      self.FMovimentos := repositorio.GetListaPorEspecificacao<TMovimento>(especificacao, 'CODIGO_CAIXA = '+intToStr(self.codigo));
+      self.FMovimentos := repositorio.GetListaPorEspecificacao<TMovimento>(especificacao, 'codigo_caixa = '+intToStr(self.codigo));
 
-      for i := 0 to FMovimentos.Count - 1 do begin
-
-        if TMovimento(FMovimentos[i]).tipo_moeda = 1 then
-          FTotal_dinheiro := FTotal_dinheiro + TMovimento(FMovimentos[i]).valor_pago
-        else if TMovimento(FMovimentos[i]).tipo_moeda = 2 then
-          FTotal_cheque := FTotal_cheque + TMovimento(FMovimentos[i]).valor_pago
-        else if TMovimento(FMovimentos[i]).tipo_moeda = 3 then
-          FTotal_cartaoC := FTotal_cartaoC + TMovimento(FMovimentos[i]).valor_pago
-        else if TMovimento(FMovimentos[i]).tipo_moeda = 4 then
-          FTotal_cartaoD := FTotal_cartaoD + TMovimento(FMovimentos[i]).valor_pago;
-      end;
-
+      if assigned(FMovimentos) then
+        for i := 0 to FMovimentos.Count - 1 do begin
+            if TMovimento(FMovimentos[i]).tipo_moeda = 1 then
+              FTotal_dinheiro := FTotal_dinheiro + TMovimento(FMovimentos[i]).valor_pago
+            else if TMovimento(FMovimentos[i]).tipo_moeda = 2 then
+              FTotal_cheque := FTotal_cheque + TMovimento(FMovimentos[i]).valor_pago
+            else if TMovimento(FMovimentos[i]).tipo_moeda = 3 then
+              FTotal_cartaoC := FTotal_cartaoC + TMovimento(FMovimentos[i]).valor_pago
+            else if TMovimento(FMovimentos[i]).tipo_moeda = 4 then
+              FTotal_cartaoD := FTotal_cartaoD + TMovimento(FMovimentos[i]).valor_pago;
+          end;
+    end;
+    result := FMovimentos;
   Finally
-    if assigned(repositorio) then  FreeAndNil(repositorio);
-    if assigned(especificacao) then  FreeAndNil(especificacao);
+    FreeAndNil(repositorio);
+    FreeAndNil(especificacao);
   end;
 end;
 
@@ -130,27 +152,37 @@ begin
   repositorio   := nil;
   especificacao := nil;
   try
-    if assigned(FSangriaReforco) then
-      FreeAndNil(FSangriaReforco);
+    if not assigned(FSangriaReforco) then
+    begin
+      self.FTotal_sangria_dinheiro := 0;
+      self.FTotal_sangria_cheque   := 0;
+      self.FTotal_reforco_dinheiro := 0;
+      self.FTotal_reforco_cheque   := 0;
 
-      self.FTotal_sangria := 0;
-      self.FTotal_reforco := 0;
-
-      repositorio := TFabricaRepositorio.GetRepositorio(TSangriaReforco.ClassName);
-
-      especificacao    := TEspecificacaoSangriaReforcoPorCodigoCaixa.Create(self.codigo);
-
+      repositorio          := TFabricaRepositorio.GetRepositorio(TSangriaReforco.ClassName);
+      especificacao        := TEspecificacaoSangriaReforcoPorCodigoCaixa.Create(self.codigo);
       self.FSangriaReforco := repositorio.GetListaPorEspecificacao<TSangriaReforco>(especificacao, 'CODIGO_CAIXA = '+intToStr(self.codigo));
 
-      if not assigned(FSangriaReforco) then
-        exit;
+      if assigned(FSangriaReforco) then
+        for i := 0 to FSangriaReforco.Count - 1 do begin
+          if FSangriaReforco[i].tipo = 'S' then
+          begin
+            if FSangriaReforco[i].tipo_moeda = 1 then //dinheiro
+              FTotal_sangria_dinheiro := FTotal_sangria_dinheiro + FSangriaReforco[i].valor
+            else if FSangriaReforco[i].tipo_moeda = 2 then //cheque
+              FTotal_sangria_cheque := FTotal_sangria_cheque + FSangriaReforco[i].valor
+          end
+          else if FSangriaReforco[i].tipo = 'R' then
+          begin
+            if FSangriaReforco[i].tipo_moeda = 1 then //dinheiro
+              FTotal_reforco_dinheiro := FTotal_reforco_dinheiro + FSangriaReforco[i].valor
+            else if FSangriaReforco[i].tipo_moeda = 2 then //cheque
+              FTotal_reforco_cheque   := FTotal_reforco_cheque + FSangriaReforco[i].valor
+          end;
+        end;
+    end;
 
-      for i := 0 to FSangriaReforco.Count - 1 do begin
-        if FSangriaReforco[i].tipo = 'S' then
-          FTotal_sangria := FTotal_sangria + FSangriaReforco[i].valor
-        else if FSangriaReforco[i].tipo = 'R' then
-          FTotal_reforco := FTotal_reforco + FSangriaReforco[i].valor;
-      end;
+    result := FSangriaReforco;
 
   Finally
     if assigned(repositorio) then  FreeAndNil(repositorio);
@@ -158,13 +190,18 @@ begin
   end;
 end;
 
+function TCaixa.GetTotalEmCaixa: Real;
+begin
+  self.atualizaValores;
+  FTotalEmCaixa := self.valor_abertura + FTotal_dinheiro + FTotal_cheque - FTotal_sangria_cheque - FTotal_sangria_dinheiro + FTotal_reforco_cheque + FTotal_reforco_dinheiro;
+  result        := FTotalEmCaixa;
+end;
+
 function TCaixa.GetTotalGeral: Real;
 begin
-   GetMovimentos;
-   GetSangriaReforco;
-   FTotal_Geral := 0;
-   FTotal_Geral := self.Total_dinheiro + self.Total_cheque + self.Total_cartaoC + self.Total_cartaoD + Self.Total_reforco - self.Total_sangria;
-   result       := FTotal_Geral;
+  self.atualizaValores;
+  FTotalGeral := self.valor_abertura + FTotal_dinheiro + FTotal_cheque + FTotal_cartaoC + FTotal_cartaoD - FTotal_sangria_cheque - FTotal_sangria_dinheiro + FTotal_reforco_cheque + FTotal_reforco_dinheiro;
+  result      := FTotalGeral;
 end;
 
 procedure TCaixa.imprime_48Colunas;
@@ -191,8 +228,8 @@ begin
   Writeln(Arq, 'Total cartão crédito >'+StringOfChar(' ', 24- (length(FormatFloat(' ,0.00; -,0.00;',self.Total_cartaoC))) ) + FormatFloat(' ,0.00; -,0.00;',self.Total_cartaoC));
   Writeln(Arq, 'Total cartão débito >'+StringOfChar(' ', 25- (length(FormatFloat(' ,0.00; -,0.00;',self.Total_cartaoD))) ) + FormatFloat(' ,0.00; -,0.00;',self.Total_cartaoD));
   Writeln(Arq, StringOfChar('-',48));
-  Writeln(Arq, 'Total sangria >'+StringOfChar(' ', 31- (length(FormatFloat(' ,0.00; -,0.00;',self.Total_sangria))) ) + FormatFloat(' ,0.00; -,0.00;',self.Total_sangria));
-  Writeln(Arq, 'Total reforço >'+StringOfChar(' ', 31- (length(FormatFloat(' ,0.00; -,0.00;',self.Total_reforco))) ) + FormatFloat(' ,0.00; -,0.00;',self.Total_reforco));
+  Writeln(Arq, 'Total sangria >'+StringOfChar(' ', 31- (length(FormatFloat(' ,0.00; -,0.00;',self.Total_sangria_dinheiro + self.FTotal_sangria_cheque))) ) + FormatFloat(' ,0.00; -,0.00;',self.Total_sangria_dinheiro + self.FTotal_sangria_cheque));
+  Writeln(Arq, 'Total reforço >'+StringOfChar(' ', 31- (length(FormatFloat(' ,0.00; -,0.00;',self.Total_reforco_dinheiro + self.FTotal_reforco_cheque))) ) + FormatFloat(' ,0.00; -,0.00;',self.Total_reforco_dinheiro + self.FTotal_reforco_cheque));
   WriteLn(Arq, '');
   Writeln(Arq, 'Valor da abertura >'+StringOfChar(' ', 27- (length(FloatToStr(self.valor_abertura))) ) + FloatToStr(self.valor_abertura));
   Writeln(Arq, StringOfChar('-',48));

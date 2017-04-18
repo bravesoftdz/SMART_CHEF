@@ -21,6 +21,7 @@ type
   private
     FNCM :TNcmIBPT;
     Fcodigo: Integer;
+    FCodigoNCM: String;
     FExecutarAposBuscar: TNotifyEvent;
     FExecutarAposLimpar: TNotifyEvent;
 
@@ -33,12 +34,14 @@ type
     procedure Setcodigo            (const Value: Integer);
     procedure SetExecutarAposBuscar(const Value: TNotifyEvent);
     procedure SetExecutarAposLimpar(const Value: TNotifyEvent);
+    procedure SetCodigoNCM(const Value: String);
 
   public
     procedure limpa;
 
     property NCM :TNCMIBPT read FNCM write SetNCM;
     property codigo  :Integer  read Fcodigo  write Setcodigo;
+    property codigoNCM     :String   read FCodigoNCM     write SetCodigoNCM;
 
   public
     property ExecutarAposBuscar :TNotifyEvent read FExecutarAposBuscar write SetExecutarAposBuscar;
@@ -98,7 +101,6 @@ procedure TBuscaNCM.setaNCM;
 var
     RepNcm :TRepositorio;
 begin
-
   RepNcm := TFabricaRepositorio.GetRepositorio(TNcmIBPT.ClassName);
   FNCM   := TNcmIBPT(RepNcm.Get(edtCodigo.AsInteger));
 
@@ -119,6 +121,13 @@ procedure TBuscaNCM.Setcodigo(const Value: Integer);
 begin
   Fcodigo := value;
   edtCodigo.AsInteger := value;
+  setaNCM;
+end;
+
+procedure TBuscaNCM.SetCodigoNCM(const Value: String);
+begin
+  FCodigoNCM := Value;
+  edtCodigo.Text := Campo_por_campo('IBPT','CODIGO', 'NCM_IBPT', Value);
   setaNCM;
 end;
 
@@ -144,7 +153,7 @@ end;
 
 procedure TBuscaNCM.edtNCMChange(Sender: TObject);
 begin
-  if (StrToIntDef(self.edtNCM.Text,0) <= 0) then
+  if (StrToIntDef(self.edtNCM.Text,0) <= 0) and (length(self.edtNCM.Text) < 5) then
     self.limpa;
 end;
 

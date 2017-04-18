@@ -6,7 +6,7 @@ uses
   DB,
   Auditoria,
   Repositorio,
-  FabricaRepositorio;
+  FabricaRepositorio, System.StrUtils;
 
 type
   TRepositorioProduto = class(TRepositorio)
@@ -81,7 +81,7 @@ begin
    Produto.codigo_grupo        := self.FQuery.FieldByName('codigo_grupo').AsInteger;
    Produto.descricao           := self.FQuery.FieldByName('descricao').AsString;
    Produto.valor               := self.FQuery.FieldByName('valor').AsFloat;
-   Produto.ativo               := self.FQuery.FieldByName('ativo').AsString;
+   Produto.ativo               := self.FQuery.FieldByName('ativo').AsString = 'S';
    Produto.codigo_departamento := self.FQuery.FieldByName('codigo_departamento').AsInteger;
    Produto.codigo_ibpt         := self.FQuery.FieldByName('codigo_ibpt').AsInteger;
    Produto.tipo                := self.FQuery.FieldByName('tipo').AsString;
@@ -92,6 +92,7 @@ begin
    Produto.altera_preco        := self.FQuery.FieldByName('altera_preco').AsString;
    Produto.codbar              := self.FQuery.FieldByName('codbar').AsString;
    Produto.referencia          := self.FQuery.FieldByName('referencia').AsString;
+   Produto.codigo_balanca      := self.FQuery.FieldByName('codigo_balanca').AsString;
 
    result := Produto;
 end;
@@ -134,7 +135,7 @@ begin
     Auditoria.AdicionaCampoAlterado('valor', FloatToStr(ProdutoAntigo.valor), FloatToStr(ProdutoNovo.valor) );
 
    if (ProdutoAntigo.ativo <> ProdutoNovo.ativo) then
-    Auditoria.AdicionaCampoAlterado('ativo', ProdutoAntigo.ativo, ProdutoNovo.ativo);
+    Auditoria.AdicionaCampoAlterado('ativo', IfThen(ProdutoAntigo.ativo,'S', 'N'), IfThen(ProdutoNovo.ativo,'S', 'N'));
 
    if (ProdutoAntigo.codigo_departamento <> ProdutoNovo.codigo_departamento) then
     Auditoria.AdicionaCampoAlterado('codigo_departamento', IntToStr(ProdutoAntigo.codigo_departamento), intToStr(ProdutoNovo.codigo_departamento) );
@@ -166,6 +167,8 @@ begin
    if (ProdutoAntigo.referencia <> ProdutoNovo.referencia) then
     Auditoria.AdicionaCampoAlterado('referencia', ProdutoAntigo.referencia, ProdutoNovo.referencia);
 
+   if (ProdutoAntigo.codigo_balanca <> ProdutoNovo.codigo_balanca) then
+    Auditoria.AdicionaCampoAlterado('codigo_balanca', ProdutoAntigo.codigo_balanca, ProdutoNovo.codigo_balanca);
 end;
 
 procedure TRepositorioProduto.SetCamposExcluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -178,7 +181,7 @@ begin
    Auditoria.AdicionaCampoExcluido('codigo_grupo',        IntToStr(Produto.Codigo));
    Auditoria.AdicionaCampoExcluido('descricao',           Produto.descricao);
    Auditoria.AdicionaCampoExcluido('valor',               FloatToStr(Produto.valor));
-   Auditoria.AdicionaCampoExcluido('ativo',               Produto.ativo);
+   Auditoria.AdicionaCampoExcluido('ativo',               IfThen(Produto.ativo,'S','N'));
    Auditoria.AdicionaCampoExcluido('codigo_departamento', IntToStr(Produto.codigo_departamento));
    Auditoria.AdicionaCampoExcluido('codigo_ibpt',         IntToStr(Produto.codigo_ibpt));
    Auditoria.AdicionaCampoExcluido('tipo',                Produto.tipo);
@@ -188,7 +191,8 @@ begin
    Auditoria.AdicionaCampoExcluido('preco_custo',         FloatToStr(Produto.preco_custo));
    Auditoria.AdicionaCampoExcluido('altera_preco',        Produto.altera_preco);
    Auditoria.AdicionaCampoExcluido('codbar',              Produto.codbar);
-   Auditoria.AdicionaCampoExcluido('referencia',              Produto.referencia);
+   Auditoria.AdicionaCampoExcluido('referencia',          Produto.referencia);
+   Auditoria.AdicionaCampoExcluido('codigo_balanca',      Produto.codigo_balanca);
 end;
 
 procedure TRepositorioProduto.SetCamposIncluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -201,7 +205,7 @@ begin
    Auditoria.AdicionaCampoIncluido('codigo_grupo', IntToStr(Produto.codigo_grupo));
    Auditoria.AdicionaCampoIncluido('descricao',    Produto.descricao);
    Auditoria.AdicionaCampoIncluido('valor',        FloatToStr(Produto.valor));
-   Auditoria.AdicionaCampoIncluido('ativo',        Produto.ativo);
+   Auditoria.AdicionaCampoIncluido('ativo',        IfThen(Produto.ativo,'S','N'));
    Auditoria.AdicionaCampoIncluido('codigo_departamento', IntToStr(Produto.codigo_departamento));
    Auditoria.AdicionaCampoIncluido('codigo_ibpt',         IntToStr(Produto.codigo_ibpt));
    Auditoria.AdicionaCampoIncluido('tipo',         Produto.tipo);
@@ -212,6 +216,7 @@ begin
    Auditoria.AdicionaCampoIncluido('altera_preco',        Produto.altera_preco);
    Auditoria.AdicionaCampoIncluido('codbar',      Produto.codbar);
    Auditoria.AdicionaCampoIncluido('referencia',      Produto.referencia);
+   Auditoria.AdicionaCampoIncluido('codigo_balanca',      Produto.codigo_balanca);
 end;
 
 procedure TRepositorioProduto.SetIdentificador(Objeto: TObject;
@@ -233,7 +238,7 @@ begin
      
    self.FQuery.ParamByName('descricao').AsString            := Produto.descricao;
    self.FQuery.ParamByName('valor').AsFloat                 := Produto.valor;
-   self.FQuery.ParamByName('ativo').AsString                := Produto.ativo;
+   self.FQuery.ParamByName('ativo').AsString                := IfThen(Produto.ativo,'S','N');
    self.FQuery.ParamByName('codigo_departamento').AsInteger := Produto.codigo_departamento;
 
    if Produto.codigo_ibpt > 0 then
@@ -247,6 +252,7 @@ begin
    self.FQuery.ParamByName('altera_preco').AsString         := Produto.altera_preco;
    self.FQuery.ParamByName('codbar').AsString               := Produto.codbar;
    self.FQuery.ParamByName('referencia').AsString           := Produto.referencia;
+   self.FQuery.ParamByName('codigo_balanca').AsString       := Produto.codigo_balanca;
 end;
 
 function TRepositorioProduto.SQLGet: String;
@@ -271,8 +277,10 @@ end;
 
 function TRepositorioProduto.SQLSalvar: String;
 begin
-   result := 'update or insert into Produtos ( codigo,  codigo_grupo,  descricao,  valor,  ativo,  codigo_departamento,  codigo_ibpt,  tipo,  icms,  tributacao, preparo, preco_custo, altera_preco, codbar, referencia) '+
-             '                        values (:codigo, :codigo_grupo, :descricao, :valor, :ativo, :codigo_departamento, :codigo_ibpt, :tipo, :icms, :tributacao, :preparo, :preco_custo, :altera_preco, :codbar, :referencia) ';
+   result := 'update or insert into Produtos ( codigo,  codigo_grupo,  descricao,  valor,  ativo,  codigo_departamento,  codigo_ibpt, '+
+             '  tipo,  icms,  tributacao, preparo, preco_custo, altera_preco, codbar, referencia, codigo_balanca)                     '+
+             '                        values (:codigo, :codigo_grupo, :descricao, :valor, :ativo, :codigo_departamento, :codigo_ibpt, '+
+             ' :tipo, :icms, :tributacao, :preparo, :preco_custo, :altera_preco, :codbar, :referencia, :codigo_balanca)               ';
 end;
 
 end.

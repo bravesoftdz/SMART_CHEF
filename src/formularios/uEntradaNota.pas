@@ -59,13 +59,15 @@ type
     btnAtuliza: TBitBtn;
     cdsMateriasCODMAT_FORNECEDOR: TStringField;
     cdsMateriasCODMAT_ERP: TIntegerField;
-    cdsMateriasDESCRICAO: TStringField;
     cdsMateriasCFOP: TIntegerField;
     cdsMateriasVALIDADO: TStringField;
     GridMaterias: TDBGrid;
     ppmalteraCFOP: TPopupMenu;
     AlterarCFOP1: TMenuItem;
     Label5: TLabel;
+    Desassociarproduto1: TMenuItem;
+    cdsMateriasDESCRICAO_FORN: TStringField;
+    cdsMateriasDESCRICAO_ERP: TStringField;
     procedure BitBtn1Click(Sender: TObject);
     procedure btnImportarNotaClick(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
@@ -89,9 +91,12 @@ type
     procedure GridMateriasKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure AlterarCFOP1Click(Sender: TObject);
+    procedure GridMateriasMouseLeave(Sender: TObject);
+    procedure Desassociarproduto1Click(Sender: TObject);
+    procedure DBGridCBN1DrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
 
   private
-    function MateriaCadastrada(produtoNfe :TProd) :Integer;
+    procedure MateriaCadastrada(produtoNfe :TProd; var codigo :integer; var descricao :String);
     function fornecedorCadastrado: Boolean;
     function  Nota_ja_importada(numero_nota :String) :Boolean;
     function  associar_produto(produtoNfe :TProd)    :Boolean;
@@ -107,7 +112,8 @@ type
 
     procedure mouseToCell(X, Y: integer; var ACol, ARow: longint);
   private
-    Validacoes :integer;
+    registroSelecionado :integer;
+    validacoes :integer;
 
   public
     MeuHint: TMinhaJanelaHint;
@@ -119,7 +125,7 @@ var
 
 const
   validacao_CFOP    = 'Não existe um CFOP correspondente cadastrado para o CFOP = ';
-  validacao_materia = 'Não existe uma matéria correspondente vinculada à matéria = ';
+  validacao_materia = 'Não existe um produto correspondente vinculado ao produto = ';
 
 implementation
 
@@ -190,9 +196,9 @@ begin
 end;
 
 procedure TfrmEntradaNota.carrega_nota;
-var nX :integer;
- texto :String;
- codigo_natureza :String;
+var nX, codigo :integer;
+    descricao :String;
+    codigo_natureza :String;
 begin
   self.AcbrNfe.NotasFiscais.Clear;
   self.AcbrNfe.NotasFiscais.LoadFromFile(self.edtCaminhoXml.Text);
@@ -221,14 +227,16 @@ begin
   end;
 
   for nX := 0 to (AcbrNfe.NotasFiscais.Items[0] as ACBrNFeNotasFiscais.NotaFiscal).NFe.Det.Count - 1 do begin
+    codigo    := 0;
+    descricao := '';
+
+    self.MateriaCadastrada( AcbrNfe.NotasFiscais.Items[0].NFe.Det.Items[nX].Prod, codigo, descricao);
 
     cdsMaterias.Append;
-
-    texto := AcbrNfe.NotasFiscais.Items[0].NFe.Det.Items[nX].Prod.cProd;
-    cdsMateriasCODMAT_FORNECEDOR.AsString := texto;
-    cdsMateriasDESCRICAO.AsString         := AcbrNfe.NotasFiscais.Items[0].NFe.Det.Items[nX].Prod.xProd;
-    cdsMateriasCODMAT_ERP.asInteger       := self.MateriaCadastrada( (AcbrNfe.NotasFiscais.Items[0] as ACBrNFeNotasFiscais.NotaFiscal).NFe.Det.Items[nX].Prod );
-
+    cdsMateriasCODMAT_FORNECEDOR.AsString := AcbrNfe.NotasFiscais.Items[0].NFe.Det.Items[nX].Prod.cProd;
+    cdsMateriasDESCRICAO_FORN.AsString    := AcbrNfe.NotasFiscais.Items[0].NFe.Det.Items[nX].Prod.xProd;
+    cdsMateriasCODMAT_ERP.asInteger       := codigo;
+    cdsMateriasDESCRICAO_ERP.AsString     := descricao;
     codigo_natureza := buscaCFOPCorrespondente( AcbrNfe.NotasFiscais.Items[0].NFe.Det.Items[nX].Prod.CFOP );
 
     cdsMateriasCFOP.AsInteger             := StrToIntDef( IfThen(codigo_natureza = '', '', Campo_por_campo('NATUREZAS_OPERACAO', 'CFOP', 'CODIGO', codigo_natureza)) ,0);
@@ -266,17 +274,22 @@ begin
   MeuHint := TMinhaJanelaHint.Create(Self);
 end;
 
-function TfrmEntradaNota.MateriaCadastrada(produtoNfe: TProd): Integer;
+procedure TfrmEntradaNota.MateriaCadastrada(produtoNfe: TProd; var codigo :integer; var descricao :String);
 begin
   dm.qryGenerica.Close;
-  dm.qryGenerica.SQL.Text := 'SELECT CODIGO_PRODUTO FROM PRODUTO_FORNECEDOR                      '+
-                             ' WHERE CODIGO_FORNECEDOR = :CF AND CODIGO_PRODUTO_FORNECEDOR = :CMF';
+  dm.qryGenerica.SQL.Text := 'SELECT PRO.CODIGO, PRO.descricao FROM PRODUTO_FORNECEDOR PF              '+
+                             ' LEFT JOIN PRODUTOS PRO ON PRO.codigo = PF.codigo_produto                '+
+                             ' WHERE PF.CODIGO_FORNECEDOR = :CF AND PF.CODIGO_PRODUTO_FORNECEDOR = :CMF';
 
   dm.qryGenerica.ParamByName('CF').AsInteger   := StrToInt(trim(copy(lbFornecedor.Caption, 1 ,pos('-',lbFornecedor.Caption)-1)) );
   dm.qryGenerica.ParamByName('CMF').AsString   := produtoNfe.cProd;
   dm.qryGenerica.Open;
 
-  Result := IfThen( dm.qryGenerica.IsEmpty, 0, dm.qryGenerica.fieldByName('CODIGO_PRODUTO').AsInteger);
+  if not dm.qryGenerica.IsEmpty then
+  begin
+    codigo    := dm.qryGenerica.FieldByName('CODIGO').AsInteger;
+    descricao := dm.qryGenerica.FieldByName('DESCRICAO').AsString;
+  end;
 end;
 
 function TfrmEntradaNota.fornecedorCadastrado: Boolean;
@@ -329,8 +342,8 @@ begin
       cdsMateriasCODMAT_ERP.AsInteger := frmCadastroProduto.cdsCODIGO.AsInteger;
       cdsMateriasVALIDADO.AsString    := IfThen(cdsMateriasCFOP.AsInteger > 0, 'S', 'N');
       cdsMaterias.Post;
-
-      btnAtuliza.Click;
+      dec(Validacoes);
+     // btnAtuliza.Click;
     end
     else
       result := false;
@@ -361,8 +374,7 @@ begin
     cdsMateriasCODMAT_ERP.AsInteger := codigo_produto;
     cdsMateriasVALIDADO.AsString    := IfThen(cdsMateriasCFOP.AsInteger > 0, 'S', 'N');
     cdsMaterias.Post;
-
-    btnAtuliza.Click;    
+    dec(Validacoes);
   end
   else
     result := false;
@@ -372,7 +384,7 @@ end;
 
 procedure TfrmEntradaNota.salvaAssociacaoProduto(codigo_produto: integer; codigo_produto_fornecedor: String);
 var
-    MateriaFornecedor  :TProdutoFornecedor;
+    ProdutoFornecedor  :TProdutoFornecedor;
     repositorio        :TRepositorio;
     Produto            :TProduto;
 begin
@@ -390,21 +402,21 @@ begin
 
 
     repositorio       := TFabricaRepositorio.GetRepositorio(TProdutoFornecedor.ClassName);
-    MateriaFornecedor := TProdutoFornecedor.Create;
+    ProdutoFornecedor := TProdutoFornecedor.Create;
 
 
-    MateriaFornecedor.codigo_produto            := codigo_produto;
-    MateriaFornecedor.codigo_fornecedor         := StrToInt( trim(copy(lbFornecedor.Caption, 1 ,pos('-',lbFornecedor.Caption)-1)) );
-    MateriaFornecedor.codigo_produto_fornecedor := codigo_produto_fornecedor;
+    ProdutoFornecedor.codigo_produto            := codigo_produto;
+    ProdutoFornecedor.codigo_fornecedor         := StrToInt( trim(copy(lbFornecedor.Caption, 1 ,pos('-',lbFornecedor.Caption)-1)) );
+    ProdutoFornecedor.codigo_produto_fornecedor := codigo_produto_fornecedor;
 
-    repositorio.Salvar(MateriaFornecedor);
+    repositorio.Salvar(ProdutoFornecedor);
 
   Except
     on e :EXception do
       raise Exception.Create('A associação não pode ser completada.'+#13#10+e.Message);
   end;
   Finally
-    FreeAndNil(MateriaFornecedor);
+    FreeAndNil(ProdutoFornecedor);
     FreeAndNil(repositorio);
   end;
 end;
@@ -415,24 +427,73 @@ begin
     PopupCorrecoes.Popup(Mouse.CursorPos.X,Mouse.CursorPos.Y);
 end;
 
+procedure TfrmEntradaNota.DBGridCBN1DrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  inherited;
+  if gdSelected in State then
+    GridMaterias.Canvas.Brush.Color := $00D79844;
+
+  if not odd(cdsMaterias.RecNo) then
+    if not (gdSelected in State) then
+      begin
+        GridMaterias.Canvas.Brush.Color := clMoneyGreen;
+        GridMaterias.Canvas.FillRect(Rect);
+      end;
+
+  TDbGrid(Sender).DefaultDrawDataCell(Rect, TDbGrid(Sender).columns[datacol].field, State);
+
+  if Column.Field = cdsMateriasVALIDADO then begin
+    TDBGridCBN(Sender).Canvas.FillRect(Rect);
+
+    if cdsMateriasVALIDADO.asString = 'S' then
+      ImageList1.Draw(TDBGridCBN(Sender).Canvas, Rect.Left +12, Rect.Top , 0, true)
+    else
+      ImageList1.Draw(TDBGridCBN(Sender).Canvas, Rect.Left +12, Rect.Top , 1, true);
+  end;
+end;
+
+procedure TfrmEntradaNota.Desassociarproduto1Click(Sender: TObject);
+begin
+  if not confirma('Confirma desassociação dos produtos seguintes?'+#13#10+#13#10+
+              '- '+cdsMateriasDESCRICAO_FORN.AsString+#13#10+
+              '- '+cdsMateriasDESCRICAO_ERP.AsString) then
+    exit;
+
+  dm.qryGenerica.Close;
+  dm.qryGenerica.SQL.Text := 'DELETE FROM PRODUTO_FORNECEDOR                                     '+
+                             ' WHERE CODIGO_FORNECEDOR = :CF AND CODIGO_PRODUTO_FORNECEDOR = :CPF';
+
+  dm.qryGenerica.ParamByName('CF').AsInteger   := StrToInt(trim(copy(lbFornecedor.Caption, 1 ,pos('-',lbFornecedor.Caption)-1)) );
+  dm.qryGenerica.ParamByName('CPF').AsString   := cdsMateriasCODMAT_FORNECEDOR.AsString;
+  dm.qryGenerica.ExecSQL;
+
+  cdsMaterias.Edit;
+  cdsMateriasCODMAT_ERP.AsInteger := 0;
+  cdsMateriasVALIDADO.AsString    := 'N';
+  cdsMaterias.Post;
+end;
+
 procedure TfrmEntradaNota.cdsMateriasAfterScroll(DataSet: TDataSet);
 begin
   Associarumamatria1.Visible           := (cdsMateriasCODMAT_ERP.AsInteger = 0);
   Cadastrarmatria1.Visible             := (cdsMateriasCODMAT_ERP.AsInteger = 0);
   AssociarumCFOP1.Visible              := (cdsMateriasCFOP.AsInteger = 0);
   CadastrarCFOPcorrespondente1.Visible := (cdsMateriasCFOP.AsInteger = 0);
+  Desassociarproduto1.Visible          := (cdsMateriasCODMAT_ERP.AsInteger > 0);
 end;
 
 procedure TfrmEntradaNota.Associarumamatria1Click(Sender: TObject);
 begin
+  registroSelecionado := cdsMaterias.RecNo;
  if self.associar_produto( AcbrNfe.NotasFiscais.Items[0].NFe.Det.Items[ cdsMaterias.recno -1 ].Prod ) then
-//   dec(Validacoes);
+  cdsMaterias.RecNo   := registroSelecionado;
 end;
 
 procedure TfrmEntradaNota.Cadastrarmatria1Click(Sender: TObject);
 begin
+  registroSelecionado := cdsMaterias.RecNo;
   if self.cadastrar_produto( AcbrNfe.NotasFiscais.Items[0].NFe.Det.Items[ cdsMaterias.recno -1 ].Prod ) then
-  // dec(Validacoes);
+  cdsMaterias.RecNo   := registroSelecionado;
 end;
 
 procedure TfrmEntradaNota.btnLimpaClick(Sender: TObject);
@@ -445,6 +506,8 @@ begin
   lbInfoFornecedor.Caption := '...';
   lbInfoNota.Caption       := '...';
   cdsMaterias.EmptyDataSet;
+  GridMaterias.BorderStyle := bsNone;
+  GridMaterias.BorderStyle := bsSingle;
   Validacoes               := 0;
 end;
 
@@ -556,8 +619,10 @@ end;
 
 procedure TfrmEntradaNota.GridMateriasCellClick(Column: TColumn);
 begin
-  if (cdsMateriasCODMAT_ERP.AsInteger = 0) or (cdsMateriasCFOP.AsInteger = 0) then
-    PopupCorrecoes.Popup(Mouse.CursorPos.X,Mouse.CursorPos.Y);
+  if Popupcorrecoes.PopupPoint.X = -1 then
+    PopupCorrecoes.Popup(Mouse.CursorPos.X,Mouse.CursorPos.Y)
+  else
+    Popupcorrecoes.PopupPoint.SetLocation(-1,-1);
 end;
 
 procedure TfrmEntradaNota.GridMateriasDrawColumnCell(Sender: TObject;
@@ -566,21 +631,21 @@ procedure TfrmEntradaNota.GridMateriasDrawColumnCell(Sender: TObject;
 begin
   inherited;
 
-  if gdSelected in State then
-    GridMaterias.Canvas.Brush.Color := $00D79844;
+  if (gdSelected in State) and (Column.Field <> cdsMateriasVALIDADO) then
+    TDBGridCBN(Sender).Canvas.Brush.Color := $00D79844;
 
   if not odd(cdsMaterias.RecNo) then
     if not (gdSelected in State) then
       begin
-        GridMaterias.Canvas.Brush.Color := clMoneyGreen;
-        GridMaterias.Canvas.FillRect(Rect);
-//        GridMaterias.DefaultDrawDataCell(rect,Column.Field,state);
+        TDBGridCBN(Sender).Canvas.Brush.Color := clMoneyGreen;
+        TDBGridCBN(Sender).Canvas.FillRect(Rect);
       end;
 
   TDbGrid(Sender).DefaultDrawDataCell(Rect, TDbGrid(Sender).columns[datacol].field, State);
 
   if Column.Field = cdsMateriasVALIDADO then begin
     TDBGridCBN(Sender).Canvas.FillRect(Rect);
+    TDBGridCBN(Sender).Canvas.Font.Color := clWhite;
 
     if cdsMateriasVALIDADO.asString = 'S' then
       ImageList1.Draw(TDBGridCBN(Sender).Canvas, Rect.Left +12, Rect.Top , 0, true)
@@ -626,6 +691,13 @@ begin
 
 end;
 
+procedure TfrmEntradaNota.GridMateriasMouseLeave(Sender: TObject);
+begin
+  inherited;
+  GridMaterias.Hint := '';
+  MeuHint.ReleaseHandle;
+end;
+
 procedure TfrmEntradaNota.GridMateriasMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 var
    MColumn, MRow: Longint;
@@ -643,7 +715,7 @@ begin
       // Fazemos a coluna do Grid ser a coluna apontada pelo mouse, para isso usamos a classe amiga
       // definida no começo da unit
       TCellGrid(GridMaterias).Col := MColumn;
- 
+
       // Movemos o DataSet para a linha apontada pelo mouse deslocando em relação à sua posição
       // anterior
       GridMaterias.DataSource.DataSet.MoveBy(MRow - TCellGrid(GridMaterias).Row);
@@ -661,7 +733,7 @@ begin
 
       if TClientDataSet(GridMaterias.DataSource.DataSet).FieldByName('CODMAT_ERP').AsInteger = 0 then
         MsgHint := MsgHint + IfThen(MsgHint = '','',#13#10)+validacao_materia +#13#10+
-                            TClientDataSet(GridMaterias.DataSource.DataSet).FieldByName('DESCRICAO').AsString;
+                            TClientDataSet(GridMaterias.DataSource.DataSet).FieldByName('DESCRICAO_FORN').AsString;
 
       GridMaterias.Hint := MsgHint;
 

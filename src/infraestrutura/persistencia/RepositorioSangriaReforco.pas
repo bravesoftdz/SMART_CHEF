@@ -49,6 +49,7 @@ begin
    SangriaReforco.tipo           := self.FQuery.FieldByName('tipo').AsString;
    SangriaReforco.valor          := self.FQuery.FieldByName('valor').AsFloat;
    SangriaReforco.descricao      := self.FQuery.FieldByName('descricao').AsString;
+   SangriaReforco.tipo_moeda     := self.FQuery.FieldByName('tipo_moeda').AsInteger;
 
    result := SangriaReforco;
 end;
@@ -96,6 +97,9 @@ begin
    if (SangriaReforcoAntigo.descricao <> SangriaReforcoNovo.descricao) then
      Auditoria.AdicionaCampoAlterado('descricao', SangriaReforcoAntigo.descricao, SangriaReforcoNovo.descricao);
 
+   if (SangriaReforcoAntigo.tipo_moeda <> SangriaReforcoNovo.tipo_moeda) then
+     Auditoria.AdicionaCampoAlterado('tipo_moeda', IntToStr(SangriaReforcoAntigo.tipo_moeda), IntToStr(SangriaReforcoNovo.tipo_moeda));
+
 end;
 
 procedure TRepositorioSangriaReforco.SetCamposExcluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -109,6 +113,7 @@ begin
   Auditoria.AdicionaCampoExcluido('tipo'          , SangriaReforco.tipo);
   Auditoria.AdicionaCampoExcluido('valor'         , FloatToStr(SangriaReforco.valor));
   Auditoria.AdicionaCampoExcluido('descricao'     , SangriaReforco.descricao);
+  Auditoria.AdicionaCampoExcluido('tipo_moeda'    , IntToStr(SangriaReforco.tipo_moeda));
 end;
 
 procedure TRepositorioSangriaReforco.SetCamposIncluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -122,6 +127,7 @@ begin
   Auditoria.AdicionaCampoIncluido('tipo'          ,    SangriaReforco.tipo);
   Auditoria.AdicionaCampoIncluido('valor'         ,    FloatToStr(SangriaReforco.valor));
   Auditoria.AdicionaCampoIncluido('descricao'     ,    SangriaReforco.descricao);
+  Auditoria.AdicionaCampoIncluido('tipo_moeda'    , IntToStr(SangriaReforco.tipo_moeda));
 end;
 
 procedure TRepositorioSangriaReforco.SetIdentificador(Objeto: TObject; Identificador: Variant);
@@ -137,9 +143,10 @@ begin
   self.FQuery.ParamByName('codigo').AsInteger         := SangriaReforco.codigo;
   self.FQuery.ParamByName('codigo_caixa').AsInteger   := StrToInt(Maior_Valor_Cadastrado('CAIXA','CODIGO'));
   self.FQuery.ParamByName('codigo_usuario').AsInteger := SangriaReforco.codigo_usuario;
-  self.FQuery.ParamByName('tipo').AsString           := SangriaReforco.tipo;
-  self.FQuery.ParamByName('valor').AsFloat          := SangriaReforco.valor;
-  self.FQuery.ParamByName('descricao').AsString      := SangriaReforco.descricao;
+  self.FQuery.ParamByName('tipo').AsString            := SangriaReforco.tipo;
+  self.FQuery.ParamByName('valor').AsFloat            := SangriaReforco.valor;
+  self.FQuery.ParamByName('descricao').AsString       := SangriaReforco.descricao;
+  self.FQuery.ParamByName('tipo_moeda').AsInteger     := SangriaReforco.tipo_moeda;
 end;
 
 function TRepositorioSangriaReforco.SQLGet: String;
@@ -164,8 +171,8 @@ end;
 
 function TRepositorioSangriaReforco.SQLSalvar: String;
 begin
-  result := 'update or insert into SANGRIA_REFORCO (CODIGO ,CODIGO_CAIXA ,CODIGO_USUARIO ,TIPO ,VALOR ,DESCRICAO) '+
-           '                      values ( :CODIGO , :CODIGO_CAIXA , :CODIGO_USUARIO , :TIPO , :VALOR , :DESCRICAO) ';
+  result := 'update or insert into SANGRIA_REFORCO (CODIGO ,CODIGO_CAIXA ,CODIGO_USUARIO ,TIPO ,VALOR ,DESCRICAO, TIPO_MOEDA) '+
+           '                      values ( :CODIGO , :CODIGO_CAIXA , :CODIGO_USUARIO , :TIPO , :VALOR , :DESCRICAO, :TIPO_MOEDA) ';
 end;
 
 end.

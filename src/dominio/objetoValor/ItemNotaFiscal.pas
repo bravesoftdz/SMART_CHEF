@@ -289,7 +289,7 @@ const
                    '  PercentualReducaoICMS, AliquotaICMS, AliquotaIPI, AliquotaCOFINS: Real); ';
 begin
    self.Create(Produto, NaturezaOperacao, Quantidade, ValorUnitario);
-
+ {
    if (AliquotaICMS <= 0) then
     raise TExcecaoParametroInvalido.Create(self.ClassName, NOME_DO_METODO, 'AliquotaICMS');
 
@@ -301,7 +301,7 @@ begin
 
    if (AliquotaCOFINS <= 0) then
     raise TExcecaoParametroInvalido.Create(self.ClassName, NOME_DO_METODO, 'AliquotaCOFINS');
-
+                                                                                              }
 
    self.FIcms00           := TIcms00.Create(OrigemMercadoria,
                                             AliquotaICMS,

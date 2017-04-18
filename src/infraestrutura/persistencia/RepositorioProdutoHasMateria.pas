@@ -4,7 +4,7 @@ interface
 
 uses
   DB,
-  Auditoria,
+  Auditoria, System.StrUtils,
   Repositorio;
 
 type
@@ -56,6 +56,7 @@ begin
    ProdutoHasMateria.Codigo         := self.FQuery.FieldByName('codigo').AsInteger;
    ProdutoHasMateria.codigo_produto := self.FQuery.FieldByName('codigo_produto').AsInteger;
    ProdutoHasMateria.codigo_materia := self.FQuery.FieldByName('codigo_materia').AsInteger;
+   ProdutoHasMateria.Adicional      := self.FQuery.FieldByName('adicional').AsString = 'S';
 
    result := ProdutoHasMateria;
 end;
@@ -132,6 +133,7 @@ begin
    self.FQuery.ParamByName('codigo').AsInteger         := ProdutoHasMateria.Codigo;
    self.FQuery.ParamByName('codigo_produto').AsInteger := ProdutoHasMateria.codigo_produto;
    self.FQuery.ParamByName('codigo_materia').AsInteger := ProdutoHasMateria.codigo_materia;
+   self.FQuery.ParamByName('Adicional').AsString       := IfThen(ProdutoHasMateria.Adicional, 'S', 'N');
 end;
 
 function TRepositorioProdutoHasMateria.SQLGet: String;
@@ -156,8 +158,8 @@ end;
 
 function TRepositorioProdutoHasMateria.SQLSalvar: String;
 begin
-   result := 'update or insert into produtos_has_materias (codigo, codigo_produto, codigo_materia) '+
-             '                               values (:codigo, :codigo_produto, :codigo_materia)    ';
+   result := 'update or insert into produtos_has_materias (codigo, codigo_produto, codigo_materia, adicional) '+
+             '                               values (:codigo, :codigo_produto, :codigo_materia, :adicional)    ';
 end;
 
 end.

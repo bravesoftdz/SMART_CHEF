@@ -24,7 +24,7 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
     Top = 479
     Width = 594
     ExplicitTop = 479
-    ExplicitWidth = 571
+    ExplicitWidth = 594
     inherited Shape8: TShape
       Width = 592
       ExplicitWidth = 569
@@ -39,7 +39,7 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
     ExplicitWidth = 450
     ExplicitHeight = 479
     inherited tsConsulta: TTabSheet
-      ExplicitWidth = 419
+      ExplicitWidth = 442
       ExplicitHeight = 448
       DesignSize = (
         442
@@ -58,12 +58,12 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
       end
     end
     inherited tsDados: TTabSheet
-      ExplicitWidth = 419
+      ExplicitWidth = 442
       ExplicitHeight = 448
       inherited pnlDados: TPanel
         Width = 442
         Height = 448
-        ExplicitWidth = 419
+        ExplicitWidth = 442
         ExplicitHeight = 448
         DesignSize = (
           442
@@ -425,7 +425,6 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
     object TabSheet1: TTabSheet
       Caption = 'Padr'#245'es'
       ImageIndex = 2
-      ExplicitWidth = 419
       object pnlPadroes: TPanel
         Left = 0
         Top = -1
@@ -980,17 +979,14 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
     object TabSheet2: TTabSheet
       Caption = 'Config. NF-e'
       ImageIndex = 3
-      ExplicitWidth = 419
       object PageControl2: TPageControl
         Left = 0
         Top = 0
         Width = 442
         Height = 448
-        ActivePage = TabSheet3
+        ActivePage = TabSheet4
         Align = alClient
         TabOrder = 0
-        ExplicitTop = 27
-        ExplicitHeight = 421
         object TabSheet3: TTabSheet
           Caption = 'NF-e'
           Font.Charset = DEFAULT_CHARSET
@@ -999,10 +995,6 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
           Font.Name = 'Vani'
           Font.Style = []
           ParentFont = False
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object gpbAliquotas: TGroupBox
             Left = 11
             Top = 127
@@ -1241,11 +1233,142 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
             end
           end
         end
+        object TabSheet4: TTabSheet
+          Caption = 'Informa'#231#245'es de e-mail'
+          ImageIndex = 1
+          object Label23: TLabel
+            Left = 14
+            Top = 13
+            Width = 54
+            Height = 13
+            Caption = 'SMTP Host'
+          end
+          object Label24: TLabel
+            Left = 287
+            Top = 11
+            Width = 51
+            Height = 13
+            Caption = 'SMTP Port'
+          end
+          object Label25: TLabel
+            Left = 14
+            Top = 75
+            Width = 53
+            Height = 13
+            Caption = 'SMTP User'
+          end
+          object Label26: TLabel
+            Left = 286
+            Top = 75
+            Width = 79
+            Height = 13
+            Caption = 'SMTP Password'
+          end
+          object Label27: TLabel
+            Left = 14
+            Top = 135
+            Width = 42
+            Height = 13
+            Caption = 'Assunto'
+          end
+          object Label28: TLabel
+            Left = 14
+            Top = 193
+            Width = 56
+            Height = 13
+            Caption = 'Mensagem'
+          end
+          object edtHost: TEdit
+            Left = 14
+            Top = 31
+            Width = 250
+            Height = 25
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = 12418084
+            Font.Height = -13
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            MaxLength = 50
+            ParentFont = False
+            TabOrder = 0
+          end
+          object edtPort: TCurrencyEdit
+            Left = 286
+            Top = 31
+            Width = 130
+            Height = 25
+            DisplayFormat = '0'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = 12418084
+            Font.Height = -13
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+          end
+          object edtUser: TEdit
+            Left = 14
+            Top = 93
+            Width = 250
+            Height = 25
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = 12418084
+            Font.Height = -13
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            MaxLength = 50
+            ParentFont = False
+            TabOrder = 2
+          end
+          object edtPassword: TEdit
+            Left = 286
+            Top = 93
+            Width = 130
+            Height = 25
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = 12418084
+            Font.Height = -13
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            MaxLength = 50
+            ParentFont = False
+            PasswordChar = '*'
+            TabOrder = 3
+          end
+          object edtAssunto: TEdit
+            Left = 14
+            Top = 153
+            Width = 402
+            Height = 25
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = 12418084
+            Font.Height = -13
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            MaxLength = 50
+            ParentFont = False
+            TabOrder = 4
+          end
+          object memoMensagem: TMemo
+            Left = 14
+            Top = 211
+            Width = 402
+            Height = 192
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = 12418084
+            Font.Height = -13
+            Font.Name = 'Segoe UI'
+            Font.Style = []
+            MaxLength = 2000
+            ParentFont = False
+            TabOrder = 5
+          end
+        end
       end
     end
   end
   inherited cds: TClientDataSet
-    Left = 119
+    Left = 79
     object cdsCODIGO: TIntegerField
       FieldName = 'CODIGO'
     end
@@ -1255,7 +1378,7 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
     end
   end
   inherited ds: TDataSource
-    Left = 152
+    Left = 112
     Top = 168
   end
 end

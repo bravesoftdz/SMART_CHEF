@@ -34,7 +34,7 @@ var Movimento :TMovimento;
 begin
   Movimento := (Objeto as TMovimento);
 
-  result := (Movimento.codigo_caixa = self.FCaixa.codigo);
+  result := (Movimento.codigo_caixa = self.FCaixa.codigo) and (Movimento.Pedido.situacao <> 'C');
 end;
 
 end.

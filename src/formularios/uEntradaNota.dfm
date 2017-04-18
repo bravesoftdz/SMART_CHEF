@@ -1,33 +1,37 @@
 inherited frmEntradaNota: TfrmEntradaNota
   Left = 421
   Top = 199
-  BorderIcons = [biSystemMenu, biMinimize]
+  BorderIcons = [biSystemMenu, biMaximize]
   Caption = 'Importador de Notas Fiscais de entrada por XML'
   ClientHeight = 537
-  ClientWidth = 691
+  ClientWidth = 760
   OldCreateOrder = True
-  ExplicitWidth = 697
+  ExplicitWidth = 766
   ExplicitHeight = 565
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlPropaganda: TPanel
     Top = 461
-    Width = 691
+    Width = 760
     TabOrder = 4
+    Visible = False
     ExplicitTop = 461
-    ExplicitWidth = 691
+    ExplicitWidth = 760
     inherited Shape8: TShape
-      Width = 689
+      Width = 758
       ExplicitWidth = 689
     end
   end
   object Panel1: TPanel
     Left = 0
     Top = 496
-    Width = 691
+    Width = 760
     Height = 41
     Align = alBottom
     TabOrder = 0
+    DesignSize = (
+      760
+      41)
     object SpeedButton1: TSpeedButton
       Left = 8
       Top = 5
@@ -152,10 +156,11 @@ inherited frmEntradaNota: TfrmEntradaNota
       OnClick = btnLimpaClick
     end
     object btnImportarNota: TBitBtn
-      Left = 537
+      Left = 604
       Top = 5
       Width = 145
       Height = 30
+      Anchors = [akTop, akRight]
       Caption = ' Importar Nota'
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
@@ -191,8 +196,9 @@ inherited frmEntradaNota: TfrmEntradaNota
   object GroupBox1: TGroupBox
     Left = 10
     Top = 16
-    Width = 672
+    Width = 738
     Height = 73
+    Anchors = [akLeft, akTop, akRight]
     Caption = ' Selecione o arquivo ".XML" para efetuar importa'#231#227'o da Nota '
     Font.Charset = DEFAULT_CHARSET
     Font.Color = 3815994
@@ -329,9 +335,10 @@ inherited frmEntradaNota: TfrmEntradaNota
   end
   object GroupBox2: TGroupBox
     Left = 10
-    Top = 94
-    Width = 671
+    Top = 93
+    Width = 738
     Height = 397
+    Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = ' Valida'#231#245'es '
     Font.Charset = DEFAULT_CHARSET
     Font.Color = 3815994
@@ -340,37 +347,51 @@ inherited frmEntradaNota: TfrmEntradaNota
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 2
+    DesignSize = (
+      738
+      397)
     object Shape1: TShape
-      Left = 490
+      Left = 557
       Top = 7
       Width = 112
       Height = 81
+      Anchors = [akTop, akRight]
       Pen.Color = 13948116
+      ExplicitLeft = 490
     end
     object lbInfoFornecedor: TLabel
-      Left = 542
+      Left = 608
       Top = 24
       Width = 12
       Height = 17
+      Anchors = [akTop, akRight]
       Caption = '...'
       Visible = False
+      ExplicitLeft = 542
     end
     object lbInfoNota: TLabel
-      Left = 542
+      Left = 608
       Top = 60
       Width = 12
       Height = 17
+      Anchors = [akTop, akRight]
       Caption = '...'
       Visible = False
+      ExplicitLeft = 542
     end
     object Label3: TLabel
       Left = 1
       Top = 36
-      Width = 672
+      Width = 1944
       Height = 14
+      Anchors = [akLeft, akTop, akRight]
       Caption = 
         '________________________________________________________________' +
-        '________________________________________________'
+        '________________________________________________________________' +
+        '________________________________________________________________' +
+        '________________________________________________________________' +
+        '________________________________________________________________' +
+        '____'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = 13816530
       Font.Height = -11
@@ -380,10 +401,11 @@ inherited frmEntradaNota: TfrmEntradaNota
       Transparent = True
     end
     object fornecedor_no: TImage
-      Left = 538
+      Left = 604
       Top = 22
       Width = 18
       Height = 18
+      Anchors = [akTop, akRight]
       Picture.Data = {
         07544269746D617036030000424D360300000000000036000000280000001000
         0000100000000100180000000000000300000000000000000000000000000000
@@ -412,12 +434,14 @@ inherited frmEntradaNota: TfrmEntradaNota
         7988EF4042DFA6A4E9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEEED
         FEAEACF67E7CF36969EF6869EE7C7CEEADABEDEEEDFDFFFFFFFFFFFFFFFFFFFF
         FFFF}
+      ExplicitLeft = 538
     end
     object fornecedor_yes: TImage
-      Left = 538
+      Left = 604
       Top = 22
       Width = 18
       Height = 18
+      Anchors = [akTop, akRight]
       Picture.Data = {
         07544269746D617036030000424D360300000000000036000000280000001000
         0000100000000100180000000000000300000000000000000000000000000000
@@ -448,10 +472,11 @@ inherited frmEntradaNota: TfrmEntradaNota
         FFFF}
     end
     object Nota_no: TImage
-      Left = 538
+      Left = 604
       Top = 59
       Width = 18
       Height = 18
+      Anchors = [akTop, akRight]
       Picture.Data = {
         07544269746D617036030000424D360300000000000036000000280000001000
         0000100000000100180000000000000300000000000000000000000000000000
@@ -480,12 +505,14 @@ inherited frmEntradaNota: TfrmEntradaNota
         7988EF4042DFA6A4E9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEEED
         FEAEACF67E7CF36969EF6869EE7C7CEEADABEDEEEDFDFFFFFFFFFFFFFFFFFFFF
         FFFF}
+      ExplicitLeft = 538
     end
     object Nota_yes: TImage
-      Left = 538
+      Left = 604
       Top = 59
       Width = 18
       Height = 18
+      Anchors = [akTop, akRight]
       Picture.Data = {
         07544269746D617036030000424D360300000000000036000000280000001000
         0000100000000100180000000000000300000000000000000000000000000000
@@ -542,10 +569,11 @@ inherited frmEntradaNota: TfrmEntradaNota
       ParentFont = False
     end
     object btnInfoFornecedor: TSpeedButton
-      Left = 624
+      Left = 691
       Top = 16
       Width = 23
       Height = 22
+      Anchors = [akTop, akRight]
       Flat = True
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
@@ -575,12 +603,14 @@ inherited frmEntradaNota: TfrmEntradaNota
         BEFDEFCBFFFAE7ECC28BFDF9F4EAB973F4D59FF2D5A0F2D49EF2D69FF4D9A6F3
         D7A1F3D7A1F8DFA8F3D79FF3D7A0F4D7A1F4D69BF0C685FFFFFF}
       OnClick = btnInfoFornecedorClick
+      ExplicitLeft = 624
     end
     object btnInfoNota: TSpeedButton
-      Left = 624
+      Left = 691
       Top = 58
       Width = 23
       Height = 22
+      Anchors = [akTop, akRight]
       Flat = True
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
@@ -610,15 +640,20 @@ inherited frmEntradaNota: TfrmEntradaNota
         BEFDEFCBFFFAE7ECC28BFDF9F4EAB973F4D59FF2D5A0F2D49EF2D69FF4D9A6F3
         D7A1F3D7A1F8DFA8F3D79FF3D7A0F4D7A1F4D69BF0C685FFFFFF}
       OnClick = btnInfoNotaClick
+      ExplicitLeft = 624
     end
     object Label1: TLabel
       Left = 1
       Top = 75
-      Width = 672
+      Width = 1944
       Height = 14
       Caption = 
         '________________________________________________________________' +
-        '________________________________________________'
+        '________________________________________________________________' +
+        '________________________________________________________________' +
+        '________________________________________________________________' +
+        '________________________________________________________________' +
+        '____'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = 13816530
       Font.Height = -11
@@ -629,7 +664,7 @@ inherited frmEntradaNota: TfrmEntradaNota
     end
     object Label2: TLabel
       Left = 8
-      Top = 107
+      Top = 115
       Width = 183
       Height = 17
       Caption = 'Produtos a serem importados'
@@ -652,12 +687,15 @@ inherited frmEntradaNota: TfrmEntradaNota
       Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       ParentFont = False
+      Visible = False
     end
     object Label5: TLabel
       Left = 8
       Top = 373
       Width = 168
       Height = 17
+      Anchors = [akLeft, akBottom]
+      AutoSize = False
       Caption = '[F2] Altera CFOP selecionado'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = 5994285
@@ -680,14 +718,16 @@ inherited frmEntradaNota: TfrmEntradaNota
       ParentFont = False
       TabOrder = 0
       Text = '000'
+      Visible = False
       OnKeyPress = edtCSTKeyPress
     end
   end
   object GridMaterias: TDBGrid
     Left = 17
     Top = 230
-    Width = 656
+    Width = 723
     Height = 235
+    Anchors = [akLeft, akTop, akRight, akBottom]
     DataSource = dsMaterias
     Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
     PopupMenu = ppmalteraCFOP
@@ -701,6 +741,7 @@ inherited frmEntradaNota: TfrmEntradaNota
     OnCellClick = GridMateriasCellClick
     OnDrawColumnCell = GridMateriasDrawColumnCell
     OnKeyDown = GridMateriasKeyDown
+    OnMouseLeave = GridMateriasMouseLeave
     OnMouseMove = GridMateriasMouseMove
     Columns = <
       item
@@ -725,9 +766,9 @@ inherited frmEntradaNota: TfrmEntradaNota
       end
       item
         Expanded = False
-        FieldName = 'DESCRICAO'
-        Title.Caption = '  DESCRICAO'
-        Width = 351
+        FieldName = 'DESCRICAO_FORN'
+        Title.Caption = 'DESCRI'#199#195'O'
+        Width = 410
         Visible = True
       end
       item
@@ -755,13 +796,17 @@ inherited frmEntradaNota: TfrmEntradaNota
     object cdsMateriasCFOP: TIntegerField
       FieldName = 'CFOP'
     end
-    object cdsMateriasDESCRICAO: TStringField
-      FieldName = 'DESCRICAO'
-      Size = 100
-    end
     object cdsMateriasVALIDADO: TStringField
       FieldName = 'VALIDADO'
       Size = 1
+    end
+    object cdsMateriasDESCRICAO_FORN: TStringField
+      FieldName = 'DESCRICAO_FORN'
+      Size = 40
+    end
+    object cdsMateriasDESCRICAO_ERP: TStringField
+      FieldName = 'DESCRICAO_ERP'
+      Size = 40
     end
   end
   object dsMaterias: TDataSource
@@ -784,7 +829,7 @@ inherited frmEntradaNota: TfrmEntradaNota
     Left = 488
     Top = 8
     Bitmap = {
-      494C010104000900300010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101040009004C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1078,6 +1123,10 @@ inherited frmEntradaNota: TfrmEntradaNota
       Caption = 'Cadastrar CFOP correspondente'
       ImageIndex = 2
       OnClick = CadastrarCFOPcorrespondente1Click
+    end
+    object Desassociarproduto1: TMenuItem
+      Caption = 'Desassociar produto'
+      OnClick = Desassociarproduto1Click
     end
   end
   object ppmalteraCFOP: TPopupMenu

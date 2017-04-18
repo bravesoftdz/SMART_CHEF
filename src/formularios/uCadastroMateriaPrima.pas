@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, uCadastroPadrao, DB, DBClient, StdCtrls, Grids, DBGrids,
   DBGridCBN, ComCtrls, Buttons, ExtCtrls, Mask, RXToolEdit, RXCurrEdit, contnrs,
-  ImgList, pngimage;
+  ImgList, pngimage, frameBuscaProduto;
 
 type
   TfrmCadastroMateriaPrima = class(TfrmCadastroPadrao)
@@ -19,6 +19,13 @@ type
     edtValor: TCurrencyEdit;
     Label12: TLabel;
     Label1: TLabel;
+    Label2: TLabel;
+    edtDescricao2: TEdit;
+    BuscaProduto1: TBuscaProduto;
+    Label3: TLabel;
+    edtQuantidade: TCurrencyEdit;
+    Label5: TLabel;
+    procedure FormShow(Sender: TObject);
   private
     { Altera um registro existente no CDS de consulta }
     procedure AlterarRegistroNoCDS(Registro :TObject); override;
@@ -113,6 +120,12 @@ begin
   edtMateria.SetFocus;
 end;
 
+procedure TfrmCadastroMateriaPrima.FormShow(Sender: TObject);
+begin
+  inherited;
+  BuscaProduto1.ProdutoMateria := true;
+end;
+
 function TfrmCadastroMateriaPrima.GravarDados: TObject;
 var
   MateriaPrima             :TMateriaPrima;
@@ -128,8 +141,12 @@ begin
      if not Assigned(MateriaPrima) then
       MateriaPrima := TMateriaPrima.Create;
 
-     MateriaPrima.descricao    := self.edtMateria.Text;
-     MateriaPrima.valor        := self.edtValor.Value;
+     MateriaPrima.descricao     := self.edtMateria.Text;
+     MateriaPrima.valor         := self.edtValor.Value;
+     MateriaPrima.descricao2    := self.edtDescricao2.Text;
+     if assigned(BuscaProduto1.Produto) then
+       MateriaPrima.codigoProduto := BuscaProduto1.Produto.codigo;
+     MateriaPrima.quantidade    := edtQuantidade.Value;
 
      RepositorioMateriaPrima.Salvar(MateriaPrima);
 
@@ -186,9 +203,12 @@ begin
 
     if not Assigned(MateriaPrima) then exit;
 
-    self.edtCodigo.Text      := IntToStr(MateriaPrima.codigo);
-    self.edtMateria.Text     := MateriaPrima.descricao;
-    self.edtValor.Value      := MateriaPrima.valor; 
+    self.edtCodigo.Text       := IntToStr(MateriaPrima.codigo);
+    self.edtMateria.Text      := MateriaPrima.descricao;
+    self.edtValor.Value       := MateriaPrima.valor;
+    self.BuscaProduto1.codigo := MateriaPrima.codigoProduto;
+    self.edtDescricao2.Text   := MateriaPrima.descricao2;
+    self.edtQuantidade.Value  := MateriaPrima.quantidade;
 
   finally
     FreeAndNil(RepositorioMateriaPrima);
@@ -203,6 +223,14 @@ begin
   if trim(edtMateria.Text) = '' then begin
     avisar('Favor informar a descrição da matéria');
     edtMateria.SetFocus;
+  end
+  else if assigned(BuscaProduto1.Produto) and (edtQuantidade.Value <= 0) then begin
+    avisar('Favor informar a quantidade correspondente à matéria');
+    edtQuantidade.SetFocus;
+  end
+  else if not assigned(BuscaProduto1.Produto) and (edtQuantidade.Value > 0) then begin
+    avisar('Favor informar o produto correspondente à matéria');
+    BuscaProduto1.edtCodigo.SetFocus;
   end
   else
     result := true;

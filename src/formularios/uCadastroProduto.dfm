@@ -2,47 +2,45 @@ inherited frmCadastroProduto: TfrmCadastroProduto
   Left = 342
   Top = 171
   Caption = 'Cadastro de Produtos'
-  ClientHeight = 602
-  ClientWidth = 670
+  ClientHeight = 641
+  ClientWidth = 733
   OnDestroy = FormDestroy
-  ExplicitWidth = 676
-  ExplicitHeight = 630
+  ExplicitWidth = 739
+  ExplicitHeight = 669
   PixelsPerInch = 96
   TextHeight = 13
   inherited Splitter1: TSplitter
-    Height = 567
+    Height = 606
     ExplicitHeight = 516
   end
   inherited pnlBotoes: TPanel
-    Height = 567
-    ExplicitHeight = 567
+    Height = 606
+    ExplicitHeight = 606
   end
   inherited pnlPropaganda: TPanel
-    Top = 567
-    Width = 670
-    ExplicitTop = 567
-    ExplicitWidth = 670
+    Top = 606
+    Width = 733
+    ExplicitTop = 606
+    ExplicitWidth = 733
     inherited Shape8: TShape
-      Width = 668
+      Width = 731
       ExplicitWidth = 668
     end
   end
   inherited pgGeral: TPageControl
-    Width = 527
-    Height = 567
-    ActivePage = tsDados
-    ExplicitWidth = 527
-    ExplicitHeight = 567
+    Width = 590
+    Height = 606
+    ExplicitWidth = 590
+    ExplicitHeight = 606
     inherited tsConsulta: TTabSheet
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 519
-      ExplicitHeight = 536
+      ExplicitWidth = 582
+      ExplicitHeight = 575
       inherited gridConsulta: TDBGridCBN
         Left = 0
         Top = 0
-        Width = 519
-        Height = 513
+        Width = 582
+        Height = 552
+        OnDrawColumnCell = gridConsultaDrawColumnCell
         Columns = <
           item
             Expanded = False
@@ -63,6 +61,11 @@ inherited frmCadastroProduto: TfrmCadastroProduto
             FieldName = 'VALOR'
             Title.Caption = 'Valor'
             Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ATIVO'
+            Visible = True
           end>
       end
       inherited lblAjudaSelecionar: TStaticText
@@ -74,40 +77,40 @@ inherited frmCadastroProduto: TfrmCadastroProduto
       end
     end
     inherited tsDados: TTabSheet
-      ExplicitWidth = 519
-      ExplicitHeight = 536
+      ExplicitWidth = 582
+      ExplicitHeight = 575
       inherited pnlDados: TPanel
-        Width = 519
-        Height = 536
-        ExplicitWidth = 519
-        ExplicitHeight = 536
+        Width = 582
+        Height = 575
+        ExplicitWidth = 582
+        ExplicitHeight = 575
         DesignSize = (
-          519
-          536)
+          582
+          575)
         inherited lblAsterisco: TLabel [0]
-          Top = 510
+          Top = 549
           Anchors = [akLeft, akBottom]
           ExplicitTop = 459
         end
         inherited lblCamposObrigatorios: TLabel [1]
-          Top = 514
+          Top = 553
           Anchors = [akLeft, akBottom]
           ExplicitTop = 463
         end
         inherited Shape2: TShape
           Left = 2
           Top = 3
-          Width = 519
-          Height = 532
+          Width = 580
+          Height = 571
           ExplicitLeft = 2
           ExplicitTop = 3
-          ExplicitWidth = 519
+          ExplicitWidth = 567
           ExplicitHeight = 532
         end
         object Image1: TImage
           Left = 11
           Top = 310
-          Width = 505
+          Width = 563
           Height = 31
           Picture.Data = {
             0954506E67496D61676589504E470D0A1A0A0000000D49484452000007080000
@@ -1041,46 +1044,46 @@ inherited frmCadastroProduto: TfrmCadastroProduto
             0321C03D7F018D8D6165582AD26B0000000049454E44AE426082}
         end
         object lblRazao: TLabel
-          Left = 25
+          Left = 41
           Top = 17
-          Width = 119
+          Width = 114
           Height = 15
           Caption = 'Descri'#231#227'o do produto'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 3815994
           Font.Height = -12
           Font.Name = 'Segoe UI'
-          Font.Style = [fsBold]
+          Font.Style = []
           ParentFont = False
         end
         object Label12: TLabel
-          Left = 24
+          Left = 40
           Top = 65
-          Width = 29
+          Width = 27
           Height = 15
           Caption = 'Valor'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 3815994
           Font.Height = -12
           Font.Name = 'Segoe UI'
-          Font.Style = [fsBold]
+          Font.Style = []
           ParentFont = False
         end
-        object Label1: TLabel
-          Left = 330
+        object lbAtivo: TLabel
+          Left = 356
           Top = 210
-          Width = 35
+          Width = 33
           Height = 15
           Caption = 'Ativo?'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 3815994
           Font.Height = -12
           Font.Name = 'Segoe UI'
-          Font.Style = [fsBold]
+          Font.Style = []
           ParentFont = False
         end
         object Label2: TLabel
-          Left = 12
+          Left = 28
           Top = 8
           Width = 11
           Height = 21
@@ -1094,7 +1097,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           ParentFont = False
         end
         object Label3: TLabel
-          Left = 12
+          Left = 28
           Top = 56
           Width = 11
           Height = 21
@@ -1108,7 +1111,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           ParentFont = False
         end
         object Label5: TLabel
-          Left = 15
+          Left = 46
           Top = 319
           Width = 495
           Height = 13
@@ -1124,7 +1127,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           Transparent = True
         end
         object Label8: TLabel
-          Left = 405
+          Left = 421
           Top = 15
           Width = 24
           Height = 15
@@ -1133,11 +1136,11 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           Font.Color = 3815994
           Font.Height = -12
           Font.Name = 'Segoe UI'
-          Font.Style = [fsBold]
+          Font.Style = []
           ParentFont = False
         end
         object Label9: TLabel
-          Left = 391
+          Left = 407
           Top = 6
           Width = 11
           Height = 21
@@ -1151,130 +1154,156 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           ParentFont = False
         end
         object lblCodBar: TLabel
-          Left = 150
+          Left = 166
           Top = 65
-          Width = 62
+          Width = 60
           Height = 15
           Caption = 'C'#243'd. Barras'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 3815994
           Font.Height = -12
           Font.Name = 'Segoe UI'
-          Font.Style = [fsBold]
+          Font.Style = []
           ParentFont = False
         end
         object lblReferencia: TLabel
-          Left = 335
+          Left = 404
           Top = 65
-          Width = 61
+          Width = 109
           Height = 15
-          Caption = 'Refer'#234'ncia'
+          Caption = 'C'#243'digo para balan'#231'a'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 3815994
           Font.Height = -12
           Font.Name = 'Segoe UI'
-          Font.Style = [fsBold]
+          Font.Style = []
           ParentFont = False
         end
         object lblUnEnt: TLabel
-          Left = 23
+          Left = 39
           Top = 257
-          Width = 74
+          Width = 71
           Height = 15
           Caption = 'Unid. Entrada'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 3815994
           Font.Height = -12
           Font.Name = 'Segoe UI'
-          Font.Style = [fsBold]
+          Font.Style = []
           ParentFont = False
         end
         object lblUnSaida: TLabel
-          Left = 253
+          Left = 269
           Top = 257
-          Width = 61
+          Width = 59
           Height = 15
           Caption = 'Unid. Sa'#237'da'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 3815994
           Font.Height = -12
           Font.Name = 'Segoe UI'
-          Font.Style = [fsBold]
+          Font.Style = []
           ParentFont = False
         end
         object lblMultiplicador: TLabel
-          Left = 103
+          Left = 119
           Top = 280
-          Width = 58
+          Width = 56
           Height = 15
           Caption = 'Equivale a:'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 3815994
           Font.Height = -12
           Font.Name = 'Segoe UI'
-          Font.Style = [fsBold]
+          Font.Style = []
+          ParentFont = False
+        end
+        object lbAdicional: TLabel
+          Left = 392
+          Top = 346
+          Width = 50
+          Height = 15
+          Caption = 'Adicional'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label1: TLabel
+          Left = 276
+          Top = 65
+          Width = 55
+          Height = 15
+          Caption = 'Refer'#234'ncia'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 3815994
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = []
           ParentFont = False
         end
         object lbPrecoCusto: TStaticText
-          Left = 416
+          Left = 432
           Top = 210
-          Width = 86
+          Width = 82
           Height = 19
           Caption = 'Pre'#231'o de custo'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 3815994
           Font.Height = -12
           Font.Name = 'Segoe UI'
-          Font.Style = [fsBold]
+          Font.Style = []
           ParentFont = False
-          TabOrder = 24
+          TabOrder = 25
           Visible = False
         end
         object lbEstoque: TStaticText
-          Left = 142
+          Left = 158
           Top = 210
-          Width = 48
+          Width = 46
           Height = 19
           Caption = 'Estoque'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 3815994
           Font.Height = -12
           Font.Name = 'Segoe UI'
-          Font.Style = [fsBold]
+          Font.Style = []
           ParentFont = False
-          TabOrder = 23
+          TabOrder = 24
           Visible = False
         end
-        object StaticText1: TStaticText
-          Left = 284
+        object lbTributacao: TStaticText
+          Left = 300
           Top = 164
-          Width = 63
+          Width = 61
           Height = 19
           Caption = 'Tributa'#231#227'o'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 3815994
           Font.Height = -12
           Font.Name = 'Segoe UI'
-          Font.Style = [fsBold]
+          Font.Style = []
           ParentFont = False
-          TabOrder = 21
+          TabOrder = 22
         end
         object lbAliquota: TStaticText
-          Left = 416
+          Left = 432
           Top = 164
-          Width = 82
+          Width = 80
           Height = 19
           Caption = 'Al'#237'quota ICMS'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 3815994
           Font.Height = -12
           Font.Name = 'Segoe UI'
-          Font.Style = [fsBold]
+          Font.Style = []
           ParentFont = False
-          TabOrder = 20
+          TabOrder = 21
         end
         object edtProduto: TEdit
-          Left = 23
+          Left = 39
           Top = 33
           Width = 368
           Height = 21
@@ -1283,7 +1312,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
         end
         object edtCodigo: TEdit
           Left = 17
-          Top = 0
+          Top = -8
           Width = 65
           Height = 21
           TabStop = False
@@ -1298,7 +1327,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           Visible = False
         end
         object edtValor: TCurrencyEdit
-          Left = 23
+          Left = 39
           Top = 83
           Width = 105
           Height = 21
@@ -1313,23 +1342,23 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           TabOrder = 3
         end
         object cbAtivo: TComboBox
-          Left = 330
+          Left = 356
           Top = 228
-          Width = 71
+          Width = 61
           Height = 21
           Style = csDropDownList
-          TabOrder = 15
+          TabOrder = 16
           Items.Strings = (
             'SIM'
             'N'#195'O')
         end
         inline ListaGrupo: TListaCampo
-          Left = 320
+          Left = 336
           Top = 107
           Width = 182
           Height = 47
-          TabOrder = 8
-          ExplicitLeft = 320
+          TabOrder = 9
+          ExplicitLeft = 336
           ExplicitTop = 107
           ExplicitWidth = 182
           ExplicitHeight = 47
@@ -1341,7 +1370,10 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           end
           inherited staTitulo: TStaticText
             Left = 20
+            Width = 48
+            Font.Style = []
             ExplicitLeft = 20
+            ExplicitWidth = 48
           end
           inherited comListaCampo: TComboBox
             Left = 19
@@ -1351,10 +1383,10 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           end
         end
         object gridItens: TDBGridCBN
-          Left = 24
-          Top = 392
-          Width = 473
-          Height = 118
+          Left = 26
+          Top = 391
+          Width = 536
+          Height = 157
           Hint = 
             'Pressione Ctrl + Alt + F2 para configurar as colunas'#13'Pressione C' +
             'trl + Alt + F3 para configurar as cores'#13'Pressione Ctrl + Alt + F' +
@@ -1372,12 +1404,14 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           ParentFont = False
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 29
+          TabOrder = 31
           TitleFont.Charset = DEFAULT_CHARSET
           TitleFont.Color = clWindowText
           TitleFont.Height = -11
           TitleFont.Name = 'MS Sans Serif'
           TitleFont.Style = []
+          OnCellClick = gridItensCellClick
+          OnDrawColumnCell = gridItensDrawColumnCell
           OnKeyDown = gridItensKeyDown
           BuscaHabilitada = True
           ConfCores.Normal.CorFonte = clWindowText
@@ -1424,58 +1458,57 @@ inherited frmCadastroProduto: TfrmCadastroProduto
               Expanded = False
               FieldName = 'CODIGO_MATERIA'
               Title.Caption = 'C'#243'digo'
-              Width = 45
+              Width = 42
               Visible = True
             end
             item
               Expanded = False
               FieldName = 'DESCRICAO'
               Title.Caption = 'Mat'#233'ria-prima'
-              Width = 376
+              Width = 360
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'ADICIONAL'
               Visible = True
             end>
         end
         inline BuscaMateriaPrima1: TBuscaMateriaPrima
           Left = 24
           Top = 347
-          Width = 369
+          Width = 365
           Height = 43
-          TabOrder = 27
+          TabOrder = 28
           ExplicitLeft = 24
           ExplicitTop = 347
-          ExplicitWidth = 369
+          ExplicitWidth = 365
           inherited StaticText1: TStaticText
-            Width = 48
             Font.Color = 5460819
-            Font.Style = [fsBold]
-            ExplicitWidth = 48
           end
           inherited StaticText2: TStaticText
-            Left = 90
-            Width = 92
+            Left = 77
             Font.Color = 5460819
-            Font.Style = [fsBold]
-            ExplicitLeft = 90
-            ExplicitWidth = 92
+            ExplicitLeft = 77
           end
           inherited edtCodigo: TCurrencyEdit
-            Width = 57
-            ExplicitWidth = 57
+            Width = 47
+            ExplicitWidth = 47
           end
           inherited btnBusca: TBitBtn
-            Left = 61
-            ExplicitLeft = 61
+            Left = 49
+            ExplicitLeft = 49
           end
           inherited edtMateria: TEdit
-            Left = 91
+            Left = 77
             Width = 278
-            ExplicitLeft = 91
+            ExplicitLeft = 77
             ExplicitWidth = 278
           end
         end
         object btnAddMateria: TBitBtn
-          Left = 416
-          Top = 361
+          Left = 482
+          Top = 362
           Width = 81
           Height = 23
           Caption = 'Adiciona'
@@ -1547,16 +1580,16 @@ inherited frmCadastroProduto: TfrmCadastroProduto
             9B009B9B9B009B9B9B00536A5300034103000019000000230000002300000019
             000003410300536A53009B9B9B009B9B9B009B9B9B009B9B9B00}
           NumGlyphs = 2
-          TabOrder = 28
+          TabOrder = 30
           OnClick = btnAddMateriaClick
         end
         inline ListaDepartamento: TListaCampo
-          Left = 137
+          Left = 153
           Top = 107
           Width = 185
           Height = 47
-          TabOrder = 7
-          ExplicitLeft = 137
+          TabOrder = 8
+          ExplicitLeft = 153
           ExplicitTop = 107
           ExplicitWidth = 185
           ExplicitHeight = 47
@@ -1569,8 +1602,11 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           inherited staTitulo: TStaticText
             Left = 14
             Top = 3
+            Width = 48
+            Font.Style = []
             ExplicitLeft = 14
             ExplicitTop = 3
+            ExplicitWidth = 48
           end
           inherited comListaCampo: TComboBox
             Left = 13
@@ -1582,12 +1618,12 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           end
         end
         inline BuscaNCM1: TBuscaNCM
-          Left = 4
+          Left = 20
           Top = 159
           Width = 267
           Height = 47
-          TabOrder = 9
-          ExplicitLeft = 4
+          TabOrder = 10
+          ExplicitLeft = 20
           ExplicitTop = 159
           ExplicitWidth = 267
           ExplicitHeight = 47
@@ -1600,28 +1636,26 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           inherited StaticText2: TStaticText
             Left = 152
             Top = 5
-            Width = 98
+            Width = 96
             Height = 19
             Caption = 'Al'#237'quota imposto'
             Font.Color = 3815994
             Font.Height = -12
-            Font.Style = [fsBold]
             ExplicitLeft = 152
             ExplicitTop = 5
-            ExplicitWidth = 98
+            ExplicitWidth = 96
             ExplicitHeight = 19
           end
           inherited StaticText1: TStaticText
             Left = 19
             Top = 5
-            Width = 31
+            Width = 32
             Height = 19
             Font.Color = 3815994
             Font.Height = -12
-            Font.Style = [fsBold]
             ExplicitLeft = 19
             ExplicitTop = 5
-            ExplicitWidth = 31
+            ExplicitWidth = 32
             ExplicitHeight = 19
           end
           inherited edtCodigo: TCurrencyEdit
@@ -1653,7 +1687,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           end
         end
         object cbTipo: TComboBox
-          Left = 405
+          Left = 421
           Top = 33
           Width = 97
           Height = 21
@@ -1663,24 +1697,26 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           OnClick = cbTipoChange
           Items.Strings = (
             'PRODUTO'
-            'SERVI'#199'O')
+            'SERVI'#199'O'
+            'MAT'#201'RIA'
+            'COMPOSTO')
         end
         object edtICMS: TCurrencyEdit
-          Left = 416
+          Left = 432
           Top = 182
           Width = 86
           Height = 21
           AutoSize = False
           DisplayFormat = '% ,0.00;-,0.00'
-          TabOrder = 11
+          TabOrder = 12
         end
         object cbTributacao: TComboBox
-          Left = 283
+          Left = 299
           Top = 182
           Width = 118
           Height = 21
           Style = csDropDownList
-          TabOrder = 10
+          TabOrder = 11
           Items.Strings = (
             'Tributado'
             'Isento'
@@ -1688,26 +1724,26 @@ inherited frmCadastroProduto: TfrmCadastroProduto
             'Substitui'#231#227'o')
         end
         object StaticText2: TStaticText
-          Left = 23
+          Left = 39
           Top = 210
-          Width = 48
+          Width = 45
           Height = 19
           Caption = 'Preparo'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 3815994
           Font.Height = -12
           Font.Name = 'Segoe UI'
-          Font.Style = [fsBold]
+          Font.Style = []
           ParentFont = False
-          TabOrder = 22
+          TabOrder = 23
         end
         object cbPreparo: TComboBox
-          Left = 23
+          Left = 39
           Top = 228
           Width = 105
           Height = 21
           Style = csDropDownList
-          TabOrder = 12
+          TabOrder = 13
           Items.Strings = (
             'CHAPA'
             'FOG'#195'O'
@@ -1716,122 +1752,145 @@ inherited frmCadastroProduto: TfrmCadastroProduto
             'FRIOS')
         end
         object edtEstoque: TCurrencyEdit
-          Left = 142
+          Left = 158
           Top = 228
           Width = 77
           Height = 21
           AutoSize = False
           DisplayFormat = ' ,0.00;-,0.00'
           Enabled = False
-          TabOrder = 13
+          TabOrder = 14
           Visible = False
         end
         object edtPrecoCusto: TCurrencyEdit
-          Left = 416
+          Left = 432
           Top = 228
           Width = 86
           Height = 21
           AutoSize = False
           DisplayFormat = ' ,0.00;-,0.00'
-          TabOrder = 16
+          TabOrder = 17
           Visible = False
         end
         object lbEstoqueMin: TStaticText
-          Left = 236
+          Left = 256
           Top = 210
-          Width = 75
+          Width = 73
           Height = 19
           Caption = 'Estoque M'#237'n.'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 3815994
           Font.Height = -12
           Font.Name = 'Segoe UI'
-          Font.Style = [fsBold]
+          Font.Style = []
           ParentFont = False
-          TabOrder = 25
+          TabOrder = 26
           Visible = False
         end
         object edtEstoqueMin: TCurrencyEdit
-          Left = 236
+          Left = 256
           Top = 228
           Width = 77
           Height = 21
           AutoSize = False
           DisplayFormat = ' ,0.00;-,0.00'
-          TabOrder = 14
+          TabOrder = 15
           Visible = False
         end
-        object StaticText3: TStaticText
-          Left = 23
+        object lbAlteraPreco: TStaticText
+          Left = 39
           Top = 110
-          Width = 78
+          Width = 73
           Height = 19
           Caption = 'Altera pre'#231'o?'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 3815994
           Font.Height = -12
           Font.Name = 'Segoe UI'
-          Font.Style = [fsBold]
+          Font.Style = []
           ParentFont = False
-          TabOrder = 26
+          TabOrder = 27
         end
         object cbAlteraPreco: TComboBox
-          Left = 23
+          Left = 39
           Top = 128
           Width = 105
           Height = 21
           Style = csDropDownList
-          TabOrder = 6
+          TabOrder = 7
           Items.Strings = (
             'SIM'
             'N'#195'O')
         end
         object edtCodBar: TEdit
-          Left = 147
+          Left = 163
           Top = 83
-          Width = 167
+          Width = 97
           Height = 21
           CharCase = ecUpperCase
           MaxLength = 13
           TabOrder = 4
+          Text = '1234567891234'
         end
-        object edtReferencia: TEdit
-          Left = 335
+        object edtCodigoBalanca: TEdit
+          Left = 405
           Top = 83
-          Width = 167
+          Width = 113
           Height = 21
           CharCase = ecUpperCase
           MaxLength = 18
-          TabOrder = 5
+          TabOrder = 6
         end
         object edtUNEntrada: TEdit
-          Left = 23
+          Left = 39
           Top = 275
           Width = 74
           Height = 21
           CharCase = ecUpperCase
           MaxLength = 13
-          TabOrder = 17
+          TabOrder = 18
         end
         object edtUNSaida: TEdit
-          Left = 253
+          Left = 269
           Top = 275
           Width = 74
           Height = 21
           CharCase = ecUpperCase
           MaxLength = 13
-          TabOrder = 19
+          TabOrder = 20
         end
         object edtMultiplicador: TCurrencyEdit
-          Left = 167
+          Left = 183
           Top = 275
           Width = 77
           Height = 21
           AutoSize = False
           DisplayFormat = ' ,0.00;-,0.00'
           MinValue = 1.000000000000000000
-          TabOrder = 18
+          TabOrder = 19
           Value = 1.000000000000000000
+        end
+        object cbAdicional: TComboBox
+          Left = 392
+          Top = 363
+          Width = 73
+          Height = 21
+          Style = csDropDownList
+          ItemIndex = 0
+          TabOrder = 29
+          Text = 'SIM'
+          Items.Strings = (
+            'SIM'
+            'N'#195'O')
+        end
+        object edtReferencia: TEdit
+          Left = 277
+          Top = 83
+          Width = 113
+          Height = 21
+          CharCase = ecUpperCase
+          MaxLength = 18
+          TabOrder = 5
         end
       end
     end
@@ -1850,6 +1909,10 @@ inherited frmCadastroProduto: TfrmCadastroProduto
       FieldName = 'VALOR'
       DisplayFormat = ',0.00;-,0.00'
     end
+    object cdsATIVO: TStringField
+      FieldName = 'ATIVO'
+      Size = 1
+    end
   end
   inherited ds: TDataSource
     Left = 246
@@ -1859,7 +1922,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
     Aggregates = <>
     Params = <>
     Left = 63
-    Top = 280
+    Top = 408
     object cdsMateriasCODIGO: TIntegerField
       FieldName = 'CODIGO'
     end
@@ -1869,10 +1932,158 @@ inherited frmCadastroProduto: TfrmCadastroProduto
     object cdsMateriasDESCRICAO: TStringField
       FieldName = 'DESCRICAO'
     end
+    object cdsMateriasADICIONAL: TStringField
+      DisplayWidth = 3
+      FieldName = 'ADICIONAL'
+      Size = 3
+    end
   end
   object dsMaterias: TDataSource
     DataSet = cdsMaterias
     Left = 102
-    Top = 280
+    Top = 408
+  end
+  object ImageList1: TImageList
+    Left = 435
+    Top = 515
+    Bitmap = {
+      494C010102000800340010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000001000000001002000000000000010
+      00000000000000000000000000000000000000000000035703000355030084AB
+      8400E8EFE80074A0740012631200046B0700046A0700046A0700046A0700046B
+      0700046B0700046B07004C8A4C00FFFFFF000000000000000000000000000000
+      0000000000000000000000000000BDBDE9000000B3000202AE00F6F6FD000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000046804000FA82D000FA82D00057E
+      0F00447F4400057C0F0018C4420018C3410018C3410018C3410016BB3D0016BB
+      3D0016BB3D0016BB3D0004600400FFFFFF000000000000000000000000000000
+      00000000000000000000000000002C2CBD00110DF9000E08EC005858CB000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000046E0B0018C3450017C34400098E
+      1B00035A030014BE3F0017C2430017C2430017C2430017C2430008922000046D
+      0900046D0900046D090004630400B4CDB4000000000000000000000000000000
+      00000000000000000000000000007877D7001413F6001C1EFF000D0DB7000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000004730C0018C5470017C447000890
+      1C00035A030018C4470017C3460017C3460017C3460017C3460018C4470018C7
+      480018C7480018C849000FA92F00538E53000000000000000000000000000000
+      00000000000000000000000000000200BD00181CFB001E26FF000D0BBF000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000005780E0016C6480016C647000893
+      21000582160017C64A0017C5490017C5490017C5490017C64A0008922000035A
+      0300035B0300035B030004620400589B58000000000000000000000000000000
+      00000000000000000000D3D1F5000C07D600212FFF00151AEE005E5AD9000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000003D9D440068EC92004CDF7D0025A3
+      3B000582160014C54A0015C54A0015C54A0015C54A0014C54A0029D15E0039D8
+      6B004DE07E0068EE930089FAAE003C9B40000000000000000000000000000000
+      000000000000000000000800CD001D2EFF002238FF00141AE900E0DEF9000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000003AA1460083FAAD0083FAAC005EC5
+      71000892210084FAAD0083F9AC0083F9AC0083F9AC0083FAAC003EA74C001E89
+      24001E8924001E8924001C8422001C8422000000000000000000000000000000
+      000000000000261ED5001C28F500253EFF00253DFF001C2BF8000C02D7000700
+      D0000700D0000700D0003C35DB008883EB000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000003CA54A0084FAB20083FAB1005EC8
+      76000892210082FAAF0081F9AD0081F9AD0081F9AD0081FAAE0075E4980075E4
+      980075E4980075E498005BC470001E8924002920DE000A00D8000A00D8000A00
+      D9000A00D800202EF7002C48FF002B45FF002B45FF002B46FF002D49FF002E4C
+      FF002E4CFF002337FF00171FF400110DE0000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000004EA354002B8E32002A8E2F001F88
+      26000F7F170078E3990083FAB30082FAB20082FAB20082FAB30084FAB50084FA
+      B60084FAB60084FAB60086FAB8003EA74C001312E9003152FF003151FF001F29
+      F600110BE6003050FF002D49FF002D49FF002D49FF002E4AFF00385AFF004D6F
+      FF00607EFF00607EFF007692FF000D04E2000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF0040A14A0078E79B0086FAB60085FAB60078ED9F0036A445002897
+      320028973300289733005CB1630089C58F001E1AED003453FF002E4EFF001B25
+      F6000E08E5003454FF00324FFF00324FFF00324FFF003350FF00273AFF00171F
+      F4000D04E2000D04E2000D04E2005B55EE000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF0031A3400082F6B10086FAB90060D28200C9E5CC00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00423FF80093A8FF006E88FF006C73
+      FF000600E3004161FF00304FFF003050FF003050FF003050FF00385AFF004D6F
+      FF00607EFF00607EFF007692FF004541F8000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF004FC1660085FABD0078EBA2006ABD7700FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00403CFC008DA6FF008CA3FF00636B
+      FF003023FF0094ACFF008FA4FF008FA4FF008FA4FF0090A6FF007376FF003226
+      F6001207F1001207F1001207F1001207F1000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF001C9E310085FAB70086FAC2002FAC4400FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00403DFF0092A9FF008FA5FF00676D
+      FF002C20FF0093ABFF008CA1FF008CA1FF008CA1FF008DA2FF0090A6FF0097B0
+      FF0099B2FF0099B3FF0099B3FF000800F5000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF0079CB890084FABB0086FAC60031B24B00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF004140FF0095AEFF0092ABFF006871
+      FF002E23FF0096AEFF008FA6FF008EA5FF008EA5FF008EA6FF008A9CFF003733
+      FF003C39FF003D3BFF003B35FF00837DFC000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF0045BD5F0086FAC00079F9B2006DCD8200FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF004542FF0096A9FF0094A6FF006D73
+      FF004744FF007174FF009DB7FF0099B2FF0099B1FF0099B2FF0096AFFF0093A5
+      FF0094A7FF0097A7FF003833FF00F7F7FF000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00B9E9C30040CF64003FC86000FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF003E35FF000A00FF000900FF005952
+      FF0000000000837FFF00332AFF004441FF004340FF004340FF004340FF004441
+      FF004441FF004745FF002C25FF00000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000100000000100010000000000800000000000000000000000
+      000000000000000000000000FFFFFF008000FE1F000000000000FE1F00000000
+      0000FE1F000000000000FE1F000000000000FC1F000000000000FC1F00000000
+      0000F80000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000008010000000000000000000000000000000000000000
+      000000000000}
   end
 end

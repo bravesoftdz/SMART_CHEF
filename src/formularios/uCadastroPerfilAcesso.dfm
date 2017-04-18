@@ -1,7 +1,6 @@
 inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
   Left = 276
   Top = 62
-  BorderIcons = [biSystemMenu]
   Caption = 'Cadastro de Perfis de Acesso'
   ClientHeight = 509
   ClientWidth = 841
@@ -294,7 +293,7 @@ inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
         Top = 57
         Width = 696
         Height = 386
-        ActivePage = TabSheet2
+        ActivePage = TabSheet3
         Align = alBottom
         Anchors = [akLeft, akTop, akRight, akBottom]
         TabOrder = 2
@@ -405,6 +404,14 @@ inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
             Caption = 'Cadastrar CFOPs Correspondentes'
             TabOrder = 12
           end
+          object chk40: TCheckBox
+            Left = 8
+            Top = 320
+            Width = 193
+            Height = 17
+            Caption = 'Cadastrar transportadoras'
+            TabOrder = 13
+          end
         end
         object TabSheet5: TTabSheet
           Caption = 'Movimentos'
@@ -424,6 +431,14 @@ inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
             Height = 17
             Caption = 'Entrada NFe por arquivo .XML'
             TabOrder = 1
+          end
+          object chk36: TCheckBox
+            Left = 8
+            Top = 56
+            Width = 177
+            Height = 17
+            Caption = 'Confirma Entrada no Estoque'
+            TabOrder = 2
           end
         end
         object TabSheet7: TTabSheet
@@ -513,6 +528,22 @@ inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
             Caption = 'Lan'#231'ar Sangria/Refor'#231'o do Caixa'
             TabOrder = 7
           end
+          object chk38: TCheckBox
+            Left = 8
+            Top = 200
+            Width = 185
+            Height = 17
+            Caption = 'Tela de Nota Fiscal'
+            TabOrder = 8
+          end
+          object chk39: TCheckBox
+            Left = 8
+            Top = 224
+            Width = 185
+            Height = 17
+            Caption = 'Monitor NF-e'
+            TabOrder = 9
+          end
         end
         object TabSheet6: TTabSheet
           Caption = 'Permiss'#245'es Relat'#243'rios'
@@ -596,6 +627,14 @@ inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
             Height = 17
             Caption = 'Visualizar relat'#243'rio de Cupons Fiscais'
             TabOrder = 9
+          end
+          object chk37: TCheckBox
+            Left = 8
+            Top = 248
+            Width = 257
+            Height = 17
+            Caption = 'Visualizar relat'#243'rio de Notas Fiscais de Entrada'
+            TabOrder = 10
           end
         end
       end

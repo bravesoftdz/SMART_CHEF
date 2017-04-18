@@ -6,8 +6,8 @@ uses
   DB,
   Auditoria,
   Repositorio,
-  fabricaRepositorio, StringUtilitario, DateTimeUtilitario, DBClient, funcoes, Printers,
-  Item, Contnrs, Pedido, Departamento, StdCtrls, Dialogs, Empresa, RepositorioItem;
+  fabricaRepositorio, StringUtilitario, DateTimeUtilitario, DBClient, funcoes, Printers, TipoMoeda,
+  Item, Contnrs, Pedido, Departamento, StdCtrls, Dialogs, Empresa, RepositorioItem, Generics.Collections;
 
 type
   TRepositorioPedido = class(TRepositorio)
@@ -65,7 +65,7 @@ implementation
 
 uses
   SysUtils,
-  StrUtils, Classes, AdicionalItem, MateriaPrima, Math, uModulo, Produto, uImpressaoPedido;
+  StrUtils, Classes, AdicionalItem, MateriaPrima, Math, uModulo, Produto, uImpressaoPedido, Movimento;
 
 { TRepositorioPedido }
 
@@ -161,13 +161,14 @@ end;
 
 procedure TRepositorioPedido.imprime_pedido(Pedido: TPedido; Departamento :TDepartamento; comandas :String; const cdsparcial :TClientDataSet);
 var Arq   :TextFile;
-    i ,j  :integer;
+    i ,j, x  :integer;
     produto, produto2, valor, acao, materia, quantidade, mesa, comanda :String;
     assinou :Boolean;
     total_itens, valor_adicional, qtd_item :Real;
     repositorio  :TREpositorio;
     impressora_padrao :String;
     fracionado :boolean;
+    Movimentos :TObjectList<TMovimento>;
 begin
    assinou     := false;
    total_itens := 0;
@@ -288,14 +289,14 @@ begin
    end;
 
    WriteLn(Arq, StringOfChar('-',48));
-   WriteLn(Arq, '     Total itens >'+StringOfChar(' ', 30-length( FormatFloat(' ,0.00; -,0.00;',total_itens) ))+FormatFloat(' ,0.00; -,0.00;',total_itens) );
+   WriteLn(Arq, '     Total itens     >'+StringOfChar(' ', 26-length( FormatFloat(' ,0.00; -,0.00;',total_itens) ))+FormatFloat(' ,0.00; -,0.00;',total_itens) );
 
    if assigned(cdsparcial) then begin
 
      if (Pedido.situacao = 'F')and(Pedido.taxa_servico > 0) then
         WriteLn(Arq, '     Taxa de serviço >'+StringOfChar(' ', 26-length( FormatFloat(' ,0.00; -,0.00;',Pedido.taxa_servico) ))+FormatFloat(' ,0.00; -,0.00;',Pedido.taxa_servico) );
 
-     WriteLn(Arq, '     TOTAL >'+StringOfChar(' ', 36-length( FormatFloat(' ,0.00; -,0.00;',total_itens + pedido.taxa_servico) ))+FormatFloat(' ,0.00; -,0.00;',total_itens + pedido.taxa_servico) );
+     WriteLn(Arq, '     TOTAL           >'+StringOfChar(' ', 36-length( FormatFloat(' ,0.00; -,0.00;',total_itens + pedido.taxa_servico) ))+FormatFloat(' ,0.00; -,0.00;',total_itens + pedido.taxa_servico) );
 
    end
    else begin
@@ -306,10 +307,24 @@ begin
         WriteLn(Arq, '     Taxa de serviço >'+StringOfChar(' ', 26-length( FormatFloat(' ,0.00; -,0.00;',Pedido.taxa_servico) ))+FormatFloat(' ,0.00; -,0.00;',Pedido.taxa_servico) );
 
       if Pedido.desconto > 0 then
-        WriteLn(Arq, '     Valor desconto >'+StringOfChar(' ', 27-length( FormatFloat(' ,0.00; -,0.00;',Pedido.desconto) ))+FormatFloat(' ,0.00; -,0.00;',Pedido.desconto) );
+        WriteLn(Arq, '     Valor desconto  >'+StringOfChar(' ', 26-length( FormatFloat(' ,0.00; -,0.00;',Pedido.desconto) ))+FormatFloat(' ,0.00; -,0.00;',Pedido.desconto) );
 
       if Pedido.taxa_entrega > 0 then
         WriteLn(Arq, '     Taxa de entrega >'+StringOfChar(' ', 26-length( FormatFloat(' ,0.00; -,0.00;',Pedido.taxa_entrega) ))+FormatFloat(' ,0.00; -,0.00;',Pedido.taxa_entrega) );
+
+      writeLn(Arq, '');
+
+      Movimentos := TMovimento.MovimentosDoPedido(Pedido.codigo);
+
+      for x := 0 to Movimentos.Count-1 do
+      begin
+        case TTipoMoedaUtilitario.DeInteiroParaEnumerado(Movimentos[x].tipo_moeda) of
+          tmDinheiro      : WriteLn(Arq, '     Dinheiro        >'+StringOfChar(' ', 26-length( FormatFloat(' ,0.00; -,0.00;',Movimentos[x].valor_pago) ))+FormatFloat(' ,0.00; -,0.00;',Movimentos[x].valor_pago) );
+          tmCheque        : writeLn(Arq, '     Cheque          >'+StringOfChar(' ', 26-length( FormatFloat(' ,0.00; -,0.00;',Movimentos[x].valor_pago) ))+FormatFloat(' ,0.00; -,0.00;',Movimentos[x].valor_pago) );
+          tmCartaoCredito : writeLn(Arq, '     Cart. Crédito   >'+StringOfChar(' ', 26-length( FormatFloat(' ,0.00; -,0.00;',Movimentos[x].valor_pago) ))+FormatFloat(' ,0.00; -,0.00;',Movimentos[x].valor_pago) );
+          tmCartaoDebito  : writeLn(Arq, '     Cart. Débito    >'+StringOfChar(' ', 26-length( FormatFloat(' ,0.00; -,0.00;',Movimentos[x].valor_pago) ))+FormatFloat(' ,0.00; -,0.00;',Movimentos[x].valor_pago) );
+        end;
+      end;
 
       WriteLn(Arq, '     TOTAL DO PEDIDO >'+StringOfChar(' ', 26-length( FormatFloat(' ,0.00; -,0.00;',Pedido.valor_total) ))+FormatFloat(' ,0.00; -,0.00;',Pedido.valor_total) );
 

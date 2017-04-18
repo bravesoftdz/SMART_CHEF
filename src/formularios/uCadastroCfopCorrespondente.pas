@@ -77,19 +77,15 @@ var
   nX          :Integer;
 begin
   inherited;
-
   Repositorio := nil;
   CFOPs    := nil;
-
   try
     Repositorio := TFabricaRepositorio.GetRepositorio(TCFOPCorrespondente.ClassName);
     CFOPs       := Repositorio.GetAll;
 
     if Assigned(CFOPs) and (CFOPs.Count > 0) then begin
-
        for nX := 0 to (CFOPs.Count-1) do
          self.IncluirRegistroNoCDS(CFOPs.Items[nX]);
-         
     end;
   finally
     FreeAndNil(Repositorio);

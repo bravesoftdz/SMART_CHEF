@@ -42,7 +42,6 @@ object BuscaMateriaPrima: TBuscaMateriaPrima
     DisplayFormat = '0'
     TabOrder = 1
     OnChange = edtCodigoChange
-    OnExit = edtCodigoExit
   end
   object btnBusca: TBitBtn
     Left = 69

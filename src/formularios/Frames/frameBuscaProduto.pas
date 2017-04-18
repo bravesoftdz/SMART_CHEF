@@ -19,10 +19,12 @@ type
     procedure edtCodigoExit(Sender: TObject);
   private
     Fcodigo :Integer;
+    FProdutoMateria :Boolean;
     FExecutarAposBuscar: TNotifyEvent;
     FExecutarAposLimpar: TNotifyEvent;
     FProduto: TProduto;
     FEstoque: TEstoque;
+    FQuantidade :Real;
 
     procedure buscaProduto;
     function selecionaProduto :String;
@@ -39,9 +41,11 @@ type
     FSelecionado: Boolean;
     procedure limpa;
 
-    property Produto  :TProduto read FProduto  write SetProduto;
-    property codigo   :Integer  read Fcodigo   write Setcodigo;
-    property Estoque  :TEstoque read FEstoque  write SetEstoque;
+    property Produto  :TProduto read FProduto    write SetProduto;
+    property codigo   :Integer  read Fcodigo     write Setcodigo;
+    property Estoque  :TEstoque read FEstoque    write SetEstoque;
+    property ProdutoMateria :Boolean read FProdutoMateria write FProdutoMateria;
+    property Quantidade :Real   read FQuantidade write FQuantidade;
 
   public
     property ExecutarAposBuscar :TNotifyEvent read FExecutarAposBuscar write SetExecutarAposBuscar;
@@ -82,7 +86,7 @@ begin
 end;
 
 function TBuscaProduto.selecionaProduto: String;
-var condicao_boliche :String;
+var condicao_boliche, condicao_produtoMateria :String;
 begin
   Result := '';
   FSelecionado:= False;
@@ -90,7 +94,11 @@ begin
     condicao_boliche := 'where codigo > 1'
   else
     condicao_boliche := 'where ativo = ''S''';
-  frmPesquisaSimples := TFrmPesquisaSimples.Create(Self,'Select ativo, codigo, descricao, referencia, valor from produtos '+condicao_boliche+' order by codigo',
+
+  if FProdutoMateria then
+    condicao_produtoMateria := ' and tipo = ''M'' ';
+
+  frmPesquisaSimples := TFrmPesquisaSimples.Create(Self,'Select ativo, codigo, descricao, referencia, valor from produtos '+condicao_boliche+condicao_produtoMateria+' order by codigo',
                                                         'CODIGO', 'Selecione o Produto desejado...',False,800,500);
 
   if frmPesquisaSimples.ShowModal = mrOk then begin
@@ -108,8 +116,10 @@ var
    codigo        :integer;
    Especificacao :TEspecificacaoEstoquePorProduto;
 begin
-  RepProduto := TFabricaRepositorio.GetRepositorio(TProduto.ClassName);
-  if Length(edtCodigo.Text) = 13 then
+  RepProduto   := TFabricaRepositorio.GetRepositorio(TProduto.ClassName);
+  FQuantidade  := 0;
+
+  if Length(edtCodigo.Text) in [12,13] then
   begin
     with dm.qryGenerica do
     begin
@@ -118,21 +128,40 @@ begin
       SQL.Add('SELECT CODIGO FROM PRODUTOS WHERE CODBAR = :ncod');
       ParamByName('ncod').AsString:= edtCodigo.Text;
       Open;
-      FProduto   := TProduto(RepProduto.Get(Fields[0].AsInteger));
     end;
+
+    if dm.qryGenerica.IsEmpty then
+    begin
+      with dm.qryGenerica do
+      begin
+        Close;
+        SQL.Clear;
+        SQL.Add('SELECT CODIGO FROM PRODUTOS WHERE CODIGO_BALANCA = :ncod');
+        ParamByName('ncod').AsString:= IntToStr(StrToInt(copy(edtCodigo.Text,2,5)));
+        Open;
+
+        if not IsEmpty then
+          FQuantidade := StrToFloat(copy(edtCodigo.Text,8,2)+','+copy(edtCodigo.Text,10,3));
+      end;
+    end;
+
+    FProduto   := TProduto(RepProduto.Get(dm.qryGenerica.Fields[0].AsInteger));
   end
   else
     FProduto   := TProduto(RepProduto.Get(edtCodigo.Text));
 
-  codigo := IfThen(dm.Configuracoes.possui_boliche,1,0);
-  FSelecionado:= False;
+  if assigned(FProduto) and not FProduto.ativo then
+    FreeAndNil(FProduto);
+
+  codigo       := IfThen(dm.Configuracoes.possui_boliche,1,0);
+  FSelecionado := False;
   if Assigned(FProduto) and (FProduto.codigo > codigo) then begin
     FSelecionado:= True;
     edtCodigo.Text   := IntToStr(FProduto.Codigo);
     edtProduto.Text  := FProduto.descricao;
     self.Fcodigo     := FProduto.codigo;
 
-    Especificacao    := TEspecificacaoEstoquePorProduto.Create(FProduto);
+    Especificacao    := TEspecificacaoEstoquePorProduto.Create(FProduto.codigo);
     RepProduto       := TFabricaRepositorio.GetRepositorio(TEstoque.ClassName);
     FEstoque         := TEstoque( RepProduto.GetPorEspecificacao( Especificacao ) );
 

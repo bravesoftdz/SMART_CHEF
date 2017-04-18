@@ -263,9 +263,6 @@
         <DCCReference Include="src\formularios\uSuporteTecnico.pas">
             <Form>frmSuporteTecnico</Form>
         </DCCReference>
-        <DCCReference Include="src\formularios\uPedidosEmAberto.pas">
-            <Form>frmPedidosEmAberto</Form>
-        </DCCReference>
         <DCCReference Include="src\formularios\uCadastroComanda.pas">
             <Form>frmCadastroComanda</Form>
         </DCCReference>
@@ -364,92 +361,18 @@
         </DCCReference>
         <DCCReference Include="src\formularios\uNFCesContingencia.pas">
             <Form>frmNFCesContingencia</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\formularios\uImpressaoPedido.pas">
             <Form>frmImpressaoPedido</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\formularios\uCadastroFornecedor.pas">
             <Form>frmCadastroPadrao1</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameBotaoImg.pas">
-            <Form>BotaoImg</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameBuscaCidade.pas">
-            <Form>BuscaCidade</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameBuscaCliente.pas">
-            <Form>BuscaCliente</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameBuscaComanda.pas">
-            <Form>BuscaComanda</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameBuscaDispensa.pas">
-            <Form>BuscaDispensa</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameBuscaMateriaPrima.pas">
-            <Form>BuscaMateriaPrima</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameBuscaNCM.pas">
-            <Form>BuscaNCM</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameBuscaProduto.pas">
-            <Form>BuscaProduto</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameBuscaUsuario.pas">
-            <Form>BuscaUsuario</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameHorario.pas">
-            <Form>Horario</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameListaCampo.pas">
-            <Form>ListaCampo</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameMaskCpfCnpj.pas">
-            <Form>MaskCpfCnpj</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameRealEdit.pas">
-            <Form>RealEdit</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="src\formularios\Frames\frameFone.pas">
-            <Form>Fone</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="src\dominio\entidade\Fornecedor.pas"/>
         <DCCReference Include="src\infraestrutura\persistencia\RepositorioFornecedor.pas"/>
         <DCCReference Include="src\dominio\utilitario\importadorNotaXML.pas"/>
         <DCCReference Include="src\formularios\uEntradaNota.pas">
             <Form>frmEntradaNota</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\dominio\entidade\NotaFiscal.pas"/>
         <DCCReference Include="src\dominio\entidade\NFe.pas"/>
@@ -491,11 +414,9 @@
         <DCCReference Include="src\dominio\tipo\TipoOrigemMercadoria.pas"/>
         <DCCReference Include="src\formularios\uCadastroCfopCorrespondente.pas">
             <Form>frmCadastroCfopCorrespondente</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\formularios\uCadastroNaturezaOperacao.pas">
             <Form>frmCadastroNaturezaOperacao</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\dominio\tipo\TipoFrete.pas"/>
         <DCCReference Include="src\dominio\entidade\Pessoa.pas"/>
@@ -549,10 +470,179 @@
         <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoSangriaReforcoPorCodigoCaixa.pas"/>
         <DCCReference Include="src\formularios\uLancaSangriaReforco.pas">
             <Form>frmLancaSangriaReforco</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\infraestrutura\persistencia\RepositorioCidade.pas"/>
         <DCCReference Include="src\infraestrutura\persistencia\RepositorioEstado.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioFormaPagamento.pas"/>
+        <DCCReference Include="src\formularios\Frames\frameBotaoImg.pas">
+            <Form>BotaoImg</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaCidade.pas">
+            <Form>BuscaCidade</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaCliente.pas">
+            <Form>BuscaCliente</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaComanda.pas">
+            <Form>BuscaComanda</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaDispensa.pas">
+            <Form>BuscaDispensa</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaMateriaPrima.pas">
+            <Form>BuscaMateriaPrima</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaNCM.pas">
+            <Form>BuscaNCM</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaProduto.pas">
+            <Form>BuscaProduto</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaUsuario.pas">
+            <Form>BuscaUsuario</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameFone.pas">
+            <Form>Fone</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameHorario.pas">
+            <Form>Horario</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameListaCampo.pas">
+            <Form>ListaCampo</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameMaskCpfCnpj.pas">
+            <Form>MaskCpfCnpj</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameRealEdit.pas">
+            <Form>RealEdit</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaFornecedor.pas">
+            <Form>buscaFornecedor</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaGrupo.pas">
+            <Form>buscaGrupo</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\uConfirmaEntrada.pas">
+            <Form>frmConfirmaEntrada</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\formularios\relatorios\Fortes\uRelatorioNotasFiscaisEntrada.pas">
+            <Form>frmRelatorioNotasFiscaisEntrada</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\dominio\tipo\TipoMoeda.pas"/>
+        <DCCReference Include="src\formularios\Frames\frameBuscaNotaFiscal.pas">
+            <Form>BuscaNotaFiscal</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\uMonitorControleNFe.pas">
+            <Form>frmMonitorControleNFe</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaEmpresa.pas"/>
+        <DCCReference Include="src\formularios\Frames\frameBuscaNaturezaOperacao.pas">
+            <Form>BuscaNaturezaOperacao</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaPessoa.pas">
+            <Form>BuscaPessoa</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaCFOP.pas">
+            <Form>BuscaCFOP</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\uNotaFiscal.pas">
+            <Form>frmNotaFiscal</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaFormaPagamento.pas">
+            <Form>BuscaFormaPagamento</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\formularios\Frames\frameBuscaTransportadora.pas">
+            <Form>BuscaTransportadora</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoNFePorNrNota.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoNotaFiscalPorPeriodoEStatus.pas"/>
+        <DCCReference Include="src\dominio\entidade\NotaInutilizada.pas"/>
+        <DCCReference Include="src\infraestrutura\servico\GeradorNFe.pas"/>
+        <DCCReference Include="src\formularios\uInutilizaNumeracao.pas">
+            <Form>frmInutilizaNumeracao</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\dominio\tipo\TipoAmbienteNFe.pas"/>
+        <DCCReference Include="src\formularios\uCadastroFormaPagamento.pas">
+            <Form>frmCadastroFormaPagamento</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\formularios\uCadastroTransportadora.pas">
+            <Form>frmCadastroTransportadora</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\dominio\entidade\Transportadora.pas"/>
+        <DCCReference Include="src\dominio\entidade\CFOP.pas"/>
+        <DCCReference Include="src\formularios\uCadastroCFOP.pas">
+            <Form>frmCadastroCFOP</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoCFOPporCodigoCFOP.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoCFOPporTipo.pas"/>
+        <DCCReference Include="src\dominio\objetoValor\especificacao\EspecificacaoEmpresaPorCodigoPessoa.pas"/>
+        <DCCReference Include="src\formularios\uDadosPessoa.pas">
+            <Form>frmDadosPessoa</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\formularios\uItensAvulsos.pas">
+            <Form>frmItensAvulsos</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioTransportadora.pas"/>
+        <DCCReference Include="src\infraestrutura\persistencia\RepositorioCFOP.pas"/>
+        <DCCReference Include="src\dominio\utilitario\UtilitarioEstoque.pas"/>
+        <DCCReference Include="src\formularios\uPedidos.pas">
+            <Form>frmPedidos</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -591,27 +681,12 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployClass Name="DependencyModule">
-                    <Platform Name="Win32">
-                        <Operation>0</Operation>
-                        <Extensions>.dll;.bpl</Extensions>
-                    </Platform>
+                <DeployClass Name="ProjectiOSDeviceResourceRules">
                     <Platform Name="iOSDevice64">
                         <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="ProjectOSXResource">
@@ -965,12 +1040,27 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <DeployClass Name="ProjectiOSDeviceResourceRules">
+                <DeployClass Name="DependencyModule">
+                    <Platform Name="Win32">
+                        <Operation>0</Operation>
+                        <Extensions>.dll;.bpl</Extensions>
+                    </Platform>
                     <Platform Name="iOSDevice64">
                         <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                    <Platform Name="OSX32">
+                        <RemoteDir>Contents\MacOS</RemoteDir>
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
                     </Platform>
                 </DeployClass>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>

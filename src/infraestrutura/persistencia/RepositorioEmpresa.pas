@@ -27,6 +27,9 @@ type
     procedure SetIdentificador(Objeto :TObject; Identificador :Variant); override;
 
   protected
+    procedure ExecutaDepoisDeSalvar (Objeto :TObject); override;
+
+  protected
     procedure SetCamposIncluidos(Auditoria :TAuditoria;               Objeto :TObject); override;
     procedure SetCamposAlterados(Auditoria :TAuditoria; AntigoObjeto, Objeto :TObject); override;
     procedure SetCamposExcluidos(Auditoria :TAuditoria;               Objeto :TObject); override;
@@ -41,9 +44,55 @@ end;
 
 implementation
 
-uses SysUtils, Empresa, Math, StrUtils, Pessoa, FabricaRepositorio;
+uses SysUtils, Empresa, Math, StrUtils, Pessoa, FabricaRepositorio, ConfiguracoesNF;
 
 { TRepositorioEmpresa }
+
+procedure TRepositorioEmpresa.ExecutaDepoisDeSalvar(Objeto: TObject);
+var
+  Empresa                       :TEmpresa;
+  RepositorioConfiguracoes      :TRepositorio;
+//  RepositorioConfiguracoesEmail :TRepositorio;
+//  RepositorioParametrosNFCe     :TRepositorio;
+ // RepositorioEndereco           :TRepositorio;
+begin
+   inherited ExecutaDepoisDeSalvar(Objeto);
+
+   RepositorioConfiguracoes       := nil;
+ //  RepositorioConfiguracoesEmail  := nil;
+
+   Empresa := (Objeto as TEmpresa);
+
+   try
+     if Assigned(Empresa.ConfiguracoesNF) then begin
+       Empresa.ConfiguracoesNF.codigo_empresa := Empresa.CodigoEmpresa;
+       RepositorioConfiguracoes := TFabricaRepositorio.GetRepositorio(TConfiguracoesNF.ClassName);
+       RepositorioConfiguracoes.Remover(Empresa.ConfiguracoesNF);
+       RepositorioConfiguracoes.Salvar(Empresa.ConfiguracoesNF);
+
+      { if Assigned(Empresa.ConfiguracoesNF.ParametrosNFCe) then begin
+         Empresa.ConfiguracoesNF.ParametrosNFCe.codigo_empresa := Empresa.CodigoEmpresa;
+         RepositorioParametrosNFCe := TFabricaRepositorio.GetRepositorio(TParametrosNFCe.ClassName);
+         RepositorioParametrosNFCe.Remover(Empresa.ConfiguracoesNF.ParametrosNFCe);
+         RepositorioParametrosNFCe.Salvar(Empresa.ConfiguracoesNF.ParametrosNFCe);
+       end;   }
+     end;
+
+     {if Assigned(Empresa.ConfiguracoesEmail) then begin
+       Empresa.ConfiguracoesEmail.codigo_empresa := Empresa.CodigoEmpresa;
+       RepositorioConfiguracoesEmail := TFabricaRepositorio.GetRepositorio(TConfiguracoesNFEmail.ClassName);
+       RepositorioConfiguracoesEmail.Remover(Empresa.ConfiguracoesEmail);
+       RepositorioConfiguracoesEmail.Salvar(Empresa.ConfiguracoesEmail);
+     end; }
+
+
+   finally
+     FreeAndNil(RepositorioConfiguracoes);
+//     FreeAndNil(RepositorioConfiguracoesEmail);
+//     FreeAndNil(RepositorioParametrosNFCe);
+//     FreeAndNil(RepositorioEndereco);
+   end;
+end;
 
 function TRepositorioEmpresa.Get(Dataset: TDataSet): TObject;
 var

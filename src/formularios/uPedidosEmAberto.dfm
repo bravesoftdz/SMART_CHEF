@@ -1,15 +1,23 @@
-inherited frmPedidosEmAberto: TfrmPedidosEmAberto
+object frmPedidosEmAberto: TfrmPedidosEmAberto
   Left = 288
   Top = 178
   Caption = 'Pedidos em aberto'
   ClientHeight = 495
   ClientWidth = 853
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = True
   OnShow = FormShow
-  ExplicitWidth = 859
-  ExplicitHeight = 523
+  DesignSize = (
+    853
+    495)
   PixelsPerInch = 96
   TextHeight = 13
-  object Label5: TLabel [0]
+  object Label5: TLabel
     Left = 177
     Top = 17
     Width = 168
@@ -23,7 +31,7 @@ inherited frmPedidosEmAberto: TfrmPedidosEmAberto
     ParentFont = False
     Transparent = True
   end
-  object Label1: TLabel [1]
+  object Label1: TLabel
     Left = 177
     Top = 430
     Width = 219
@@ -38,7 +46,7 @@ inherited frmPedidosEmAberto: TfrmPedidosEmAberto
     Transparent = True
     Visible = False
   end
-  object Label2: TLabel [2]
+  object Label2: TLabel
     Left = 521
     Top = 430
     Width = 187
@@ -52,16 +60,6 @@ inherited frmPedidosEmAberto: TfrmPedidosEmAberto
     ParentFont = False
     Transparent = True
     Visible = False
-  end
-  inherited pnlPropaganda: TPanel
-    Top = 460
-    Width = 853
-    ExplicitTop = 460
-    ExplicitWidth = 853
-    inherited Shape8: TShape
-      Width = 851
-      ExplicitWidth = 851
-    end
   end
   object gridItens: TDBGridCBN
     Left = 176
@@ -82,7 +80,7 @@ inherited frmPedidosEmAberto: TfrmPedidosEmAberto
     ParentCtl3D = False
     ParentFont = False
     ReadOnly = True
-    TabOrder = 1
+    TabOrder = 0
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = 2960685
     TitleFont.Height = -11
@@ -175,22 +173,23 @@ inherited frmPedidosEmAberto: TfrmPedidosEmAberto
     Left = 0
     Top = 0
     Width = 153
-    Height = 460
+    Height = 495
     Align = alLeft
     BevelOuter = bvNone
     Caption = 'c'
-    TabOrder = 2
+    TabOrder = 1
     DesignSize = (
       153
-      460)
+      495)
     object Shape12: TShape
       Left = 0
       Top = 0
       Width = 153
-      Height = 460
+      Height = 495
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119
+      ExplicitHeight = 460
     end
     object btnCancelaCupom: TSpeedButton
       Left = 8
@@ -461,7 +460,7 @@ inherited frmPedidosEmAberto: TfrmPedidosEmAberto
     Font.Style = []
     ParentCtl3D = False
     ParentFont = False
-    TabOrder = 4
+    TabOrder = 2
     Visible = False
   end
   object dsPedidos: TDataSource

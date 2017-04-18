@@ -8,15 +8,16 @@ uses
 
 type
   TBuscaComanda = class(TFrame)
-    StaticText1: TStaticText;
     edtCodigo: TCurrencyEdit;
     btnBusca: TBitBtn;
     edtNumeroComanda: TEdit;
     btnFormaBusca: TBitBtn;
+    btnNovo: TBitBtn;
     procedure btnBuscaClick(Sender: TObject);
     procedure edtNumeroComandaChange(Sender: TObject);
     procedure edtNumeroComandaExit(Sender: TObject);
     procedure btnFormaBuscaClick(Sender: TObject);
+    procedure btnNovoClick(Sender: TObject);
   private
     FComanda :TComanda;
     Fcodigo: Integer;
@@ -41,6 +42,9 @@ type
     procedure SetExecutarAposBuscar(const Value: TNotifyEvent);
     procedure SetExecutarAposLimpar(const Value: TNotifyEvent);
 
+  protected
+    FCriandoPedido :Boolean;
+
   public
     procedure limpa;
     procedure efetua_busca;
@@ -49,9 +53,9 @@ type
     property Comanda :TComanda read FComanda write SetComanda;
     property codigo  :Integer  read Fcodigo  write Setcodigo;
 
-    property Pedido  :TPedido  read GetPedido write FPedido;
-    property CodigoPedido :integer write FCodigo_pedido;
-    property BuscaPedidosExternos :boolean read FBuscaPedidosExternos write FBuscaPedidosExternos;
+    property Pedido        :TPedido read GetPedido      write FPedido;
+    property CodigoPedido  :integer                     write FCodigo_pedido;
+    property CriandoPedido :boolean read FCriandoPedido write FCriandoPedido;
 
   public
     property ExecutarAposBuscar :TNotifyEvent read FExecutarAposBuscar write SetExecutarAposBuscar;
@@ -137,8 +141,8 @@ begin
        keybd_event(VK_TAB,0,0,0);
      end
      else
-       edtNumeroComanda.SetFocus;
-
+       if edtNumeroComanda.Visible then
+         edtNumeroComanda.SetFocus;
    end
    else
      raise Exception.Create('Nenhum dado foi encontrado');
@@ -212,7 +216,7 @@ begin
   if not assigned(self.FComanda) then
     carregaPedido( strToIntDef(pedido, 0));
 
-  keybd_event(VK_RETURN,0,0,0);
+  keybd_event(VK_TAB,0,0,0);
 
  except
    on e: Exception do
@@ -220,7 +224,6 @@ begin
 
  end;
 end;
-
 
 procedure TBuscaComanda.edtNumeroComandaChange(Sender: TObject);
 begin
@@ -287,13 +290,22 @@ end;
 
 procedure TBuscaComanda.btnFormaBuscaClick(Sender: TObject);
 begin
-    btnFormaBusca.Caption := IfThen(btnFormaBusca.TAG = 0,'Pedidos externos','Pedidos normais');
-    btnFormaBusca.TAG     := IfThen(btnFormaBusca.TAG = 0,1,0);
-
-    edtNumeroComanda.SetFocus;
-
+    btnFormaBusca.Caption     := IfThen(btnFormaBusca.TAG = 0,'Pedidos externos','Pedidos normais');
+    btnFormaBusca.TAG         := IfThen(btnFormaBusca.TAG = 0,1,0);
     edtnumeroComanda.Text     := IfThen(btnFormaBusca.TAG = 1, 'PED.EXT.', '');
     edtNumeroComanda.ReadOnly := btnFormaBusca.TAG = 1;
+
+    edtNumeroComanda.Visible  := btnFormaBusca.TAG = 0;
+    btnNovo.Visible           := btnFormaBusca.TAG = 1;
+
+    if edtNumeroComanda.Visible then
+      edtNumeroComanda.SetFocus;
+end;
+
+procedure TBuscaComanda.btnNovoClick(Sender: TObject);
+begin
+  self.FCriandoPedido := true;
+  keybd_event(VK_TAB, 0, 0, 0);
 end;
 
 end.

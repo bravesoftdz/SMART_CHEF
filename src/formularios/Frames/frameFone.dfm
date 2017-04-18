@@ -20,7 +20,7 @@ object Fone: TFone
   object edtFone: TMaskEdit
     Left = 3
     Top = 19
-    Width = 111
+    Width = 103
     Height = 21
     EditMask = '!\(99\)99999-9999;1; '
     MaxLength = 14

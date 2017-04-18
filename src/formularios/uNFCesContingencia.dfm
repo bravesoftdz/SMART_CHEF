@@ -406,10 +406,9 @@ inherited frmNFCesContingencia: TfrmNFCesContingencia
       
         'Select p.codigo, p.data, p.valor_total, p.nome_cliente cliente, ' +
         'p.cpf_cliente'
-      ''
       'from pedidos p'
       'left join nfce on nfce.codigo_pedido = p.codigo'
-      'where (p.em_contingencia = '#39'S'#39') and (nfce.codigo is null)')
+      'where (p.em_contingencia = '#39'S'#39')')
     Left = 592
     Top = 136
     object qryPedidosCODIGO: TIntegerField

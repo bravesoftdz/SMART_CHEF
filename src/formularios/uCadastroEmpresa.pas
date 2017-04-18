@@ -88,6 +88,19 @@ type
     Label30: TLabel;
     Label15: TLabel;
     cmbTipoEmissao: TComboBox;
+    TabSheet4: TTabSheet;
+    Label23: TLabel;
+    Label24: TLabel;
+    Label25: TLabel;
+    Label26: TLabel;
+    Label27: TLabel;
+    Label28: TLabel;
+    edtHost: TEdit;
+    edtPort: TCurrencyEdit;
+    edtUser: TEdit;
+    edtPassword: TEdit;
+    edtAssunto: TEdit;
+    memoMensagem: TMemo;
     procedure edtInscricaoKeyPress(Sender: TObject; var Key: Char);
     procedure rgDiaCouvertClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
@@ -262,7 +275,7 @@ begin
                                          '',
                                          StrToInt(copy(cmbTipoEmissao.Items[cmbTipoEmissao.ItemIndex],1,1)),
                                          rgpRegime.ItemIndex,
-                                         memoObsGeradaSistema.Text, StrToInt(edtSequenciaNF.Text));
+                                         memoObsGeradaSistema.Text, StrToIntDef(edtSequenciaNF.Text,0));
 
      except
        on E: Exception do begin
@@ -272,6 +285,14 @@ begin
           end;
        end;
      end;
+
+     { Configurações E-mail }
+     Empresa.AdicionarConfiguracoesEmail(self.edtHost.Text,
+                                         self.edtPort.Text,
+                                         self.edtUser.Text,
+                                         self.edtPassword.Text,
+                                         self.edtAssunto.Text,
+                                         self.memoMensagem.Text);
 
      Repositorio.Salvar(Empresa);
 
@@ -330,6 +351,11 @@ begin
   edtBairro.Clear;
   edtcep.Clear;
   edtComplemento.Clear;
+  edtCreditoSN.Clear;
+  edtIcms.Clear;
+  edtPis.Clear;
+  edtCofins.Clear;
+  memoObsGeradaSistema.Clear;
 end;
 
 procedure TfrmCadastroEmpresa.MostrarDados;
@@ -406,6 +432,16 @@ begin
       self.edtCofins.Value      := Empresa.ConfiguracoesNF.aliq_cofins;
       memoObsGeradaSistema.Text := Empresa.ConfiguracoesNF.ObsGeradaPeloSistema;
       self.edtSequenciaNF.Text  := IntToStr(Empresa.ConfiguracoesNF.SequenciaNotaFiscal);
+    end;
+
+    { Configurações de E-mail }
+    if Assigned(Empresa.ConfiguracoesEmail) then begin
+       self.edtHost.Text          := Empresa.ConfiguracoesEmail.smtp_host;
+       self.edtPort.Text          := Empresa.ConfiguracoesEmail.smtp_port;
+       self.edtUser.Text          := Empresa.ConfiguracoesEmail.smtp_user;
+       self.edtPassword.Text      := Empresa.ConfiguracoesEmail.smtp_password;
+       self.edtAssunto.Text       := Empresa.ConfiguracoesEmail.Assunto;
+       self.memoMensagem.Text     := Empresa.ConfiguracoesEmail.mensagem.Text;
     end;
 
   finally

@@ -2,7 +2,7 @@ unit Empresa;
 
 interface
 
-uses SysUtils, TipoRegimeTributario, Contnrs, ConfiguracoesNF, Pessoa;
+uses SysUtils, TipoRegimeTributario, Contnrs, ConfiguracoesNF, Pessoa, ConfiguracoesNFEmail;
 
 type
   TEmpresa = class(TPessoa)
@@ -24,10 +24,12 @@ type
     FTaxa_entrega :Real;
     FConfiguracoesNF: TConfiguracoesNF;
     FCodigoEmpresa: integer;
+    FConfiguracoesEmail :TConfiguracoesNFEmail;
     
     function GetAliqCouvertParaECF: String;
     function GetAliqTxServicoParaECF: String;
     function GetConfiguracoesNF: TConfiguracoesNF;
+    function GetConfiguracoesEmail      :TConfiguracoesNFEmail;
 
   public
     property codigoEmpresa         :integer read FCodigoEmpresa         write FCodigoEmpresa;
@@ -48,6 +50,7 @@ type
     property aliqCouvertParaECF     :String  read GetAliqCouvertParaECF;
     property aliqTxServicoParaECF   :String  read GetAliqTxServicoParaECF;
     property ConfiguracoesNF        :TConfiguracoesNF      read GetConfiguracoesNF          write FConfiguracoesNF;
+    property ConfiguracoesEmail     :TConfiguracoesNFEmail read GetConfiguracoesEmail;
 
   public
     procedure AdicionarConfiguracoesNFe(
@@ -63,6 +66,13 @@ type
                                      obsGeradaSistema  :string;
                                      SequenciaNF       :integer
                                     );
+
+    procedure AdicionarConfiguracoesEmail(SMTPHost,
+                                          SMTPPort,
+                                          SMTPUser,
+                                          SMTPPassword,
+                                          Assunto,
+                                          Mensagem :String);
   public
     constructor Create;
 
@@ -119,6 +129,23 @@ begin
     Result := FloatToStr(self.Aliquota_TxServico) + Result;
 end;
 
+function TEmpresa.GetConfiguracoesEmail: TConfiguracoesNFEmail;
+var
+  Repositorio :TRepositorio;
+begin
+   if not Assigned(self.FConfiguracoesEmail) then begin
+     Repositorio := nil;
+     try
+       Repositorio              := TFabricaRepositorio.GetRepositorio(TConfiguracoesNFEmail.ClassName);
+       self.FConfiguracoesEmail := (Repositorio.Get(self.FCodigoEmpresa) as TConfiguracoesNFEmail);
+     finally
+       FreeAndNil(Repositorio);
+     end;
+   end;
+
+   result := self.FConfiguracoesEmail;
+end;
+
 function TEmpresa.GetConfiguracoesNF: TConfiguracoesNF;
 var
   Repositorio :TRepositorio;
@@ -134,6 +161,25 @@ begin
    end;
 
    result := self.FConfiguracoesNF;
+end;
+
+procedure TEmpresa.AdicionarConfiguracoesEmail(SMTPHost, SMTPPort, SMTPUser, SMTPPassword, Assunto, Mensagem: String);
+const
+  NOME_METODO = ' AdicionarConfiguracoesEmail(SMTPHost, SMTPPort, SMTPUser, SMTPPassword, Assunto, Mensagem: String; UsaSSL: Boolean) ';
+begin
+   if SMTPHost.IsEmpty and SMTPPort.IsEmpty  and SMTPUser.IsEmpty  and SMTPPassword.IsEmpty  and
+      Assunto.IsEmpty  and Mensagem.IsEmpty  then
+   begin
+     exit;
+   end;
+
+   self.FConfiguracoesEmail := TConfiguracoesNFEmail.Create(self.CodigoEmpresa,
+                                                            SMTPHost,
+                                                            SMTPPort,
+                                                            SMTPUser,
+                                                            SMTPPassword,
+                                                            Assunto,
+                                                            Mensagem);
 end;
 
 end.

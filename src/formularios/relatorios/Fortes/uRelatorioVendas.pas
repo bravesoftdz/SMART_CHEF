@@ -353,12 +353,12 @@ begin
     cdsVendasGRUPO.AsString       := qryVendasGRUPO.AsString;
     cdsVendasPRODUTO.AsString     := TRIM( qryVendasPRODUTO.AsString );
     cdsVendasVLR_UNI.AsFloat      := qryVendasVLR_UNI.AsFloat;
-    cdsVendasQTDE.AsInteger       := cdsVendasQTDE.AsInteger       + qryVendasQTDE.AsInteger;
+    cdsVendasQTDE.AsFloat         := cdsVendasQTDE.AsFloat + qryVendasQTDE.AsFloat;
 
-    if qryVendasQTD_FRACIONADO.AsInteger > 0 then
+    {if qryVendasQTD_FRACIONADO.AsInteger > 0 then
       cdsVendasVLR_TOTAL_IT.AsFloat := qryVendasVLR_TOTAL_IT.AsFloat
-    else
-      cdsVendasVLR_TOTAL_IT.AsFloat := cdsVendasVLR_TOTAL_IT.AsFloat + qryVendasVLR_TOTAL_IT.AsFloat;
+    else}
+      cdsVendasVLR_TOTAL_IT.AsFloat := roundTo(cdsVendasVLR_TOTAL_IT.AsFloat + qryVendasVLR_TOTAL_IT.AsFloat,-2);
 
     cdsVendasVLR_TOTAL_AD.AsFloat := cdsVendasVLR_TOTAL_AD.AsFloat + qryVendasVLR_TOTAL_AD.AsFloat;
 

@@ -213,15 +213,10 @@ begin
        if self.IsInsercao(Objeto) then begin
           if not self.IsComponente then
             self.SetIdentificador(Objeto, dm.GetValorGenerator('GEN_'+self.GetNomeDaTabela+'_ID'));
-
-//          self.GravaAuditoria(nil, Objeto, taInclusao);
        end;
-//       else
-//          self.GravaAuditoria(ObjetoAntigo, Objeto, taAlteracao);
 
        self.ExecutaDepoisDeSalvar(Objeto);
      finally
-
        FreeAndNil(Repositorio);
        FreeAndNil(ObjetoAntigo);
      end;

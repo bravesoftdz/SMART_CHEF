@@ -100,13 +100,11 @@ type
     RLLabel20: TRLLabel;
     rlbTotItens: TRLLabel;
     RLPDFFilter1: TRLPDFFilter;
-    RLDBText17: TRLDBText;
     GroupBox2: TGroupBox;
     chkAgrupadas: TCheckBox;
     qryPedidos: TFDQuery;
     qryPedidosDATA: TDateField;
     qryPedidosCODPED: TIntegerField;
-    qryPedidosCODCOMANDA: TIntegerField;
     qryPedidosMESA: TIntegerField;
     qryPedidosCOUVERT: TBCDField;
     qryPedidosTAXA_SERVICO: TBCDField;
@@ -121,8 +119,21 @@ type
     qryPedidosCODITEM: TIntegerField;
     qryPedidosQTD_ADICIONAL: TSmallintField;
     qryPedidosAGRUPADAS: TStringField;
-    qryPedidosTOT_ITEM: TFMTBCDField;
     qryPedidosTOT_ADICIONAL: TFMTBCDField;
+    qryMovimentos: TFDQuery;
+    RLLabel7: TRLLabel;
+    totDinheiro: TRLLabel;
+    totCredito: TRLLabel;
+    totDebito: TRLLabel;
+    totCheque: TRLLabel;
+    qryMovimentosVALOR_PAGO: TBCDField;
+    qryMovimentosTIPO_MOEDA: TIntegerField;
+    qryPedidosTOT_ITEM: TFMTBCDField;
+    rgpC: TRadioGroup;
+    qryPedidosCODCOMANDA: TStringField;
+    RLLabel16: TRLLabel;
+    RLLabel21: TRLLabel;
+    RLLabel22: TRLLabel;
     procedure BitBtn1Click(Sender: TObject);
     procedure RLDBText9BeforePrint(Sender: TObject; var Text: String;
       var PrintIt: Boolean);
@@ -139,6 +150,9 @@ type
     FPedidos     :String;
 
     procedure monta_sql;
+    procedure monta_sql_movimentos;
+
+    procedure mostraMovimentos;
 
     procedure calcula_totais;
   public
@@ -164,6 +178,13 @@ begin
 
   calcula_totais;
 
+  qryMovimentos.Connection    := dm.conexao;
+  qryMovimentos.Close;
+  monta_sql_movimentos;
+  qryMovimentos.Open;
+
+  mostraMovimentos;
+
   rlbPeriodo.Caption := DateToStr( dtpInicio.Date ) + ' a ' + DateToStr( dtpFim.Date );
   rlbUsuario.Caption := dm.UsuarioLogado.Nome;
 
@@ -171,12 +192,11 @@ begin
     avisar('Nenhum registro foi encontrado com os filtros fornecidos.')
   else
     RLReport1.PreviewModal;
-
 end;
 
 procedure TfrmRelatorioPedidos.monta_sql;
 begin
-   qryPedidos.SQL.Text := 'select ped.data, ped.codigo CODPED, ped.codigo_comanda CODCOMANDA, ped.codigo_mesa MESA, ped.couvert, ped.taxa_servico, '+
+   qryPedidos.SQL.Text := 'select ped.data, ped.codigo CODPED, iif(ped.agrupadas <> '''', ped.agrupadas, cast(ped.codigo_comanda as char(7))) CODCOMANDA, ped.codigo_mesa MESA, ped.couvert, ped.taxa_servico, '+
                           '       ped.valor_total, ped.desconto, i.hora, i.quantidade qtd_item, (iif(((i.quantidade > 198)and(i.fracionado = ''S''))or(i.quantidade > 599), 1, i.quantidade ) * i.valor_unitario) tot_item,        '+
                           '       iif(ait.flag = ''A'', ''Adiciona'', ''Remove'') flag, usu.nome,  map.descricao mat_prima, i.codigo CODITEM, ped.agrupadas,      '+
                           '       pro.descricao, ait.quantidade qtd_Adicional, (iif(((i.quantidade > 198)and(i.fracionado = ''S''))or(i.quantidade > 599), 1, i.quantidade ) * (ait.quantidade * ait.valor_unitario)) tot_Adicional                 '+
@@ -187,6 +207,7 @@ begin
                           'left join pedidos          ped on ped.codigo = i.codigo_pedido                                                          '+
                           ' left join verifica_hora_item(ped.codigo)  vant on 1=1   '+
                           'left join usuarios         usu on usu.codigo = i.codigo_usuario                                                         '+
+                          'left join nfce                 on nfce.codigo_pedido = ped.codigo                                                       '+
                           ' where (ped.situacao = '''+IfThen(rgpSituacao.ItemIndex = 0, 'F', 'A')+''')                                             ';
 
   if ListaComanda.CodCampo > 0 then begin
@@ -194,6 +215,9 @@ begin
 
     qryPedidos.ParamByName('cod_comanda').AsInteger := ListaComanda.CodCampo;
   end;
+
+  if rgpC.ItemIndex > 0 then
+    qryPedidos.SQL.Add(' and '+IfThen(rgpC.ItemIndex = 1,'not','')+'(nfce.codigo is null) ');
 
   if not chkPeriodoGeral.Checked then begin
     qryPedidos.SQL.Add('and ((  (ped.data > :dti) and (ped.data < :dtf) )  ');
@@ -212,6 +236,63 @@ begin
 
 end;
 
+procedure TfrmRelatorioPedidos.monta_sql_movimentos;
+begin
+   qryMovimentos.SQL.Text := 'select sum(mov.valor_pago) valor_pago, mov.tipo_moeda                       '+
+                             'from movimentos mov                                                         '+
+                             'left join pedidos          ped on ped.codigo = mov.codigo_pedido            '+
+                             'left join nfce                 on nfce.codigo_pedido = ped.codigo           '+
+                             ' where (ped.situacao = '''+IfThen(rgpSituacao.ItemIndex = 0, 'F', 'A')+''') ';
+
+  if ListaComanda.CodCampo > 0 then begin
+    qryMovimentos.SQL.Add(' and ped.codigo_comanda = :cod_comanda ');
+
+    qryMovimentos.ParamByName('cod_comanda').AsInteger := ListaComanda.CodCampo;
+  end;
+
+  if not chkPeriodoGeral.Checked then begin
+    qryMovimentos.SQL.Add('and (  (mov.data > :dti) and (mov.data < :dtf) )  ');
+    qryMovimentos.ParamByName('dti').AsDateTime := dtpInicio.DateTime;
+    qryMovimentos.ParamByName('dtf').AsDateTime := dtpFim.DateTime +1;
+  end;
+
+  if rgpC.ItemIndex > 0 then
+    qryMovimentos.SQL.Add(' and '+IfThen(rgpC.ItemIndex = 1,'not','')+'(nfce.codigo is null) ');
+
+  if chkAgrupadas.Checked then begin
+    qryMovimentos.SQL.Add(' and (ped.agrupadas <> '''')');
+  end;
+
+  qryMovimentos.SQL.Add(' group by mov.tipo_moeda ');
+  qryMovimentos.SQL.Add(' order by mov.tipo_moeda ');
+end;
+
+procedure TfrmRelatorioPedidos.mostraMovimentos;
+var totalDinheiro, totalCredito, totalDebito, totalCheque :Real;
+begin
+  totalDinheiro := 0;
+  totalCredito  := 0;
+  totalDebito   := 0;
+  totalCheque   := 0;
+
+  qryMovimentos.First;
+  while not qryMovimentos.Eof do
+  begin
+    case qryMovimentosTIPO_MOEDA.AsInteger of
+      1 : totalDinheiro := totalDinheiro + qryMovimentosVALOR_PAGO.AsFloat;
+      2 : totalCheque   := totalCheque   + qryMovimentosVALOR_PAGO.AsFloat;
+      3 : totalCredito  := totalCredito  + qryMovimentosVALOR_PAGO.AsFloat;
+      4 : totalDebito   := totalDebito   + qryMovimentosVALOR_PAGO.AsFloat;
+    end;
+    qryMovimentos.Next;
+  end;
+
+  totDinheiro.Caption := FormatFloat(' ,0.00; -,0.00;',totalDinheiro);
+  totCredito.Caption  := FormatFloat(' ,0.00; -,0.00;',totalCredito);
+  totDebito.Caption   := FormatFloat(' ,0.00; -,0.00;',totalDebito);
+  totCheque.Caption   := FormatFloat(' ,0.00; -,0.00;',totalCheque);
+end;
+
 procedure TfrmRelatorioPedidos.RLDBText9BeforePrint(Sender: TObject; var Text: String; var PrintIt: Boolean);
 begin
   if (Text = '') or (grpLeiaute.ItemIndex = 1) then begin
@@ -227,8 +308,8 @@ end;
 procedure TfrmRelatorioPedidos.FormShow(Sender: TObject);
 begin
   inherited;
-  dtpInicio.DateTime := Date;
-  dtpFim.DateTime    := date;
+  dtpInicio.DateTime := StrToDateTime(DateToStr(Date)+' 07:00:00');
+  dtpFim.DateTime    := StrToDateTime(DateToStr(Date)+' 07:00:00');;
   qryPedidos.Connection := dm.conexao;
 
   ListaComanda.setValores('select * from comandas', 'numero_comanda', 'Comanda');
@@ -329,24 +410,26 @@ begin
     RLLabel25.Top  := 2;
     RLLabel26.Top  := 2;
     RLLabel5.Top   := 2;
-    RLDBText17.Top := 16;
   end;
 
   RLband3.Visible   := (grpLeiaute.ItemIndex = 0);
   RLBand6.Visible   := (grpLeiaute.ItemIndex = 1);
+  rllabel5.Visible  := (grpLeiaute.ItemIndex = 0);
+  rllabel25.Visible := (grpLeiaute.ItemIndex = 0);
+  rllabel26.Visible := (grpLeiaute.ItemIndex = 0);
+  RLDBText8.Left    := IfThen(grpLeiaute.ItemIndex = 0,61,37);
+  RLDBText2.Left    := IfThen(grpLeiaute.ItemIndex = 0,214,142);
+  RLDBText3.Left    := IfThen(grpLeiaute.ItemIndex = 0,393,289);
 
   RLLabel9.Visible  := (grpLeiaute.ItemIndex = 0);
   RLLabel13.Visible := (grpLeiaute.ItemIndex = 0);
   RLLabel14.Visible := (grpLeiaute.ItemIndex = 0);
-
 end;
 
 procedure TfrmRelatorioPedidos.RLBand2BeforePrint(Sender: TObject; var PrintIt: Boolean);
 begin
   inherited;
-  if (grpLeiaute.ItemIndex = 1) and (qryPedidosAGRUPADAS.AsString <> '') then
-    RLBand2.Height := 32
-  else if (grpLeiaute.ItemIndex = 1) and (qryPedidosAGRUPADAS.AsString = '') then
+  if (grpLeiaute.ItemIndex = 1)  then
     RLBand2.Height := 25;
 end;
 

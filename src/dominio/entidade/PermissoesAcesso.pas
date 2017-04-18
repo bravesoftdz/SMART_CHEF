@@ -49,6 +49,11 @@ const
   paEntradaNotaPorXml            = 33;
   paCadastroCFOPsCorrespondentes = 34;
   paLancaSangriaReforco          = 35;
+  paConfirmaEntradaEstoque       = 36;
+  paRelatorioNotasFiscaisEntrada = 37;
+  paNotaFiscal                   = 38;
+  paMonitorNFe                   = 39;
+  paCadastroTransportadora       = 40;
 
 implementation
 

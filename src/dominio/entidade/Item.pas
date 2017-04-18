@@ -122,22 +122,19 @@ begin
 
   if assigned(Adicionais) and (Adicionais.Count > 0) then
   begin
-    for i := 0 to Adicionais.Count do
+    for i := 0 to Adicionais.Count -1 do
       result := result + ((Adicionais.Items[i] as TAdicionalItem).quantidade * (Adicionais.Items[i] as TAdicionalItem).valor_unitario);
-
-    result := quantidade * result;
   end;
-
 end;
 
 function TItem.GetTotalBruto: Real;
 begin
-  result := (self.quantidade * self.valor_Unitario) + self.totalAdicionais;
+  result := (self.quantidade * self.valor_Unitario) + (self.quantidade * self.totalAdicionais);
 end;
 
 function TItem.GetTotalLiquido: Real;
 begin
-  result := (self.quantidade * self.valor_Unitario) + self.totalAdicionais ;//- self.Desconto;
+  result := (self.quantidade * self.valor_Unitario) + (self.quantidade * self.totalAdicionais);//- self.Desconto;
 end;
 
 function TItem.GetUsuario: TUsuario;

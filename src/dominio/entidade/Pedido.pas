@@ -5,7 +5,7 @@ interface
 uses
   SysUtils,
   Contnrs,
-  Usuario, Cliente, Item, Endereco, Generics.Collections;
+  Usuario, Cliente, Item, Endereco, Generics.Collections, NFCe;
 
 type
   TPedido = class
@@ -37,6 +37,7 @@ type
     FTaxa_entrega: Real;
     FSts_recebimento: String;
     FEmContingencia: String;
+    FNFce  :TNFCe;
 
     function GetItens: TObjectList<TItem>;
     function GetTotal_produtos: Real;
@@ -45,6 +46,7 @@ type
     function GetEndereco: TEndereco;
     function GetPedidoEntrega :Boolean;
     function GetPedidoRetiradaLocal :Boolean;
+    function GetNFCe: TNFCe;
 
   public
     property codigo          :integer   read Fcodigo          write Fcodigo;
@@ -78,17 +80,21 @@ type
     property Total_produtos  :Real      read GetTotal_produtos;
     property Total_servicos  :Real      read GetTotal_servicos;
     property Endereco        :TEndereco read GetEndereco;
+    property NFCe            :TNFCe     read GetNFCe;
 
   public
     constructor Create;
     destructor  Destroy; override;
+
+  public
+    class function PedidoPorCodigo(codigo :integer) :TPedido;
 
 end;
 
 implementation
 
 uses repositorio, fabricaRepositorio, EspecificacaoClientePorCpfCnpj, EspecificacaoItensDoPedido,
-  Classes, Math;
+  Classes, Math, Funcoes;
 
 { TPedido }
 
@@ -105,6 +111,10 @@ destructor TPedido.Destroy;
 begin
   if self.FCriouListaItens and Assigned(self.FItens) then
     FreeAndNil(self.FItens);
+  if assigned(FNFce) then
+    FreeAndNil(FNFce);
+  if assigned(FEndereco) then
+    FreeAndNil(FEndereco);
 
   inherited;
 end;
@@ -165,6 +175,25 @@ begin
    end;
 end;
 
+function TPedido.GetNFCe: TNFCe;
+var repositorio :TRepositorio;
+    codigoNfce  :integer;
+begin
+  repositorio := nil;
+  codigoNfce  := StrToIntDef(Campo_por_campo('NFCE','CODIGO','CODIGO_PEDIDO', intToStr(Fcodigo)),0);
+  try
+    if not assigned(FNFce) and (codigoNfce > 0) then
+    begin
+      repositorio := TFabricaRepositorio.GetRepositorio(TNFCe.ClassName);
+      FNFce       := TNFCe(repositorio.Get(codigoNfce));
+    end;
+
+    result := FNFce;
+  finally
+    FreeAndNil(repositorio);
+  end;
+end;
+
 function TPedido.GetPedidoEntrega: Boolean;
 begin
   result := (self.Fcodigo_comanda = 0) and (self.FCodigo_endereco > 0);
@@ -195,6 +224,17 @@ begin
     if TItem(Itens.Items[i]).Produto.tipo = 'S' then
       result := result + (TItem(Itens.Items[i]).valor_Unitario *
                          IfThen(((TItem(Itens.Items[i]).quantidade > 198)and(TItem(Itens.Items[i]).Fracionado = 'S')) or (TItem(Itens.Items[i]).quantidade > 599), 1, TItem(Itens.Items[i]).quantidade));
+end;
+
+class function TPedido.PedidoPorCodigo(codigo: integer): TPedido;
+var repositorio :TRepositorio;
+begin
+  try
+    repositorio := TFabricaRepositorio.GetRepositorio(self.ClassName);
+    result      := TPedido(repositorio.Get(codigo));
+  finally
+    FreeAndNil(repositorio);
+  end;
 end;
 
 end.

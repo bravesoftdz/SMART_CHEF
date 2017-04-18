@@ -52,10 +52,13 @@ function TRepositorioMateriaPrima.Get(Dataset: TDataSet): TObject;
 var
   MateriaPrima :TMateriaPrima;
 begin
-   MateriaPrima           := TMateriaPrima.Create;
-   MateriaPrima.Codigo    := self.FQuery.FieldByName('codigo').AsInteger;
-   MateriaPrima.descricao := self.FQuery.FieldByName('descricao').AsString;
-   MateriaPrima.valor     := self.FQuery.FieldByName('valor').AsFloat;
+   MateriaPrima               := TMateriaPrima.Create;
+   MateriaPrima.Codigo        := self.FQuery.FieldByName('codigo').AsInteger;
+   MateriaPrima.descricao     := self.FQuery.FieldByName('descricao').AsString;
+   MateriaPrima.valor         := self.FQuery.FieldByName('valor').AsFloat;
+   MateriaPrima.descricao2    := self.FQuery.FieldByName('descricao2').AsString;
+   MateriaPrima.codigoProduto := self.FQuery.FieldByName('codigo_produto').AsInteger;
+   MateriaPrima.quantidade    := self.FQuery.FieldByName('quantidade').AsFloat;
 
    result := MateriaPrima;
 end;
@@ -93,6 +96,15 @@ begin
 
    if (MateriaPrimaAntigo.valor <> MateriaPrimaNovo.valor) then
     Auditoria.AdicionaCampoAlterado('valor', FloatToStr(MateriaPrimaAntigo.valor), FloatToStr(MateriaPrimaNovo.valor) );
+
+   if (MateriaPrimaAntigo.descricao2 <> MateriaPrimaNovo.descricao2) then
+    Auditoria.AdicionaCampoAlterado('descricao2', MateriaPrimaAntigo.descricao2, MateriaPrimaNovo.descricao2 );
+
+   if (MateriaPrimaAntigo.codigoProduto <> MateriaPrimaNovo.codigoProduto) then
+    Auditoria.AdicionaCampoAlterado('codigo_Produto', IntToStr(MateriaPrimaAntigo.codigoProduto), intToStr(MateriaPrimaNovo.codigoProduto) );
+
+   if (MateriaPrimaAntigo.quantidade <> MateriaPrimaNovo.quantidade) then
+    Auditoria.AdicionaCampoAlterado('quantidade', FloatToStr(MateriaPrimaAntigo.quantidade), FloatToStr(MateriaPrimaNovo.quantidade) );
 end;
 
 procedure TRepositorioMateriaPrima.SetCamposExcluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -104,6 +116,9 @@ begin
    Auditoria.AdicionaCampoExcluido('codigo',    IntToStr(MateriaPrima.Codigo));
    Auditoria.AdicionaCampoExcluido('descricao', MateriaPrima.descricao);
    Auditoria.AdicionaCampoExcluido('valor',     FloatToStr(MateriaPrima.valor));
+   Auditoria.AdicionaCampoExcluido('descricao2', MateriaPrima.descricao2);
+   Auditoria.AdicionaCampoExcluido('codigo_produto', intToStr(MateriaPrima.codigoProduto));
+   Auditoria.AdicionaCampoExcluido('quantidade',     FloatToStr(MateriaPrima.quantidade));
 end;
 
 procedure TRepositorioMateriaPrima.SetCamposIncluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -115,6 +130,9 @@ begin
    Auditoria.AdicionaCampoIncluido('codigo',    IntToStr(MateriaPrima.codigo));
    Auditoria.AdicionaCampoIncluido('descricao', MateriaPrima.descricao);
    Auditoria.AdicionaCampoIncluido('valor',     FloatToStr(MateriaPrima.valor));
+   Auditoria.AdicionaCampoIncluido('descricao2', MateriaPrima.descricao2);
+   Auditoria.AdicionaCampoIncluido('codigo_produto', intToStr(MateriaPrima.codigoProduto));
+   Auditoria.AdicionaCampoIncluido('quantidade',     FloatToStr(MateriaPrima.quantidade));
 end;
 
 procedure TRepositorioMateriaPrima.SetIdentificador(Objeto: TObject;
@@ -129,9 +147,12 @@ var
 begin
    MateriaPrima := (Objeto as TMateriaPrima);
 
-   self.FQuery.ParamByName('codigo').AsInteger   := MateriaPrima.Codigo;
-   self.FQuery.ParamByName('descricao').AsString := MateriaPrima.descricao;
-   self.FQuery.ParamByName('valor').AsFloat      := MateriaPrima.valor;
+   self.FQuery.ParamByName('codigo').AsInteger           := MateriaPrima.Codigo;
+   self.FQuery.ParamByName('descricao').AsString         := MateriaPrima.descricao;
+   self.FQuery.ParamByName('valor').AsFloat              := MateriaPrima.valor;
+   self.FQuery.ParamByName('descricao2').AsString        := MateriaPrima.descricao2;
+   self.FQuery.ParamByName('codigo_produto').AsInteger   := MateriaPrima.codigoProduto;
+   self.FQuery.ParamByName('quantidade').AsFloat         := MateriaPrima.quantidade;
 end;
 
 function TRepositorioMateriaPrima.SQLGet: String;
@@ -156,8 +177,8 @@ end;
 
 function TRepositorioMateriaPrima.SQLSalvar: String;
 begin
-   result := 'update or insert into Materias_Primas (codigo, descricao, valor)    '+
-             '                               values (:codigo, :descricao, :valor) ';
+   result := 'update or insert into Materias_Primas (codigo, descricao, valor, descricao2, codigo_produto, quantidade)    '+
+             '                               values (:codigo, :descricao, :valor, :descricao2, :codigo_produto, :quantidade) ';
 end;
 
 end.

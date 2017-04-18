@@ -6,20 +6,19 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, uPadrao, StdCtrls, Mask, RXToolEdit, RXCurrEdit, Buttons, ExtCtrls,
   ImgList, pngimage, DB, DBClient, Grids, DBGrids, ContNrs, Item, Menus,
-  AdicionalItem, Funcoes, CriaBalaoInformacao, generics.collections;
+  AdicionalItem, Funcoes, CriaBalaoInformacao, generics.collections, System.ImageList;
 
 type
   TfrmFinalizaPedido = class(TfrmPadrao)
     Panel1: TPanel;
     btnCancela: TBitBtn;
     btnConfirma: TBitBtn;
-    gridAgrupa: TDBGrid;
+    gridMoedas: TDBGrid;
     cdsMoedas: TClientDataSet;
-    dsAgrupaComanda: TDataSource;
+    dsMoedas: TDataSource;
     cdsMoedasTIPO_MOEDA: TIntegerField;
     cdsMoedasVALOR_PAGO: TFloatField;
     cdsMoedasMOEDA: TStringField;
-    Label26: TLabel;
     GroupBox1: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
@@ -34,7 +33,7 @@ type
     edtTotalRestante: TCurrencyEdit;
     edtValorParcial: TCurrencyEdit;
     Label6: TLabel;
-    DBGrid1: TDBGrid;
+    gridItens: TDBGrid;
     dsItens: TDataSource;
     DBGrid2: TDBGrid;
     Label7: TLabel;
@@ -43,8 +42,6 @@ type
     cdsItens: TClientDataSet;
     cdsItensCODIGO_ITEM: TIntegerField;
     cdsItensPRODUTO: TStringField;
-    cdsItensVLR_UNITARIO: TFloatField;
-    cdsItensQTD_PAGA: TFloatField;
     PopupMenu1: TPopupMenu;
     FracionarItem1: TMenuItem;
     cdsItensFRACIONADO: TStringField;
@@ -52,7 +49,6 @@ type
     lbLegenda: TLabel;
     Image1: TImage;
     Image2: TImage;
-    cdsItensQTD_A_PAGAR: TFloatField;
     cdsItensPrePagos: TClientDataSet;
     cdsItensPrePagosCODIGO_ITEM: TIntegerField;
     cdsItensPrePagosQUANTIDADE: TFloatField;
@@ -65,8 +61,6 @@ type
     cdsItensPrePagosMOEDA: TStringField;
     btnVoltar: TSpeedButton;
     btnEstornar: TSpeedButton;
-    cdsItensVLR_TOTAL: TFloatField;
-    cdsItensVLR_PAGO: TFloatField;
     Shape1: TShape;
     Shape2: TShape;
     Label9: TLabel;
@@ -78,41 +72,50 @@ type
     btnFracionaItem: TBitBtn;
     Label13: TLabel;
     edtTxServico: TCurrencyEdit;
-    cdsItensQUANTIDADE: TFloatField;
     cdsItensPrePagosFRACIONADO: TStringField;
     Label14: TLabel;
     edtPagando: TCurrencyEdit;
     Timer1: TTimer;
     edtDesconto: TCurrencyEdit;
     Label10: TLabel;
+    edtCpf: TEdit;
+    Label15: TLabel;
+    cdsItensQUANTIDADE: TFMTBCDField;
+    cdsItensQTD_PAGA: TFMTBCDField;
+    cdsItensQTD_A_PAGAR: TFMTBCDField;
+    cdsItensVLR_PAGO: TFMTBCDField;
+    cdsItensVLR_TOTAL: TFMTBCDField;
+    cdsItensVLR_UNITARIO: TFMTBCDField;
+    btnExtornaItem: TBitBtn;
+    btnExtornaMoeda: TBitBtn;
+    cdsItensPrePagosCODMOEDA: TIntegerField;
+    cdsMoedasCODIGO: TIntegerField;
+    cdsMoedasINDICE: TIntegerField;
+    ImageList1: TImageList;
     procedure edtValorPagoChange(Sender: TObject);
     procedure btnConfirmaClick(Sender: TObject);
     procedure btnCancelaClick(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
-    procedure gridAgrupaKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure cdsMoedasAfterPost(DataSet: TDataSet);
-    procedure edtTotalPedidoChange(Sender: TObject);
-    procedure cdsMoedasBeforeDelete(DataSet: TDataSet);
     procedure edtValorParcialChange(Sender: TObject);
     procedure edtValorParcialKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure cdsItensAfterScroll(DataSet: TDataSet);
-    procedure DBGrid1Enter(Sender: TObject);
-    procedure DBGrid1ColEnter(Sender: TObject);
-    procedure DBGrid1CellClick(Column: TColumn);
-    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+    procedure gridItensEnter(Sender: TObject);
+    procedure gridItensColEnter(Sender: TObject);
+    procedure gridItensCellClick(Column: TColumn);
+    procedure gridItensDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
-    procedure DBGrid1KeyPress(Sender: TObject; var Key: Char);
+    procedure gridItensKeyPress(Sender: TObject; var Key: Char);
     procedure DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure cdsItensAfterPost(DataSet: TDataSet);
     procedure btnOkClick(Sender: TObject);
     procedure btnVoltarClick(Sender: TObject);
     procedure btnEstornarClick(Sender: TObject);
-    procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
+    procedure gridItensKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure chkSelecionarPendentesClick(Sender: TObject);
     procedure FracionarItem1Click(Sender: TObject);
@@ -123,27 +126,41 @@ type
     procedure Timer1Timer(Sender: TObject);
     procedure edtValorPagoEnter(Sender: TObject);
     procedure cmbTipoMoedaEnter(Sender: TObject);
+    procedure edtCpfChange(Sender: TObject);
+    procedure edtDescontoChange(Sender: TObject);
+    procedure cdsItensQTD_PAGAChange(Sender: TField);
+    procedure btnExtornaItemClick(Sender: TObject);
+    procedure btnExtornaMoedaClick(Sender: TObject);
+    procedure gridMoedasDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure cdsMoedasBeforeDelete(DataSet: TDataSet);
   private
     Itens :TObjectList;
     recebendoParcial :Boolean;
 
   private
     FFinalizaRapido: Boolean;
+    FTotalAdicionais :Real;
+
     procedure verifica_pago;
     procedure SetupGridPickList(const FieldName : string);
     function possui_item_adicionado(codigo_item :integer):boolean;
+    function GetTotalPago :Real;
 
     procedure agrupa_itens_iguais;
-    procedure calcula_totais;
+    procedure recalculaTotalPedido;
+    procedure calculaTotalSerPago;
+    procedure calculaTotalPedido;
     procedure armazena_pre_pagos;
     procedure carrega_movimentos;
     procedure fraciona_item;
-    procedure modoPagandoParcial(pagandoParcial :Boolean);
     procedure corrigeValorMoedas;
+    procedure rateiaValor;
+    procedure ExtornarItem;
 
     function verifica_obrigatorio :Boolean;
 
     function total_prepago(codigo_item :integer) :Real;
+    function totalAdicionaisItem(qtde :Real; const codigoItem :integer = 0) :Real;
     function valor_item(quantidade :Real) :Real;
     function getPagamentoCompleto: Boolean;
 
@@ -155,6 +172,7 @@ type
 
   public
     property finalizaRapido :Boolean     read FFinalizaRapido  write FFinalizaRapido;
+    property totalAdicionais :Real       read FTotalAdicionais write FTotalAdicionais;
     property pagamento_completo :Boolean read getPagamentoCompleto;
   end;
 
@@ -173,7 +191,7 @@ var pagando :Real;
 begin
   edtTroco.Clear;
 
-  pagando := IfThen(edtValorParcial.Value > 0, edtValorParcial.Value, edtPagando.Value);
+  pagando := edtPagando.Value;
 
   if (pagando > 0) and (edtValorPago.Value > pagando) then
     edtTroco.Value := edtValorPago.Value - pagando
@@ -185,13 +203,14 @@ end;
 procedure TfrmFinalizaPedido.edtValorPagoEnter(Sender: TObject);
 begin
   edtValorPago.Color := clWhite;
+  edtValorParcial.SelectAll;
 end;
 
 procedure TfrmFinalizaPedido.btnConfirmaClick(Sender: TObject);
 begin
   if edtTotalRestante.Value = edtTotalPedido.Value then begin
     avisar('Nenhum valor foi informado, para efetuar o recebimento.');
-    DBGrid1.SetFocus;
+    gridItens.SetFocus;
     exit;
   end
   else if recebendoParcial then begin
@@ -214,7 +233,9 @@ begin
     edtValorPago.SetFocus;
   end
   else begin
-    if confirma('Confirma recebimento '+IfThen(edtTotalRestante.Value = 0, 'TOTAL','PARCIAL')+' do pedido?') then
+    if (edtCpf.Text <> '') and not Valida_CPF_CNPJ( edtCPF.Text ) then
+      avisar('CPF inválido')
+    else if confirma('Confirma recebimento '+IfThen(edtTotalRestante.Value = 0, 'TOTAL','PARCIAL')+' do pedido?') then
       self.ModalResult := mrOk;
   end;
 end;
@@ -268,65 +289,41 @@ begin
   result:=  (edtTotalRestante.Value = 0);
 end;
 
-procedure TfrmFinalizaPedido.gridAgrupaKeyDown(Sender: TObject;
-  var Key: Word; Shift: TShiftState);
+function TfrmFinalizaPedido.GetTotalPago: Real;
+var registro :integer;
 begin
-  if (Key = VK_DELETE) and not FFinalizaRapido then
- //   if (cdsMoedas.Active) and not(cdsMoedas.IsEmpty) then
-  //    if cdsItensPrePagos.IsEmpty then
-  //      cdsMoedas.Delete
-  //    else begin
-        if cdsItensPrePagos.IsEmpty then
-          avisar('Não existem itens a serem estornados')
-        else begin
-          pnlExtorna.Left    := trunc(self.Width / 4);
-          pnlExtorna.Visible := true;
-        end;
+  result := 0;
+  registro := cdsMoedas.RecNo;
+  cdsMoedas.First;
+  while not cdsMoedas.Eof do
+  begin
+    result := result + cdsMoedasVALOR_PAGO.AsFloat;
+    cdsMoedas.Next;
+  end;
+  cdsMoedas.RecNo := registro;
 end;
 
 procedure TfrmFinalizaPedido.Image1Click(Sender: TObject);
 var tecla :String;
 begin
   tecla := '+';
-  DBGrid1KeyPress(nil, tecla[1]);
+  gridItensKeyPress(nil, tecla[1]);
 end;
 
 procedure TfrmFinalizaPedido.Image2Click(Sender: TObject);
 var tecla :String;
 begin
   tecla := '-';
-  DBGrid1KeyPress(nil, tecla[1]);
-end;
-
-procedure TfrmFinalizaPedido.modoPagandoParcial(pagandoParcial: Boolean);
-begin
-  if pagandoParcial then
-  begin
-    dbgrid1.OnKeyPress   := nil;
-    gridAgrupa.OnKeyDown := nil;
-    DBGrid1.PopupMenu    := nil;
-  end
-  else
-  begin
-    dbgrid1.OnKeyPress   := DBGrid1KeyPress;
-    gridAgrupa.OnKeyDown := gridAgrupaKeyDown;
-    DBGrid1.PopupMenu    := PopupMenu1;
-  end;
-
-  dbgrid1.Enabled                := not pagandoParcial;
-  gridAgrupa.Enabled             := not pagandoParcial;
-  chkSelecionarPendentes.visible := not pagandoParcial;
-  btnFracionaItem.Enabled        := not pagandoParcial;
-  recebendoParcial               := pagandoParcial;
+  gridItensKeyPress(nil, tecla[1]);
 end;
 
 procedure TfrmFinalizaPedido.FormShow(Sender: TObject);
 begin
   cdsMoedas.CreateDataSet;
-  DBGrid1.SelectedIndex := 6;
+  gridItens.SelectedIndex := 6;
   TNumericField(cdsAdicionais.Fields[2]).DisplayFormat := ',0.00; ,0.00';
-  label26.Caption := '<DELETE> Estornar itens';
   cdsItensAfterScroll(nil);
+  edtDesconto.OnChange := edtDescontoChange;
 
   (cdsAdicionais.fieldByName('QUANTIDADE') as TFloatField).DisplayFormat     := ',0.00; ,0.00';
   (cdsAdicionais.fieldByName('VALOR_UNITARIO') as TFloatField).DisplayFormat := ',0.00; ,0.00';
@@ -338,22 +335,23 @@ begin
     chkSelecionarPendentes.Checked := true;
     btnFracionaItem.Visible        := false;
     chkSelecionarPendentes.Visible := false;
-    label26.Visible                := false;
     lbLegenda.Visible              := false;
     image1.Visible                 := false;
     image2.Visible                 := false;
-    DBGrid1.PopupMenu              := nil;
+    gridItens.PopupMenu            := nil;
     cmbTipoMoeda.SetFocus;
     cmbTipoMoeda.OnEnter           := cmbTipoMoedaEnter;
     cmbTipoMoeda.ItemIndex         := 0;
     edtValorPago.SetFocus;
   end;
+
+  recalculaTotalPedido;
 end;
 
 procedure TfrmFinalizaPedido.verifica_pago;
 var total_pago :Double;
 begin
-  total_pago := 0;
+ { total_pago := 0;
 
   cdsMoedas.First;
   while not cdsMoedas.Eof do begin
@@ -362,46 +360,60 @@ begin
 
     cdsMoedas.Next;
   end;
-
+               }
  // btnConfirma.Enabled :=  (FloatToStr(total_pago) = FloatToStr(edtTotalPedido.Value));
 end;
 
 procedure TfrmFinalizaPedido.cdsMoedasAfterPost(DataSet: TDataSet);
 begin
-  verifica_pago;
-end;
-
-procedure TfrmFinalizaPedido.edtPagandoChange(Sender: TObject);
-begin
-  if (edtPagando.Value + edtTxServico.Value) = edtTotalRestante.Value then
-    edtPagando.Value := edtPagando.Value + edtTxServico.Value;
-
-  edtValorPagoChange(nil);
-  edtValorParcial.Enabled := edtPagando.Value > 0;
-  edtValorParcial.Clear;
-end;
-
-procedure TfrmFinalizaPedido.edtTotalPedidoChange(Sender: TObject);
-begin
-  edtTotalRestante.Value := edtTotalPedido.Value;
+//  verifica_pago;
 end;
 
 procedure TfrmFinalizaPedido.cdsMoedasBeforeDelete(DataSet: TDataSet);
 begin
-  edtTotalRestante.Value := edtTotalRestante.Value + cdsMoedasVALOR_PAGO.AsFloat;
-
   inherited;
+  recalculaTotalPedido;
+end;
 
+procedure TfrmFinalizaPedido.edtCpfChange(Sender: TObject);
+begin
+  if not Valida_CPF_CNPJ( edtCPF.Text ) then
+    edtCpf.Font.Color := clMaroon
+  else
+    edtCpf.Font.Color := clGreen;
+end;
+
+procedure TfrmFinalizaPedido.edtDescontoChange(Sender: TObject);
+begin
+  if edtDesconto.Value > edtTotalRestante.Value then
+    edtDesconto.Value := 0;
+
+  recalculaTotalPedido;
+end;
+
+procedure TfrmFinalizaPedido.edtPagandoChange(Sender: TObject);
+begin
+  if roundTo(((edtPagando.Value + edtTxServico.Value - edtDesconto.Value) - edtTotalRestante.Value),-4) = 0 then
+    edtPagando.Value := edtPagando.Value + edtTxServico.Value;
+
+  edtValorPagoChange(nil);
 end;
 
 procedure TfrmFinalizaPedido.edtValorParcialChange(Sender: TObject);
+var valorItens :Real;
 begin
-  if edtValorParcial.Value > edtPagando.Value then begin
-    avisar('Atenção! O valor parcial deve ser menor ou igual ao valor que se está pagando.');
-    edtValorParcial.Clear;
+  valorItens := (edtTotalRestante.Value{ - self.FTotalAdicionais} - edtTxServico.Value + edtDesconto.Value);
+  if (edtValorParcial.Value >= valorItens) and (edtValorParcial.Value < edtTotalRestante.Value) then
+  begin
+    edtValorParcial.Value     := edtTotalRestante.Value;
+    edtValorParcial.SelStart  := Length(edtValorParcial.Text);
+    edtValorParcial.SelLength := 0;
   end;
 
+  edtValorPago.Value := edtValorParcial.Value;
   edtValorPagoChange(nil);
+
+  rateiaValor;
 end;
 
 procedure TfrmFinalizaPedido.edtValorParcialEnter(Sender: TObject);
@@ -415,6 +427,32 @@ procedure TfrmFinalizaPedido.edtValorParcialKeyPress(Sender: TObject; var Key: C
 begin
   if key = '.' then
     Key := ',';
+end;
+
+procedure TfrmFinalizaPedido.ExtornarItem;
+var registro :integer;
+begin
+    cdsItens.Locate('CODIGO_ITEM',cdsItensPrePagosCODIGO_ITEM.AsInteger, []);
+    cdsItens.Edit;
+    cdsItensQTD_PAGA.AsFloat := cdsItensQTD_PAGA.AsFloat - cdsItensPrePagosQUANTIDADE.AsFloat;
+    cdsItens.Post;
+
+    cdsMoedas.Locate('INDICE', cdsItensPrePagosCODMOEDA.AsInteger, []);
+
+    cdsMoedas.Edit;
+    cdsMoedasVALOR_PAGO.AsFloat := cdsMoedasVALOR_PAGO.AsFloat - IfThen(cdsItensPrePagosVALOR.AsFloat > cdsMoedasVALOR_PAGO.AsFloat,
+                                                                        cdsMoedasVALOR_PAGO.AsFloat,
+                                                                        cdsItensPrePagosVALOR.AsFloat);
+    cdsMoedas.Post;
+
+  {  if cdsMoedasVALOR_PAGO.AsFloat <= 0 then
+      corrigeValorMoedas;  }
+
+    edtTotalRestante.Value := edtTotalRestante.Value + cdsItensPrePagosVALOR.AsFloat;
+    cdsItensPrePagos.Delete;
+
+    if cortaCasasDecimais(cdsMoedasVALOR_PAGO.AsFloat, 2) = 0 then
+      cdsMoedas.Delete;
 end;
 
 procedure TfrmFinalizaPedido.FormCreate(Sender: TObject);
@@ -440,9 +478,9 @@ begin
     slPickList.Add('Cartão Débito');
 
     //colocar a lista na coluna correta
-    for i := 0 to DBGrid1.Columns.Count-1 do
-      if DBGrid1.Columns[i].FieldName = FieldName then begin
-        DBGrid1.Columns[i].PickList := slPickList;
+    for i := 0 to gridItens.Columns.Count-1 do
+      if gridItens.Columns[i].FieldName = FieldName then begin
+        gridItens.Columns[i].PickList := slPickList;
         Break;
       end;
 
@@ -495,6 +533,7 @@ begin
           cdsItens.Edit;
           cdsItensQUANTIDADE.AsFloat := cdsItensQUANTIDADE.AsFloat + quantidade;
           cdsItensVLR_TOTAL.AsFloat  := cdsItensQUANTIDADE.AsFloat * cdsItensVLR_UNITARIO.AsFloat;
+          cdsItensVLR_TOTAL.AsFloat  := cdsItensVLR_TOTAL.AsFloat + totalAdicionaisItem(cdsItensQUANTIDADE.AsFloat);
           cdsItens.Post;
 
           Item := TItem(repositorio.Get(cdsItensCODIGO_ITEM.AsInteger));
@@ -539,13 +578,8 @@ begin
   cdsItens.AfterScroll := nil;
   cds.First;
   while not cds.Eof do begin
-    primeiroFracionado := false;
     sobra := 0;
     linha := cds.RecNo;
-
-    if (cds.fieldByName('QTD_FRACIONADO').AsInteger > 0) and
-       not (cds.Locate('CODIGO_PRODUTO;FRACIONADO',varArrayOf([cds.fieldByName('CODIGO').AsInteger, cds.fieldByName('FRACIONADO').AsString]),[])) then
-      primeiroFracionado := true;
 
     cds.RecNo := linha;
 
@@ -558,31 +592,29 @@ begin
     else
       quantidade := StrToFloat(cds.fieldByName('QUANTIDADE').AsString);
 
+      // se for do tipo SERVIÇO, e for medido em tempo
     if (cds.fieldByName('QTD_FRACIONADO').AsInteger > 0) and (cds.fieldByName('TIPO').AsString = 'S') and (pos(':',cds.fieldByName('QUANTIDADE').AsString)>0)  then
     begin
 
-      quantidade := RoundTo(1/cds.fieldByName('QTD_FRACIONADO').AsInteger,-2);
+      quantidade := RoundTo(1/cds.fieldByName('QTD_FRACIONADO').AsInteger,-4);
 
       if cdsItens.RecordCount = 0 then
       begin
-        sobra := 1- (RoundTo(1/cds.fieldByName('QTD_FRACIONADO').AsInteger,-2) * cds.fieldByName('QTD_FRACIONADO').AsInteger);
+        sobra := 1- (RoundTo(1/cds.fieldByName('QTD_FRACIONADO').AsInteger,-4) * cds.fieldByName('QTD_FRACIONADO').AsInteger);
 
-        valorD := roundTo( quantidade * cds.fieldByName('VALOR_UNITARIO').AsFloat, -2) * cds.fieldByName('QTD_FRACIONADO').AsInteger;
-        valorD := valorD + roundTo(sobra * cds.fieldByName('VALOR_UNITARIO').AsFloat,-2);
+        valorD := roundTo( quantidade * cds.fieldByName('VALOR_UNITARIO').AsFloat, -4) * cds.fieldByName('QTD_FRACIONADO').AsInteger;
+        valorD := valorD + roundTo(sobra * cds.fieldByName('VALOR_UNITARIO').AsFloat,-4);
         diferenca := cds.fieldByName('VALOR_UNITARIO').AsFloat - valorD;
 
       end;
 
       quantidade := quantidade + sobra;
-
-
-
     end;
 
     cdsItensQUANTIDADE.AsFloat    := quantidade;
     cdsItensVLR_UNITARIO.AsFloat  := cds.fieldByName('VALOR_UNITARIO').AsFloat;
-    cdsItensVLR_TOTAL.AsFloat     := (quantidade * cds.fieldByName('VALOR_UNITARIO').AsFloat) + diferenca;
-    cdsItensVLR_PAGO.AsFloat      := cds.fieldByName('QUANTIDADE_PG').AsFloat * cds.fieldByName('VALOR_UNITARIO').AsFloat;
+    cdsItensVLR_TOTAL.AsFloat     := roundTo((quantidade * cds.fieldByName('VALOR_UNITARIO').AsFloat),-4) + diferenca + totalAdicionaisItem(cdsItensQUANTIDADE.AsFloat, cds.fieldByName('CODIGO').AsInteger);
+   // cdsItensVLR_PAGO.AsFloat      := roundTo(cds.fieldByName('QUANTIDADE_PG').AsFloat * cds.fieldByName('VALOR_UNITARIO').AsFloat,-3);
     cdsItensFRACIONADO.AsString   := cds.fieldByName('FRACIONADO').AsString;
     cdsItensQTD_PAGA.AsFloat      := cds.fieldByName('QUANTIDADE_PG').AsFloat;
     cdsItensQTD_A_PAGAR.AsFloat   := 0;
@@ -598,6 +630,45 @@ begin
   cdsItens.AfterScroll := cdsItensAfterScroll;
 
   cdsItens.RecNo := 1;
+end;
+
+procedure TfrmFinalizaPedido.rateiaValor;
+var resto, percentagemEq, valorFalta, pagando, calculado :Real;
+begin
+  cdsItens.First;
+  pagando := edtValorParcial.Value;
+  while not cdsItens.Eof do
+  begin
+    if cdsItensVLR_PAGO.AsFloat < cdsItensVLR_TOTAL.AsFloat then
+    begin
+      valorFalta := cdsItensVLR_TOTAL.AsFloat - cdsItensVLR_PAGO.AsFloat;
+
+      cdsItens.Edit;
+      if pagando > valorFalta then
+      begin
+        cdsItensQTD_A_PAGAR.AsFloat := cdsItensQUANTIDADE.AsFloat - cdsItensQTD_PAGA.AsFloat;
+        pagando := pagando - valorFalta;
+      end
+      else
+      begin
+        percentagemEq := (pagando * 100 / valorFalta);
+        calculado     := (cdsItensQUANTIDADE.AsFloat - cdsItensQTD_PAGA.AsFloat) * percentagemEq / 100;
+                                      //trunca para 4 casas decimais
+        cdsItensQTD_A_PAGAR.AsFloat := cortaCasasDecimais(calculado, 4);
+        pagando       := 0;
+      end;
+
+      cdsItens.Post;
+    end;
+    cdsItens.Next;
+  end;
+end;
+
+procedure TfrmFinalizaPedido.recalculaTotalPedido;
+begin
+  calculaTotalPedido;
+  edtTotalRestante.Value := edtTotalPedido.Value - GetTotalPago;
+  calculaTotalSerPago;
 end;
 
 procedure TfrmFinalizaPedido.cdsItensAfterScroll(DataSet: TDataSet);
@@ -616,27 +687,48 @@ begin
   btnFracionaItem.Enabled := not (cdsItensVLR_PAGO.AsFloat > 0);
 
   if cdsItensVLR_PAGO.AsFloat > 0 then
-    DBGrid1.PopupMenu := nil
-  else
-    DBGrid1.PopupMenu := PopupMenu1;  
+    gridItens.PopupMenu := nil
+  else if not self.FFinalizaRapido then
+    gridItens.PopupMenu := PopupMenu1;
 end;
 
-procedure TfrmFinalizaPedido.DBGrid1Enter(Sender: TObject);
+procedure TfrmFinalizaPedido.cdsItensQTD_PAGAChange(Sender: TField);
 begin
-  DBGrid1.SelectedIndex := 6;
+   cdsItensVLR_PAGO.AsFloat    := (cdsItensQTD_PAGA.AsFloat * valor_item(1));
 end;
 
-procedure TfrmFinalizaPedido.DBGrid1ColEnter(Sender: TObject);
+procedure TfrmFinalizaPedido.gridItensEnter(Sender: TObject);
 begin
-  DBGrid1.SelectedIndex := 6;
+  gridItens.SelectedIndex := 6;
 end;
 
-procedure TfrmFinalizaPedido.DBGrid1CellClick(Column: TColumn);
+procedure TfrmFinalizaPedido.gridItensColEnter(Sender: TObject);
 begin
-  DBGrid1.SelectedIndex := 6;
+  gridItens.SelectedIndex := 6;
 end;
 
-procedure TfrmFinalizaPedido.DBGrid1DrawColumnCell(Sender: TObject;
+procedure TfrmFinalizaPedido.gridMoedasDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  inherited;
+  if Column.Field = cdsMoedasCODIGO then begin
+    gridMoedas.Canvas.FillRect(Rect);
+    TDBGrid(Sender).Canvas.Font.Color := TDBGrid(Sender).Canvas.Brush.Color;
+    TDBGrid(Sender).Canvas.FillRect(Rect);
+    TDBGrid(Sender).DefaultDrawColumnCell(Rect, DataCol, Column, State);
+
+    if cdsMoedasCODIGO.AsInteger > 0 then
+      ImageList1.Draw(gridMoedas.Canvas, Rect.Left +20, Rect.Top , 0, true);
+
+  end;
+end;
+
+procedure TfrmFinalizaPedido.gridItensCellClick(Column: TColumn);
+begin
+  gridItens.SelectedIndex := 6;
+end;
+
+procedure TfrmFinalizaPedido.gridItensDrawColumnCell(Sender: TObject;
   const Rect: TRect; DataCol: Integer; Column: TColumn;
   State: TGridDrawState);
 begin
@@ -684,8 +776,8 @@ begin
   end;
 end;
 
-procedure TfrmFinalizaPedido.DBGrid1KeyPress(Sender: TObject;
-  var Key: Char);
+procedure TfrmFinalizaPedido.gridItensKeyPress(Sender: TObject; var Key: Char);
+var pagoParcial :Boolean;
 begin
   if not (key in ['+','-']) or FFinalizaRapido then key := #0;
 
@@ -697,8 +789,8 @@ begin
          lbLegenda.font.color := clBlack;
        end;
 
-       if (cdsItensFRACIONADO.AsString = 'S')and cdsItensPrePagos.Locate('CODIGO_ITEM', cdsItensCODIGO_ITEM.AsInteger,[]) then
-         Exit;
+       {if (cdsItensFRACIONADO.AsString = 'S')and cdsItensPrePagos.Locate('CODIGO_ITEM', cdsItensCODIGO_ITEM.AsInteger,[]) then
+         Exit;}
        if (key = '+') and ((cdsItensQUANTIDADE.AsString = cdsItensQTD_PAGA.AsString) or
                            (cdsItensQUANTIDADE.AsFloat = (cdsItensQTD_PAGA.AsFloat + cdsItensQTD_A_PAGAR.AsFloat)) ) then
          Exit;
@@ -706,14 +798,14 @@ begin
          Exit;
 
        cdsItens.Edit;
-
-       if cdsItensFRACIONADO.AsString = 'S' then
-         cdsItensQTD_A_PAGAR.AsFloat := IfThen(key = '+',cdsItensQUANTIDADE.AsFloat,0)
+       pagoParcial := (cdsItensQTD_PAGA.AsFloat - trunc(cdsItensQTD_PAGA.AsFloat)) > 0;
+                                                               // ou se teve recebimento parcial do item
+       if (cdsItensFRACIONADO.AsString = 'S') or pagoParcial or ((cdsItensQUANTIDADE.AsFloat - Trunc(cdsItensQUANTIDADE.AsFloat)) > 0) then
+         cdsItensQTD_A_PAGAR.AsFloat := IfThen(key = '+',cdsItensQUANTIDADE.AsFloat - cdsItensQTD_PAGA.AsFloat,0)
        else
          cdsItensQTD_A_PAGAR.AsFloat := cdsItensQTD_A_PAGAR.AsFloat + IfThen(key = '+',1,-1);
 
        cdsItens.Post;
-
     finally
       Key := #0;
     end;
@@ -738,40 +830,78 @@ end;
 procedure TfrmFinalizaPedido.cdsItensAfterPost(DataSet: TDataSet);
 begin
   inherited;
-  calcula_totais;
+  calculaTotalSerPago;
 end;
 
-procedure TfrmFinalizaPedido.calcula_totais;
+procedure TfrmFinalizaPedido.calculaTotalPedido;
 var linha :integer;
+    totalPedido :Real;
 begin
   linha := cdsItens.RecNo;
   cdsItens.DisableControls;
   cdsItens.First;
-
-  edtPagando.Value := 0;
+  totalPedido := 0;
 
   while not cdsItens.Eof do begin
-
-    if cdsItensQTD_A_PAGAR.AsFloat > 0 then begin
-      edtPagando.Value := edtPagando.Value + IfThen(cdsItensFRACIONADO.AsString = 'S',
-                                                    cdsItensVLR_TOTAL.AsFloat,
-                                                    (cdsItensQTD_A_PAGAR.AsFloat * cdsItensVLR_UNITARIO.AsFloat));
-
-      cdsAdicionais.First;
-      while not cdsAdicionais.Eof do begin
-         edtPagando.Value := edtPagando.Value + (cdsAdicionais.fieldByName('VALOR').AsFloat * cdsItensQTD_A_PAGAR.AsFloat);
-
-         cdsAdicionais.Next;
-      end;
-    end;
-
+    totalPedido := totalPedido + cdsItensVLR_TOTAL.AsFloat;
     cdsItens.Next;
   end;
 
-  edtPagando.Value := edtPagando.Value - edtDesconto.Value;
+  edtTotalPedido.Value := totalPedido {+ FTotalAdicionais} + edtTxServico.Value - edtDesconto.Value;
 
   cdsItens.EnableControls;
   cdsItens.RecNo := linha;
+end;
+
+procedure TfrmFinalizaPedido.calculaTotalSerPago;
+var linha :integer;
+    pagando :Real;
+    pagoParcial, pegaValorTotal :Boolean;
+begin
+  pagando := 0;
+  if edtValorParcial.Value > 0 then
+  begin
+    if edtValorParcial.Value > edtTotalRestante.Value then
+      pagando := edtTotalRestante.Value
+    else
+      pagando := edtValorParcial.Value;
+
+    edtPagando.Value := pagando;
+  end
+  else
+  begin
+    linha := cdsItens.RecNo;
+    cdsItens.DisableControls;
+    cdsItens.First;
+    while not cdsItens.Eof do begin
+
+      if cdsItensQTD_A_PAGAR.AsFloat > 0 then begin
+        pegaValorTotal := (cdsItensFRACIONADO.AsString = 'S') and (cdsItensQTD_PAGA.AsFloat = 0);
+        pagando        := pagando + IfThen(pegaValorTotal,
+                                           cdsItensVLR_TOTAL.AsFloat,
+                                           (cdsItensQTD_A_PAGAR.AsFloat * cdsItensVLR_UNITARIO.AsFloat));
+        cdsAdicionais.First;
+        pagoParcial := (cdsItensQTD_PAGA.AsFloat - trunc(cdsItensQTD_PAGA.AsFloat)) > 0;
+
+        while not cdsAdicionais.Eof do begin
+          if not pegaValorTotal then
+           pagando := pagando + (cdsAdicionais.fieldByName('VALOR').AsFloat * IfThen(pagoParcial, cdsItensQUANTIDADE.AsFloat,cdsItensQTD_A_PAGAR.AsFloat));
+           cdsAdicionais.Next;
+        end;
+      end;
+      cdsItens.Next;
+    end;
+
+    edtPagando.Value := pagando;
+    if edtPagando.Value > edtTotalRestante.Value then
+      edtPagando.Value := edtTotalRestante.Value;
+
+    if edtValorParcial.Value > 0 then
+      edtPagando.Value := edtValorParcial.Value;
+
+    cdsItens.EnableControls;
+    cdsItens.RecNo := linha;
+  end;
 end;
 
 procedure TfrmFinalizaPedido.btnOkClick(Sender: TObject);
@@ -783,7 +913,7 @@ begin
 
   if edtValorPago.Value > 0 then begin
 
-    pagando := IfThen(edtValorParcial.Value > 0, edtValorParcial.Value, edtPagando.Value);
+    pagando   := edtPagando.Value;
 
     valorPago := edtValorPago.Value;
 
@@ -792,18 +922,15 @@ begin
       edtValorPago.SetFocus;
       abort;
     end
-    else if cmbTipoMoeda.ItemIndex < 0 then begin
-       avisar('Tipo da moeda não foi informado');
-       edtValorPago.Clear;
-       cmbTipoMoeda.SetFocus;
-    end
-    else begin
+    else
+    begin
 
-      if (cdsMoedas.Locate('MOEDA',cmbTipoMoeda.Items[cmbTipoMoeda.ItemIndex],[])) then
+    {  if (cdsMoedas.Locate('MOEDA',cmbTipoMoeda.Items[cmbTipoMoeda.ItemIndex],[])) then
         cdsMoedas.Edit
-      else
+      else}
         cdsMoedas.Append;
 
+      cdsMoedasINDICE.AsInteger     := cdsMoedas.RecordCount + 1;
       cdsMoedasTIPO_MOEDA.AsInteger := cmbTipoMoeda.ItemIndex + 1;
       cdsMoedasMOEDA.AsString       := cmbTipoMoeda.Items[ cmbTipoMoeda.itemIndex ];
 
@@ -826,31 +953,24 @@ begin
 
     end;
 
-    if edtValorParcial.Value > 0 then begin
-      edtValorParcial.SetFocus;
-      edtValorParcial.Clear;
-    end
-    else
-      cmbTipoMoeda.SetFocus;
-
     edtTroco.Clear;
 
     edtPagando.Value := edtPagando.Value - pagando;
 
     edtPagando.Color   := clWhite;
     edtValorPago.Color := clWhite;
-
-    if edtPagando.Value > 0 then
-      modoPagandoParcial(true)
-    else
-      modoPagandoParcial(false);
   end;
 
   armazena_pre_pagos;
-  if DBGrid1.enabled then
-    DBGrid1.SetFocus;
-{  if edtTotalRestante.Value = 0 then
-    GroupBox1.Enabled := false; }
+  if edtValorParcial.Value > 0 then begin
+    edtValorParcial.SetFocus;
+    edtValorParcial.Clear;
+  end
+  else
+    cmbTipoMoeda.SetFocus;
+
+  if gridItens.enabled then
+    gridItens.SetFocus;
 end;
 
 procedure TfrmFinalizaPedido.armazena_pre_pagos;
@@ -862,32 +982,46 @@ begin
   cdsItens.AfterPost := nil;
 
   while not cdsItens.Eof do begin
-
     if cdsItensQTD_A_PAGAR.AsFloat > 0 then begin
-
       cdsItensPrePagos.Append;
       cdsItensPrePagosCODIGO_ITEM.AsInteger := cdsItensCODIGO_ITEM.AsInteger;
-      cdsItensPrePagosQUANTIDADE.AsFloat    := cdsItensQTD_A_PAGAR.AsFloat;
+      cdsItensPrePagosQUANTIDADE.AsFloat    := cdsItensPrePagosQUANTIDADE.AsFloat + cdsItensQTD_A_PAGAR.AsFloat;
       cdsItensPrePagosMOEDA.AsString        := cmbTipoMoeda.Items[cmbTipoMoeda.itemIndex];
+      cdsItensPrePagosCODMOEDA.AsInteger    := cdsMoedasINDICE.AsInteger;
       cdsItensPrePagosPRODUTO.AsString      := cdsItensPRODUTO.AsString;
-      cdsItensPrePagosVALOR.AsFloat         := valor_item(cdsItensQTD_A_PAGAR.AsFloat);
+      cdsItensPrePagosVALOR.AsFloat         := cdsItensPrePagosVALOR.AsFloat + valor_item(cdsItensQTD_A_PAGAR.AsFloat);
       cdsItensPrePagosFRACIONADO.AsString   := cdsItensFRACIONADO.AsString;
       cdsItensPrePagos.Post;
 
       cdsItens.Edit;
       cdsItensQTD_PAGA.AsFloat    := cdsItensQTD_PAGA.AsFloat + cdsItensQTD_A_PAGAR.AsFloat;
-      cdsItensVLR_PAGO.AsFloat    := cdsItensVLR_PAGO.AsFloat + (cdsItensQTD_A_PAGAR.AsFloat * cdsItensVLR_UNITARIO.AsFloat);
       cdsItensQTD_A_PAGAR.AsFloat := 0;
       cdsItens.Post;
-
     end;
-
     cdsItens.Next;
   end;
 
   cdsItens.AfterPost := cdsItensAfterPost;
   cdsItens.EnableControls;
   cdsItens.RecNo := linha;
+end;
+
+function TfrmFinalizaPedido.totalAdicionaisItem(qtde :Real; const codigoItem :integer): Real;
+begin
+  result := 0;
+  if codigoItem > 0 then
+  begin
+    cdsAdicionais.Filtered := false;
+    cdsAdicionais.Filter   := 'CODIGO_ITEM = '+intToStr(codigoItem);
+    cdsAdicionais.Filtered := true;
+  end;
+
+  cdsAdicionais.First;
+  while not cdsAdicionais.Eof do
+  begin
+    result := result + (qtde * cdsAdicionais.fieldByName('VALOR').AsFloat);
+    cdsAdicionais.Next;
+  end;
 end;
 
 function TfrmFinalizaPedido.total_prepago(codigo_item :integer): Real;
@@ -910,33 +1044,10 @@ begin
 end;
 
 procedure TfrmFinalizaPedido.btnEstornarClick(Sender: TObject);
-var registro :integer;
 begin
-  if confirma('Estornar recebimento do item selecionado?'+#13#10+cdsItensPrePagosPRODUTO.AsString+' (recebido em '+cdsItensPrePagosMOEDA.asString+')') then begin
-    cdsItens.Locate('CODIGO_ITEM',cdsItensPrePagosCODIGO_ITEM.AsInteger, []);
-    cdsItens.Edit;
-    cdsItensQTD_PAGA.AsFloat := cdsItensQTD_PAGA.AsFloat - cdsItensPrePagosQUANTIDADE.AsFloat;
-    cdsItens.Post;
-
-    cdsMoedas.Locate('MOEDA', cdsItensPrePagosMOEDA.AsString, []);
-
-    registro := cdsMoedas.Recno;
-    cdsMoedas.Edit;
-    cdsMoedasVALOR_PAGO.AsFloat := cdsMoedasVALOR_PAGO.AsFloat - cdsItensPrePagosVALOR.AsFloat;
-    cdsMoedas.Post;
-    cdsMoedas.Recno := registro;
-
-    if cdsMoedasVALOR_PAGO.AsFloat <= 0 then
-      corrigeValorMoedas;
-
-
-    edtTotalRestante.Value := edtTotalRestante.Value + cdsItensPrePagosVALOR.AsFloat;
-
-    if cdsMoedasVALOR_PAGO.AsFloat = 0 then
-      cdsMoedas.Delete;
-
-    cdsItensPrePagos.Delete;
-
+  if confirma('Estornar recebimento do item selecionado?'+#13#10+cdsItensPrePagosPRODUTO.AsString+' (recebido em '+cdsItensPrePagosMOEDA.asString+')') then
+  begin
+    ExtornarItem;
     avisar('Item estornado!');
 
     if cdsItensPrePagos.IsEmpty then begin
@@ -946,18 +1057,35 @@ begin
   end;
 end;
 
+procedure TfrmFinalizaPedido.btnExtornaItemClick(Sender: TObject);
+begin
+  if cdsItensPrePagos.IsEmpty then
+     avisar('Não existem itens a serem estornados')
+  else begin
+     pnlExtorna.Left    := trunc(self.Width / 4);
+     pnlExtorna.Visible := true;
+  end;
+end;
+
+procedure TfrmFinalizaPedido.btnExtornaMoedaClick(Sender: TObject);
+var indice :integer;
+begin
+  if cdsMoedas.IsEmpty then
+     avisar('Não existem pagamentos a serem estornados')
+  else if cdsMoedasCODIGO.AsInteger > 0 then
+     avisar('Um pagamento salvo não pode ser extornado')
+  else begin
+     indice := cdsMoedasINDICE.AsInteger;
+     while cdsItensPrePagos.Locate('CODMOEDA', cdsMoedasINDICE.AsInteger, []) and (cdsMoedasINDICE.AsInteger = indice) do
+       ExtornarItem;
+  end;
+end;
+
 function TfrmFinalizaPedido.valor_item(quantidade: Real): Real;
 begin
   Result := 0;
-
-  Result := cdsItensVLR_UNITARIO.AsFloat * quantidade;
-
-  cdsAdicionais.First;
-  while not cdsAdicionais.Eof do begin
-
-    result := result + cdsAdicionais.fieldByName('VALOR').AsFloat;
-    cdsAdicionais.Next;
-  end;
+  Result := (cdsItensVLR_UNITARIO.AsFloat + totalAdicionaisItem(1)) * quantidade;
+  result := roundTo(result, -4);
 end;
 
 function TfrmFinalizaPedido.verifica_obrigatorio :Boolean;
@@ -968,12 +1096,12 @@ begin
     avisar('O tipo da moeda deve ser informado');
     cmbTipoMoeda.SetFocus;
   end
-  else if edtPagando.Value <= 0 then begin
+  else if (edtPagando.Value <= 0) and (edtValorParcial.Value <= 0) then begin
     avisar('Nenhum item foi marcado como recebido');
-    DBGrid1.SetFocus;
+    gridItens.SetFocus;
     Timer1.enabled := true;
   end
-  else if edtValorPago.Value <= 0 then begin
+  else if (edtValorPago.Value <= 0) and (edtValorParcial.Value <= 0) then begin
     avisar('O valor pago não foi informado');
     edtValorPago.SetFocus;
     edtValorPago.Color := $00ACAAFD;
@@ -982,7 +1110,7 @@ begin
     result := true;
 end;
 
-procedure TfrmFinalizaPedido.DBGrid1KeyDown(Sender: TObject; var Key: Word;
+procedure TfrmFinalizaPedido.gridItensKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if (key = 39) and (GroupBox1.Enabled) then
@@ -1009,6 +1137,8 @@ begin
     if assigned(Movimentos) then
        for i := 0 to Movimentos.Count - 1 do begin
          cdsMoedas.Append;
+         cdsMoedasCODIGO.AsInteger     := TMovimento(Movimentos.Items[i]).codigo;
+         cdsMoedasINDICE.AsInteger     := cdsMoedas.RecordCount +1;
          cdsMoedasTIPO_MOEDA.AsInteger := TMovimento(Movimentos.Items[i]).tipo_moeda;
          cdsMoedasVALOR_PAGO.AsFloat   := TMovimento(Movimentos.Items[i]).valor_pago;
 
@@ -1016,8 +1146,6 @@ begin
 
          cdsMoedasMOEDA.AsString       := cmbTipoMoeda.Items[ cmbTipoMoeda.itemIndex ];
          cdsMoedas.Post;
-
-         edtTotalRestante.Value := edtTotalRestante.Value - TMovimento(Movimentos.Items[i]).valor_pago;
        end;
 
     cmbTipoMoeda.ItemIndex := -1;
@@ -1038,7 +1166,7 @@ begin
   end
   else begin
     chkSelecionarPendentes.Caption := 'Selecionar produtos pendentes';
-    DBGrid1.SetFocus;
+    gridItens.SetFocus;
   end;
 
   cdsItens.First;
@@ -1047,7 +1175,6 @@ begin
 
     cdsItens.Edit;
     cdsItensQTD_A_PAGAR.AsFloat := IfThen(chkSelecionarPendentes.Checked, (cdsItensQUANTIDADE.AsFloat - cdsItensQTD_PAGA.AsFloat), 0);
-    //DBGrid1KeyPress(nil, Tecla);
     cdsItens.Post;
 
     cdsItens.Next;
@@ -1062,6 +1189,7 @@ end;
 procedure TfrmFinalizaPedido.corrigeValorMoedas;
 var valorNegativo :Real;
 begin
+  valorNegativo := 0;
   valorNegativo := cdsMoedasVALOR_PAGO.AsFloat;
 
   cdsMoedas.Delete;
@@ -1078,148 +1206,135 @@ begin
 end;
 
 procedure TfrmFinalizaPedido.fraciona_item;
-var partes, i, x, linha, qtd_ad:integer;
+var partes, i, x, linha :integer;
     Item   :TItem;
+    ListaItens :TObjectList<TItem>;
     Adicional :TAdicionalItem;
     repositorio :Trepositorio;
     repositorioAd :TRepositorio;
-    contem_adicional, boliche :Boolean;
-    diferenca, sobraBoliche, sobraTotal, qtde, quantidadeReal, quantidadeLocal :Real;
+    contem_adicional :Boolean;
+    diferenca, quantidade, quantidadeReal, quantidadeLocal, centavos :Real;
     lista_adicionais :TObjectList<TAdicionalItem>;
 begin
+ partes              := StrToIntDef( chamaInput('INTEGER', 'Fracionar produto em quantas partes?'),0);
+
+ if (partes = 0) or not confirma('Atenção! Confirma particionamento do produto:'+#13#10+
+                                 cdsItensPRODUTO.AsString+'?'#13#10+#13#10+
+                                '(Será particionado em '+intToStr(partes)+' partes)') then
+   exit;
+
  try
-    contem_adicional := false;
-    diferenca        := 0;
-    sobraTotal       := 0;
-    quantidadeReal   := 0;
-    quantidadeLocal  := 0;
-    qtde             := 0;
-    partes           := StrToIntDef( chamaInput('INTEGER', 'Fracionar produto em quantas partes?'),0);
+   ListaItens := TObjectList<TItem>.Create(true);
 
-    if partes <= 1 then begin
-      avisar('Quantidade de partes não informada. Operação cancelada.');
-      Exit;
-    end;
+   if not cdsAdicionais.IsEmpty then begin
+     contem_adicional := true;
+     lista_adicionais := TObjectList<TAdicionalItem>.Create;
+   end;
 
-    if not cdsAdicionais.IsEmpty then begin
-      contem_adicional := true;
+   repositorio         := TFabricaRepositorio.GetRepositorio(TItem.ClassName);
+   ListaItens.Add( TItem(repositorio.Get(cdsItensCODIGO_ITEM.AsInteger)) );
 
-      lista_adicionais := TObjectList<TAdicionalItem>.Create;
-    end;
+   quantidade          := RoundTo(ListaItens[0].quantidade / partes, -4);
+   diferenca           := roundTo(ListaItens[0].quantidade - (quantidade * partes),-4);
+   diferenca           := Trunc(diferenca * 1000) / 1000;
 
-    repositorio      := TFabricaRepositorio.GetRepositorio(TItem.ClassName);
+   if diferenca > 0.01 then
+   begin
+     centavos          := trunc(diferenca / 0.01);
+     diferenca         := diferenca - (Trunc(diferenca * 100) / 100);
+   end;
 
-    Item            := TItem(repositorio.Get(cdsItensCODIGO_ITEM.AsInteger));
+   ListaItens[0].quantidade     := quantidade + diferenca;
+   ListaItens[0].Fracionado     := 'S';
+   ListaItens[0].qtd_fracionado := partes;
+   repositorio.Salvar(ListaItens[0]);
 
-    boliche         := (Item.Produto.tipo = 'S') and (Item.quantidade > 599);
+   if contem_adicional then
+   begin
+     repositorioAd := TFabricaRepositorio.GetRepositorio(TAdicionalItem.ClassName);
 
-    //diferenca       := ifThen(boliche, 1, Item.quantidade); //recebe quantidade antes do fracionamento
-    qtde            := ifThen(boliche, 1, Item.quantidade);
-
-    if boliche then
-      sobraBoliche := RoundTo(Item.valor_Unitario - (roundTo((Item.valor_Unitario/partes),-2) * partes),-2);
-
-    DivideProporcional(qtde, diferenca, partes);
-
-    quantidadeReal      := RoundTo(Item.quantidade / partes, -2);
-
-    Item.quantidade     := quantidadeReal + IfThen(not boliche, diferenca, 0);
-
-    Item.Fracionado     := 'S';
-    Item.qtd_fracionado := partes;
-    repositorio.Salvar(Item);
-
-
-    Item.Adicionais.Free;
-
-    if contem_adicional then begin
-      repositorioAd := TFabricaRepositorio.GetRepositorio(TAdicionalItem.ClassName);
-
-       cdsAdicionais.First;
-       while not cdsAdicionais.Eof do begin
-
-         if cdsAdicionais.FieldByName('VALOR').AsFloat > 0 then
-         begin
-            Adicional     := TAdicionalItem(repositorioAd.Get(cdsAdicionais.FieldByName('CODIGO').AsInteger) );
-
-            repositorioAd.Salvar(Adicional);
-
-            lista_adicionais.Add(Adicional);
-
-         end;
-
-         cdsAdicionais.Next;
+     cdsAdicionais.First;
+     while not cdsAdicionais.Eof do begin
+       if cdsAdicionais.FieldByName('VALOR').AsFloat > 0 then
+       begin
+          Adicional     := TAdicionalItem(repositorioAd.Get(cdsAdicionais.FieldByName('CODIGO').AsInteger) );
+          lista_adicionais.Add(Adicional);
        end;
-    end;
+       cdsAdicionais.Next;
+     end;
+   end;
 
-    cdsItens.Edit;
-    cdsItensQUANTIDADE.AsFloat  := roundTo(cdsItensQUANTIDADE.AsFloat / partes, -2);
+   for i := 1 to partes - 1 do
+   begin
+     ListaItens.Add(TItem.Create);
+     ListaItens[i].codigo_pedido  := ListaItens[0].codigo_pedido;
+     ListaItens[i].codigo_produto := ListaItens[0].codigo_produto;
+     ListaItens[i].hora           := ListaItens[0].hora;
+     ListaItens[i].valor_Unitario := ListaItens[0].valor_Unitario;
+     ListaItens[i].codigo_usuario := ListaItens[0].codigo_usuario;
+     ListaItens[i].qtd_fracionado := ListaItens[0].qtd_fracionado;
+     ListaItens[i].codigo_pedido  := ListaItens[0].codigo_pedido;
+     ListaItens[i].quantidade     := quantidade;
 
-    sobraTotal := roundTo( cdsItensQUANTIDADE.AsFloat * cdsItensVLR_UNITARIO.AsFloat, -2) * partes;
-    sobraTotal := sobraTotal + roundTo(diferenca * cdsItensVLR_UNITARIO.AsFloat,-2);
-    sobraTotal := (IfThen(boliche, 1, roundTo(cdsItensQUANTIDADE.AsFloat * partes, -2)+diferenca )* cdsItensVLR_UNITARIO.AsFloat) - sobraTotal;
+     // a sobra de centavos nunca será maior que a quantidade de itens
+     if (i >= (partes-centavos)) then
+       ListaItens[i].quantidade := ListaItens[i].quantidade + 0.01;
 
-    cdsItensQUANTIDADE.AsFloat  := cdsItensQUANTIDADE.AsFloat + diferenca;
-    cdsItensVLR_TOTAL.AsFloat   := roundTo(cdsItensQUANTIDADE.AsFloat * cdsItensVLR_UNITARIO.AsFloat, -2)+sobraTotal;
-    cdsItensVLR_PAGO.AsFloat    := roundTo(cdsItensQTD_PAGA.AsFloat * cdsItensVLR_UNITARIO.AsFloat,-2);
-    cdsItensFRACIONADO.AsString := 'S';
-    cdsItens.Post;
+     ListaItens[i].Fracionado := 'S';
+     repositorio.Salvar(ListaItens[i]);
 
-    cdsItens.AfterScroll := nil;
+     if contem_adicional then begin
+       cdsAdicionais.First;
 
-    quantidadeLocal := cdsItensQUANTIDADE.AsFloat;
+       //salva adicional(is) para cada item criado
+       for x := 0 to lista_adicionais.Count - 1 do begin
+          lista_adicionais.Items[x].codigo      := 0;
+          lista_adicionais.Items[x].codigo_item := ListaItens[i].codigo;
+          repositorioAd.Salvar( lista_adicionais.Items[x] );
+       end;
+     end;
+   end;
 
-    for i := 0 to partes -2 do begin
-      Item.codigo := 0;
-      Item.quantidade := quantidadeReal;
-      Item.Fracionado := 'S';
-      repositorio.Salvar(Item);
+   cdsAdicionais.EmptyDataSet;
+   cdsItens.AfterScroll := nil;
+   cdsItens.Delete;
+   for Item in ListaItens  do
+   begin
+     cdsItens.Insert;
+     cdsItensCODIGO_ITEM.AsInteger := Item.codigo;
+     cdsItensQUANTIDADE.AsFloat    := Item.quantidade;
+     cdsItensPRODUTO.AsString      := Item.Produto.descricao;
+     cdsItensVLR_UNITARIO.AsFloat  := Item.valor_Unitario;
+     cdsItensVLR_TOTAL.AsFloat     := roundTo(Item.quantidade * Item.valor_Unitario, -4) + roundTo(Item.quantidade * Item.totalAdicionais, -4);
+     cdsItensVLR_PAGO.AsFloat      := 0;
+     cdsItensFRACIONADO.AsString   := 'S';
+     cdsItensQTD_PAGA.AsFloat      := 0;
+     cdsItensQTD_A_PAGAR.AsFloat   := 0;
+     cdsItens.Post;
 
-      cdsItens.Insert;
-      cdsItensCODIGO_ITEM.AsInteger := Item.codigo;
-      cdsItensQUANTIDADE.AsFloat    := quantidadeLocal - diferenca;
-      cdsItensPRODUTO.AsString      := Item.Produto.descricao;
-      cdsItensVLR_UNITARIO.AsFloat  := Item.valor_Unitario;
-      cdsItensVLR_TOTAL.AsFloat     := roundTo(cdsItensQUANTIDADE.AsFloat * Item.valor_Unitario, -2);
+     if assigned(Item.Adicionais) and (Item.Adicionais.Count > 0) then
+       for Adicional in Item.Adicionais do
+       begin
+         cdsAdicionais.Append;
+         cdsAdicionais.FieldByName('CODIGO').AsInteger       := Adicional.codigo;
+         cdsAdicionais.FieldByName('DESCRICAO').AsString     := Adicional.Materia.descricao;
+         cdsAdicionais.FieldByName('VALOR').AsFloat          := Adicional.valor_unitario * Adicional.quantidade;
+         cdsAdicionais.FieldByName('CODIGO_ITEM').AsInteger  := Adicional.codigo_item;
+         cdsAdicionais.FieldByName('VALOR_UNITARIO').AsFloat := Adicional.valor_unitario;
+         cdsAdicionais.FieldByName('QUANTIDADE').AsFloat     := Adicional.quantidade;
+         cdsAdicionais.Post;
+       end;
 
-      cdsItensVLR_PAGO.AsFloat      := 0;
-      cdsItensFRACIONADO.AsString   := 'S';
-      cdsItensQTD_PAGA.AsFloat      := 0;
-      cdsItensQTD_A_PAGAR.AsFloat   := 0;//Item.quantidade;
-      cdsItens.Post;
+   end;
 
-      if contem_adicional then begin
+   cdsItens.AfterScroll     := cdsItensAfterScroll;
+   cdsItensAfterScroll(nil);
+   cdsItens.IndexFieldNames := 'PRODUTO';
 
-         cdsAdicionais.First;
-         qtd_ad := cdsAdicionais.RecordCount;
-
-         for x := 0 to lista_adicionais.Count - 1 do begin
-
-            lista_adicionais.Items[x].codigo      := 0;
-            lista_adicionais.Items[x].codigo_item := Item.codigo;
-            repositorioAd.Salvar( lista_adicionais.Items[x] );
-
-            cdsAdicionais.Append;
-            cdsAdicionais.FieldByName('CODIGO').AsInteger       := lista_adicionais.Items[x].codigo;
-            cdsAdicionais.FieldByName('DESCRICAO').AsString     := lista_adicionais.Items[x].Materia.descricao;
-            cdsAdicionais.FieldByName('VALOR').AsFloat          := lista_adicionais.Items[x].valor_unitario * lista_adicionais.Items[x].quantidade;
-            cdsAdicionais.FieldByName('CODIGO_ITEM').AsInteger  := lista_adicionais.Items[x].codigo_item;
-            cdsAdicionais.FieldByName('VALOR_UNITARIO').AsFloat := lista_adicionais.Items[x].valor_unitario;
-            cdsAdicionais.FieldByName('QUANTIDADE').AsFloat     := lista_adicionais.Items[x].quantidade;
-            cdsAdicionais.Post;
-
-         end;
-
-      end;
-
-    end;
-
-    cdsItens.AfterScroll     := cdsItensAfterScroll;
-    cdsItensAfterScroll(nil);
-    cdsItens.IndexFieldNames := 'PRODUTO';
-
+   recalculaTotalPedido;
   Finally
     lista_adicionais.Free;
+    ListaItens.Free;
   end;
 end;
 

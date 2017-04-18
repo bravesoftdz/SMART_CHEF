@@ -808,4 +808,12 @@ inherited frmRelatorioItensDeletados: TfrmRelatorioItensDeletados
       Size = 50
     end
   end
+  object RLPDFFilter1: TRLPDFFilter
+    DocumentInfo.Creator = 
+      'FortesReport Community Edition v4.0 \251 Copyright '#169' 1999-2015 F' +
+      'ortes Inform'#225'tica'
+    DisplayName = 'Documento PDF'
+    Left = 288
+    Top = 104
+  end
 end

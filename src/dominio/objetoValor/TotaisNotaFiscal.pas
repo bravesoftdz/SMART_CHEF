@@ -18,6 +18,7 @@ type
     FSeguro           :Real;
     FDescontos        :Real;
     FOutrasDespesas   :Real;
+    FSubstTributaria  :Real;
     FBaseCalculoICMS  :Real;
     FICMS             :Real;
     FBaseCalculoST    :Real;
@@ -102,7 +103,7 @@ type
     procedure ValidarOutrasDespesas (OutrasDespesas :Real);
 
   public
-    constructor Create(Frete, Seguro, Desconto, OutrasDespesas :Real);
+    constructor Create(Frete, Seguro, Desconto, OutrasDespesas, substTributaria :Real);
 
   public
     property CodigoNotaFiscal         :Integer read GetCodigoNotaFiscal;
@@ -121,6 +122,7 @@ type
     property PIS                      :Real    read GetPIS                    write SetPIS;
     property COFINS                   :Real    read GetCOFINS                 write SetCOFINS;
     property OutrasDespesas           :Real    read GetOutrasDespesas         write SetOutrasDespesas;
+    property SubstTributaria          :Real    read FSubstTributaria          write FSubstTributaria;
     property TotalNF                  :Real    read GetTotalNF                write SetTotalNF;
     property ICMSFCP                  :Real    read GetICMSFCP                write FICMSFCP;
     property ICMSUFDest               :Real    read GetICMSUFDest             write FICMSUFDest;
@@ -274,12 +276,13 @@ begin
 end;
 
 constructor TTotaisNotaFiscal.Create(Frete, Seguro, Desconto,
-  OutrasDespesas: Real);
+  OutrasDespesas, substTributaria: Real);
 begin
    self.SetFrete(Frete);
    self.SetSeguro(Seguro);
    self.SetDesconto(Desconto);
    self.SetOutrasDespesas(OutrasDespesas);
+   self.FSubstTributaria := substTributaria;
 end;
 
 function TTotaisNotaFiscal.GetBaseCalculoICMS: Real;
@@ -431,6 +434,7 @@ begin
                           + self.II
                           + self.IPI
                           + 0 // self.ISS
+                          + self.SubstTributaria
                         );
 //           end;
 //    tfFOB :

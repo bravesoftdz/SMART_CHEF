@@ -124,7 +124,7 @@ begin
 
       codigo_produto := produtoCadastrado(nfe.NFe.Det.Items[nX].Prod);
 
-      atualizaProduto( codigo_produto, nfe.NFe.Det.Items[nX].Prod )// atualiza o estoque da matéria
+     //tualizaProduto( codigo_produto, nfe.NFe.Det.Items[nX].Prod )// atualiza o estoque do produto
 
     end;
 
@@ -144,18 +144,18 @@ begin
 
   dm.qryGenerica.Close;
   dm.qryGenerica.SQL.Text := 'SELECT CODIGO_PRODUTO FROM PRODUTO_FORNECEDOR                      '+
-                             ' WHERE CODIGO_FORNECEDOR = :CF AND CODIGO_PRODUTO_FORNECEDOR = :CMF';
+                             ' WHERE CODIGO_FORNECEDOR = :CF AND CODIGO_PRODUTO_FORNECEDOR = :CP';
 
   dm.qryGenerica.ParamByName('CF').AsInteger  := FCodigo_fornecedor;
-  dm.qryGenerica.ParamByName('CMF').AsString  := produtoNfe.cProd;
+  dm.qryGenerica.ParamByName('CP').AsString  := produtoNfe.cProd;
   dm.qryGenerica.Open;
 
   Result := IfThen( dm.qryGenerica.IsEmpty, 0, dm.qryGenerica.fieldByName('codigo_produto').AsInteger);
 end;
 
 procedure TImportadorNotaXML.atualizaProduto(codigo_produto: integer; produtoNfe: TProd);
-var  Produto     :TProduto;
-     repositorio :TRepositorio;
+var Produto     :TProduto;
+    repositorio :TRepositorio;
 begin
   try
     repositorio                := TFabricaRepositorio.GetRepositorio(TProduto.ClassName);
@@ -307,6 +307,7 @@ begin
     FNotaFiscal.DataSaida        := nDataSaida;
     FNotaFiscal.transportadora   := transportadora;
     FNotaFiscal.Entrada_saida    := 'E';
+    FNotaFiscal.EntrouEstoque    := 'N';
 
     FNotaFiscal.Totais.Frete           := nfe.NFe.Total.ICMSTot.vFrete;
     FNotaFiscal.Totais.Seguro          := nfe.NFe.Total.ICMSTot.vSeg;
@@ -325,6 +326,7 @@ begin
     FNotaFiscal.Totais.IPI             := Nfe.NFe.Total.ICMSTot.vIPI;
     FNotaFiscal.Totais.OutrasDespesas  := Nfe.NFe.Total.ICMSTot.vOutro;
     FNotaFiscal.Totais.TotalNF         := Nfe.NFe.Total.ICMSTot.vNF;
+    FNotaFiscal.Totais.SubstTributaria := Nfe.NFe.Total.ICMSTot.vST;
     FNotaFiscal.Totais.PIS             := Nfe.NFe.Total.ICMSTot.vPIS;
     FNotaFiscal.Totais.COFINS          := Nfe.NFe.Total.ICMSTot.vCOFINS;
 
@@ -433,7 +435,7 @@ begin
         rep := TFabricaRepositorio.GetRepositorio(TEmpresa.ClassName);
 
         try
-          empresa := TEmpresa( rep.Get( strToInt( Campo_por_campo('EMPRESAS','CODIGO','CODIGO_PESSOA', intToStr(FNotaFiscal.Destinatario.Codigo) ) ) ) );
+          empresa := TEmpresa( rep.Get( FNotaFiscal.Destinatario.Codigo));
         Except
           raise Exception.Create(#13#10+'O CNPJ do Destinatário da nota difere do CNPJ da Empresa.');
         end;

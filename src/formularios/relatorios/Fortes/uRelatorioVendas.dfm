@@ -1,11 +1,11 @@
 inherited frmRelatorioVendas: TfrmRelatorioVendas
   Top = 209
   Caption = 'Relat'#243'rio de vendas'
-  ClientHeight = 165
-  ClientWidth = 666
+  ClientHeight = 178
+  ClientWidth = 673
   OnShow = FormShow
-  ExplicitWidth = 672
-  ExplicitHeight = 193
+  ExplicitWidth = 679
+  ExplicitHeight = 206
   PixelsPerInch = 96
   TextHeight = 13
   object Label2: TLabel [0]
@@ -602,7 +602,7 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
           ParentFont = False
         end
         object RLLabel2: TRLLabel
-          Left = 367
+          Left = 399
           Top = 31
           Width = 78
           Height = 16
@@ -615,7 +615,7 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
           ParentFont = False
         end
         object RLLabel4: TRLLabel
-          Left = 464
+          Left = 494
           Top = 31
           Width = 80
           Height = 16
@@ -628,7 +628,7 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
           ParentFont = False
         end
         object RLLabel6: TRLLabel
-          Left = 564
+          Left = 592
           Top = 31
           Width = 62
           Height = 16
@@ -684,11 +684,11 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
           ParentFont = False
         end
         object RLLabel25: TRLLabel
-          Left = 644
+          Left = 672
           Top = 31
-          Width = 96
+          Width = 66
           Height = 16
-          Caption = 'Vlr. Adicionais'
+          Caption = 'Vlr. Adici.'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -13
@@ -709,54 +709,85 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
         Borders.DrawBottom = True
         BeforePrint = RLBand3BeforePrint
         object RLDBText1: TRLDBText
-          Left = 8
+          Left = 6
           Top = 5
-          Width = 67
-          Height = 16
+          Width = 409
+          Height = 15
+          AutoSize = False
           DataField = 'PRODUTO'
           DataSource = dsVendas
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
           Text = ''
         end
         object RLDBText5: TRLDBText
-          Left = 484
+          Left = 526
           Top = 5
-          Width = 57
-          Height = 16
+          Width = 48
+          Height = 15
           Alignment = taRightJustify
           DataField = 'VLR_UNI'
           DataSource = dsVendas
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
           Text = ''
           BeforePrint = RLDBText5BeforePrint
         end
         object RLDBText6: TRLDBText
-          Left = 386
+          Left = 445
           Top = 5
-          Width = 39
-          Height = 16
+          Width = 32
+          Height = 15
           Alignment = taRightJustify
           DataField = 'QTDE'
           DataSource = dsVendas
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
           Text = ''
           BeforePrint = RLDBText6BeforePrint
         end
         object RLDBText2: TRLDBText
-          Left = 538
+          Left = 578
           Top = 5
-          Width = 93
-          Height = 16
+          Width = 77
+          Height = 15
           Alignment = taRightJustify
           DataField = 'VLR_TOTAL_IT'
           DataSource = dsVendas
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
           Text = ''
         end
         object RLDBText3: TRLDBText
-          Left = 640
+          Left = 656
           Top = 5
-          Width = 101
-          Height = 16
+          Width = 82
+          Height = 15
           Alignment = taRightJustify
           DataField = 'VLR_TOTAL_AD'
           DataSource = dsVendas
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
           Text = ''
         end
       end
@@ -785,7 +816,7 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
           Pen.Style = psClear
         end
         object RLDBResult6: TRLDBResult
-          Left = 345
+          Left = 397
           Top = 7
           Width = 80
           Height = 16
@@ -818,7 +849,7 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
           Transparent = False
         end
         object RLDBResult4: TRLDBResult
-          Left = 491
+          Left = 514
           Top = 6
           Width = 140
           Height = 16
@@ -836,7 +867,7 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
           Transparent = False
         end
         object RLDBResult1: TRLDBResult
-          Left = 595
+          Left = 592
           Top = 6
           Width = 146
           Height = 16
@@ -857,12 +888,12 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
     end
   end
   inherited pnlPropaganda: TPanel
-    Top = 130
-    Width = 666
-    ExplicitTop = 130
-    ExplicitWidth = 666
+    Top = 143
+    Width = 673
+    ExplicitTop = 176
+    ExplicitWidth = 661
     inherited Shape8: TShape
-      Width = 664
+      Width = 671
       ExplicitWidth = 687
     end
   end
@@ -870,14 +901,15 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
     Left = 0
     Top = 0
     Width = 129
-    Height = 130
+    Height = 143
     Align = alLeft
     TabOrder = 5
+    ExplicitHeight = 176
     object Shape12: TShape
       Left = 1
       Top = 1
       Width = 127
-      Height = 128
+      Height = 141
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119
@@ -1124,6 +1156,7 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
     end
     object cdsVendasQTDE: TFloatField
       FieldName = 'QTDE'
+      DisplayFormat = ' ,0.000;-,0.000'
     end
     object cdsVendasVLR_UNI: TFloatField
       FieldName = 'VLR_UNI'
@@ -1280,6 +1313,7 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
       Origin = 'QTDE'
       ProviderFlags = []
       ReadOnly = True
+      DisplayFormat = ' ,0.000;-,0.000'
       Precision = 18
     end
     object qryVendasVLR_UNI: TBCDField

@@ -17,7 +17,6 @@ type
     procedure edtMateriaEnter(Sender: TObject);
     procedure btnBuscaClick(Sender: TObject);
     procedure edtCodigoChange(Sender: TObject);
-    procedure edtCodigoExit(Sender: TObject);
   private
     FMateriaPrima :TMateriaPrima;
     Fcodigo: Integer;
@@ -86,19 +85,27 @@ begin
 end;
 
 function TBuscaMateriaPrima.selecionaMateriaPrima: String;
-var SQL :String;
+var SQL, nome :String;
 begin
   Result := '';
 
   if FAdicionaRemove = 'A' then
-    SQL := FSQL_DO_GRUPO
+  begin
+    SQL := FSQL_DO_GRUPO;
+    nome := 'grupo';
+  end
   else
-    SQL := FSQL_DO_PRODUTO;  
+  begin
+    SQL := FSQL_DO_PRODUTO;
+    nome := 'produto';
+  end;
 
   frmPesquisaSimples := TFrmPesquisaSimples.Create(Self,'Select mp.codigo, mp.descricao from materias_primas mp ' + SQL
                                                         ,'CODIGO', 'Selecione a Matéria-prima desejada...');
 
-  if frmPesquisaSimples.ShowModal = mrOk then begin
+  if frmPesquisaSimples.cds.IsEmpty then
+    frmPesquisaSimples.avisar('Não existem adicionais cadastrados para o '+nome+' selecionado.', 3)
+  else if (frmPesquisaSimples.ShowModal = mrOk) then begin
     Result := frmPesquisaSimples.cds_retorno.Fields[0].AsString;
     edtCodigo.Text := Result;
     setaMateriaPrima;
@@ -115,7 +122,7 @@ begin
   FMateriaPrima   := TMateriaPrima(RepMateriaPrima.Get(edtCodigo.AsInteger));
 
   if ((self.FAdicionaRemove = 'A')or(self.FAdicionaRemove = 'R')) and not produto_valido(FMateriaPrima.codigo) then
-    exit;
+    FreeAndNil(FMateriaPrima);
 
   if Assigned(FMateriaPrima) then begin
 
@@ -154,8 +161,13 @@ end;
 
 procedure TBuscaMateriaPrima.edtMateriaEnter(Sender: TObject);
 begin
-  if not Assigned(FMateriaPrima) or (FMateriaPrima.Codigo <= 0) then
-    btnBusca.Click;
+  if not Assigned(FMateriaPrima) then
+  begin
+    if edtCodigo.AsInteger > 0 then
+      buscaMateriaPrima
+    else
+      btnBusca.Click;
+  end;
 
   keybd_event(VK_RETURN, 0, 0, 0);
 end;
@@ -173,12 +185,6 @@ begin
     self.limpa;
 end;
 
-procedure TBuscaMateriaPrima.edtCodigoExit(Sender: TObject);
-begin
-  if edtCodigo.AsInteger > 0 then
-    buscaMateriaPrima;
-end;
-
 procedure TBuscaMateriaPrima.SetAdicionaRemove(const Value: String);
 begin
   FAdicionaRemove := Value;
@@ -190,11 +196,11 @@ begin
 
   FSQL_DO_GRUPO := 'left join produtos_has_materias phm on (phm.codigo_materia = mp.codigo) '+
                    'left join produtos p                on (p.codigo = phm.codigo_produto)  '+
-                   'where p.codigo_grupo = '+IntToStr(FProduto.codigo_grupo)+
+                   'where p.codigo_grupo = '+IntToStr(FProduto.codigo_grupo)+' AND PHM.ADICIONAL = ''S'' '+
                    'group by mp.codigo, mp.descricao';
 
   FSQL_DO_PRODUTO := 'left join produtos_has_materias phm on (phm.codigo_materia = mp.codigo) '+
-                     'where phm.codigo_produto = '+IntToStr(FProduto.codigo);
+                     'where phm.codigo_produto = '+IntToStr(FProduto.codigo)+' AND PHM.ADICIONAL = ''S'' ';
 end;
 
 function TBuscaMateriaPrima.produto_valido(codigo_materia :integer): Boolean;
