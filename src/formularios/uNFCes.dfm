@@ -263,8 +263,6 @@ inherited frmNFCes: TfrmNFCes
     BevelOuter = bvNone
     Caption = 'c'
     TabOrder = 5
-    ExplicitLeft = -2
-    ExplicitTop = -5
     DesignSize = (
       144
       393)

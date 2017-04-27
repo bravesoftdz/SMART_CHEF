@@ -55,6 +55,7 @@ type
     procedure busca_NFCes;
     procedure marca_desmarca(marca, todas :Boolean);
     procedure consultarNFCe;
+    procedure cancelaPedido;
 
   public
     { Public declarations }
@@ -66,7 +67,7 @@ var
 implementation
 
 uses Repositorio, FabricaRepositorio, NFCE, EspecificacaoFiltraNFCe, ServicoEmissorNFCe, Parametros,
-  Math, StrUtils, Pedido;
+  Math, StrUtils, Pedido, UtilitarioEstoque;
 
 {$R *.dfm}
 
@@ -172,14 +173,14 @@ begin
 
    Parametro  := TParametros.Create;
    Servico    := TServicoEmissorNFCe.Create(Parametro);
-
-   XML := TStringStream.Create(cdsNFCesXML.AsString);
+   XML        := TStringStream.Create(cdsNFCesXML.AsString);
 
    Justificativa := chamaInput('STRING', 'Justificativa de cancelamento');
 
    Servico.CancelarNFCe( XML , Justificativa);
 
-   avisar('Operação realizada com sucesso!');
+   if confirma('NFC-e cancelada com sucesso.'+#13#10+'Deseja cancelar também o pedido?') then
+     cancelaPedido;
       
    btnBusca.Click;
  Except
@@ -245,6 +246,24 @@ begin
      Avisar('Erro ao gerar arquivos.'+#13#10+e.Message);
    end;
  end;
+end;
+
+procedure TfrmNFCes.cancelaPedido;
+var Pedido :TPedido;
+    repositorio :TRepositorio;
+begin
+  repositorio := nil;
+  Pedido      := nil;
+  try
+    repositorio     := TFabricaRepositorio.GetRepositorio(TPedido.ClassName);
+    Pedido          := TPedido(repositorio.Get(cdsNFCesCODIGO_PEDIDO.asInteger));
+    TUtilitarioEstoque.atualizaEstoque(Pedido,-1);
+    Pedido.situacao := 'C';
+    repositorio.Salvar(Pedido);
+  finally
+    FreeAndNil(Pedido);
+    FreeAndNil(repositorio);
+  end;
 end;
 
 procedure TfrmNFCes.cdsNFCesAfterScroll(DataSet: TDataSet);

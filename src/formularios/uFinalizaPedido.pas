@@ -959,6 +959,7 @@ begin
 
     edtPagando.Color   := clWhite;
     edtValorPago.Color := clWhite;
+    cmbTipoMoeda.ItemIndex := -1;
   end;
 
   armazena_pre_pagos;

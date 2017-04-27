@@ -365,7 +365,7 @@ inherited frmCadastroPadrao: TfrmCadastroPadrao
         Left = 8
         Top = 8
         Width = 535
-        Height = 423
+        Height = 356
         Hint = 
           'Pressione Ctrl + Alt + F2 para configurar as colunas'#13'Pressione C' +
           'trl + Alt + F3 para configurar as cores'#13'Pressione Ctrl + Alt + F' +

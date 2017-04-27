@@ -32,13 +32,12 @@ type
     lblAsterisco: TLabel;
     Shape2: TShape;
     procedure pgGeralChange(Sender: TObject);
-    procedure FormKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
     procedure btnIncluirClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
     procedure btnSalvarClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 
   private
     FEstadoTela           :TTipoEstadoTela;
@@ -129,7 +128,7 @@ begin
    else if (Key = VK_F4) and (self.btnAlterar.Enabled and self.btnAlterar.Visible) and (Shift = []) then self.EstadoTela := tetAlterar
 
    else
-     inherited FormKeyDown(Sender, Key, Shift);
+      FormKeyDown(Sender, Key, Shift);
 
 end;
 
@@ -138,8 +137,8 @@ procedure TfrmCadastroPadrao.AtalhosPesquisar(Sender: TObject;
 begin
    if ((not self.cds.IsEmpty) and (self.gridConsulta.Focused) and (Key = VK_RETURN)) then
       self.ModalResult := mrOK
-  else
-      inherited FormKeyDown(Sender, Key, Shift);
+   else
+      FormKeyDown(Sender, Key, Shift);
 end;
 
 procedure TfrmCadastroPadrao.CarregarDados(Especificacao :TEspecificacao);
@@ -364,21 +363,6 @@ begin
    result := nil;
 end;
 
-procedure TfrmCadastroPadrao.FormKeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
-begin
-  if key = vk_escape then
-  begin
-    key := 0;
-    if self.ds.DataSet.Filtered then
-      self.ds.DataSet.Filtered:= False
-    else
-      inherited;
-  end
-  else
-    inherited;
-end;
-
 procedure TfrmCadastroPadrao.AlterarRegistroNoCDS(Registro: TObject);
 begin
 
@@ -416,6 +400,17 @@ begin
   inherited;
 
   self.EstadoTela := tetSalvar;
+end;
+
+procedure TfrmCadastroPadrao.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if (key = vk_escape) and (self.gridConsulta.buscando) then
+  begin
+     self.cds.Filtered := false;
+     key := 0;
+  end
+  else
+     inherited;
 end;
 
 procedure TfrmCadastroPadrao.FormShow(Sender: TObject);

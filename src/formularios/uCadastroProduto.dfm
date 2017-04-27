@@ -3,9 +3,9 @@ inherited frmCadastroProduto: TfrmCadastroProduto
   Top = 171
   Caption = 'Cadastro de Produtos'
   ClientHeight = 641
-  ClientWidth = 733
+  ClientWidth = 757
   OnDestroy = FormDestroy
-  ExplicitWidth = 739
+  ExplicitWidth = 763
   ExplicitHeight = 669
   PixelsPerInch = 96
   TextHeight = 13
@@ -19,26 +19,27 @@ inherited frmCadastroProduto: TfrmCadastroProduto
   end
   inherited pnlPropaganda: TPanel
     Top = 606
-    Width = 733
+    Width = 757
     ExplicitTop = 606
-    ExplicitWidth = 733
+    ExplicitWidth = 757
     inherited Shape8: TShape
-      Width = 731
+      Width = 755
       ExplicitWidth = 668
     end
   end
   inherited pgGeral: TPageControl
-    Width = 590
+    Width = 614
     Height = 606
-    ExplicitWidth = 590
+    ActivePage = tsDados
+    ExplicitWidth = 614
     ExplicitHeight = 606
     inherited tsConsulta: TTabSheet
-      ExplicitWidth = 582
+      ExplicitWidth = 606
       ExplicitHeight = 575
       inherited gridConsulta: TDBGridCBN
         Left = 0
         Top = 0
-        Width = 582
+        Width = 606
         Height = 552
         OnDrawColumnCell = gridConsultaDrawColumnCell
         Columns = <
@@ -58,8 +59,16 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           end
           item
             Expanded = False
+            FieldName = 'ESTOQUE'
+            Title.Caption = 'Estoque'
+            Width = 55
+            Visible = True
+          end
+          item
+            Expanded = False
             FieldName = 'VALOR'
             Title.Caption = 'Valor'
+            Width = 76
             Visible = True
           end
           item
@@ -74,18 +83,19 @@ inherited frmCadastroProduto: TfrmCadastroProduto
         Align = alNone
         Visible = False
         ExplicitTop = 516
+        ExplicitWidth = 222
       end
     end
     inherited tsDados: TTabSheet
-      ExplicitWidth = 582
+      ExplicitWidth = 606
       ExplicitHeight = 575
       inherited pnlDados: TPanel
-        Width = 582
+        Width = 606
         Height = 575
-        ExplicitWidth = 582
+        ExplicitWidth = 606
         ExplicitHeight = 575
         DesignSize = (
-          582
+          606
           575)
         inherited lblAsterisco: TLabel [0]
           Top = 549
@@ -100,7 +110,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
         inherited Shape2: TShape
           Left = 2
           Top = 3
-          Width = 580
+          Width = 604
           Height = 571
           ExplicitLeft = 2
           ExplicitTop = 3
@@ -110,7 +120,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
         object Image1: TImage
           Left = 11
           Top = 310
-          Width = 563
+          Width = 588
           Height = 31
           Picture.Data = {
             0954506E67496D61676589504E470D0A1A0A0000000D49484452000007080000
@@ -1385,7 +1395,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
         object gridItens: TDBGridCBN
           Left = 26
           Top = 391
-          Width = 536
+          Width = 560
           Height = 157
           Hint = 
             'Pressione Ctrl + Alt + F2 para configurar as colunas'#13'Pressione C' +
@@ -1898,20 +1908,24 @@ inherited frmCadastroProduto: TfrmCadastroProduto
   inherited cds: TClientDataSet
     Left = 215
     Top = 32
-    object cdsCODIGO: TIntegerField
-      FieldName = 'CODIGO'
-    end
     object cdsDESCRICAO: TStringField
       FieldName = 'DESCRICAO'
       Size = 60
+    end
+    object cdsATIVO: TStringField
+      FieldName = 'ATIVO'
+      Size = 1
+    end
+    object cdsCODIGO: TIntegerField
+      FieldName = 'CODIGO'
     end
     object cdsVALOR: TFloatField
       FieldName = 'VALOR'
       DisplayFormat = ',0.00;-,0.00'
     end
-    object cdsATIVO: TStringField
-      FieldName = 'ATIVO'
-      Size = 1
+    object cdsESTOQUE: TFloatField
+      FieldName = 'ESTOQUE'
+      DisplayFormat = ',0.00;-,0.00'
     end
   end
   inherited ds: TDataSource
@@ -1947,7 +1961,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
     Left = 435
     Top = 515
     Bitmap = {
-      494C010102000800340010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010102000800480010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       00000000000000000000000000000000000000000000035703000355030084AB
       8400E8EFE80074A0740012631200046B0700046A0700046A0700046A0700046B

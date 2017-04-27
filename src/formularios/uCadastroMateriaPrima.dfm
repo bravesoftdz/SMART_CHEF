@@ -16,7 +16,6 @@ inherited frmCadastroMateriaPrima: TfrmCadastroMateriaPrima
   end
   inherited pgGeral: TPageControl
     Width = 448
-    ActivePage = tsDados
     ExplicitWidth = 448
     inherited tsConsulta: TTabSheet
       ExplicitWidth = 440
@@ -25,7 +24,7 @@ inherited frmCadastroMateriaPrima: TfrmCadastroMateriaPrima
         384)
       inherited gridConsulta: TDBGridCBN
         Left = 0
-        Top = 0
+        Top = 2
         Width = 439
         Height = 378
         Columns = <

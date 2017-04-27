@@ -34,9 +34,15 @@ inherited frmCadastroCliente: TfrmCadastroCliente
     inherited tsConsulta: TTabSheet
       ExplicitWidth = 531
       ExplicitHeight = 470
-      inherited gridConsulta: TDBGridCBN
+      inherited lblAjudaSelecionar: TStaticText [0]
+        Top = 453
+        Width = 531
+        ExplicitTop = 453
+        ExplicitWidth = 531
+      end
+      inherited gridConsulta: TDBGridCBN [1]
         Width = 513
-        Height = 509
+        Height = 443
         Columns = <
           item
             Expanded = False
@@ -56,12 +62,6 @@ inherited frmCadastroCliente: TfrmCadastroCliente
             Title.Caption = 'CPF/CNPJ'
             Visible = True
           end>
-      end
-      inherited lblAjudaSelecionar: TStaticText
-        Top = 453
-        Width = 531
-        ExplicitTop = 453
-        ExplicitWidth = 531
       end
     end
     inherited tsDados: TTabSheet
@@ -114,6 +114,19 @@ inherited frmCadastroCliente: TfrmCadastroCliente
           Font.Style = [fsBold]
           ParentFont = False
         end
+        object Label7: TLabel
+          Left = 239
+          Top = 52
+          Width = 34
+          Height = 15
+          Caption = 'E-mail'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 3815994
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
         object edtCodigo: TEdit
           Left = 65
           Top = 8
@@ -158,14 +171,16 @@ inherited frmCadastroCliente: TfrmCadastroCliente
           inherited edtCpf: TMaskEdit
             Left = 103
             Top = 21
+            Width = 103
             ExplicitLeft = 103
             ExplicitTop = 21
+            ExplicitWidth = 103
           end
           inherited comPessoa: TComboBox
             Top = 21
-            Width = 77
+            Width = 75
             ExplicitTop = 21
-            ExplicitWidth = 77
+            ExplicitWidth = 75
           end
           inherited StaticText1: TStaticText
             Top = 4
@@ -190,7 +205,7 @@ inherited frmCadastroCliente: TfrmCadastroCliente
           Font.Name = 'Segoe UI'
           Font.Style = [fsBold]
           ParentFont = False
-          TabOrder = 3
+          TabOrder = 4
           object Shape1: TShape
             Left = 3
             Top = 190
@@ -356,11 +371,13 @@ inherited frmCadastroCliente: TfrmCadastroCliente
               Width = 44
               Height = 15
               Caption = 'N'#250'mero'
+              Color = clBtnFace
               Font.Charset = DEFAULT_CHARSET
               Font.Color = 3815994
               Font.Height = -12
               Font.Name = 'Segoe UI'
               Font.Style = []
+              ParentColor = False
               ParentFont = False
             end
             object Label2: TLabel
@@ -539,15 +556,26 @@ inherited frmCadastroCliente: TfrmCadastroCliente
             end
           end
         end
+        object edtEmail: TEdit
+          Left = 239
+          Top = 68
+          Width = 271
+          Height = 21
+          CharCase = ecUpperCase
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 3
+        end
       end
     end
   end
   inherited cds: TClientDataSet
     Left = 159
     Top = 160
-    object cdsCODIGO: TIntegerField
-      FieldName = 'CODIGO'
-    end
     object cdsNOME: TStringField
       FieldName = 'NOME'
       Size = 60
@@ -555,6 +583,9 @@ inherited frmCadastroCliente: TfrmCadastroCliente
     object cdsCPF: TStringField
       FieldName = 'CPF'
       Size = 14
+    end
+    object cdsCODIGO: TIntegerField
+      FieldName = 'CODIGO'
     end
   end
   object dsEndereco: TDataSource

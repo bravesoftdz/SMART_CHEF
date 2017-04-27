@@ -134,6 +134,7 @@ type
     RLLabel16: TRLLabel;
     RLLabel21: TRLLabel;
     RLLabel22: TRLLabel;
+    totDeposito: TRLLabel;
     procedure BitBtn1Click(Sender: TObject);
     procedure RLDBText9BeforePrint(Sender: TObject; var Text: String;
       var PrintIt: Boolean);
@@ -268,12 +269,13 @@ begin
 end;
 
 procedure TfrmRelatorioPedidos.mostraMovimentos;
-var totalDinheiro, totalCredito, totalDebito, totalCheque :Real;
+var totalDinheiro, totalCredito, totalDebito, totalCheque, totalDeposito :Real;
 begin
   totalDinheiro := 0;
   totalCredito  := 0;
   totalDebito   := 0;
   totalCheque   := 0;
+  totalDeposito := 0;
 
   qryMovimentos.First;
   while not qryMovimentos.Eof do
@@ -283,6 +285,7 @@ begin
       2 : totalCheque   := totalCheque   + qryMovimentosVALOR_PAGO.AsFloat;
       3 : totalCredito  := totalCredito  + qryMovimentosVALOR_PAGO.AsFloat;
       4 : totalDebito   := totalDebito   + qryMovimentosVALOR_PAGO.AsFloat;
+      5 : totalDeposito := totalDeposito + qryMovimentosVALOR_PAGO.AsFloat;
     end;
     qryMovimentos.Next;
   end;
@@ -291,6 +294,7 @@ begin
   totCredito.Caption  := FormatFloat(' ,0.00; -,0.00;',totalCredito);
   totDebito.Caption   := FormatFloat(' ,0.00; -,0.00;',totalDebito);
   totCheque.Caption   := FormatFloat(' ,0.00; -,0.00;',totalCheque);
+  totDeposito.Caption := FormatFloat(' ,0.00; -,0.00;',totalDeposito);
 end;
 
 procedure TfrmRelatorioPedidos.RLDBText9BeforePrint(Sender: TObject; var Text: String; var PrintIt: Boolean);

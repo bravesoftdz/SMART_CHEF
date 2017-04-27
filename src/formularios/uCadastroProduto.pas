@@ -19,9 +19,7 @@ type
     cbAtivo: TComboBox;
     lbAtivo: TLabel;
     ListaGrupo: TListaCampo;
-    cdsCODIGO: TIntegerField;
     cdsDESCRICAO: TStringField;
-    cdsVALOR: TFloatField;
     gridItens: TDBGridCBN;
     cdsMaterias: TClientDataSet;
     dsMaterias: TDataSource;
@@ -70,6 +68,9 @@ type
     cdsATIVO: TStringField;
     edtReferencia: TEdit;
     Label1: TLabel;
+    cdsCODIGO: TIntegerField;
+    cdsVALOR: TFloatField;
+    cdsESTOQUE: TFloatField;
     procedure FormShow(Sender: TObject);
     procedure btnAddMateriaClick(Sender: TObject);
     procedure gridItensKeyDown(Sender: TObject; var Key: Word;
@@ -139,10 +140,12 @@ begin
   Produto := (Registro as TProduto);
 
   self.cds.Edit;
-  self.cdsCODIGO.AsInteger   := Produto.codigo;
+  self.cdsCODIGO.AsInteger    := Produto.codigo;
   self.cdsDESCRICAO.AsString := Produto.descricao;
   self.cdsVALOR.AsFloat      := Produto.valor;
   self.cdsATIVO.AsString     := IfThen(Produto.ativo, 'S', 'N');
+  if assigned(Produto.Estoque) then
+    self.cdsESTOQUE.AsFloat := Produto.Estoque.quantidade;
   self.cds.Post;
 end;
 
@@ -322,10 +325,12 @@ begin
   Produto := (Registro as TProduto);
 
   self.cds.Append;
-  self.cdsCODIGO.AsInteger   := Produto.codigo;
+  self.cdsCODIGO.AsFloat    := Produto.codigo;
   self.cdsDESCRICAO.AsString := Produto.descricao;
-  self.cdsVALOR.AsFloat      := Produto.valor;
+  self.cdsVALOR.AsFloat     := Produto.valor;
   self.cdsATIVO.AsString     := IfThen(Produto.ativo, 'S', 'N');
+  if assigned(Produto.Estoque) then
+    self.cdsESTOQUE.AsFloat := Produto.Estoque.quantidade;
   self.cds.Post;
 end;
 
@@ -336,15 +341,15 @@ begin
   edtProduto.Clear;
   edtValor.Clear;
   cbAtivo.ItemIndex := 0;
-  ListaGrupo.comListaCampo.ItemIndex := -1;
+  ListaGrupo.comListaCampo.ItemIndex        := -1;
   ListaDepartamento.comListaCampo.ItemIndex := -1;
   cdsMaterias.EmptyDataSet;
   BuscaMateriaPrima1.limpa;
   BuscaNCM1.limpa;
-  cbTipo.ItemIndex       := -1;
+  cbTipo.ItemIndex        := -1;
   edtICMS.Clear;
-  cbTributacao.ItemIndex := -1;
-  cbPreparo.ItemIndex    := -1;
+  cbTributacao.ItemIndex  := -1;
+  cbPreparo.ItemIndex     := -1;
   cbAlteraPreco.ItemIndex := -1;
   edtPrecoCusto.Clear;
   edtEstoque.Clear;
@@ -419,18 +424,16 @@ begin
                       TMateriaPrima(TProdutoHasMateria(listaDeMaterias.Items[i]).materia_prima).descricao,
                       TProdutoHasMateria(listaDeMaterias.Items[i]).Adicional);
 
-    Especificacao      := TEspecificacaoEstoquePorProduto.Create(Produto.codigo);
-    RepositorioProduto := TFabricaRepositorio.GetRepositorio(TEstoque.ClassName);
-    Estoque            := TEstoque( RepositorioProduto.GetPorEspecificacao( Especificacao ) );
 
-    if not assigned( Estoque ) then
+
+    if not assigned( Produto.Estoque ) then
       Exit;
 
-    edtEstoque.Value           := Estoque.quantidade;
-    edtEstoqueMin.Value        := Estoque.quantidade_min;
-    edtUNSaida.Text            := Estoque.unidade_medida;
-    edtUNEntrada.Text          := Estoque.unidade_entrada;
-    edtMultiplicador.Value     := Estoque.multiplicador;
+    edtEstoque.Value           := Produto.Estoque.quantidade;
+    edtEstoqueMin.Value        := Produto.Estoque.quantidade_min;
+    edtUNSaida.Text            := Produto.Estoque.unidade_medida;
+    edtUNEntrada.Text          := Produto.Estoque.unidade_entrada;
+    edtMultiplicador.Value     := Produto.Estoque.multiplicador;
   finally
      FreeAndNil(RepositorioProduto);
      FreeAndNil(Produto);
@@ -497,6 +500,8 @@ begin
 
   if assigned(FProdutoNfe) then begin
     btnIncluir.Click;
+    cbTributacao.ItemIndex := IfThen(pos(copy(FProdutoNfe.CFOP,1,2), '54,64') > 0, 3, 1);
+    edtPrecoCusto.Value    := FProdutoNfe.vUnCom;
     edtProduto.Text        := FProdutoNfe.xProd;
     BuscaNCM1.codigoNCM    := FProdutoNfe.NCM;
     edtUNEntrada.Text      := UPPERCASE(copy(FProdutoNfe.uCom,1,3));

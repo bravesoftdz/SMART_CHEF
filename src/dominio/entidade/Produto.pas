@@ -62,29 +62,29 @@ end;
 
 implementation
 
-uses repositorio, fabricaRepositorio, EspecificacaoMateriasDoProduto, EspecificacaoEstoquePorProduto;
+uses repositorio, fabricaRepositorio, EspecificacaoMateriasDoProduto, EspecificacaoEstoquePorProduto, funcoes;
 
 { TProduto }
 
 function TProduto.GetEstoque: TEstoque;
-var Especificacao :TEspecificacaoEstoquePorProduto;
+var //Especificacao :TEspecificacaoEstoquePorProduto;
     Repositorio   :TRepositorio;
 begin
  try
    Repositorio   := nil;
-   Especificacao := nil;
+ //  Especificacao := nil;
 
    if not assigned(FEstoque) then
    begin
-     Especificacao  := TEspecificacaoEstoquePorProduto.Create(self.codigo);
+   //  Especificacao  := TEspecificacaoEstoquePorProduto.Create(self.codigo);
      Repositorio    := TFabricaRepositorio.GetRepositorio(TEstoque.ClassName);
-     FEstoque       := TEstoque( repositorio.GetPorEspecificacao( Especificacao ) );
+     FEstoque       := TEstoque( repositorio.Get( strToIntDef(Campo_por_campo('ESTOQUE','CODIGO','CODIGO_PRODUTO',inttostr(self.codigo)),0)));
    end;
 
    result := FEstoque;
  finally
    FreeAndNil(Repositorio);
-   FreeAndNil(Especificacao);
+ //  FreeAndNil(Especificacao);
  end;
 end;
 

@@ -25,6 +25,7 @@ type
     FTotal_reforco_dinheiro: Real;
     FTotalGeral :Real;
     FTotalEmCaixa :Real;
+    FTotal_deposito: Real;
 
     FMovimentos :TObjectList<TMovimento>;
     FSangriaReforco :TObjectList<TSangriaReforco>;
@@ -47,6 +48,7 @@ type
     property Total_cheque    :Real        read FTotal_cheque;
     property Total_cartaoC   :Real        read FTotal_cartaoC;
     property Total_cartaoD   :Real        read FTotal_cartaoD;
+    property Total_deposito  :Real        read FTotal_deposito;
 
     property Total_sangria_dinheiro   :Real       read FTotal_sangria_dinheiro;
     property Total_sangria_cheque     :Real       read FTotal_sangria_cheque;
@@ -126,15 +128,13 @@ begin
       self.FMovimentos := repositorio.GetListaPorEspecificacao<TMovimento>(especificacao, 'codigo_caixa = '+intToStr(self.codigo));
 
       if assigned(FMovimentos) then
-        for i := 0 to FMovimentos.Count - 1 do begin
-            if TMovimento(FMovimentos[i]).tipo_moeda = 1 then
-              FTotal_dinheiro := FTotal_dinheiro + TMovimento(FMovimentos[i]).valor_pago
-            else if TMovimento(FMovimentos[i]).tipo_moeda = 2 then
-              FTotal_cheque := FTotal_cheque + TMovimento(FMovimentos[i]).valor_pago
-            else if TMovimento(FMovimentos[i]).tipo_moeda = 3 then
-              FTotal_cartaoC := FTotal_cartaoC + TMovimento(FMovimentos[i]).valor_pago
-            else if TMovimento(FMovimentos[i]).tipo_moeda = 4 then
-              FTotal_cartaoD := FTotal_cartaoD + TMovimento(FMovimentos[i]).valor_pago;
+        for i := 0 to FMovimentos.Count - 1 do
+          case TMovimento(FMovimentos[i]).tipo_moeda of
+            1 : FTotal_dinheiro := FTotal_dinheiro + TMovimento(FMovimentos[i]).valor_pago;
+            2 : FTotal_cheque   := FTotal_cheque + TMovimento(FMovimentos[i]).valor_pago;
+            3 : FTotal_cartaoC  := FTotal_cartaoC + TMovimento(FMovimentos[i]).valor_pago;
+            4 : FTotal_cartaoD  := FTotal_cartaoD + TMovimento(FMovimentos[i]).valor_pago;
+            5 : FTotal_deposito := FTotal_deposito + TMovimento(FMovimentos[i]).valor_pago;
           end;
     end;
     result := FMovimentos;
@@ -200,7 +200,7 @@ end;
 function TCaixa.GetTotalGeral: Real;
 begin
   self.atualizaValores;
-  FTotalGeral := self.valor_abertura + FTotal_dinheiro + FTotal_cheque + FTotal_cartaoC + FTotal_cartaoD - FTotal_sangria_cheque - FTotal_sangria_dinheiro + FTotal_reforco_cheque + FTotal_reforco_dinheiro;
+  FTotalGeral := self.valor_abertura + FTotal_dinheiro + FTotal_cheque + FTotal_cartaoC + FTotal_cartaoD + FTotal_deposito - FTotal_sangria_cheque - FTotal_sangria_dinheiro + FTotal_reforco_cheque + FTotal_reforco_dinheiro;
   result      := FTotalGeral;
 end;
 
@@ -227,6 +227,7 @@ begin
   Writeln(Arq, 'Total em cheque >'+StringOfChar(' ', 29- (length(FormatFloat(' ,0.00; -,0.00;',self.Total_cheque))) ) + FormatFloat(' ,0.00; -,0.00;',self.Total_cheque));
   Writeln(Arq, 'Total cartão crédito >'+StringOfChar(' ', 24- (length(FormatFloat(' ,0.00; -,0.00;',self.Total_cartaoC))) ) + FormatFloat(' ,0.00; -,0.00;',self.Total_cartaoC));
   Writeln(Arq, 'Total cartão débito >'+StringOfChar(' ', 25- (length(FormatFloat(' ,0.00; -,0.00;',self.Total_cartaoD))) ) + FormatFloat(' ,0.00; -,0.00;',self.Total_cartaoD));
+  Writeln(Arq, 'Total em depósito >'+StringOfChar(' ', 27- (length(FormatFloat(' ,0.00; -,0.00;',self.Total_deposito))) ) + FormatFloat(' ,0.00; -,0.00;',self.Total_deposito));
   Writeln(Arq, StringOfChar('-',48));
   Writeln(Arq, 'Total sangria >'+StringOfChar(' ', 31- (length(FormatFloat(' ,0.00; -,0.00;',self.Total_sangria_dinheiro + self.FTotal_sangria_cheque))) ) + FormatFloat(' ,0.00; -,0.00;',self.Total_sangria_dinheiro + self.FTotal_sangria_cheque));
   Writeln(Arq, 'Total reforço >'+StringOfChar(' ', 31- (length(FormatFloat(' ,0.00; -,0.00;',self.Total_reforco_dinheiro + self.FTotal_reforco_cheque))) ) + FormatFloat(' ,0.00; -,0.00;',self.Total_reforco_dinheiro + self.FTotal_reforco_cheque));

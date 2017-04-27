@@ -19,6 +19,8 @@ type
     cdsCODIGO: TIntegerField;
     cdsRAZAO_SOCIAL: TStringField;
     Fone2: TFone;
+    Label2: TLabel;
+    edtEmail: TEdit;
     procedure FormShow(Sender: TObject);
   private
     { Altera um registro existente no CDS de consulta }
@@ -137,6 +139,7 @@ begin
      Fornecedor.razao     := self.edtRazao.Text;
      Fornecedor.cpf_cnpj  := self.CNPJ.edtCpf.Text;
      Fornecedor.RG_IE     := self.edtIE.Text;
+     Fornecedor.Email     := self.edtEmail.Text;
 
      Repositorio.Salvar(Fornecedor);
 
@@ -171,6 +174,7 @@ begin
   CNPJ.Limpa;
   Fone1.limpa;
   Fone2.limpa;
+  edtEmail.Clear;
 end;
 
 procedure TfrmCadastroFornecedor.MostrarDados;
@@ -194,6 +198,7 @@ begin
     self.edtRazao.Text    := Fornecedor.razao;
     CNPJ.cpfCnpj          := Fornecedor.cpf_cnpj;
     self.edtIE.Text       := Fornecedor.RG_IE;
+    self.edtEmail.Text    := Fornecedor.Email;
 
   finally
     FreeAndNil(Repositorio);

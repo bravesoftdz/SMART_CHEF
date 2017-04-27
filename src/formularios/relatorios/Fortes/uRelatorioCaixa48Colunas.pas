@@ -93,13 +93,16 @@ type
     RLDBText7: TRLDBText;
     RLDBText8: TRLDBText;
     RLDBText9: TRLDBText;
+    cdsMovimentosDEPOSITO: TStringField;
+    RLLabel14: TRLLabel;
+    rlDeposito: TRLLabel;
+    RLDBText11: TRLDBText;
     procedure FormShow(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
     procedure BitBtn2Click(Sender: TObject);
     procedure RLReport1BeforePrint(Sender: TObject; var PrintIt: Boolean);
     procedure RLLabel16BeforePrint(Sender: TObject; var Text: string; var PrintIt: Boolean);
     procedure RLBand4BeforePrint(Sender: TObject; var PrintIt: Boolean);
-    procedure RLMemo1BeforePrint(Sender: TObject; var Text: string; var PrintIt: Boolean);
   private
      Caixa         :TCaixa;
 
@@ -160,6 +163,9 @@ begin
 
         4 : cdsMovimentosCRTDEBITO.AsString  := cdsMovimentosCRTDEBITO.AsString+IfThen(cdsMovimentosCRTDEBITO.AsString = '', '', ' - ')+
                                                 TStringUtilitario.FormataDinheiro(Mov.valor_pago);
+
+        5 : cdsMovimentosDEPOSITO.AsString   := cdsMovimentosDEPOSITO.AsString+IfThen(cdsMovimentosDEPOSITO.AsString = '', '', ' - ')+
+                                                TStringUtilitario.FormataDinheiro(Mov.valor_pago);
       end;
       cdsMovimentos.Post;
 
@@ -209,48 +215,6 @@ begin
   PrintIt := not cds.IsEmpty;
 end;
 
-procedure TfrmRelatorioCaixa48Colunas.RLMemo1BeforePrint(Sender: TObject; var Text: string; var PrintIt: Boolean);
-var pedido :String;
-    d, cc, cd, ch :integer;
-    ds, ccs, cds, chs, maiorLinha :String;
-begin
- { d := 0; cc :=0; cd :=0; ch :=0; maiorLinha := 0;
-
-  pedido := copy(pedidos,1, pos(';',pedidos)-1 );
-  pedidos := copy(pedidos,pos(';',pedidos)+1, length(pedidos));
-
-  cdsMovimentos.Filtered := false;
-  cdsMovimentos.Filter   := 'CODPEDIDO = '+inttostr(pedido);
-  cdsMovimentos.Filtered := true;
-
-  ds  := cdsMovimentosDINHEIRO.AsString;
-  ccs := cdsMovimentosCRTCREDITO.AsString;
-  cds := cdsMovimentosCRTDEBITO.AsString;
-  chs := cdsMovimentosCHEQUE.AsString;
-
-  while ds <> '' do
-  begin
-    inc(d);
-  end;
-
-  while ccs <> '' do
-  begin
-    inc(cc);
-  end;
-
-  while cds <> '' do
-  begin
-    inc(cd);
-  end;
-
-  while chs <> '' do
-  begin
-    inc(ch);
-  end;
-
-  maiorLinha :=    }
-end;
-
 procedure TfrmRelatorioCaixa48Colunas.RLReport1BeforePrint(Sender: TObject; var PrintIt: Boolean);
 var totVenda, totSangria, totReforco, totDinheiro, totCheque :Real;
 begin
@@ -259,6 +223,7 @@ begin
   rlCartCredito.Caption := TStringUtilitario.FormataDinheiro( Caixa.Total_cartaoC );
   rlDinheiro.Caption    := TStringUtilitario.FormataDinheiro( Caixa.Total_dinheiro );
   rlCheque.Caption      := TStringUtilitario.FormataDinheiro( Caixa.Total_cheque );
+  rlDeposito.Caption    := TStringUtilitario.FormataDinheiro( Caixa.Total_deposito );
   rlDinheiroSan.Caption := TStringUtilitario.FormataDinheiro( Caixa.Total_sangria_dinheiro );
   rlChequeSan.Caption   := TStringUtilitario.FormataDinheiro( Caixa.Total_sangria_cheque );
   rlDinheiroRef.Caption := TStringUtilitario.FormataDinheiro( Caixa.Total_reforco_dinheiro );
@@ -273,7 +238,7 @@ begin
   rlAbertura.Caption    := TStringUtilitario.FormataDinheiro( Caixa.valor_abertura );
   rlMontanteTotal.Caption := TStringUtilitario.FormataDinheiro( Caixa.valor_abertura + totDinheiro + totCheque );
 
-  totVenda              := Caixa.Total_cartaoD + Caixa.Total_cartaoC + Caixa.Total_dinheiro + Caixa.Total_cheque;
+  totVenda              := Caixa.Total_cartaoD + Caixa.Total_cartaoC + Caixa.Total_deposito + Caixa.Total_dinheiro + Caixa.Total_cheque;
   totSangria            := Caixa.Total_sangria_dinheiro + Caixa.Total_sangria_cheque;
   totReforco            := Caixa.Total_reforco_dinheiro + Caixa.Total_reforco_cheque;
 

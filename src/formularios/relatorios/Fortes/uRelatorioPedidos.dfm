@@ -2,16 +2,16 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
   Left = 515
   Top = 99
   Caption = 'Relat'#243'rio de Pedidos'
-  ClientHeight = 315
-  ClientWidth = 581
+  ClientHeight = 314
+  ClientWidth = 585
   OnShow = FormShow
-  ExplicitWidth = 587
-  ExplicitHeight = 343
+  ExplicitWidth = 591
+  ExplicitHeight = 342
   PixelsPerInch = 96
   TextHeight = 13
   object RLReport1: TRLReport [0]
     Left = 184
-    Top = 240
+    Top = 120
     Width = 794
     Height = 1123
     Borders.Sides = sdCustom
@@ -619,11 +619,11 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
       ParentColor = False
       Transparent = False
       object RLLabel15: TRLLabel
-        Left = 376
+        Left = 400
         Top = 88
-        Width = 169
+        Width = 161
         Height = 16
-        Caption = 'TOTAL DOS PEDIDOS     >'
+        Caption = 'TOTAL DOS PEDIDOS   >'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -13
@@ -704,11 +704,11 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
         ParentFont = False
       end
       object RLLabel29: TRLLabel
-        Left = 376
+        Left = 400
         Top = 24
-        Width = 172
+        Width = 164
         Height = 16
-        Caption = 'Total Taxa Servi'#231'o          >'
+        Caption = 'Total Taxa Servi'#231'o        >'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 3552822
         Font.Height = -13
@@ -717,11 +717,11 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
         ParentFont = False
       end
       object RLLabel30: TRLLabel
-        Left = 376
+        Left = 400
         Top = 44
-        Width = 172
+        Width = 164
         Height = 16
-        Caption = 'Total Couvert Art'#237'stico     >'
+        Caption = 'Total Couvert Art'#237'stico   >'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 3552822
         Font.Height = -13
@@ -730,11 +730,11 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
         ParentFont = False
       end
       object RLLabel31: TRLLabel
-        Left = 376
+        Left = 400
         Top = 65
-        Width = 170
+        Width = 162
         Height = 16
-        Caption = 'Total Desconto                >'
+        Caption = 'Total Desconto              >'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 3552822
         Font.Height = -13
@@ -796,11 +796,11 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
         Pen.Style = psClear
       end
       object RLLabel20: TRLLabel
-        Left = 376
+        Left = 400
         Top = 3
-        Width = 174
+        Width = 162
         Height = 16
-        Caption = 'Total Itens                        >'
+        Caption = 'Total Itens                     >'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 3552822
         Font.Height = -13
@@ -823,11 +823,11 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
         ParentFont = False
       end
       object RLLabel7: TRLLabel
-        Left = 19
+        Left = 7
         Top = 65
-        Width = 282
+        Width = 349
         Height = 16
-        Caption = 'Dinheiro     Crt Cr'#233'dito   Crt D'#233'bito   Cheque'
+        Caption = 'Dinheiro     Crt Cr'#233'dito   Crt D'#233'bito   Dep'#243'sito   Cheque'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 3552822
         Font.Height = -13
@@ -836,7 +836,7 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
         ParentFont = False
       end
       object totDinheiro: TRLLabel
-        Left = 56
+        Left = 44
         Top = 87
         Width = 29
         Height = 16
@@ -850,7 +850,7 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
         ParentFont = False
       end
       object totCredito: TRLLabel
-        Left = 128
+        Left = 116
         Top = 87
         Width = 29
         Height = 16
@@ -864,7 +864,7 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
         ParentFont = False
       end
       object totDebito: TRLLabel
-        Left = 200
+        Left = 188
         Top = 87
         Width = 29
         Height = 16
@@ -878,7 +878,21 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
         ParentFont = False
       end
       object totCheque: TRLLabel
-        Left = 272
+        Left = 324
+        Top = 87
+        Width = 29
+        Height = 16
+        Alignment = taRightJustify
+        Caption = '0.00'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+      end
+      object totDeposito: TRLLabel
+        Left = 260
         Top = 87
         Width = 29
         Height = 16
@@ -992,13 +1006,13 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
     end
   end
   inherited pnlPropaganda: TPanel
-    Top = 280
-    Width = 581
+    Top = 279
+    Width = 585
     TabOrder = 4
-    ExplicitTop = 279
-    ExplicitWidth = 586
+    ExplicitTop = 280
+    ExplicitWidth = 581
     inherited Shape8: TShape
-      Width = 579
+      Width = 583
       ExplicitWidth = 578
     end
   end
@@ -1006,15 +1020,15 @@ inherited frmRelatorioPedidos: TfrmRelatorioPedidos
     Left = 0
     Top = 0
     Width = 129
-    Height = 280
+    Height = 279
     Align = alLeft
     TabOrder = 6
-    ExplicitHeight = 279
+    ExplicitHeight = 280
     object Shape12: TShape
       Left = 1
       Top = 1
       Width = 127
-      Height = 278
+      Height = 277
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119

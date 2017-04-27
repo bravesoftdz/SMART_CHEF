@@ -76,6 +76,19 @@ inherited frmCadastroFornecedor: TfrmCadastroFornecedor
           Font.Style = [fsBold]
           ParentFont = False
         end
+        object Label2: TLabel
+          Left = 25
+          Top = 169
+          Width = 34
+          Height = 15
+          Caption = 'E-mail'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 3815994
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
         object edtRazao: TEdit
           Left = 23
           Top = 41
@@ -175,6 +188,14 @@ inherited frmCadastroFornecedor: TfrmCadastroFornecedor
             Width = 114
             ExplicitWidth = 114
           end
+        end
+        object edtEmail: TEdit
+          Left = 23
+          Top = 185
+          Width = 368
+          Height = 21
+          CharCase = ecUpperCase
+          TabOrder = 6
         end
       end
     end

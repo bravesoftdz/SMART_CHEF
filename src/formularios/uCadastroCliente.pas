@@ -18,7 +18,6 @@ type
     lblRazao: TLabel;
     cpfCnpj: TMaskCpfCnpj;
     Label19: TLabel;
-    cdsCODIGO: TIntegerField;
     cdsNOME: TStringField;
     cdsCPF: TStringField;
     gpbEndereco: TGroupBox;
@@ -51,11 +50,14 @@ type
     cdsenderecocod_cidade: TIntegerField;
     cdsenderecoCODIGO: TIntegerField;
     cdsenderecoUF: TStringField;
-    cdsEndDeletado: TClientDataSet;
-    cdsEndDeletadoCOD_END: TIntegerField;
     Label1: TLabel;
     edtFone: TMaskEdit;
     cdsenderecofone: TStringField;
+    edtEmail: TEdit;
+    Label7: TLabel;
+    cdsCODIGO: TIntegerField;
+    cdsEndDeletado: TClientDataSet;
+    cdsEndDeletadoCOD_END: TIntegerField;
     procedure btnSalvarClick(Sender: TObject);
     procedure btnIncluirEndClick(Sender: TObject);
     procedure btnAlterarEndClick(Sender: TObject);
@@ -65,6 +67,7 @@ type
     procedure btnSalvarendClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure gridEnderecosEnter(Sender: TObject);
+
   private
     cpf_ao_alterar :String;
     FStatus_endereco :TStatusEndereco;
@@ -193,6 +196,7 @@ begin
      Cliente.cpf_cnpj      := self.cpfCnpj.edtCpf.Text;
      Cliente.Pessoa        := self.cpfCnpj.pessoa;
      Cliente.Tipo          := 'C';
+     Cliente.Email         := edtEmail.Text;
 
      cdsendereco.First;
      while not cdsendereco.Eof do begin
@@ -266,6 +270,7 @@ begin
   edtNumero.Clear;
   edtComplemento.Clear;
   edtBairro.Clear;
+  edtEmail.Clear;
   BuscaCidade1.limpa;
   cdsendereco.EmptyDataSet;
   cdsEndDeletado.EmptyDataSet;
@@ -293,6 +298,7 @@ begin
     edtCodigo.Text              := IntToStr(Cliente.codigo);
     self.edtNome.Text           :=  Cliente.razao;
     self.cpfCnpj.cpfCnpj        :=  Cliente.cpf_cnpj;
+    self.edtEmail.Text          := Cliente.Email;
 
     if assigned(Cliente.Enderecos) and (Cliente.Enderecos.count > 0) then begin
 

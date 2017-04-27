@@ -454,6 +454,7 @@ begin
          2 :  tPag := fpCheque;
          3 :  tPag := fpCartaoCredito;
          4 :  tPag := fpCartaoDebito;
+         5 :  tPag := fpOutro;
        end;
 
        if tPag in [fpCartaoCredito, fpCartaoDebito] then

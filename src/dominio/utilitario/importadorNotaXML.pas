@@ -116,17 +116,17 @@ begin
   try
 
     { Verifica se itens da nota ja estão associados ao devido representante, e consequentemente se já estao cadastrados}
-    for nX := 0 to nfe.NFe.Det.Count - 1 do
+ {   for nX := 0 to nfe.NFe.Det.Count - 1 do
       codigo_produto := produtoCadastrado(nfe.NFe.Det.Items[nX].Prod);
 
     { Atualiza o estoque dos respectivos itens de entrada }
-    for nX := 0 to nfe.NFe.Det.Count - 1 do begin
+  {  for nX := 0 to nfe.NFe.Det.Count - 1 do begin
 
       codigo_produto := produtoCadastrado(nfe.NFe.Det.Items[nX].Prod);
 
      //tualizaProduto( codigo_produto, nfe.NFe.Det.Items[nX].Prod )// atualiza o estoque do produto
 
-    end;
+    end;            }
 
     Result := true;
 

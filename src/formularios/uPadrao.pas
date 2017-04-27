@@ -129,9 +129,8 @@ begin
     begin
        Shift := [];
        Key   := 0;
-       self.Close();
+       TForm(Sender).Close();
     end;
-
 end;
 
 function TfrmPadrao.confirma(mensagem: String): Boolean;
@@ -156,7 +155,7 @@ begin
       TDBGridCBN(Components[i]).ConfCores.Destacado.CorFonte := clwhite;
       TDBGridCBN(Components[i]).ConfCores.Destacado.CorFundo := $00CB7834;//$00917E6F;
       TDBGridCBN(Components[i]).ConfCores.Selecao.CorFonte   := clBlack;
-      TDBGridCBN(Components[i]).ConfCores.Selecao.CorFundo   := clSilver;
+      TDBGridCBN(Components[i]).ConfCores.Selecao.CorFundo   := $00F0E3D5;
       TDBGridCBN(Components[i]).ConfCores.Normal.CorFonte    := clBlack;
       TDBGridCBN(Components[i]).ConfCores.Normal.CorFundo    := clWhite;
       TDBGridCBN(Components[i]).ConfCores.Zebrada.CorFonte   := clBlack;

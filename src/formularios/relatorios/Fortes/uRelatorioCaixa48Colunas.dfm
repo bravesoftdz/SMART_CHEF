@@ -1,9 +1,9 @@
 object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
-  Left = 514
-  Top = 387
+  Left = 171
+  Top = 193
   Caption = 'Relat'#243'rio de Caixa'
-  ClientHeight = 178
-  ClientWidth = 480
+  ClientHeight = 172
+  ClientWidth = 489
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -29,10 +29,10 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
     ParentFont = False
   end
   object RLReport1: TRLReport
-    Left = 151
-    Top = 156
-    Width = 794
-    Height = 1123
+    Left = 134
+    Top = 176
+    Width = 1123
+    Height = 794
     Margins.LeftMargin = 5.000000000000000000
     Margins.RightMargin = 5.000000000000000000
     Borders.Sides = sdCustom
@@ -46,18 +46,19 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
     Font.Height = -13
     Font.Name = 'Arial'
     Font.Style = []
+    PageSetup.Orientation = poLandscape
     Visible = False
     BeforePrint = RLReport1BeforePrint
     object RLSubDetail1: TRLSubDetail
       Left = 20
       Top = 397
-      Width = 754
+      Width = 1083
       Height = 164
       DataSource = dsMovimentos
       object RLBand4: TRLBand
         Left = 0
         Top = 29
-        Width = 754
+        Width = 1083
         Height = 24
         Color = 16053492
         ParentColor = False
@@ -80,7 +81,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
           Transparent = False
         end
         object RLDBText6: TRLDBText
-          Left = 83
+          Left = 97
           Top = 4
           Width = 56
           Height = 14
@@ -96,7 +97,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
           Transparent = False
         end
         object RLDBText7: TRLDBText
-          Left = 254
+          Left = 287
           Top = 4
           Width = 67
           Height = 14
@@ -112,7 +113,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
           Transparent = False
         end
         object RLDBText8: TRLDBText
-          Left = 651
+          Left = 717
           Top = 4
           Width = 45
           Height = 14
@@ -128,7 +129,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
           Transparent = False
         end
         object RLDBText9: TRLDBText
-          Left = 451
+          Left = 503
           Top = 4
           Width = 61
           Height = 14
@@ -143,17 +144,33 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
           Text = ''
           Transparent = False
         end
+        object RLDBText11: TRLDBText
+          Left = 887
+          Top = 4
+          Width = 55
+          Height = 14
+          DataField = 'DEPOSITO'
+          DataSource = dsMovimentos
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
+          Text = ''
+          Transparent = False
+        end
       end
       object RLBand3: TRLBand
         Left = 0
         Top = 0
-        Width = 754
+        Width = 1083
         Height = 29
         BandType = btColumnHeader
         object RLDraw6: TRLDraw
           Left = 0
           Top = 5
-          Width = 754
+          Width = 1083
           Height = 24
           Brush.Color = 15722727
           Pen.Style = psDot
@@ -161,12 +178,13 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         object RLLabel23: TRLLabel
           Left = 3
           Top = 10
-          Width = 697
+          Width = 940
           Height = 16
           Caption = 
-            'N'#186' Pedido    Dinheiro                             Cart. Cr'#233'dito ' +
-            '                            Cart. D'#233'bito                        ' +
-            '       Cheque'
+            'N'#186' Pedido       Dinheiro                                  Cart. ' +
+            'Cr'#233'dito                                  Cart. D'#233'bito           ' +
+            '                        Cheque                              Dep'#243 +
+            'sito'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -13
@@ -176,16 +194,106 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         end
       end
     end
+    object RLSubDetail2: TRLSubDetail
+      Left = 20
+      Top = 356
+      Width = 1083
+      Height = 41
+      DataSource = ds
+      object RLBand2: TRLBand
+        Left = 0
+        Top = 0
+        Width = 1083
+        Height = 24
+        object RLDBText1: TRLDBText
+          Left = 7
+          Top = 5
+          Width = 27
+          Height = 14
+          DataField = 'TIPO'
+          DataSource = ds
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
+          Text = ''
+        end
+        object RLDBText2: TRLDBText
+          Left = 109
+          Top = 5
+          Width = 37
+          Height = 14
+          Alignment = taRightJustify
+          DataField = 'VALOR'
+          DataSource = ds
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
+          Text = ''
+        end
+        object RLDBText3: TRLDBText
+          Left = 160
+          Top = 5
+          Width = 42
+          Height = 14
+          DataField = 'MOEDA'
+          DataSource = ds
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
+          Text = ''
+        end
+        object RLDBText4: TRLDBText
+          Left = 229
+          Top = 5
+          Width = 420
+          Height = 16
+          AutoSize = False
+          DataField = 'DESCRICAO'
+          DataSource = ds
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
+          Text = ''
+        end
+        object RLDBText10: TRLDBText
+          Left = 655
+          Top = 5
+          Width = 51
+          Height = 14
+          DataField = 'USUARIO'
+          DataSource = ds
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
+          Text = ''
+        end
+      end
+    end
     object RLBand1: TRLBand
       Left = 20
       Top = 39
-      Width = 754
+      Width = 1083
       Height = 317
       BandType = btTitle
       object RLDraw5: TRLDraw
         Left = 0
         Top = 259
-        Width = 754
+        Width = 1083
         Height = 26
         Brush.Color = 15987933
         Pen.Style = psDot
@@ -193,7 +301,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
       object RLDraw4: TRLDraw
         Left = 0
         Top = 107
-        Width = 582
+        Width = 1000
         Height = 24
         Brush.Color = 16119285
         Pen.Style = psClear
@@ -201,13 +309,13 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
       object RLDraw3: TRLDraw
         Left = 0
         Top = 155
-        Width = 582
+        Width = 1000
         Height = 24
         Brush.Color = 16119285
         Pen.Style = psClear
       end
       object RLDraw2: TRLDraw
-        Left = 618
+        Left = 947
         Top = 76
         Width = 136
         Height = 133
@@ -217,20 +325,21 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
       object RLDraw1: TRLDraw
         Left = 0
         Top = 209
-        Width = 754
+        Width = 1083
         Height = 26
         Brush.Color = 16642773
         Pen.Style = psDot
       end
       object RLLabel11: TRLLabel
-        Left = -2
+        Left = -6
         Top = 67
-        Width = 760
+        Width = 952
         Height = 16
         Caption = 
           '----------------------------------------------------------------' +
           '----------------------------------------------------------------' +
-          '-------------------------------------------------------------'
+          '----------------------------------------------------------------' +
+          '---------------------------------------------'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -13
@@ -239,14 +348,15 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object RLLabel1: TRLLabel
-        Left = 0
+        Left = -6
         Top = 169
-        Width = 756
+        Width = 952
         Height = 16
         Caption = 
           '----------------------------------------------------------------' +
           '----------------------------------------------------------------' +
-          '------------------------------------------------------------'
+          '----------------------------------------------------------------' +
+          '---------------------------------------------'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -13
@@ -295,7 +405,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object RLLabel4: TRLLabel
-        Left = 216
+        Left = 465
         Top = 86
         Width = 79
         Height = 16
@@ -308,7 +418,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object RLLabel5: TRLLabel
-        Left = 315
+        Left = 564
         Top = 86
         Width = 84
         Height = 16
@@ -321,7 +431,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object RLLabel6: TRLLabel
-        Left = 419
+        Left = 748
         Top = 86
         Width = 58
         Height = 16
@@ -334,7 +444,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object RLLabel7: TRLLabel
-        Left = 515
+        Left = 844
         Top = 86
         Width = 53
         Height = 16
@@ -347,7 +457,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object RLLabel8: TRLLabel
-        Left = 120
+        Left = 377
         Top = 110
         Width = 63
         Height = 16
@@ -360,7 +470,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object RLLabel9: TRLLabel
-        Left = 120
+        Left = 377
         Top = 134
         Width = 66
         Height = 16
@@ -373,7 +483,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object RLLabel10: TRLLabel
-        Left = 120
+        Left = 377
         Top = 158
         Width = 65
         Height = 16
@@ -386,7 +496,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object rlCartDebito: TRLLabel
-        Left = 222
+        Left = 471
         Top = 110
         Width = 73
         Height = 16
@@ -400,7 +510,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object rlCartCredito: TRLLabel
-        Left = 322
+        Left = 571
         Top = 110
         Width = 77
         Height = 16
@@ -414,7 +524,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object rlDinheiro: TRLLabel
-        Left = 426
+        Left = 755
         Top = 110
         Width = 51
         Height = 16
@@ -428,7 +538,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object rlCheque: TRLLabel
-        Left = 520
+        Left = 849
         Top = 110
         Width = 48
         Height = 16
@@ -442,7 +552,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object rlDinheiroSan: TRLLabel
-        Left = 426
+        Left = 755
         Top = 134
         Width = 51
         Height = 16
@@ -456,7 +566,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object rlChequeSan: TRLLabel
-        Left = 520
+        Left = 849
         Top = 134
         Width = 48
         Height = 16
@@ -470,7 +580,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object rlDinheiroRef: TRLLabel
-        Left = 426
+        Left = 755
         Top = 158
         Width = 51
         Height = 16
@@ -484,7 +594,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object rlChequeRef: TRLLabel
-        Left = 520
+        Left = 849
         Top = 158
         Width = 48
         Height = 16
@@ -498,7 +608,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object RLLabel19: TRLLabel
-        Left = 697
+        Left = 1026
         Top = 86
         Width = 47
         Height = 16
@@ -512,12 +622,12 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object rlTotVenda: TRLLabel
-        Left = 696
+        Left = 1003
         Top = 110
-        Width = 48
+        Width = 70
         Height = 16
         Alignment = taRightJustify
-        Caption = 'Cheque'
+        Caption = 'Tot Vendas'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -13
@@ -526,12 +636,12 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object rlTotSan: TRLLabel
-        Left = 696
+        Left = 1003
         Top = 134
-        Width = 48
+        Width = 70
         Height = 16
         Alignment = taRightJustify
-        Caption = 'Cheque'
+        Caption = 'Tot Sangria'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -13
@@ -540,12 +650,12 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object rlTotRef: TRLLabel
-        Left = 696
+        Left = 1003
         Top = 158
-        Width = 48
+        Width = 70
         Height = 16
         Alignment = taRightJustify
-        Caption = 'Cheque'
+        Caption = 'Tot Refor'#231'o'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -13
@@ -554,7 +664,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object rlTotalGeral: TRLLabel
-        Left = 669
+        Left = 998
         Top = 187
         Width = 75
         Height = 16
@@ -568,7 +678,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object RLLabel12: TRLLabel
-        Left = 654
+        Left = 983
         Top = 134
         Width = 8
         Height = 16
@@ -582,7 +692,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object RLLabel13: TRLLabel
-        Left = 652
+        Left = 981
         Top = 158
         Width = 12
         Height = 16
@@ -596,7 +706,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object rlTotDinheiro: TRLLabel
-        Left = 419
+        Left = 748
         Top = 215
         Width = 58
         Height = 16
@@ -610,7 +720,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object rlTotCheque: TRLLabel
-        Left = 515
+        Left = 844
         Top = 215
         Width = 53
         Height = 16
@@ -624,7 +734,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object rlMontante: TRLLabel
-        Left = 691
+        Left = 1020
         Top = 215
         Width = 53
         Height = 16
@@ -638,7 +748,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object RLLabel15: TRLLabel
-        Left = 120
+        Left = 377
         Top = 238
         Width = 128
         Height = 16
@@ -651,7 +761,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object rlAbertura: TRLLabel
-        Left = 685
+        Left = 1014
         Top = 239
         Width = 59
         Height = 16
@@ -665,7 +775,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object rlMontanteTotal: TRLLabel
-        Left = 708
+        Left = 1037
         Top = 264
         Width = 36
         Height = 16
@@ -679,7 +789,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
       end
       object RLLabel17: TRLLabel
-        Left = 120
+        Left = 377
         Top = 264
         Width = 134
         Height = 16
@@ -761,95 +871,32 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
         ParentFont = False
         BeforePrint = RLLabel16BeforePrint
       end
-    end
-    object RLSubDetail2: TRLSubDetail
-      Left = 20
-      Top = 356
-      Width = 754
-      Height = 41
-      DataSource = ds
-      object RLBand2: TRLBand
-        Left = 0
-        Top = 0
-        Width = 754
-        Height = 24
-        object RLDBText1: TRLDBText
-          Left = 7
-          Top = 5
-          Width = 27
-          Height = 14
-          DataField = 'TIPO'
-          DataSource = ds
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -12
-          Font.Name = 'Calibri'
-          Font.Style = []
-          ParentFont = False
-          Text = ''
-        end
-        object RLDBText2: TRLDBText
-          Left = 109
-          Top = 5
-          Width = 37
-          Height = 14
-          Alignment = taRightJustify
-          DataField = 'VALOR'
-          DataSource = ds
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -12
-          Font.Name = 'Calibri'
-          Font.Style = []
-          ParentFont = False
-          Text = ''
-        end
-        object RLDBText3: TRLDBText
-          Left = 160
-          Top = 5
-          Width = 42
-          Height = 14
-          DataField = 'MOEDA'
-          DataSource = ds
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -12
-          Font.Name = 'Calibri'
-          Font.Style = []
-          ParentFont = False
-          Text = ''
-        end
-        object RLDBText4: TRLDBText
-          Left = 229
-          Top = 5
-          Width = 420
-          Height = 16
-          AutoSize = False
-          DataField = 'DESCRICAO'
-          DataSource = ds
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -12
-          Font.Name = 'Calibri'
-          Font.Style = []
-          ParentFont = False
-          Text = ''
-        end
-        object RLDBText10: TRLDBText
-          Left = 655
-          Top = 5
-          Width = 51
-          Height = 14
-          DataField = 'USUARIO'
-          DataSource = ds
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -12
-          Font.Name = 'Calibri'
-          Font.Style = []
-          ParentFont = False
-          Text = ''
-        end
+      object RLLabel14: TRLLabel
+        Left = 668
+        Top = 86
+        Width = 59
+        Height = 16
+        Caption = 'Dep'#243'sito'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object rlDeposito: TRLLabel
+        Left = 672
+        Top = 110
+        Width = 55
+        Height = 16
+        Alignment = taRightJustify
+        Caption = 'Dep'#243'sito'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
       end
     end
   end
@@ -857,15 +904,15 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
     Left = 0
     Top = 0
     Width = 129
-    Height = 178
+    Height = 172
     Align = alLeft
     TabOrder = 1
-    ExplicitHeight = 162
+    ExplicitHeight = 178
     object Shape12: TShape
       Left = 1
       Top = 1
       Width = 127
-      Height = 176
+      Height = 170
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119
@@ -1103,6 +1150,11 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
     end
     object cdsMovimentosCHEQUE: TStringField
       FieldName = 'CHEQUE'
+      Size = 100
+    end
+    object cdsMovimentosDEPOSITO: TStringField
+      DisplayWidth = 100
+      FieldName = 'DEPOSITO'
       Size = 100
     end
   end
