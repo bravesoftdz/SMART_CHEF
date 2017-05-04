@@ -3,7 +3,7 @@ unit TipoMoeda;
 interface
 
 type
-  TTipoMoeda = (tmDinheiro = 1, tmCheque = 2, tmCartaoCredito=3, tmCartaoDebito=4);
+  TTipoMoeda = (tmDinheiro = 1, tmCheque = 2, tmCartaoCredito=3, tmCartaoDebito=4, tmDeposito=5);
 
 type
   TTipoMoedaUtilitario = class
@@ -26,6 +26,7 @@ begin
    else if (TipoMoeda = tmCheque)        then result := 2
    else if (TipoMoeda = tmCartaoCredito) then result := 3
    else if (TipoMoeda = tmCartaoDebito)  then result := 4
+   else if (TipoMoeda = tmDeposito)      then result := 5
    else
     raise TExcecaoParametroInvalido.Create('TTipoMoedaUtilitario', 'DeEnumeradoParaInteiro', 'TipoMoeda :TTipoMoeda');
 end;
@@ -37,6 +38,7 @@ begin
      2: result := tmCheque;
      3: result := tmCartaoCredito;
      4: result := tmCartaoDebito;
+     5: result := tmDeposito;
      else
        raise TExcecaoParametroInvalido.Create('TTipoFreteUtilitario', 'DeInteiroParaEnumerado', 'TipoFrete :TTipoFrete');
    end;

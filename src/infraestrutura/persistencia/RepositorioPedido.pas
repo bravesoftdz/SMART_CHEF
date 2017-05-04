@@ -323,6 +323,7 @@ begin
           tmCheque        : writeLn(Arq, '     Cheque          >'+StringOfChar(' ', 26-length( FormatFloat(' ,0.00; -,0.00;',Movimentos[x].valor_pago) ))+FormatFloat(' ,0.00; -,0.00;',Movimentos[x].valor_pago) );
           tmCartaoCredito : writeLn(Arq, '     Cart. Crédito   >'+StringOfChar(' ', 26-length( FormatFloat(' ,0.00; -,0.00;',Movimentos[x].valor_pago) ))+FormatFloat(' ,0.00; -,0.00;',Movimentos[x].valor_pago) );
           tmCartaoDebito  : writeLn(Arq, '     Cart. Débito    >'+StringOfChar(' ', 26-length( FormatFloat(' ,0.00; -,0.00;',Movimentos[x].valor_pago) ))+FormatFloat(' ,0.00; -,0.00;',Movimentos[x].valor_pago) );
+          tmDeposito      : writeLn(Arq, '     Depósito        >'+StringOfChar(' ', 26-length( FormatFloat(' ,0.00; -,0.00;',Movimentos[x].valor_pago) ))+FormatFloat(' ,0.00; -,0.00;',Movimentos[x].valor_pago) );
         end;
       end;
 
