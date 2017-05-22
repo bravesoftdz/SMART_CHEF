@@ -208,7 +208,7 @@ begin
       Pedido := TPedido(repositorio.Get(cdsSelecionadosCODIGO.AsInteger));
 
       frmImpressaoPedido := TFrmImpressaoPedido.Create(nil);
-      frmImpressaoPedido.imprime(Pedido);
+      frmImpressaoPedido.imprimeDepartamento(Pedido);
       frmImpressaoPedido.Release;
       frmImpressaoPedido := nil;
 

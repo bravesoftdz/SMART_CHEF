@@ -5,7 +5,7 @@ interface
 uses
   SysUtils,
   Contnrs,
-  Usuario, Cliente, Item, Endereco, Generics.Collections, NFCe;
+  Usuario, Cliente, Item, Endereco, Generics.Collections, NFCe, Dialogs;
 
 type
   TPedido = class
@@ -211,7 +211,10 @@ begin
 
   for i := 0 to self.Itens.Count - 1 do
     if TItem(Itens.Items[i]).Produto.tipo = 'P' then
-      result := result + (TItem(Itens.Items[i]).valor_Unitario * TItem(Itens.Items[i]).quantidade);
+    begin
+      result := result + (Itens.Items[i].valor_Unitario * Itens.Items[i].quantidade)
+                       +  Itens.Items[i].quantidade * Itens.Items[i].totalAdicionais ;
+    end;
 
 end;
 

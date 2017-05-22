@@ -30,7 +30,6 @@ inherited frmCadastroProduto: TfrmCadastroProduto
   inherited pgGeral: TPageControl
     Width = 614
     Height = 606
-    ActivePage = tsDados
     ExplicitWidth = 614
     ExplicitHeight = 606
     inherited tsConsulta: TTabSheet
@@ -83,7 +82,6 @@ inherited frmCadastroProduto: TfrmCadastroProduto
         Align = alNone
         Visible = False
         ExplicitTop = 516
-        ExplicitWidth = 222
       end
     end
     inherited tsDados: TTabSheet
@@ -1906,31 +1904,37 @@ inherited frmCadastroProduto: TfrmCadastroProduto
     end
   end
   inherited cds: TClientDataSet
+    ProviderName = 'DataSetProvider1'
     Left = 215
-    Top = 32
-    object cdsDESCRICAO: TStringField
-      FieldName = 'DESCRICAO'
-      Size = 60
-    end
-    object cdsATIVO: TStringField
-      FieldName = 'ATIVO'
-      Size = 1
+    Top = 48
+    object cdsESTOQUE: TBCDField
+      FieldName = 'ESTOQUE'
+      DisplayFormat = '#,0.00'
+      Precision = 18
     end
     object cdsCODIGO: TIntegerField
       FieldName = 'CODIGO'
+      Required = True
     end
-    object cdsVALOR: TFloatField
+    object cdsDESCRICAO: TStringField
+      FieldName = 'DESCRICAO'
+      Size = 150
+    end
+    object cdsVALOR: TBCDField
       FieldName = 'VALOR'
-      DisplayFormat = ',0.00;-,0.00'
+      DisplayFormat = ',0.00; ,0.00'
+      Precision = 18
+      Size = 2
     end
-    object cdsESTOQUE: TFloatField
-      FieldName = 'ESTOQUE'
-      DisplayFormat = ',0.00;-,0.00'
+    object cdsATIVO: TStringField
+      FieldName = 'ATIVO'
+      FixedChar = True
+      Size = 1
     end
   end
   inherited ds: TDataSource
     Left = 246
-    Top = 32
+    Top = 48
   end
   object cdsMaterias: TClientDataSet
     Aggregates = <>
@@ -1961,7 +1965,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
     Left = 435
     Top = 515
     Bitmap = {
-      494C010102000800480010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101020008005C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       00000000000000000000000000000000000000000000035703000355030084AB
       8400E8EFE80074A0740012631200046B0700046A0700046A0700046A0700046B
@@ -2099,5 +2103,19 @@ inherited frmCadastroProduto: TfrmCadastroProduto
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000008010000000000000000000000000000000000000000
       000000000000}
+  end
+  object qry1: TFDQuery
+    SQL.Strings = (
+      
+        'select est.quantidade estoque, pro.codigo, pro.descricao, pro.va' +
+        'lor, pro.ativo from produtos pro'
+      ' left join estoque est on est.codigo_produto = pro.codigo  ')
+    Left = 368
+    Top = 320
+  end
+  object DataSetProvider1: TDataSetProvider
+    DataSet = qry1
+    Left = 272
+    Top = 296
   end
 end

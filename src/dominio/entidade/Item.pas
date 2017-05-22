@@ -123,7 +123,7 @@ begin
   if assigned(Adicionais) and (Adicionais.Count > 0) then
   begin
     for i := 0 to Adicionais.Count -1 do
-      result := result + ((Adicionais.Items[i] as TAdicionalItem).quantidade * (Adicionais.Items[i] as TAdicionalItem).valor_unitario);
+      result := result + (Adicionais.Items[i].quantidade * Adicionais.Items[i].valor_unitario);
   end;
 end;
 

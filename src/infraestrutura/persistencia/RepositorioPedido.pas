@@ -6,7 +6,7 @@ uses
   DB,
   Auditoria,
   Repositorio,
-  fabricaRepositorio, StringUtilitario, DateTimeUtilitario, DBClient, funcoes, Printers, TipoMoeda,
+  fabricaRepositorio, StringUtilitario, DateTimeUtilitario, DBClient, funcoes, Printers, TipoMoeda, System.SysUtils,
   Item, Contnrs, Pedido, Departamento, StdCtrls, Dialogs, Empresa, RepositorioItem, Generics.Collections;
 
 type
@@ -64,7 +64,6 @@ const
 implementation
 
 uses
-  SysUtils,
   StrUtils, Classes, AdicionalItem, MateriaPrima, Math, uModulo, Produto, uImpressaoPedido, Movimento;
 
 { TRepositorioPedido }
@@ -185,7 +184,7 @@ begin
          if(Printer.PrinterIndex >= 0)then begin
            try
              impressora_padrao := impressoraPadrao;
-             AssignFile(Arq, impressora_padrao);
+             AssignFile(Arq, 'C:\Users\Allan\Desktop\teste.txt');
              ReWrite(Arq);
            Except
              on e:Exception do
@@ -291,14 +290,8 @@ begin
    WriteLn(Arq, StringOfChar('-',48));
    WriteLn(Arq, '     Total itens     >'+StringOfChar(' ', 26-length( FormatFloat(' ,0.00; -,0.00;',total_itens) ))+FormatFloat(' ,0.00; -,0.00;',total_itens) );
 
-   if assigned(cdsparcial) then begin
-
-     if (Pedido.situacao = 'F')and(Pedido.taxa_servico > 0) then
-        WriteLn(Arq, '     Taxa de serviço >'+StringOfChar(' ', 26-length( FormatFloat(' ,0.00; -,0.00;',Pedido.taxa_servico) ))+FormatFloat(' ,0.00; -,0.00;',Pedido.taxa_servico) );
-
-     WriteLn(Arq, '     TOTAL           >'+StringOfChar(' ', 36-length( FormatFloat(' ,0.00; -,0.00;',total_itens + pedido.taxa_servico) ))+FormatFloat(' ,0.00; -,0.00;',total_itens + pedido.taxa_servico) );
-
-   end
+   if assigned(cdsparcial) then
+     WriteLn(Arq, '     TOTAL           >'+StringOfChar(' ', 36-length( FormatFloat(' ,0.00; -,0.00;',total_itens) ))+FormatFloat(' ,0.00; -,0.00;',total_itens) )
    else begin
       if Pedido.couvert > 0 then
         WriteLn(Arq, '     Couvert artistico >'+StringOfChar(' ', 24-length( FormatFloat(' ,0.00; -,0.00;',Pedido.couvert) ))+FormatFloat(' ,0.00; -,0.00;',Pedido.couvert) );
@@ -535,7 +528,7 @@ begin
       for i := 0 to Departamentos.Count - 1 do begin
 
          frmImpressaoPedido := TfrmImpressaoPedido.Create(nil);
-         frmImpressaoPedido.imprime(Pedido);
+         frmImpressaoPedido.imprimeDepartamento(Pedido);
          frmImpressaoPedido.Release;
          frmImpressaoPedido := nil;
 //         imprime( Pedido);

@@ -54,6 +54,8 @@ const
   paNotaFiscal                   = 38;
   paMonitorNFe                   = 39;
   paCadastroTransportadora       = 40;
+  paEstornoEntradaNF             = 41;
+  paCadastroNCM                  = 42;
 
 implementation
 

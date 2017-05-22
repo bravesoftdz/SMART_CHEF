@@ -2,8 +2,8 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
   Left = 171
   Top = 193
   Caption = 'Relat'#243'rio de Caixa'
-  ClientHeight = 172
-  ClientWidth = 489
+  ClientHeight = 162
+  ClientWidth = 424
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -29,7 +29,7 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
     ParentFont = False
   end
   object RLReport1: TRLReport
-    Left = 134
+    Left = 135
     Top = 176
     Width = 1123
     Height = 794
@@ -904,15 +904,15 @@ object frmRelatorioCaixa48Colunas: TfrmRelatorioCaixa48Colunas
     Left = 0
     Top = 0
     Width = 129
-    Height = 172
+    Height = 162
     Align = alLeft
     TabOrder = 1
-    ExplicitHeight = 178
+    ExplicitHeight = 172
     object Shape12: TShape
       Left = 1
       Top = 1
       Width = 127
-      Height = 170
+      Height = 160
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119

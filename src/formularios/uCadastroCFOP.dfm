@@ -1,28 +1,27 @@
 inherited frmCadastroCFOP: TfrmCadastroCFOP
   Caption = 'Cadastro de CFOP'
   ClientHeight = 421
-  ExplicitWidth = 320
-  ExplicitHeight = 459
+  ExplicitHeight = 449
   PixelsPerInch = 96
   TextHeight = 13
   inherited Splitter1: TSplitter
     Height = 386
+    ExplicitHeight = 386
   end
   inherited pnlBotoes: TPanel
     Height = 386
-    ExplicitTop = 369
+    ExplicitHeight = 386
   end
   inherited pnlPropaganda: TPanel
     Top = 386
+    ExplicitTop = 386
   end
   inherited pgGeral: TPageControl
     Height = 386
-    ExplicitHeight = 369
+    ActivePage = tsDados
+    ExplicitHeight = 386
     inherited tsConsulta: TTabSheet
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 333
+      ExplicitHeight = 355
       inherited gridConsulta: TDBGridCBN
         Height = 300
         ConfCores.Normal.Tipo.Height = -13
@@ -61,19 +60,15 @@ inherited frmCadastroCFOP: TfrmCadastroCFOP
           end>
       end
       inherited lblAjudaSelecionar: TStaticText
-        Top = 308
-        Width = 222
-        ExplicitTop = 308
+        Top = 338
+        ExplicitTop = 338
       end
     end
     inherited tsDados: TTabSheet
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 333
+      ExplicitHeight = 355
       inherited pnlDados: TPanel
         Height = 355
-        ExplicitHeight = 333
+        ExplicitHeight = 355
         object Label1: TLabel
           Left = 75
           Top = 130

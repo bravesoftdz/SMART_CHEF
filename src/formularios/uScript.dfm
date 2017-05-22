@@ -3523,6 +3523,54 @@ object frmScript: TfrmScript
     TabOrder = 67
     WordWrap = False
   end
+  object versao69: TMemo
+    Left = 563
+    Top = 101
+    Width = 31
+    Height = 23
+    Ctl3D = False
+    Lines.Strings = (
+      'ALTER TABLE NOTAS_FISCAIS'
+      'ADD NOTA_IMPORTACAO CHAR(1)'
+      '^')
+    ParentCtl3D = False
+    TabOrder = 68
+    WordWrap = False
+  end
+  object versao70: TMemo
+    Left = 603
+    Top = 101
+    Width = 31
+    Height = 23
+    Ctl3D = False
+    Lines.Strings = (
+      'UPDATE NOTAS_FISCAIS NF SET NOTA_IMPORTACAO = '#39'S'#39
+      'WHERE NF.entrada_saida = '#39'E'#39
+      '^')
+    ParentCtl3D = False
+    TabOrder = 69
+    WordWrap = False
+  end
+  object versao71: TMemo
+    Left = 643
+    Top = 101
+    Width = 31
+    Height = 23
+    Ctl3D = False
+    Lines.Strings = (
+      'ALTER TABLE IBPT'
+      'ADD CODIGO_CFOP SMALLINT'
+      '^'
+      'ALTER TABLE IBPT'
+      'ADD CODIGO_CFOP_FORA SMALLINT'
+      '^'
+      'ALTER TABLE IBPT'
+      'ADD CST CHAR(3)'
+      '^')
+    ParentCtl3D = False
+    TabOrder = 70
+    WordWrap = False
+  end
   object Zsql: TZSQLProcessor
     Params = <>
     Delimiter = ';'

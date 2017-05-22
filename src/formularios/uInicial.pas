@@ -84,13 +84,16 @@ type
     BotaoImgPedidos: TBotaoImg;
     BotaoImgCaixa: TBotaoImg;
     Fornecedores1: TMenuItem;
-    EntradaNFExml1: TMenuItem;
     CFOPscorrespondentes1: TMenuItem;
     SangriaeReforo1: TMenuItem;
-    ConfirmaEntradaEstoque1: TMenuItem;
     NotasFiscaisEntrada1: TMenuItem;
     NFe1: TMenuItem;
     ransportadora1: TMenuItem;
+    Entradadenotasfiscais1: TMenuItem;
+    EntradaporXML1: TMenuItem;
+    ConfirmaoEntradaEstoque1: TMenuItem;
+    Extorno1: TMenuItem;
+    NCM1: TMenuItem;
     procedure Perfisdeacesso1Click(Sender: TObject);
     procedure Usurios1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -152,13 +155,15 @@ type
     procedure BotaoImg1Label1Click(Sender: TObject);
     procedure BotaoImgCaixaLabel1Click(Sender: TObject);
     procedure Fornecedores1Click(Sender: TObject);
-    procedure EntradaNFExml1Click(Sender: TObject);
     procedure CFOPscorrespondentes1Click(Sender: TObject);
     procedure SangriaeReforo1Click(Sender: TObject);
-    procedure ConfirmaEntradaEstoque1Click(Sender: TObject);
     procedure NotasFiscaisEntrada1Click(Sender: TObject);
     procedure NFe1Click(Sender: TObject);
     procedure ransportadora1Click(Sender: TObject);
+    procedure EntradaporXML1Click(Sender: TObject);
+    procedure ConfirmaoEntradaEstoque1Click(Sender: TObject);
+    procedure Extorno1Click(Sender: TObject);
+    procedure NCM1Click(Sender: TObject);
 
   private
     procedure SalvaPedido;
@@ -200,7 +205,7 @@ uses uCadastroPerfilAcesso, PermissoesAcesso, uCadastroUsuario, uCadastroGrupo, 
      uRelatorioEntradaSaida, uRelatorioCaixa48Colunas, uRelatorioItensDeletados, uConfiguraNFCe, uNFCes, uCadastroFornecedor,
      uConfiguracoesSistema, uCadastroCliente, uRelatorioProdutos, funcoes, uRelatorioCuponsFiscais, uImpressaoPedido,
      uEntradaNota, uCadastroCfopCorrespondente, uLancaSangriaReforco, uConfirmaEntrada, uSupervisor, uRelatorioNotasFiscaisEntrada,
-     uCadastroTransportadora;
+     uCadastroTransportadora, uEstornoEntrada, uCadastroNCMIBPT;
 
 {$R *.dfm}
 
@@ -819,7 +824,7 @@ begin
   AbreForm(TfrmConfiguraNFCe, paConfiguraECF);
 end;
 
-procedure TfrmInicial.ConfirmaEntradaEstoque1Click(Sender: TObject);
+procedure TfrmInicial.ConfirmaoEntradaEstoque1Click(Sender: TObject);
 begin
   AbreForm(TfrmConfirmaEntrada, paConfirmaEntradaEstoque);
 end;
@@ -885,6 +890,11 @@ begin
   RxFolderMonitor2.Active := false;
   RenameFile(RxFolderMonitor2.FolderName+ '\' +nome_arquivo, RxFolderMonitor2.FolderName+ '\' +novo_nome);
   RxFolderMonitor2.Active := true;
+end;
+
+procedure TfrmInicial.NCM1Click(Sender: TObject);
+begin
+  AbreForm(TfrmCadastroNCMIBPT, paCadastroNCM);
 end;
 
 procedure TfrmInicial.NFe1Click(Sender: TObject);
@@ -1099,7 +1109,7 @@ begin
     Pedido            := TPedido(repositorioPedido.Get(codigo_pedido));
 
     frmImpressaoPedido := TFrmImpressaoPedido.Create(nil);
-    frmImpressaoPedido.imprime(Pedido);
+    frmImpressaoPedido.imprimeDepartamento(Pedido);
     frmImpressaoPedido.Release;
     frmImpressaoPedido := nil;
     //repositorioPedido.imprime( Pedido );
@@ -1345,12 +1355,37 @@ begin
   AbreForm(TfrmRelatorioEstoque, paRelatorioEstoque);
 end;
 
+procedure TfrmInicial.Extorno1Click(Sender: TObject);
+var usuario :TUsuario;
+begin
+  usuario := dm.UsuarioLogado;
+
+  try
+    frmSupervisor := TfrmSupervisor.Create(self);
+
+    frmSupervisor.Label1.Caption := 'Login';
+    frmSupervisor.Label4.Caption := 'Para acessar a tela de Extorno de Nota Fiscal de Entrada';
+    frmSupervisor.Label5.Caption := 'informe seu login e senha:';
+
+    if frmSupervisor.ShowModal = mrOk then begin
+      dm.UsuarioLogado := frmSupervisor.usu;
+
+      AbreForm(TfrmEstornoEntrada, paEstornoEntradaNF);
+    end;
+
+  finally
+    dm.UsuarioLogado := usuario;
+    frmSupervisor.Release;
+    frmSupervisor := nil;
+  end;
+end;
+
 procedure TfrmInicial.EntradaeSada1Click(Sender: TObject);
 begin
   AbreForm(TfrmRelatorioEntradaSaida, paRelatorioEntradaSaida);
 end;
 
-procedure TfrmInicial.EntradaNFExml1Click(Sender: TObject);
+procedure TfrmInicial.EntradaporXML1Click(Sender: TObject);
 begin
   AbreForm(TfrmEntradaNota, paEntradaNotaPorXml);
 end;

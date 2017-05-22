@@ -501,16 +501,20 @@ var produto :String;
     repositorio :TRepositorio;
     Item        :TItem;
     linha, id_pro :Integer;
+    possui_adicional :Boolean;
 begin
   quantidade := 0;
   cdsItens.IndexFieldNames := 'PRODUTO';
   cdsItens.First;
 
   repositorio := TFabricaRepositorio.GetRepositorio(TItem.ClassName);
+  possui_adicional := false;
 
   while not cdsItens.Eof do begin
 
-    if (produto = '') and not possui_item_adicionado(cdsItensCODIGO_ITEM.AsInteger)
+    possui_adicional := possui_item_adicionado(cdsItensCODIGO_ITEM.AsInteger);
+
+    if (produto = '') and not possui_adicional
        and not (cdsItensFRACIONADO.AsString = 'S') and (pos('BOLICHE',cdsItensPRODUTO.AsString)= 0)then begin
        produto := cdsItensPRODUTO.AsString;
        id_pro  := cdsItens.RecNo;
@@ -519,7 +523,7 @@ begin
 
        if (produto = cdsItensPRODUTO.AsString) then begin
 
-         if possui_item_adicionado(cdsItensCODIGO_ITEM.AsInteger) or (cdsItensFRACIONADO.AsString = 'S') then begin
+         if possui_adicional or (cdsItensFRACIONADO.AsString = 'S') then begin
            cdsItens.Next;
            continue;
          end;
@@ -542,11 +546,10 @@ begin
 
           houve_agrupamento := true;
        end
-       else if not (cdsItensFRACIONADO.AsString = 'S') and (pos('BOLICHE',cdsItensPRODUTO.AsString)= 0) then begin
+       else if not (cdsItensFRACIONADO.AsString = 'S') and (pos('BOLICHE',cdsItensPRODUTO.AsString)= 0) and not possui_adicional then begin
           produto := cdsItensPRODUTO.AsString;
           id_pro  := cdsItens.RecNo;
        end;
-
 
     end;
     cdsItens.Next;

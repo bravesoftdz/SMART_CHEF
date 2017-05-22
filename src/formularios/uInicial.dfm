@@ -22,6 +22,8 @@ object frmInicial: TfrmInicial
   OnDestroy = FormDestroy
   OnKeyDown = FormKeyDown
   OnShow = FormShow
+  ExplicitWidth = 320
+  ExplicitHeight = 240
   DesignSize = (
     1080
     746)
@@ -32343,6 +32345,10 @@ object frmInicial: TfrmInicial
         Caption = 'Mat'#233'rias-primas'
         OnClick = Matriasprimas1Click
       end
+      object NCM1: TMenuItem
+        Caption = 'NCM'
+        OnClick = NCM1Click
+      end
       object Perfisdeacesso1: TMenuItem
         Caption = 'Perfis de acesso'
         OnClick = Perfisdeacesso1Click
@@ -32366,13 +32372,20 @@ object frmInicial: TfrmInicial
         Caption = 'Entrada/Sa'#237'da mercadoria'
         OnClick = EntradaSada1Click
       end
-      object EntradaNFExml1: TMenuItem
-        Caption = 'Entrada NF-e (.xml)'
-        OnClick = EntradaNFExml1Click
-      end
-      object ConfirmaEntradaEstoque1: TMenuItem
-        Caption = 'Confirma Entrada Estoque'
-        OnClick = ConfirmaEntradaEstoque1Click
+      object Entradadenotasfiscais1: TMenuItem
+        Caption = 'Entrada de notas fiscais'
+        object EntradaporXML1: TMenuItem
+          Caption = 'Entrada por XML'
+          OnClick = EntradaporXML1Click
+        end
+        object ConfirmaoEntradaEstoque1: TMenuItem
+          Caption = 'Confirma'#231#227'o Entrada Estoque'
+          OnClick = ConfirmaoEntradaEstoque1Click
+        end
+        object Extorno1: TMenuItem
+          Caption = 'Estorno'
+          OnClick = Extorno1Click
+        end
       end
     end
     object Vendas1: TMenuItem

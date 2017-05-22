@@ -251,7 +251,7 @@ type
     procedure RemoverPedidoDaNotaFiscal  (const CodigoPedido :Integer);
     procedure VoltarAoNormalAoSairComOMouse(Sender: TObject);
     procedure selecionaEmpresa;
-    procedure atualizaCFOPs(cfopDoProduto :boolean);
+    procedure atualizaCFOPs;
     procedure atualizaCFOPnoItemNota;
     procedure persisteRemocoesItem;
 
@@ -306,8 +306,8 @@ procedure TfrmNotaFiscal.FormClose(Sender: TObject;
 begin
   inherited;
 
-   if not (inherited Confirma('Se você sair, a digitação atual irá ser cancelada. Deseja CANCELAR a digitação atual?')) then
-    Action := caNone;
+   if (edtTotalNF.Value > 0) and not (inherited Confirma('Se você sair, a digitação atual irá ser cancelada. Deseja CANCELAR a digitação atual?')) then
+     Action := caNone;
 end;
 
 procedure TfrmNotaFiscal.btnAddItemClick(Sender: TObject);
@@ -674,7 +674,7 @@ begin
   end;
 end;
 
-procedure TfrmNotaFiscal.atualizaCFOPs(cfopDoProduto: boolean);
+procedure TfrmNotaFiscal.atualizaCFOPs;
 var i :integer;
 begin
   if assigned(self.FNotaFiscal.Itens) then
@@ -851,7 +851,7 @@ end;
 procedure TfrmNotaFiscal.chkCfopItemClick(Sender: TObject);
 begin
   self.FNotaFiscal.CFOPdoProduto := chkCfopItem.Checked;
-  atualizaCFOPs(self.FNotaFiscal.CFOPdoProduto);
+  atualizaCFOPs;
 end;
 
 procedure TfrmNotaFiscal.AdicionarPedidoNaNotaFiscal(const CodigoPedido: Integer);

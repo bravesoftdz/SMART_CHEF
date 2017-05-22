@@ -170,7 +170,6 @@ object frmPedidos: TfrmPedidos
     BevelOuter = bvNone
     Caption = 'c'
     TabOrder = 1
-    ExplicitHeight = 581
     DesignSize = (
       153
       568)
@@ -262,7 +261,7 @@ object frmPedidos: TfrmPedidos
     end
     object btnImprimir: TBitBtn
       Left = 10
-      Top = 69
+      Top = 62
       Width = 131
       Height = 35
       Anchors = [akTop, akRight]

@@ -1,10 +1,10 @@
 inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
   Caption = 'Relat'#243'rio de Notas Fiscais de Entrada'
-  ClientHeight = 279
-  ClientWidth = 703
+  ClientHeight = 282
+  ClientWidth = 705
   OnShow = FormShow
-  ExplicitWidth = 709
-  ExplicitHeight = 307
+  ExplicitWidth = 711
+  ExplicitHeight = 310
   PixelsPerInch = 96
   TextHeight = 13
   object RLReport1: TRLReport [0]
@@ -347,12 +347,12 @@ inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
     end
   end
   inherited pnlPropaganda: TPanel
-    Top = 244
-    Width = 703
-    ExplicitTop = 177
-    ExplicitWidth = 575
+    Top = 247
+    Width = 705
+    ExplicitTop = 244
+    ExplicitWidth = 703
     inherited Shape8: TShape
-      Width = 701
+      Width = 703
       ExplicitWidth = 577
     end
   end
@@ -452,15 +452,15 @@ inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
     Left = 0
     Top = 0
     Width = 129
-    Height = 244
+    Height = 247
     Align = alLeft
     TabOrder = 4
-    ExplicitHeight = 177
+    ExplicitHeight = 244
     object Shape12: TShape
       Left = 1
       Top = 1
       Width = 127
-      Height = 242
+      Height = 245
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119

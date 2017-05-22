@@ -7,7 +7,9 @@ uses
   Dialogs, uCadastroPadrao, DB, DBClient, StdCtrls, Grids, DBGrids,
   DBGridCBN, ComCtrls, Buttons, ExtCtrls, contnrs, frameListaCampo, Mask,
   RXToolEdit, RXCurrEdit, Math, pngimage, frameBuscaMateriaPrima, ImgList,
-  frameBuscaNCM, Generics.Collections, ProdutoHasMateria, pcnNFe, System.ImageList;
+  frameBuscaNCM, Generics.Collections, ProdutoHasMateria, pcnNFe, System.ImageList, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client, Datasnap.Provider;
 
 type
   TfrmCadastroProduto = class(TfrmCadastroPadrao)
@@ -19,7 +21,6 @@ type
     cbAtivo: TComboBox;
     lbAtivo: TLabel;
     ListaGrupo: TListaCampo;
-    cdsDESCRICAO: TStringField;
     gridItens: TDBGridCBN;
     cdsMaterias: TClientDataSet;
     dsMaterias: TDataSource;
@@ -65,12 +66,15 @@ type
     lbAdicional: TLabel;
     cdsMateriasADICIONAL: TStringField;
     ImageList1: TImageList;
-    cdsATIVO: TStringField;
     edtReferencia: TEdit;
     Label1: TLabel;
+    qry1: TFDQuery;
+    DataSetProvider1: TDataSetProvider;
+    cdsESTOQUE: TBCDField;
     cdsCODIGO: TIntegerField;
-    cdsVALOR: TFloatField;
-    cdsESTOQUE: TFloatField;
+    cdsDESCRICAO: TStringField;
+    cdsVALOR: TBCDField;
+    cdsATIVO: TStringField;
     procedure FormShow(Sender: TObject);
     procedure btnAddMateriaClick(Sender: TObject);
     procedure gridItensKeyDown(Sender: TObject; var Key: Word;
@@ -150,31 +154,12 @@ begin
 end;
 
 procedure TfrmCadastroProduto.CarregarDados;
-var
-  Produtos    :TObjectList;
-  Repositorio :TRepositorio;
-  nX          :Integer;
 begin
-  inherited;
-
-  Repositorio := nil;
-  Produtos    := nil;
-
-  try
-    Repositorio := TFabricaRepositorio.GetRepositorio(TProduto.ClassName);
-    Produtos    := Repositorio.GetAll;
-
-    if Assigned(Produtos) and (Produtos.Count > 0) then begin
-
-       for nX := 0 to (Produtos.Count-1) do
-         self.IncluirRegistroNoCDS(Produtos.Items[nX]);
-
-    end;
-
-  finally
-    FreeAndNil(Repositorio);
-    FreeAndNil(Produtos);
-  end;
+  qry1.Connection := fdm.conexao;
+  cds.Close;
+  qry1.SQL.Text   := 'select est.quantidade estoque, pro.codigo, pro.descricao, pro.valor, pro.ativo from produtos pro '+
+                     ' left join estoque est on est.codigo_produto = pro.codigo                                        ';
+  cds.Open();
 end;
 
 procedure TfrmCadastroProduto.ExecutarDepoisAlterar;

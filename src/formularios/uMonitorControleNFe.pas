@@ -156,7 +156,7 @@ implementation
 
 uses
   TipoStatusNotaFiscal,
-  Especificacao,
+  Especificacao, Math,
   Repositorio,
   FabricaRepositorio,
   TipoSerie,
@@ -226,8 +226,11 @@ begin
      if assigned(NF.NFe) then
      begin
        self.cdsXML.AsString          := NF.NFe.XMLText;
-       self.cdsSTATUS_STR.AsString   := NF.NFe.Retorno.Status;
-       self.cdsMOTIVO.AsString       := NF.NFe.Retorno.Motivo;
+       if assigned(NF.NFe.Retorno) then
+       begin
+         self.cdsSTATUS_STR.AsString   := NF.NFe.Retorno.Status;
+         self.cdsMOTIVO.AsString       := NF.NFe.Retorno.Motivo;
+       end;
      end
      else
      begin
@@ -545,14 +548,13 @@ begin
    for nX := 0 to (self.FNotasSelecionadas.Count-1) do begin
       NotaFiscal := (self.FNotasSelecionadas[nX] as TNotaFiscal);
 
-      case NotaFiscal.Status of
-        snfAguardandoEnvio : dec(FSelecionadasAguardandoEnvio);
-        snfRejeitada       : dec(FSelecionadasRejeitadas);
-        snfCancelada       : dec(FSelecionadasCanceladas);
-        snfAutorizada      : dec(FSelecionadasAutorizadas);
-      end;
-
       if (NotaFiscal.CodigoNotaFiscal = CodigoNotaFiscal) then begin
+         case NotaFiscal.Status of
+           snfAguardandoEnvio : dec(FSelecionadasAguardandoEnvio);
+           snfRejeitada       : dec(FSelecionadasRejeitadas);
+           snfCancelada       : dec(FSelecionadasCanceladas);
+           snfAutorizada      : dec(FSelecionadasAutorizadas);
+         end;
          self.RemoverNotaSelecionada(NotaFiscal);
          exit;
       end;
@@ -1037,7 +1039,9 @@ begin
      if HouveErros then begin
         if inherited Confirma('Houve erros no processo. Consulte o log na pasta raiz do sistema para maiores detalhes.') then
           inherited AbrirArquivo(dm.LogErros.NomeArquivo);
-     end;
+     end
+     else
+       avisar('Operação realizada com sucesso');
 
    finally
      FimAguarda('');  

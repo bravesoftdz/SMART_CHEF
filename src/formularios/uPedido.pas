@@ -315,7 +315,7 @@ implementation
 uses Usuario, Item, Comanda, uModulo, repositorio, FabricaRepositorio, Empresa, uAdicionaItemProduto,
      Math, AdicionalItem, CriaBalaoInformacao, uFinalizaPedido, Movimento, RepositorioPedido,
      ZConnection, Departamento, Estoque, EspecificacaoEstoquePorProduto, uInicial, PermissoesAcesso, ItemDeletado,
-     uPesquisaSimples, Venda, ServicoEmissorNFCe, ConfiguracoesSistema, Endereco,
+     uPesquisaSimples, Venda, ServicoEmissorNFCe, ConfiguracoesSistema, Endereco, uImpressaoPedido,
      ParametrosNFCe, ParametrosDANFE, StringUtilitario, EspecificacaoClientePorCpfCnpj,
      EspecificacaoMovimentosPorCodigoPedido, ProdutoHasMateria, NFCe, UtilitarioEstoque;
 
@@ -459,6 +459,7 @@ var total_valor_produtos :Real;
     total_adicionados    :Real;
     linha                :integer;
 begin
+  edtValorAcrescimo.OnChange := nil;
   total_valor_produtos := 0;
   total_valor_servicos := 0;
   total_qtde_itens     := 0;
@@ -468,6 +469,10 @@ begin
   edtTaxaServico.Clear;
   edtTotalItens.Clear;
   edtTotalPedido.Clear;
+  edtValorAcrescimo.Clear; //
+  edtValorPago.Clear;
+  edtTotalAdicionais.Clear;
+
 
   if cdsItens.IsEmpty then
     Exit;
@@ -523,6 +528,8 @@ begin
   edtValorPago.Value   := total_pago;
 
   edtValorAberto.Value := edtTotalPedido.Value - edtValorPago.Value;
+
+  edtValorAcrescimo.OnChange := edtValorDescontoChange;
 end;
 
 procedure TfrmPedido.memoObservacoesChange(Sender: TObject);
@@ -579,7 +586,8 @@ begin
 
 
          imprimePedido := true;
-         if dm.Configuracoes.perguntaImprimirPedido then
+         if dm.Configuracoes.perguntaImprimirPedido and
+           (frmFinalizaPedido.pagamento_completo or ( not frmFinalizaPedido.pagamento_completo and dm.Configuracoes.impressoes_parciais)) then
            imprimePedido := confirma('Deseja imprimir pedido?');
 
          Salva_Pedido_pos_recebimento(imprimePedido, edtCpf.text, true, frmFinalizaPedido.pagamento_completo );
@@ -1075,12 +1083,15 @@ begin
 
    frmInicial.Cliente.Socket.SendText('imprime='+IntToStr(buscaComanda1.Pedido.codigo));
 
-   if not mantem_na_tela then
-     btnCancelar.Click
-   else begin
+   btnCancelar.Click;
+
+   if mantem_na_tela then
+   begin
      buscaComanda1.Pedido := nil;
      buscaComanda1.CodigoPedido := Self.Fcodigo_pedido;
      buscaComanda1.Pedido;
+     buscaComanda1.edtNumeroComanda.Text := intToStr(buscaComanda1.Pedido.codigo_comanda);
+     carrega_dados_pedido(buscaComanda1.Pedido);
    end;
 
  Except
@@ -1323,12 +1334,12 @@ end;
 procedure TfrmPedido.adiciona_no_produto(Materia: TMateriaPrima;
   quantidade: Integer; codigo_produto: integer; flag :String; const codigo_item :integer =0; const codigo :integer = 0);
 begin
-  if cdsAdicionais.Locate('CODIGO_PRODUTO;CODIGO_MATERIA', varArrayOf([codigo_produto, Materia.codigo]), []) then
-    if Confirma('Já existe(m) '+cdsAdicionaisQUANTIDADE.AsString+' unidade(s) desta item, relacionada ao produto.'+#13#10+
+  {if cdsAdicionais.Locate('CODIGO_PRODUTO;CODIGO_MATERIA', varArrayOf([codigo_produto, Materia.codigo]), []) then
+    if Confirma('Já existe(m) '+cdsAdicionaisQUANTIDADE.AsString+' unidade(s) deste item, relacionada ao produto.'+#13#10+
                 'Deseja substituir a relação atual pela informada?') then
       cdsAdicionais.Edit
     else
-      Exit;
+      Exit;}
 
    if not (cdsAdicionais.State in [dsEdit]) then begin
      cdsAdicionais.Append;
@@ -1454,11 +1465,14 @@ begin
         cdsAdicionais.Delete;
 
       cdsItens.Delete;
+      calcula_totais;
     end
     else if DirectoryExists(ExtractFilePath(Application.ExeName)+'\Pedidos') then
+    begin
       armazena_item_selecionado;
+      calcula_totais;
+    end;
   end;
- calcula_totais;
 end;
 
 procedure TfrmPedido.armazena_adicional_selecionado(const pergunta :Boolean);
@@ -2288,7 +2302,7 @@ begin
 end;
 
 procedure TfrmPedido.imprimir_pedido(Pedido :TPedido; const pelo_botao: boolean);
-var repositorio :TRepositorioPedido;
+//var repositorio :TRepositorioPedido;
 begin
   if pelo_botao then begin
     Salva_Pedido(true);
@@ -2296,10 +2310,16 @@ begin
   end;
 
   if assigned(frmFinalizaPedido) or not (cdsItens.IsEmpty) then begin
-    repositorio.imprime_pedido(Pedido, dm.UsuarioLogado.Departamento, comandas);
+      frmImpressaoPedido := TFrmImpressaoPedido.Create(nil);
+      frmImpressaoPedido.imprimePedido(Pedido, dm.UsuarioLogado.Departamento, comandas);
+    // repositorio.imprime_pedido(buscaComanda1.Pedido, dm.UsuarioLogado.Departamento, comandas);
 
     if chkDuasVias.Checked then
-      repositorio.imprime_pedido(Pedido, dm.UsuarioLogado.Departamento, comandas);
+//      repositorio.imprime_pedido(buscaComanda1.Pedido, dm.UsuarioLogado.Departamento, comandas);
+      frmImpressaoPedido.imprimePedido(Pedido, dm.UsuarioLogado.Departamento, comandas);
+
+    frmImpressaoPedido.Release;
+    frmImpressaoPedido := nil;
   end;
 end;
 
@@ -2417,9 +2437,14 @@ begin
 end;
 
 procedure TfrmPedido.cria_imprime_pedido_parcial;
-var repositorio :TRepositorioPedido;
+//var repositorio :TRepositorioPedido;
 begin
-  repositorio.imprime_pedido(buscaComanda1.Pedido, dm.UsuarioLogado.Departamento, '', frmFinalizaPedido.cdsItensPrePagos);
+//  repositorio.imprime_pedido(buscaComanda1.Pedido, dm.UsuarioLogado.Departamento, '', frmFinalizaPedido.cdsItensPrePagos);
+
+  frmImpressaoPedido := TFrmImpressaoPedido.Create(nil);
+  frmImpressaoPedido.imprimePedido(buscaComanda1.Pedido, dm.UsuarioLogado.Departamento, '', frmFinalizaPedido.cdsItensPrePagos);
+  frmImpressaoPedido.Release;
+  frmImpressaoPedido := nil;
 end;
 
 procedure TfrmPedido.edtTelefoneExit(Sender: TObject);

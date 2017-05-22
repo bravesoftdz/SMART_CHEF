@@ -109,7 +109,9 @@ var
 implementation
 
 //uses
-//  ExcecaoMetodoNaoImplementado;
+
+
+uses uModulo;//  ExcecaoMetodoNaoImplementado;
 
 {$R *.dfm}
 
@@ -338,7 +340,7 @@ begin
       if not (E is EAbort) then
         inherited Avisar(E.Message);
 
-      Fdm.LogErros.AdicionaErro('uCadastroPadrao', E.ClassName, E.Message);
+      dm.LogErros.AdicionaErro('uCadastroPadrao', E.ClassName, E.Message);
     end;
   end;
 end;

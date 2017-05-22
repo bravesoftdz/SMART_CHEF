@@ -412,6 +412,14 @@ inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
             Caption = 'Cadastrar transportadoras'
             TabOrder = 13
           end
+          object chk42: TCheckBox
+            Left = 248
+            Top = 8
+            Width = 129
+            Height = 17
+            Caption = 'Cadastrar NCM'
+            TabOrder = 14
+          end
         end
         object TabSheet5: TTabSheet
           Caption = 'Movimentos'
@@ -439,6 +447,14 @@ inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
             Height = 17
             Caption = 'Confirma Entrada no Estoque'
             TabOrder = 2
+          end
+          object chk41: TCheckBox
+            Left = 8
+            Top = 80
+            Width = 177
+            Height = 17
+            Caption = 'Estorno Entrada NF'
+            TabOrder = 3
           end
         end
         object TabSheet7: TTabSheet

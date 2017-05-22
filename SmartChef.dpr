@@ -339,7 +339,9 @@ uses
   RepositorioTransportadora in 'src\infraestrutura\persistencia\RepositorioTransportadora.pas',
   RepositorioCFOP in 'src\infraestrutura\persistencia\RepositorioCFOP.pas',
   UtilitarioEstoque in 'src\dominio\utilitario\UtilitarioEstoque.pas',
-  uPedidos in 'src\formularios\uPedidos.pas' {frmPedidos};
+  uPedidos in 'src\formularios\uPedidos.pas' {frmPedidos},
+  uEstornoEntrada in 'src\formularios\uEstornoEntrada.pas' {frmEstornoEntrada},
+  uCadastroNcmIBPT in 'src\formularios\uCadastroNcmIBPT.pas' {frmCadastroNcmIBPT};
 
 {$R *.res}
 
@@ -363,6 +365,8 @@ begin
   Application.Initialize;
   Application.Title := 'SMART CHEF';
   Application.CreateForm(Tdm, dm);
+  Application.CreateForm(TfrmEstornoEntrada, frmEstornoEntrada);
+  Application.CreateForm(TfrmCadastroNcmIBPT, frmCadastroNcmIBPT);
   if not dm.cancelaInicializacao then begin
     //------------------------------------------------------------------------------------------------//
     // Se não for encontrado o Banco de Dados, então é solicitado para o usário configurá-lo.         //

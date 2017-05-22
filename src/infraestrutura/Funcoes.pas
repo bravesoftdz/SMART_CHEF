@@ -27,7 +27,7 @@ procedure DivideProporcional(var valor, diferenca :Real; partes :Integer);
 function impressoraPadrao:String;
 function ApenasNumeros(const Texto: String): String;
 function retorna_estado(const codigo_estado :integer; const uf :String):Variant;
-function zeroEsquerda(texto :String; tamMax :integer) :String;
+function charEsquerda(texto :String; tamMax :integer; char :string) :String;
 function DataSEFAZToDateTime(const Data: String): TDateTime;
 function cortaCasasDecimais(valor :Real; casasDesejadas :integer) :Real;
 
@@ -97,9 +97,9 @@ begin
    result := EncodeDateTime(Ano, Mes, Dia, Hora, Minuto, Segundo, 0);
 end;
 
-function zeroEsquerda(texto :String; tamMax :integer) :String;
+function charEsquerda(texto :String; tamMax :integer; char :string) :String;
 begin
-  Result := StringOfChar('0',tamMax-Length(texto))+ texto;
+  Result := StringOfChar(char[1],tamMax-Length(texto))+ texto;
 end;
 
 function impressoraPadrao:String;

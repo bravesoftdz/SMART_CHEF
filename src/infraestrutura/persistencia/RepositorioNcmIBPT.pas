@@ -49,6 +49,9 @@ begin
    NcmIBPT.tabela_ibpt            := self.FQuery.FieldByName('tabela_ibpt').AsString;
    NcmIBPT.aliqnacional_ibpt      := self.FQuery.FieldByName('aliqnacional_ibpt').AsFloat;
    NcmIBPT.aliqinternacional_ibpt := self.FQuery.FieldByName('aliqinternacional_ibpt').AsFloat;
+   NcmIBPT.codigo_cfop            := self.FQuery.FieldByName('codigo_cfop').AsInteger;
+   NcmIBPT.codigo_cfop_fora       := self.FQuery.FieldByName('codigo_cfop_fora').AsInteger;
+   NcmIBPT.cst                    := self.FQuery.FieldByName('cst').AsString;
 
    result := NcmIBPT;
 end;
@@ -96,6 +99,14 @@ begin
    if (NcmIBPTAntigo.aliqinternacional_ibpt <> NcmIBPTNovo.aliqinternacional_ibpt) then
      Auditoria.AdicionaCampoAlterado('aliqinternacional_ibpt', FloatToStr(NcmIBPTAntigo.aliqinternacional_ibpt), FloatToStr(NcmIBPTNovo.aliqinternacional_ibpt));
 
+   if (NcmIBPTAntigo.codigo_cfop <> NcmIBPTNovo.codigo_cfop) then
+     Auditoria.AdicionaCampoAlterado('codigo_cfop', IntToStr(NcmIBPTAntigo.codigo_cfop), IntToStr(NcmIBPTNovo.codigo_cfop));
+
+   if (NcmIBPTAntigo.codigo_cfop_fora <> NcmIBPTNovo.codigo_cfop_fora) then
+     Auditoria.AdicionaCampoAlterado('codigo_cfop_fora', IntToStr(NcmIBPTAntigo.codigo_cfop_fora), IntToStr(NcmIBPTNovo.codigo_cfop_fora));
+
+   if (NcmIBPTAntigo.cst <> NcmIBPTNovo.cst) then
+     Auditoria.AdicionaCampoAlterado('cst', NcmIBPTAntigo.cst, NcmIBPTNovo.cst);
 end;
 
 procedure TRepositorioNcmIBPT.SetCamposExcluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -109,6 +120,9 @@ begin
   Auditoria.AdicionaCampoExcluido('tabela_ibpt'           , NcmIBPT.tabela_ibpt);
   Auditoria.AdicionaCampoExcluido('aliqnacional_ibpt'     , FloatToStr(NcmIBPT.aliqnacional_ibpt));
   Auditoria.AdicionaCampoExcluido('aliqinternacional_ibpt', FloatToStr(NcmIBPT.aliqinternacional_ibpt));
+  Auditoria.AdicionaCampoExcluido('codigo_cfop'           , IntToStr(NcmIBPT.codigo_cfop));
+  Auditoria.AdicionaCampoExcluido('codigo_cfop_fora'      , IntToStr(NcmIBPT.codigo_cfop_fora));
+  Auditoria.AdicionaCampoExcluido('cst'                   ,    NcmIBPT.cst);
 end;
 
 procedure TRepositorioNcmIBPT.SetCamposIncluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -122,6 +136,9 @@ begin
   Auditoria.AdicionaCampoIncluido('tabela_ibpt'           ,    NcmIBPT.tabela_ibpt);
   Auditoria.AdicionaCampoIncluido('aliqnacional_ibpt'     ,    FloatToStr(NcmIBPT.aliqnacional_ibpt));
   Auditoria.AdicionaCampoIncluido('aliqinternacional_ibpt',    FloatToStr(NcmIBPT.aliqinternacional_ibpt));
+  Auditoria.AdicionaCampoIncluido('codigo_cfop'           , IntToStr(NcmIBPT.codigo_cfop));
+  Auditoria.AdicionaCampoIncluido('codigo_cfop_fora'      , IntToStr(NcmIBPT.codigo_cfop_fora));
+  Auditoria.AdicionaCampoIncluido('cst'                   ,    NcmIBPT.cst);
 end;
 
 procedure TRepositorioNcmIBPT.SetIdentificador(Objeto: TObject; Identificador: Variant);
@@ -134,12 +151,15 @@ var
 begin
   NcmIBPT := (Objeto as TNcmIBPT);
 
-  self.FQuery.ParamByName('codigo').AsInteger                 := NcmIBPT.codigo;
-  self.FQuery.ParamByName('ncm_ibpt').AsString               := NcmIBPT.ncm_ibpt;
-  self.FQuery.ParamByName('ex_ibpt').AsString                := NcmIBPT.ex_ibpt;
-  self.FQuery.ParamByName('tabela_ibpt').AsString            := NcmIBPT.tabela_ibpt;
+  self.FQuery.ParamByName('codigo').AsInteger               := NcmIBPT.codigo;
+  self.FQuery.ParamByName('ncm_ibpt').AsString              := NcmIBPT.ncm_ibpt;
+  self.FQuery.ParamByName('ex_ibpt').AsString               := NcmIBPT.ex_ibpt;
+  self.FQuery.ParamByName('tabela_ibpt').AsString           := NcmIBPT.tabela_ibpt;
   self.FQuery.ParamByName('aliqnacional_ibpt').AsFloat      := NcmIBPT.aliqnacional_ibpt;
   self.FQuery.ParamByName('aliqinternacional_ibpt').AsFloat := NcmIBPT.aliqinternacional_ibpt;
+  self.FQuery.ParamByName('codigo_cfop').AsInteger          := NcmIBPT.codigo_cfop;
+  self.FQuery.ParamByName('codigo_cfop_fora').AsInteger     := NcmIBPT.codigo_cfop_fora;
+  self.FQuery.ParamByName('cst').AsString                   := NcmIBPT.cst;
 end;
 
 function TRepositorioNcmIBPT.SQLGet: String;
@@ -164,8 +184,8 @@ end;
 
 function TRepositorioNcmIBPT.SQLSalvar: String;
 begin
-  result := 'update or insert into IBPT (CODIGO ,NCM_IBPT ,EX_IBPT ,TABELA_IBPT ,ALIQNACIONAL_IBPT ,ALIQINTERNACIONAL_IBPT) '+
-           '                      values ( :CODIGO , :NCM_IBPT , :EX_IBPT , :TABELA_IBPT , :ALIQNACIONAL_IBPT , :ALIQINTERNACIONAL_IBPT) ';
+  result := 'update or insert into IBPT (CODIGO ,NCM_IBPT ,EX_IBPT ,TABELA_IBPT ,ALIQNACIONAL_IBPT ,ALIQINTERNACIONAL_IBPT, CODIGO_CFOP, CODIGO_CFOP_FORA, CST) '+
+            '                      values ( :CODIGO , :NCM_IBPT , :EX_IBPT , :TABELA_IBPT , :ALIQNACIONAL_IBPT , :ALIQINTERNACIONAL_IBPT, :CODIGO_CFOP, :CODIGO_CFOP_FORA, :CST) ';
 end;
 
 end.

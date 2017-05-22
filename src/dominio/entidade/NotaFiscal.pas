@@ -36,14 +36,13 @@ type
     FFinalidade   : String;
     FNFe_referenciada :String;
     FEntrouEstoque :String;
-    FNotaDeMaterias: Boolean;
     FNotaDeServico :Boolean;
+    FNotaDeImportacao: Boolean;
 
     procedure SetTotais(const Value: TTotaisNotaFiscal);
     procedure SetEntrada_saida(const Value: String);
     procedure SetFinalidade(const Value: String);
     procedure SetNFe_referenciada(const Value: String);
-    procedure SetNotaDeMaterias(const Value: Boolean);
 
   private
     FCodigoDestinatario     :Integer;
@@ -69,7 +68,6 @@ type
     function GetChaveAcesso          :String;
     function GetEmpresa              :TEmpresa;
     function GetItensAvulsos         :TObjectList;
-    function GetNotaDeMaterias       :Boolean;
     function GetNotaDeReducao        :Boolean;
     function GetNotaDeServico        :Boolean;
     function GetCalculaIcmsCompartilhado :Boolean;
@@ -200,7 +198,8 @@ type
                                      Entrada_saida        :String;
                                      Finalidade           :String;
                                      NFe_referenciada     :String;
-                                     EntrouEstoque        :String);
+                                     EntrouEstoque        :String;
+                                     notaDeImportacao     :Boolean);
 
     destructor Destroy; override;
 
@@ -231,7 +230,6 @@ type
     property Finalidade       :String                  read FFinalidade         write SetFinalidade;
     property NFe_referenciada :String                  read FNFe_referenciada   write SetNFe_referenciada;
     property EntrouEstoque    :String                  read FEntrouEstoque      write FEntrouEstoque;
-    property NotaDeMaterias   :Boolean                 read GetNotaDeMaterias   write SetNotaDeMaterias;
     property NotaDeReducao    :Boolean                 read GetNotaDeReducao;
     property NotaDeServico    :Boolean                 read GetNotaDeServico;
     property CalculaIcmsCompartilhado :Boolean         read GetCalculaIcmsCompartilhado;
@@ -241,6 +239,7 @@ type
     property AliquotaFCP      :Real                    read GetAliqFCP;
     property AliquotaICMS     :Real                    read GetAliquotaICMSEmpresa;
     property AliquotaPIS      :Real                    read GetAliquotaPIS;
+    property notaDeImportacao :Boolean                 read FNotaDeImportacao   write FNotaDeImportacao;
 
     property CFOPdoProduto    :Boolean                 read FCFOPdoProduto      write FCFOPdoProduto;
 
@@ -451,6 +450,7 @@ begin
    self.FEmpresa                 := nil;
    self.FItensAvulsos            := nil;
    self.Entrada_saida            := IfThen(Entrada,'E','');
+   self.FNotaDeImportacao        := false;
 
    ParametrosInvalidos           := TStringList.Create;
    ParametrosInvalidos.Delimiter := #13;
@@ -1324,7 +1324,7 @@ constructor TNotaFiscal.CriarParaRepositorio(CodigoNotaFiscal: Integer;
   NumeroNotaFiscal, CodigoNatureza: Integer; TipoSerie: String;
   CodigoEmitente, CodigoDestinatario, CodigoFormaPagamento: Integer;
   DataEmissao, DataSaida: TDateTime; CodigoTransportadora,
-  TipoFrete: Integer; Entrada_saida, finalidade, Nfe_referenciada, EntrouEstoque :String);
+  TipoFrete: Integer; Entrada_saida, finalidade, Nfe_referenciada, EntrouEstoque :String; notaDeImportacao :Boolean);
 begin
    self.FCodigoNotaFiscal           := CodigoNotaFiscal;
    self.FNumeroNotaFiscal           := NumeroNotaFiscal;
@@ -1351,6 +1351,7 @@ begin
    self.FItensAvulsos               := nil;
    SELF.FObservacoes                := nil;//TObservacaoNotaFiscal.Create;
    self.FEntrouEstoque              := EntrouEstoque;
+   self.FNotaDeImportacao           := notaDeImportacao;
 end;
 
 function TNotaFiscal.GetTipoStatusNotaFiscal: TTipoStatusNotaFiscal;
@@ -1755,22 +1756,6 @@ end;
 procedure TNotaFiscal.SetEntrada_saida(const Value: String);
 begin
   FEntrada_saida := Value;
-end;
-
-procedure TNotaFiscal.SetNotaDeMaterias(const Value: Boolean);
-begin
-  FNotaDeMaterias := Value;
-end;
-
-function TNotaFiscal.GetNotaDeMaterias: Boolean;
-var rep :TRepositorio;
-begin
-  rep := nil;
-
- // rep := TFabricaRepositorio.GetRepositorio(TItemNfMateria.ClassName);
-  result := rep.GetExiste('codigo_nota_fiscal', self.CodigoNotaFiscal);
-
-  FreeAndNil(rep);
 end;
 
 procedure TNotaFiscal.SetFinalidade(const Value: String);

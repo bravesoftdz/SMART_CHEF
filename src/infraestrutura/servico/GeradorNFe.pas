@@ -126,7 +126,7 @@ uses
   { Busca }
   frameBuscaCidade,
   {frameBuscaNcm,} ACBrDFeConfiguracoes, ACBrDFe, ACBrDFeSSL,// Icms00,
-  ACBrNFeWebServices, pcnProcNFe, Pessoa;
+  ACBrNFeWebServices, pcnProcNFe, Pessoa, UtilitarioEstoque;
 
 { TGeradorNFe }
             {
@@ -219,7 +219,14 @@ begin
 
    NotaFiscal.AdicionarRetornoNFe(IntToStr(self.FACBrNFe.WebServices.Consulta.cStat),
                                     self.FACBrNFe.WebServices.Consulta.xMotivo);
+
    self.GerarXML(NotaFiscal);
+
+   if (NotaFiscal.NFe.Retorno.Status = '100') and not(NotaFiscal.EntrouEstoque = 'S') then
+   begin
+     TUtilitarioEstoque.atualizaEstoquePorNFe(NotaFiscal, IfThen(NotaFiscal.Entrada_saida = 'E', -1, 1));
+     NotaFiscal.EntrouEstoque := 'S';
+   end;
 end;
 
 constructor TGeradorNFe.Create(const CaminhoLogo :String);
@@ -273,6 +280,7 @@ var
   nX                 :Integer;
   aux                :String;
   ACBrMail1          :TACBrMail;
+  Mensagem           :String;
 begin
    EmailsDestinatario := nil;
    CC                 := nil;
@@ -320,6 +328,18 @@ begin
 
      self.FACBrNFe.MAIL := ACBrMail1;
 
+     Mensagem := #13#10+#13#10+'ATENÇÃO, favor não responder. '+#13#10+#13#10+
+
+                 'Esta mensagem refere-se à Nota Fiscal Eletrônica de número '+intToStr(NotaFiscal.NumeroNotaFiscal)+', emitida em '+DateToStr(NotaFiscal.DataEmissao)+' por:'+#13#10+
+                 'Razão Social: '+NotaFiscal.Emitente.Razao+#13#10+
+                 'CNPJ: '+NotaFiscal.Emitente.CPF_CNPJ+#13#10+#13#10+
+
+                 'Chave de acesso: '+NotaFiscal.NFe.ChaveAcesso +#13#10+#13#10+
+
+                 'Obs.: Este e-mail foi enviado automaticamente pelo sistema Smart Chef da empresa CBN Informática - (43) 3534-2350.';
+
+     NotaFiscal.Empresa.ConfiguracoesEmail.Mensagem.Add(Mensagem);
+
      self.FACBrNFe.NotasFiscais.Clear;
      self.FACBrNFe.NotasFiscais.LoadFromString(NotaFiscal.NFe.XMLText);
      self.FACBrNFe.NotasFiscais.Items[0].EnviarEmail( CC[0],
@@ -327,7 +347,7 @@ begin
                                                       NotaFiscal.Empresa.ConfiguracoesEmail.Mensagem,
                                                       True,  // Enviar PDF junto
                                                       CC,    // Lista com emails que serÃ£o enviado cÃ³pias - TStrings
-                                                      nil); // Lista de anexos - TStrings
+                                                      nil);  // Lista de anexos - TStrings
 
 
    finally
@@ -375,7 +395,9 @@ var
   tot_desc_somado, diferenca :REal;
   icms_partilha :Real;
   perc_destinatario :Real;
+  sim :boolean;
 begin
+   sim := true;
    Itens    := NF.Itens;
 
    tot_desc_somado    := 0;
@@ -396,7 +418,7 @@ begin
         ItemNFe.Prod.cProd    := IntToStr(Item.Produto.codigo);
         ItemNFe.Prod.xProd    := Item.Produto.Descricao;
         ItemNFe.Prod.NCM      := Item.Produto.NCMIbpt.ncm_ibpt;
-        ItemNFe.Prod.CFOP     := Item.NaturezaOperacao.cfop;
+        ItemNFe.Prod.CFOP     := Item.NaturezaOperacao.CFOP;
         ItemNFe.Prod.uCom     := Item.Produto.Estoque.unidade_medida;
         ItemNFe.Prod.vUnCom   := Item.ValorUnitario;
         ItemNFe.Prod.qCom     := Item.Quantidade;
@@ -490,10 +512,15 @@ begin
             tomEstrangeiraAdquiridaMercadoInterno: ItemNFe.Imposto.ICMS.orig := oeEstrangeiraAdquiridaBrasil;
           end;
 
-          if NF.Destinatario.Pessoa = 'F' then
-            ItemNFe.Imposto.ICMS.CSOSN        := csosn102
+        {  if NF.Destinatario.Pessoa = 'F' then
+          begin  }
+
+         ItemNFe.Imposto.ICMS.CSOSN := StrToEnumerado(sim, Item.Produto.NcmIBPT.cst, ['', '101' ,'102', '103', '201', '202', '203', '300', '400', '500', '900'],
+                                                                                      [csosnVazio, csosn101, csosn102, csosn103, csosn201, csosn202, csosn203, csosn300, csosn400, csosn500,csosn900]);
+
+         { end
           else
-            ItemNFe.Imposto.ICMS.CSOSN        := csosn102; //csosn101;
+            ItemNFe.Imposto.ICMS.CSOSN        := csosn102; //csosn101; }
 
           ItemNFe.Imposto.ICMS.pCredSN      := Item.IcmsSn101.AliquotaCreditoSN;
           ItemNFe.Imposto.ICMS.vCredICMSSN  := Item.IcmsSn101.ValorCreditoSN;
@@ -658,6 +685,9 @@ begin
     nfe.NFe.Ide.tpNF := tnSaida
   else
     nfe.NFe.Ide.tpNF := tnEntrada;
+
+  if not assigned(Nf.Destinatario.Enderecos[0].Cidade) then
+    raise Exception.Create('Cidade do destinatário não foi cadastrada');
 
   case AnsiIndexStr(UpperCase(Nf.Destinatario.Enderecos[0].Cidade.estado.sigla), [NF.Emitente.Enderecos[0].Cidade.estado.sigla, 'XX']) of
     0 : nfe.NFe.Ide.idDest := doInterna;

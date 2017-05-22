@@ -439,6 +439,7 @@ inherited frmCadastroPadrao: TfrmCadastroPadrao
         Alignment = taCenter
         Caption = 'Pressione ENTER para selecionar o registro'
         TabOrder = 1
+        ExplicitWidth = 222
       end
     end
     object tsDados: TTabSheet

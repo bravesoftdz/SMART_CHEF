@@ -15,6 +15,7 @@ inherited frmReimpressaoPedido: TfrmReimpressaoPedido
     Width = 18
     Height = 17
     Brush.Color = 7398387
+    Visible = False
   end
   object Label1: TLabel [1]
     Left = 168
@@ -22,6 +23,7 @@ inherited frmReimpressaoPedido: TfrmReimpressaoPedido
     Width = 177
     Height = 13
     Caption = 'CONTING'#202'NCIA (ENVIO PENDENTE)'
+    Visible = False
   end
   inherited pnlPropaganda: TPanel
     Top = 478
@@ -362,8 +364,8 @@ inherited frmReimpressaoPedido: TfrmReimpressaoPedido
     ConfCores.Titulo.Tipo.Name = 'MS Sans Serif'
     ConfCores.Titulo.Tipo.Style = []
     Ordenavel = True
-    TipoBusca.ListarApenasEncontrados = False
-    TipoBusca.QualquerParte = False
+    TipoBusca.ListarApenasEncontrados = True
+    TipoBusca.QualquerParte = True
     SalvaConfiguracoes = True
     Columns = <
       item
@@ -388,7 +390,7 @@ inherited frmReimpressaoPedido: TfrmReimpressaoPedido
       item
         Expanded = False
         FieldName = 'CLIENTE'
-        Width = 227
+        Width = 240
         Visible = True
       end
       item
@@ -400,7 +402,13 @@ inherited frmReimpressaoPedido: TfrmReimpressaoPedido
       end
       item
         Expanded = False
-        FieldName = 'CODIGO'
+        FieldName = 'PEDIDO'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CODIGO_COMANDA'
+        Title.Caption = 'COMANDA'
         Visible = True
       end>
   end
@@ -449,14 +457,15 @@ inherited frmReimpressaoPedido: TfrmReimpressaoPedido
   object qryPedidos: TFDQuery
     SQL.Strings = (
       
-        'Select p.codigo, p.data, iif(p.situacao = '#39'F'#39', '#39'FINALIZADO'#39', '#39'EM' +
-        ' ABERTO'#39') SITUACAO, p.valor_total, p.nome_cliente cliente, p.agr' +
-        'upadas'
+        'Select p.codigo pedido, p.data, iif(p.situacao = '#39'F'#39', '#39'FINALIZAD' +
+        'O'#39', '#39'EM ABERTO'#39') SITUACAO, p.valor_total, p.nome_cliente cliente' +
+        ', p.agrupadas,'
+      '          p.codigo_comanda'
       ''
       'from pedidos p'
       
-        'where p.data between :di and :df and p.codigo_comanda = :codcoma' +
-        'nda')
+        'where p.data between :di and :df and (p.codigo_comanda = :codcom' +
+        'anda or :codcomanda = 0)')
     Left = 592
     Top = 136
     ParamData = <
@@ -475,12 +484,6 @@ inherited frmReimpressaoPedido: TfrmReimpressaoPedido
         DataType = ftInteger
         ParamType = ptInput
       end>
-    object qryPedidosCODIGO: TIntegerField
-      FieldName = 'CODIGO'
-      Origin = 'CODIGO'
-      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
-      Required = True
-    end
     object qryPedidosDATA: TDateField
       FieldName = 'DATA'
       Origin = '"DATA"'
@@ -509,6 +512,12 @@ inherited frmReimpressaoPedido: TfrmReimpressaoPedido
       FieldName = 'AGRUPADAS'
       Origin = 'AGRUPADAS'
       Size = 80
+    end
+    object qryPedidosPEDIDO: TIntegerField
+      FieldName = 'PEDIDO'
+    end
+    object qryPedidosCODIGO_COMANDA: TIntegerField
+      FieldName = 'CODIGO_COMANDA'
     end
   end
 end

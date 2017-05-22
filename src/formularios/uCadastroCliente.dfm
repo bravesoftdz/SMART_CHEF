@@ -2,22 +2,22 @@ inherited frmCadastroCliente: TfrmCadastroCliente
   Left = 339
   Top = 167
   Caption = 'Cadastro de Clientes'
-  ClientHeight = 536
+  ClientHeight = 579
   ClientWidth = 682
   ExplicitWidth = 688
-  ExplicitHeight = 564
+  ExplicitHeight = 607
   PixelsPerInch = 96
   TextHeight = 13
   inherited Splitter1: TSplitter
-    Height = 501
+    Height = 544
     ExplicitHeight = 501
   end
   inherited pnlBotoes: TPanel
-    Height = 501
+    Height = 544
     ExplicitHeight = 501
   end
   inherited pnlPropaganda: TPanel
-    Top = 501
+    Top = 544
     Width = 682
     ExplicitTop = 501
     ExplicitWidth = 682
@@ -28,21 +28,22 @@ inherited frmCadastroCliente: TfrmCadastroCliente
   end
   inherited pgGeral: TPageControl
     Width = 539
-    Height = 501
+    Height = 544
+    ActivePage = tsDados
     ExplicitWidth = 539
     ExplicitHeight = 501
     inherited tsConsulta: TTabSheet
       ExplicitWidth = 531
       ExplicitHeight = 470
       inherited lblAjudaSelecionar: TStaticText [0]
-        Top = 453
+        Top = 496
         Width = 531
         ExplicitTop = 453
         ExplicitWidth = 531
       end
       inherited gridConsulta: TDBGridCBN [1]
         Width = 513
-        Height = 443
+        Height = 486
         Columns = <
           item
             Expanded = False
@@ -69,24 +70,26 @@ inherited frmCadastroCliente: TfrmCadastroCliente
       ExplicitHeight = 470
       inherited pnlDados: TPanel
         Width = 531
-        Height = 470
+        Height = 513
         ExplicitWidth = 531
         ExplicitHeight = 470
         inherited lblCamposObrigatorios: TLabel
-          Top = 451
-          ExplicitTop = 451
+          Top = 491
+          ExplicitTop = 491
         end
         inherited lblAsterisco: TLabel
-          Top = 447
-          ExplicitTop = 447
+          Top = 487
+          ExplicitTop = 487
         end
         inherited Shape2: TShape
-          Top = 2
+          Left = 4
+          Top = 1
           Width = 527
-          Height = 468
-          ExplicitTop = 2
+          Height = 511
+          ExplicitLeft = 4
+          ExplicitTop = 1
           ExplicitWidth = 527
-          ExplicitHeight = 468
+          ExplicitHeight = 511
         end
         object Label19: TLabel
           Left = 12
@@ -115,11 +118,24 @@ inherited frmCadastroCliente: TfrmCadastroCliente
           ParentFont = False
         end
         object Label7: TLabel
-          Left = 239
-          Top = 52
+          Left = 25
+          Top = 95
           Width = 34
           Height = 15
           Caption = 'E-mail'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 3815994
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label8: TLabel
+          Left = 240
+          Top = 52
+          Width = 32
+          Height = 15
+          Caption = 'RG/IE'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 3815994
           Font.Height = -12
@@ -195,7 +211,7 @@ inherited frmCadastroCliente: TfrmCadastroCliente
         end
         object gpbEndereco: TGroupBox
           Left = 13
-          Top = 99
+          Top = 139
           Width = 500
           Height = 349
           Caption = ' Endere'#231'o '
@@ -205,7 +221,7 @@ inherited frmCadastroCliente: TfrmCadastroCliente
           Font.Name = 'Segoe UI'
           Font.Style = [fsBold]
           ParentFont = False
-          TabOrder = 4
+          TabOrder = 5
           object Shape1: TShape
             Left = 3
             Top = 190
@@ -557,9 +573,9 @@ inherited frmCadastroCliente: TfrmCadastroCliente
           end
         end
         object edtEmail: TEdit
-          Left = 239
-          Top = 68
-          Width = 271
+          Left = 25
+          Top = 111
+          Width = 485
           Height = 21
           CharCase = ecUpperCase
           Font.Charset = DEFAULT_CHARSET
@@ -567,6 +583,21 @@ inherited frmCadastroCliente: TfrmCadastroCliente
           Font.Height = -11
           Font.Name = 'Segoe UI'
           Font.Style = []
+          ParentFont = False
+          TabOrder = 4
+        end
+        object edtIe: TEdit
+          Left = 240
+          Top = 68
+          Width = 116
+          Height = 21
+          CharCase = ecUpperCase
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          MaxLength = 14
           ParentFont = False
           TabOrder = 3
         end

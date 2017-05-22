@@ -274,7 +274,7 @@ begin
     nCodigoNotaFiscal     := 0;
     nNumeroNotaFiscal     := nfe.NFe.Ide.nNF;
     nCodigoNatureza       := 1;
-    nSerie                := zeroEsquerda(IntToStr(nfe.NFe.Ide.serie),3);
+    nSerie                := charEsquerda(IntToStr(nfe.NFe.Ide.serie),3,'0');
     nCodigoEmitente       := StrToIntDef(campo_por_campo('PESSOAS','CODIGO','CPF_CNPJ',nfe.NFe.Emit.CNPJCPF,'TIPO','F'), 0); //F fornecedor
     nCodigoDestinatario   := StrToIntDef(campo_por_campo('PESSOAS','CODIGO','CPF_CNPJ',nfe.NFe.Dest.CNPJCPF,'TIPO','E'), 0); //E empresa
     nCodigoFormaPagamento := 0;
@@ -308,6 +308,7 @@ begin
     FNotaFiscal.transportadora   := transportadora;
     FNotaFiscal.Entrada_saida    := 'E';
     FNotaFiscal.EntrouEstoque    := 'N';
+    FNotaFiscal.notaDeImportacao := true;
 
     FNotaFiscal.Totais.Frete           := nfe.NFe.Total.ICMSTot.vFrete;
     FNotaFiscal.Totais.Seguro          := nfe.NFe.Total.ICMSTot.vSeg;
@@ -387,7 +388,6 @@ begin
       empresa := nil;
 
      // codigo_natureza := campo_por_campo('NATUREZAS_OPERACAO','CODIGO','CFOP',nfe.NFe.Det.Items[nX].Prod.CFOP);
-
         cod_nat_cfop_correspondente :=  Campo_por_campo('NATUREZAS_OPERACAO', 'CODIGO', 'CFOP', FCDS.fieldByName('CFOP').AsString);
 
         if cod_nat_cfop_correspondente.isEmpty then

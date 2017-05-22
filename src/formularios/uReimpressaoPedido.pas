@@ -28,7 +28,6 @@ type
     dsPedidos: TDataSource;
     btnFiltrar: TBitBtn;
     qryPedidos: TFDQuery;
-    qryPedidosCODIGO: TIntegerField;
     qryPedidosDATA: TDateField;
     qryPedidosSITUACAO: TStringField;
     qryPedidosVALOR_TOTAL: TBCDField;
@@ -36,6 +35,8 @@ type
     qryPedidosAGRUPADAS: TStringField;
     Shape1: TShape;
     Label1: TLabel;
+    qryPedidosPEDIDO: TIntegerField;
+    qryPedidosCODIGO_COMANDA: TIntegerField;
     procedure btnFiltrarClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnImprimirClick(Sender: TObject);
@@ -52,7 +53,7 @@ var
 implementation
 
 uses repositorioPedido, fabricaRepositorio, Pedido, uModulo, ServicoEmissorNFCe, repositorio,
-  Parametros;
+  Parametros, uImpressaoPedido;
 
 {$R *.dfm}
 
@@ -63,13 +64,6 @@ end;
 
 procedure TfrmReimpressaoPedido.btnFiltrarClick(Sender: TObject);
 begin
-  if ListaComanda.CodCampo <= 0 then
-  begin
-    avisar('A comanda deve ser informada');
-    ListaComanda.comListaCampo.SetFocus;
-    Exit;
-  end;
-
   qryPedidos.Close;
   qryPedidos.ParamByName('di').AsDateTime        := dtpInicio.DateTime;
   qryPedidos.ParamByName('df').AsDateTime        := dtpFim.DateTime;
@@ -94,9 +88,16 @@ begin
   if qryPedidos.IsEmpty then
     Exit;
 
+ try
   repositorio := TRepositorioPedido(TFabricaRepositorio.GetRepositorio(TPedido.ClassName));
 
-  repositorio.imprime_pedido( TPedido(repositorio.Get(qryPedidosCODIGO.AsInteger)), fdm.UsuarioLogado.Departamento,'' );
+  frmImpressaoPedido := TFrmImpressaoPedido.Create(nil);
+  frmImpressaoPedido.imprimePedido(TPedido(repositorio.Get(qryPedidosPEDIDO.AsInteger)), dm.UsuarioLogado.Departamento, '');
+  frmImpressaoPedido.Release;
+  frmImpressaoPedido := nil;
+ finally
+   FreeAndNil(repositorio);
+ end;
 end;
 
 end.

@@ -79,7 +79,8 @@ begin
                                               Dataset.FieldByName('entrada_saida').AsString,
                                               Dataset.FieldByName('finalidade').AsString,
                                               Dataset.FieldByName('nfe_referenciada').AsString,
-                                              Dataset.FieldByName('entrou_estoque').AsString);
+                                              Dataset.FieldByName('entrou_estoque').AsString,
+                                              Dataset.FieldByName('nota_importacao').AsString = 'S');
 end;
 
 function TRepositorioNotaFiscal.GetIdentificador(Objeto: TObject): Variant;
@@ -264,6 +265,7 @@ begin
   inherited SetParametro('finalidade',             obj.Finalidade );
   inherited SetParametro('nfe_referenciada',       obj.NFe_referenciada );
   inherited SetParametro('entrou_estoque',         obj.EntrouEstoque );
+  inherited SetParametro('nota_importacao',        IfThen(obj.notaDeImportacao, 'S', '') );
 end;
 
 function TRepositorioNotaFiscal.SQLGet: String;
@@ -280,16 +282,15 @@ end;
 function TRepositorioNotaFiscal.SQLRemover: String;
 begin
    result := 'delete from ' + self.GetNomeDaTabela + ' where codigo = :codigo ';
-   showmessage('* * * * * * * * * * * * * * ATENÇÃO ! ! ! * * * * * * * * * * * * *'+#13#10+' PRESTES A REMOVER NOTA FISCAL');
 end;
 
 function TRepositorioNotaFiscal.SQLSalvar: String;
 begin
    result := ' update or insert into ' + self.GetNomeDaTabela +
              '        (codigo, numero_nota_fiscal, codigo_natureza, serie, codigo_emitente, codigo_destinatario, codigo_fpagto, data_emissao,         '+
-             '         data_saida, codigo_transportadora, tipo_frete, entrada_saida, finalidade, nfe_referenciada, entrou_estoque)                                    '+
+             '         data_saida, codigo_transportadora, tipo_frete, entrada_saida, finalidade, nfe_referenciada, entrou_estoque, nota_importacao)                                    '+
              ' values (:codigo, :numero_nota_fiscal, :codigo_natureza, :serie, :codigo_emitente, :codigo_destinatario, :codigo_fpagto, :data_emissao, '+
-             '         :data_saida, :codigo_transportadora, :tipo_frete, :entrada_saida, :finalidade, :nfe_referenciada, :entrou_estoque)                              ';
+             '         :data_saida, :codigo_transportadora, :tipo_frete, :entrada_saida, :finalidade, :nfe_referenciada, :entrou_estoque, :nota_importacao)                              ';
 end;
 
 end.

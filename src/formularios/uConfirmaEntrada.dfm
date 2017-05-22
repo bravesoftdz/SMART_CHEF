@@ -317,7 +317,9 @@
       
         '  left join totais_notas_fiscais tnf on tnf.codigo_nota_fiscal =' +
         ' nf.codigo'
-      'where entrada_saida = '#39'E'#39' and entrou_estoque = '#39'N'#39)
+      
+        'where entrada_saida = '#39'E'#39' and nf.nota_importacao = '#39'S'#39' and entro' +
+        'u_estoque = '#39'N'#39)
     Left = 184
     Top = 96
     object qryNotasEmissão: TSQLTimeStampField

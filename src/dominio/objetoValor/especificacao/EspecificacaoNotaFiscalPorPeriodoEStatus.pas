@@ -68,8 +68,8 @@ begin
        exit;
      end;
 
-   //Verifico se a nota é de entrada e se a especificação nao esta sendo chamada pelo GeradorSintegra
-   if ( NF.Entrada_saida = 'E' ) and ( self.FCNPJ_empresa_selecionada = '0' ) then begin
+   //Verifico se a nota é de entrada e se a especificação nao esta sendo chamada pelo GeradorSintegra ou foi nota de importacao pelo xml
+   if ( NF.Entrada_saida = 'E' ) and (( self.FCNPJ_empresa_selecionada = '0' ) or NF.notaDeImportacao) then begin
      result := false;
      exit;
    end;
@@ -93,7 +93,7 @@ begin
     exit;
 
    //se for nota de entrada e for de importacao por XML ja esta com status de enviada
-   if (NF.Entrada_saida = 'E') and (NF.NotaDeMaterias) and ( length(self.FCNPJ_empresa_selecionada) > 10) then begin
+   if (NF.Entrada_saida = 'E') and ( length(self.FCNPJ_empresa_selecionada) > 10) then begin
      result := true;
      exit;
    end;

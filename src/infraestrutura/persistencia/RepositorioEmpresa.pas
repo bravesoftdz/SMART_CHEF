@@ -44,7 +44,7 @@ end;
 
 implementation
 
-uses SysUtils, Empresa, Math, StrUtils, Pessoa, FabricaRepositorio, ConfiguracoesNF;
+uses SysUtils, Empresa, Math, StrUtils, Pessoa, FabricaRepositorio, ConfiguracoesNF, ConfiguracoesNFEmail;
 
 { TRepositorioEmpresa }
 
@@ -52,7 +52,7 @@ procedure TRepositorioEmpresa.ExecutaDepoisDeSalvar(Objeto: TObject);
 var
   Empresa                       :TEmpresa;
   RepositorioConfiguracoes      :TRepositorio;
-//  RepositorioConfiguracoesEmail :TRepositorio;
+  RepositorioConfiguracoesEmail :TRepositorio;
 //  RepositorioParametrosNFCe     :TRepositorio;
  // RepositorioEndereco           :TRepositorio;
 begin
@@ -78,12 +78,12 @@ begin
        end;   }
      end;
 
-     {if Assigned(Empresa.ConfiguracoesEmail) then begin
+     if Assigned(Empresa.ConfiguracoesEmail) then begin
        Empresa.ConfiguracoesEmail.codigo_empresa := Empresa.CodigoEmpresa;
        RepositorioConfiguracoesEmail := TFabricaRepositorio.GetRepositorio(TConfiguracoesNFEmail.ClassName);
        RepositorioConfiguracoesEmail.Remover(Empresa.ConfiguracoesEmail);
        RepositorioConfiguracoesEmail.Salvar(Empresa.ConfiguracoesEmail);
-     end; }
+     end;
 
 
    finally

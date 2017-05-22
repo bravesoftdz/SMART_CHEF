@@ -54,7 +54,7 @@ end;
 
 function TRepositorioCFOP.GetNomeDaTabela: String;
 begin
-  result := 'NATUREZA_OPERACAO';
+  result := 'NATUREZAS_OPERACAO';
 end;
 
 function TRepositorioCFOP.GetRepositorio: TRepositorio;
@@ -85,27 +85,27 @@ end;
 
 function TRepositorioCFOP.SQLGet: String;
 begin
-  result := 'select * from NATUREZA_OPERACAO where codigo = :ncod';
+  result := 'select * from NATUREZAS_OPERACAO where codigo = :ncod';
 end;
 
 function TRepositorioCFOP.SQLGetAll: String;
 begin
-  result := 'select * from NATUREZA_OPERACAO';
+  result := 'select * from NATUREZAS_OPERACAO';
 end;
 
 function TRepositorioCFOP.SQLGetExiste(campo: String): String;
 begin
-  result := 'select '+ campo +' from NATUREZA_OPERACAO where '+ campo +' = :ncampo';
+  result := 'select '+ campo +' from NATUREZAS_OPERACAO where '+ campo +' = :ncampo';
 end;
 
 function TRepositorioCFOP.SQLRemover: String;
 begin
-  result := ' delete from NATUREZA_OPERACAO where codigo = :codigo ';
+  result := ' delete from NATUREZAS_OPERACAO where codigo = :codigo ';
 end;
 
 function TRepositorioCFOP.SQLSalvar: String;
 begin
-  result := 'update or insert into NATUREZA_OPERACAO (CODIGO ,DESCRICAO ,CFOP, SUSPENSAO_ICMS) '+
+  result := 'update or insert into NATUREZAS_OPERACAO (CODIGO ,DESCRICAO ,CFOP, SUSPENSAO_ICMS) '+
            '                      values ( :CODIGO , :DESCRICAO , :CFOP, :SUSPENSAO_ICMS) ';
 end;
 

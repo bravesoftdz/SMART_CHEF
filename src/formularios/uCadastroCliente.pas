@@ -58,6 +58,8 @@ type
     cdsCODIGO: TIntegerField;
     cdsEndDeletado: TClientDataSet;
     cdsEndDeletadoCOD_END: TIntegerField;
+    edtIe: TEdit;
+    Label8: TLabel;
     procedure btnSalvarClick(Sender: TObject);
     procedure btnIncluirEndClick(Sender: TObject);
     procedure btnAlterarEndClick(Sender: TObject);
@@ -196,6 +198,7 @@ begin
      Cliente.cpf_cnpj      := self.cpfCnpj.edtCpf.Text;
      Cliente.Pessoa        := self.cpfCnpj.pessoa;
      Cliente.Tipo          := 'C';
+     Cliente.RG_IE         := edtIe.Text;
      Cliente.Email         := edtEmail.Text;
 
      cdsendereco.First;
@@ -265,6 +268,7 @@ begin
   edtCodigo.Clear;
   edtNome.Clear;
   cpfCnpj.Limpa;
+  edtIe.Clear;
   edtcep.Clear;
   edtLogradouro.Clear;
   edtNumero.Clear;
@@ -296,8 +300,9 @@ begin
     if not Assigned(Cliente) then exit;
 
     edtCodigo.Text              := IntToStr(Cliente.codigo);
-    self.edtNome.Text           :=  Cliente.razao;
-    self.cpfCnpj.cpfCnpj        :=  Cliente.cpf_cnpj;
+    self.edtNome.Text           := Cliente.razao;
+    self.cpfCnpj.cpfCnpj        := Cliente.cpf_cnpj;
+    self.edtIe.Text             := Cliente.RG_IE;
     self.edtEmail.Text          := Cliente.Email;
 
     if assigned(Cliente.Enderecos) and (Cliente.Enderecos.count > 0) then begin
