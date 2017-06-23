@@ -2575,7 +2575,7 @@ inherited frmFinalizaPedido: TfrmFinalizaPedido
     ParentColor = False
     TabOrder = 8
   end
-  object pnlExtorna: TPanel
+  object pnlEstorna: TPanel
     Left = 1232
     Top = 77
     Width = 665
@@ -2777,13 +2777,13 @@ inherited frmFinalizaPedido: TfrmFinalizaPedido
         end>
     end
   end
-  object btnExtornaItem: TBitBtn
+  object btnEstornaItem: TBitBtn
     Left = 879
     Top = 520
     Width = 162
     Height = 25
     Anchors = [akTop, akRight]
-    Caption = 'Extorna pelo item'
+    Caption = 'Estorna pelo item'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -12
@@ -2860,15 +2860,15 @@ inherited frmFinalizaPedido: TfrmFinalizaPedido
     ParentFont = False
     TabOrder = 9
     TabStop = False
-    OnClick = btnExtornaItemClick
+    OnClick = btnEstornaItemClick
   end
-  object btnExtornaMoeda: TBitBtn
+  object btnEstornaMoeda: TBitBtn
     Left = 1057
     Top = 520
     Width = 162
     Height = 25
     Anchors = [akTop, akRight]
-    Caption = 'Extorna pela moeda'
+    Caption = 'Estorna pela moeda'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -12
@@ -2945,7 +2945,7 @@ inherited frmFinalizaPedido: TfrmFinalizaPedido
     ParentFont = False
     TabOrder = 10
     TabStop = False
-    OnClick = btnExtornaMoedaClick
+    OnClick = btnEstornaMoedaClick
   end
   object cdsMoedas: TClientDataSet
     Aggregates = <>
@@ -3095,7 +3095,7 @@ inherited frmFinalizaPedido: TfrmFinalizaPedido
     Left = 435
     Top = 515
     Bitmap = {
-      494C010102000800680010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010102000800700010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       00000000000000000000000000000000000000000000C2751900BD6B1300B965
       0400B9650400B9650400BA650400BA650400BA650400BA650400BA650400BA65

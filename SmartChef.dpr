@@ -341,7 +341,8 @@ uses
   UtilitarioEstoque in 'src\dominio\utilitario\UtilitarioEstoque.pas',
   uPedidos in 'src\formularios\uPedidos.pas' {frmPedidos},
   uEstornoEntrada in 'src\formularios\uEstornoEntrada.pas' {frmEstornoEntrada},
-  uCadastroNcmIBPT in 'src\formularios\uCadastroNcmIBPT.pas' {frmCadastroNcmIBPT};
+  uCadastroNcmIBPT in 'src\formularios\uCadastroNcmIBPT.pas' {frmCadastroNcmIBPT},
+  uRelatorioMovimentacaoGeral in 'src\formularios\relatorios\Fortes\uRelatorioMovimentacaoGeral.pas' {frmRelatorioMovimentacaoGeral};
 
 {$R *.res}
 
@@ -367,6 +368,7 @@ begin
   Application.CreateForm(Tdm, dm);
   Application.CreateForm(TfrmEstornoEntrada, frmEstornoEntrada);
   Application.CreateForm(TfrmCadastroNcmIBPT, frmCadastroNcmIBPT);
+  Application.CreateForm(TfrmRelatorioMovimentacaoGeral, frmRelatorioMovimentacaoGeral);
   if not dm.cancelaInicializacao then begin
     //------------------------------------------------------------------------------------------------//
     // Se não for encontrado o Banco de Dados, então é solicitado para o usário configurá-lo.         //

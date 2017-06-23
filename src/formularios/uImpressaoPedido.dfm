@@ -237,6 +237,23 @@ object frmImpressaoPedido: TfrmImpressaoPedido
         Borders.DrawTop = False
         Borders.DrawRight = False
         Borders.DrawBottom = False
+        object RLDBText12: TRLDBText
+          Left = 9
+          Top = 2
+          Width = 57
+          Height = 14
+          AutoSize = False
+          DataField = 'ADD_REM'
+          DataSource = dsItens
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Calibri'
+          Font.Style = []
+          ParentFont = False
+          Text = ''
+          BeforePrint = RLDBText5BeforePrint
+        end
         object RLDBText3: TRLDBText
           Left = 64
           Top = 2

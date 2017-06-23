@@ -92,8 +92,9 @@ type
     Entradadenotasfiscais1: TMenuItem;
     EntradaporXML1: TMenuItem;
     ConfirmaoEntradaEstoque1: TMenuItem;
-    Extorno1: TMenuItem;
+    Estorno1: TMenuItem;
     NCM1: TMenuItem;
+    MovimentaoGeral1: TMenuItem;
     procedure Perfisdeacesso1Click(Sender: TObject);
     procedure Usurios1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -162,8 +163,9 @@ type
     procedure ransportadora1Click(Sender: TObject);
     procedure EntradaporXML1Click(Sender: TObject);
     procedure ConfirmaoEntradaEstoque1Click(Sender: TObject);
-    procedure Extorno1Click(Sender: TObject);
+    procedure Estorno1Click(Sender: TObject);
     procedure NCM1Click(Sender: TObject);
+    procedure MovimentaoGeral1Click(Sender: TObject);
 
   private
     procedure SalvaPedido;
@@ -205,7 +207,7 @@ uses uCadastroPerfilAcesso, PermissoesAcesso, uCadastroUsuario, uCadastroGrupo, 
      uRelatorioEntradaSaida, uRelatorioCaixa48Colunas, uRelatorioItensDeletados, uConfiguraNFCe, uNFCes, uCadastroFornecedor,
      uConfiguracoesSistema, uCadastroCliente, uRelatorioProdutos, funcoes, uRelatorioCuponsFiscais, uImpressaoPedido,
      uEntradaNota, uCadastroCfopCorrespondente, uLancaSangriaReforco, uConfirmaEntrada, uSupervisor, uRelatorioNotasFiscaisEntrada,
-     uCadastroTransportadora, uEstornoEntrada, uCadastroNCMIBPT;
+     uCadastroTransportadora, uEstornoEntrada, uCadastroNCMIBPT, uRelatorioMovimentacaoGeral;
 
 {$R *.dfm}
 
@@ -593,6 +595,11 @@ begin
   end
   else
     frmAvisoPedidoPendente.OnShow(nil);
+end;
+
+procedure TfrmInicial.MovimentaoGeral1Click(Sender: TObject);
+begin
+  AbreForm(TfrmRelatorioMovimentacaoGeral, paRelatorioMovimentacaoGeral);
 end;
 
 procedure TfrmInicial.verificaNFCesContingencia;
@@ -1355,7 +1362,7 @@ begin
   AbreForm(TfrmRelatorioEstoque, paRelatorioEstoque);
 end;
 
-procedure TfrmInicial.Extorno1Click(Sender: TObject);
+procedure TfrmInicial.Estorno1Click(Sender: TObject);
 var usuario :TUsuario;
 begin
   usuario := dm.UsuarioLogado;
@@ -1364,7 +1371,7 @@ begin
     frmSupervisor := TfrmSupervisor.Create(self);
 
     frmSupervisor.Label1.Caption := 'Login';
-    frmSupervisor.Label4.Caption := 'Para acessar a tela de Extorno de Nota Fiscal de Entrada';
+    frmSupervisor.Label4.Caption := 'Para acessar a tela de Estorno de Nota Fiscal de Entrada';
     frmSupervisor.Label5.Caption := 'informe seu login e senha:';
 
     if frmSupervisor.ShowModal = mrOk then begin

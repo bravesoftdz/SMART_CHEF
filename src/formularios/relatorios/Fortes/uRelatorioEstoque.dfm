@@ -2,16 +2,16 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
   Left = 513
   Top = 321
   Caption = 'Relat'#243'rio de Estoque'
-  ClientHeight = 445
-  ClientWidth = 566
+  ClientHeight = 469
+  ClientWidth = 558
   OnShow = FormShow
-  ExplicitWidth = 572
-  ExplicitHeight = 473
+  ExplicitWidth = 564
+  ExplicitHeight = 497
   PixelsPerInch = 96
   TextHeight = 13
   object RLReport1: TRLReport [0]
-    Left = 400
-    Top = 384
+    Left = 704
+    Top = 130
     Width = 1123
     Height = 794
     Margins.LeftMargin = 5.000000000000000000
@@ -509,12 +509,12 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
     end
   end
   inherited pnlPropaganda: TPanel
-    Top = 410
-    Width = 566
-    ExplicitTop = 410
-    ExplicitWidth = 566
+    Top = 434
+    Width = 558
+    ExplicitTop = 623
+    ExplicitWidth = 1129
     inherited Shape8: TShape
-      Width = 564
+      Width = 556
       ExplicitWidth = 558
     end
   end
@@ -536,14 +536,15 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
     Left = 0
     Top = 0
     Width = 129
-    Height = 410
+    Height = 434
     Align = alLeft
     TabOrder = 2
+    ExplicitHeight = 623
     object Shape12: TShape
       Left = 1
       Top = 1
       Width = 127
-      Height = 408
+      Height = 432
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119
@@ -704,39 +705,22 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
       OnClick = BitBtn2Click
     end
   end
-  object GroupBox1: TGroupBox
-    Left = 144
-    Top = 66
-    Width = 401
-    Height = 34
-    TabOrder = 3
-    object chkAbaixo: TCheckBox
-      Left = 8
-      Top = 12
-      Width = 385
-      Height = 17
-      Caption = 
-        'Apenas itens abaixo do estoque m'#237'nimo e dentro da margem de aler' +
-        'ta'
-      TabOrder = 0
-    end
-  end
   object GroupBox2: TGroupBox
     Left = 144
-    Top = 106
+    Top = 148
     Width = 401
     Height = 56
     Caption = ' Alerta quantidade do estoque atual '
-    TabOrder = 4
+    TabOrder = 3
     object Label1: TLabel
-      Left = 184
+      Left = 144
       Top = 29
       Width = 163
       Height = 13
       Caption = 'Para alcan'#231'ar o estoque m'#237'nimo'
     end
     object edtPercentAcima: TCurrencyEdit
-      Left = 78
+      Left = 38
       Top = 24
       Width = 99
       Height = 25
@@ -747,16 +731,14 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
       Font.Name = 'Segoe UI'
       Font.Style = []
       MaxValue = 100.000000000000000000
-      MinValue = 5.000000000000000000
       ParentFont = False
       TabOrder = 0
-      Value = 5.000000000000000000
       OnEnter = edtPercentAcimaEnter
     end
   end
   object rgpAgrupamento: TRadioGroup
     Left = 144
-    Top = 168
+    Top = 210
     Width = 401
     Height = 57
     Caption = ' Filtro de agrupamento '
@@ -766,15 +748,15 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
       'N'#227'o agrupar'
       'Fornecedor'
       'Grupo')
-    TabOrder = 6
+    TabOrder = 5
   end
   object GroupBox3: TGroupBox
     Left = 144
-    Top = 231
+    Top = 273
     Width = 401
     Height = 66
     Caption = ' Filtro Fornecedor '
-    TabOrder = 7
+    TabOrder = 6
     inline buscaFornecedor1: TBuscaFornecedor
       Left = 11
       Top = 9
@@ -825,11 +807,11 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
   end
   object GroupBox4: TGroupBox
     Left = 144
-    Top = 308
+    Top = 350
     Width = 401
     Height = 69
     Caption = ' Filtro Grupo '
-    TabOrder = 8
+    TabOrder = 7
     inline buscaGrupo1: TbuscaGrupo
       Left = 11
       Top = 11
@@ -877,6 +859,19 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
         ExplicitHeight = 25
       end
     end
+  end
+  object rgpFiltro: TRadioGroup
+    Left = 144
+    Top = 71
+    Width = 401
+    Height = 73
+    Caption = ' Filtro '
+    ItemIndex = 0
+    Items.Strings = (
+      'Geral'
+      'Apenas itens abaixo do estoque m'#237'nimo'
+      'Apenas itens dentro da margem de alerta')
+    TabOrder = 8
   end
   object dsEstoque: TDataSource
     DataSet = qryEstoque
@@ -930,7 +925,7 @@ inherited frmRelatorioEstoque: TfrmRelatorioEstoque
       'left join pessoas  fr  on fr.codigo = pf.codigo_fornecedor'
       'left join grupos   gr on gr.codigo = pro.codigo_grupo')
     Left = 344
-    Top = 112
+    Top = 160
     object qryEstoqueCODFORN: TIntegerField
       AutoGenerateValue = arDefault
       FieldName = 'CODFORN'

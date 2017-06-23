@@ -293,7 +293,7 @@ inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
         Top = 57
         Width = 696
         Height = 386
-        ActivePage = TabSheet3
+        ActivePage = TabSheet6
         Align = alBottom
         Anchors = [akLeft, akTop, akRight, akBottom]
         TabOrder = 2
@@ -651,6 +651,14 @@ inherited frmCadastroPerfilAcesso: TfrmCadastroPerfilAcesso
             Height = 17
             Caption = 'Visualizar relat'#243'rio de Notas Fiscais de Entrada'
             TabOrder = 10
+          end
+          object chk43: TCheckBox
+            Left = 8
+            Top = 272
+            Width = 257
+            Height = 17
+            Caption = 'Visualizar relat'#243'rio de Movimenta'#231#227'o Geral'
+            TabOrder = 11
           end
         end
       end

@@ -83,6 +83,7 @@ type
     chk40: TCheckBox;
     chk41: TCheckBox;
     chk42: TCheckBox;
+    chk43: TCheckBox;
     procedure FormShow(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);

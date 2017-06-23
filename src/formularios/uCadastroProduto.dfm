@@ -30,6 +30,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
   inherited pgGeral: TPageControl
     Width = 614
     Height = 606
+    ActivePage = tsDados
     ExplicitWidth = 614
     ExplicitHeight = 606
     inherited tsConsulta: TTabSheet
@@ -1873,10 +1874,9 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           Width = 77
           Height = 21
           AutoSize = False
-          DisplayFormat = ' ,0.00;-,0.00'
-          MinValue = 1.000000000000000000
+          DecimalPlaces = 3
+          DisplayFormat = ' ,0.000;-,0.000'
           TabOrder = 19
-          Value = 1.000000000000000000
         end
         object cbAdicional: TComboBox
           Left = 392
@@ -1965,7 +1965,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
     Left = 435
     Top = 515
     Bitmap = {
-      494C0101020008005C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010102000800680010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       00000000000000000000000000000000000000000000035703000355030084AB
       8400E8EFE80074A0740012631200046B0700046A0700046A0700046A0700046B

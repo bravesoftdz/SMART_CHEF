@@ -341,15 +341,35 @@ end;
 function TfrmCadastroCliente.VerificaDados: Boolean;
 begin
   result := false;
+  gridEnderecos.SetFocus;
 
   if edtNome.Text = '' then begin
     avisar('O nome deve ser informado');
     edtNome.SetFocus;
   end
- { else if cpfCnpj.edtCpf.Text = '' then begin
-    avisar('O '+IfThen(cpfCnpj.comPessoa.ItemIndex = 0, 'CPF', 'CNPJ')+' deve ser informado');
-    cpfCnpj.edtCpf.SetFocus;
-  end}
+  else if cdsendereco.IsEmpty then begin
+    avisar('O endereço deve ser informado');
+    btnIncluirEnd.Click;
+  end
+  else if cdsenderecologradouro.AsString = '' then begin
+    avisar('A rua/logradouro deve ser informado');
+    btnAlterarEnd.Click;
+  end
+  else if cdsendereconumero.AsString = '' then begin
+    avisar('O número deve ser informado');
+    btnAlterarEnd.Click;
+    edtNumero.SetFocus;
+  end
+  else if cdsenderecobairro.AsString = '' then begin
+    avisar('O bairro deve ser informado');
+    btnAlterarEnd.Click;
+    edtBairro.SetFocus;
+  end
+  else if cdsenderecocod_cidade.AsInteger = 0 then begin
+    avisar('A cidade deve ser informada');
+    btnAlterarEnd.Click;
+    BuscaCidade1.edtCodCid.SetFocus;
+  end
   else
     result := true;
 end;

@@ -89,6 +89,7 @@ type
     RLSubDetail3: TRLSubDetail;
     RLBand15: TRLBand;
     memoEndereco: TRLMemo;
+    RLDBText12: TRLDBText;
     procedure RLDBText3BeforePrint(Sender: TObject; var Text: string; var PrintIt: Boolean);
     procedure FormCreate(Sender: TObject);
     procedure RLDBText7BeforePrint(Sender: TObject; var Text: string; var PrintIt: Boolean);

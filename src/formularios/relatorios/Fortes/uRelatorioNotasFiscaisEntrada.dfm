@@ -1,9 +1,9 @@
 inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
   Caption = 'Relat'#243'rio de Notas Fiscais de Entrada'
   ClientHeight = 282
-  ClientWidth = 705
+  ClientWidth = 701
   OnShow = FormShow
-  ExplicitWidth = 711
+  ExplicitWidth = 707
   ExplicitHeight = 310
   PixelsPerInch = 96
   TextHeight = 13
@@ -348,11 +348,11 @@ inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
   end
   inherited pnlPropaganda: TPanel
     Top = 247
-    Width = 705
-    ExplicitTop = 244
-    ExplicitWidth = 703
+    Width = 701
+    ExplicitTop = 247
+    ExplicitWidth = 705
     inherited Shape8: TShape
-      Width = 703
+      Width = 699
       ExplicitWidth = 577
     end
   end
@@ -455,7 +455,6 @@ inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
     Height = 247
     Align = alLeft
     TabOrder = 4
-    ExplicitHeight = 244
     object Shape12: TShape
       Left = 1
       Top = 1
@@ -721,11 +720,9 @@ inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
       end
       inherited edtCodigo: TCurrencyEdit
         Width = 70
-        Height = 25
         AutoSize = True
         Font.Height = -13
         ExplicitWidth = 70
-        ExplicitHeight = 25
       end
       inherited btnBusca: TBitBtn
         Left = 75
@@ -738,12 +735,10 @@ inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
       inherited edtNome: TEdit
         Left = 108
         Width = 397
-        Height = 25
         AutoSize = True
         Font.Height = -13
         ExplicitLeft = 108
         ExplicitWidth = 397
-        ExplicitHeight = 25
       end
     end
   end

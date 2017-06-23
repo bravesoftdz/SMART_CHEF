@@ -56,6 +56,7 @@ const
   paCadastroTransportadora       = 40;
   paEstornoEntradaNF             = 41;
   paCadastroNCM                  = 42;
+  paRelatorioMovimentacaoGeral   = 43;
 
 implementation
 

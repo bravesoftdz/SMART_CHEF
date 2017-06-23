@@ -228,7 +228,7 @@ begin
      Produto.preparo      := cbPreparo.Items[ cbPreparo.itemIndex ];
      Produto.altera_preco := IfThen(cbAlteraPreco.ItemIndex = 0, 'S', 'N');
 
-     //se for produto composto ou produto-materia, controla estoque
+     //se for produto ou produto-materia, controla estoque próprio
      if pos(Produto.tipo, 'PM') > 0 then
      begin
        { * * * SALVA ESTOQUE DO PRODUTO * * * }
@@ -468,6 +468,11 @@ begin
   else if (edtUNSaida.Text = '') and (cbTipo.ItemIndex in [0,2]) then begin
       avisar('É necessário informar a unidade de saída do produto');
       edtUNSaida.setFocus;
+  end
+  else if (edtMultiplicador.Value = 0) and edtMultiplicador.visible then
+  begin
+      avisar('É necessário informar a quantidade equivalente do produto referente a unidade de entrada');
+      edtMultiplicador.setFocus;
   end
   else
     result := true;

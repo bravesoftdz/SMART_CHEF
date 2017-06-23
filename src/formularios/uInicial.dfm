@@ -22,8 +22,6 @@ object frmInicial: TfrmInicial
   OnDestroy = FormDestroy
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  ExplicitWidth = 320
-  ExplicitHeight = 240
   DesignSize = (
     1080
     746)
@@ -32382,9 +32380,9 @@ object frmInicial: TfrmInicial
           Caption = 'Confirma'#231#227'o Entrada Estoque'
           OnClick = ConfirmaoEntradaEstoque1Click
         end
-        object Extorno1: TMenuItem
+        object Estorno1: TMenuItem
           Caption = 'Estorno'
-          OnClick = Extorno1Click
+          OnClick = Estorno1Click
         end
       end
     end
@@ -32455,6 +32453,18 @@ object frmInicial: TfrmInicial
         Caption = 'Itens Deletados'
         OnClick = ItensDeletados1Click
       end
+      object Vendas2: TMenuItem
+        Caption = 'Vendas'
+        OnClick = Vendas2Click
+      end
+      object MovimentaoGeral1: TMenuItem
+        Caption = 'Movimenta'#231#227'o Geral'
+        OnClick = MovimentaoGeral1Click
+      end
+      object NotasFiscaisEntrada1: TMenuItem
+        Caption = 'Notas Fiscais Entrada'
+        OnClick = NotasFiscaisEntrada1Click
+      end
       object Pedidos1: TMenuItem
         Caption = 'Pedidos'
         OnClick = Pedidos1Click
@@ -32462,14 +32472,6 @@ object frmInicial: TfrmInicial
       object Produtos1: TMenuItem
         Caption = 'Produtos'
         OnClick = Produtos1Click
-      end
-      object Vendas2: TMenuItem
-        Caption = 'Vendas'
-        OnClick = Vendas2Click
-      end
-      object NotasFiscaisEntrada1: TMenuItem
-        Caption = 'Notas Fiscais Entrada'
-        OnClick = NotasFiscaisEntrada1Click
       end
     end
     object SuporteTcnico1: TMenuItem

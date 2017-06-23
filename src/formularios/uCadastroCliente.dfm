@@ -14,12 +14,12 @@ inherited frmCadastroCliente: TfrmCadastroCliente
   end
   inherited pnlBotoes: TPanel
     Height = 544
-    ExplicitHeight = 501
+    ExplicitHeight = 544
   end
   inherited pnlPropaganda: TPanel
     Top = 544
     Width = 682
-    ExplicitTop = 501
+    ExplicitTop = 544
     ExplicitWidth = 682
     inherited Shape8: TShape
       Width = 680
@@ -31,15 +31,14 @@ inherited frmCadastroCliente: TfrmCadastroCliente
     Height = 544
     ActivePage = tsDados
     ExplicitWidth = 539
-    ExplicitHeight = 501
+    ExplicitHeight = 544
     inherited tsConsulta: TTabSheet
       ExplicitWidth = 531
-      ExplicitHeight = 470
+      ExplicitHeight = 513
       inherited lblAjudaSelecionar: TStaticText [0]
         Top = 496
         Width = 531
-        ExplicitTop = 453
-        ExplicitWidth = 531
+        ExplicitTop = 496
       end
       inherited gridConsulta: TDBGridCBN [1]
         Width = 513
@@ -67,12 +66,12 @@ inherited frmCadastroCliente: TfrmCadastroCliente
     end
     inherited tsDados: TTabSheet
       ExplicitWidth = 531
-      ExplicitHeight = 470
+      ExplicitHeight = 513
       inherited pnlDados: TPanel
         Width = 531
         Height = 513
         ExplicitWidth = 531
-        ExplicitHeight = 470
+        ExplicitHeight = 513
         inherited lblCamposObrigatorios: TLabel
           Top = 491
           ExplicitTop = 491

@@ -16,6 +16,7 @@ inherited frmCadastroMateriaPrima: TfrmCadastroMateriaPrima
   end
   inherited pgGeral: TPageControl
     Width = 448
+    ActivePage = tsDados
     ExplicitWidth = 448
     inherited tsConsulta: TTabSheet
       ExplicitWidth = 440
@@ -209,16 +210,20 @@ inherited frmCadastroMateriaPrima: TfrmCadastroMateriaPrima
           ExplicitTop = 138
           ExplicitWidth = 399
           inherited StaticText1: TStaticText
-            Width = 42
+            Top = -1
+            Width = 158
+            Caption = 'Produto de origem da mat'#233'ria'
             Font.Color = 3355443
             Font.Name = 'Segoe UI'
-            ExplicitWidth = 42
+            ExplicitTop = -1
+            ExplicitWidth = 158
           end
           inherited StaticText2: TStaticText
             Left = 71
             Width = 46
             Font.Color = 3355443
             Font.Name = 'Segoe UI'
+            Visible = False
             ExplicitLeft = 71
             ExplicitWidth = 46
           end

@@ -34,8 +34,6 @@ type
     RLLabel4: TRLLabel;
     RLLabel6: TRLLabel;
     RLLabel9: TRLLabel;
-    GroupBox1: TGroupBox;
-    chkAbaixo: TCheckBox;
     GroupBox2: TGroupBox;
     edtPercentAcima: TCurrencyEdit;
     Label1: TLabel;
@@ -83,6 +81,7 @@ type
     GroupBox4: TGroupBox;
     buscaGrupo1: TbuscaGrupo;
     qryEstoqueQUANTIDADE: TBCDField;
+    rgpFiltro: TRadioGroup;
     procedure BitBtn1Click(Sender: TObject);
     procedure qryEstoqueCalcFields(DataSet: TDataSet);
     procedure RLBand2BeforePrint(Sender: TObject; var PrintIt: Boolean);
@@ -92,6 +91,7 @@ type
     procedure BitBtn2Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure RLReport1BeforePrint(Sender: TObject; var PrintIt: Boolean);
+    procedure chkDentroMargemClick(Sender: TObject);
   private
     procedure monta_sql;
   public
@@ -128,9 +128,12 @@ begin
   else if rgpTipo.ItemIndex = 1 then
     qryEstoque.SQL.add(' and not(dis.descricao_item is null) ');
 
-  if chkAbaixo.Checked then begin
-    qryEstoque.SQL.add( ' and iif(e.quantidade_min > 0, (100 - ((e.quantidade_min * 100)/ e.quantidade)), 100) <= :marg_percent');
-
+  if rgpFiltro.ItemIndex = 1 then
+    qryEstoque.SQL.add( ' and ((e.quantidade_min > 0) and (e.quantidade < e.quantidade_min))')
+  else if rgpFiltro.ItemIndex = 2 then
+  begin
+    qryEstoque.SQL.add( ' and ((e.quantidade > e.quantidade_min) and (e.quantidade_min > 0) and '+
+                        ' (iif(e.quantidade_min > 0, (100 - ((e.quantidade_min * 100)/ e.quantidade)), 100) <= :marg_percent))');
     qryEstoque.ParamByName('marg_percent').AsFloat := edtPercentAcima.Value;
   end;
 
@@ -152,7 +155,13 @@ end;
 
 procedure TfrmRelatorioEstoque.BitBtn1Click(Sender: TObject);
 begin
-  qryEstoque.Connection    := dm.FDConnection;
+  if (rgpFiltro.ItemIndex = 2) and (edtPercentAcima.Value = 0) then
+  begin
+    avisar('Com o filtro "Apenas itens dentro da margem de alerta" selecionado, o campo de % para alcançar o estoque mínimo deve ser informado');
+    exit;
+  end;
+
+  qryEstoque.Connection    := dm.conexao;
   qryEstoque.Close;
   monta_sql;
   qryEstoque.Open;
@@ -217,6 +226,11 @@ end;
 procedure TfrmRelatorioEstoque.BitBtn2Click(Sender: TObject);
 begin
   self.Close;
+end;
+
+procedure TfrmRelatorioEstoque.chkDentroMargemClick(Sender: TObject);
+begin
+  edtPercentAcima.SetFocus;
 end;
 
 procedure TfrmRelatorioEstoque.edtPercentAcimaEnter(Sender: TObject);

@@ -53,7 +53,7 @@ type
     cdsItensPrePagosCODIGO_ITEM: TIntegerField;
     cdsItensPrePagosQUANTIDADE: TFloatField;
     btnOk: TBitBtn;
-    pnlExtorna: TPanel;
+    pnlEstorna: TPanel;
     DBGrid3: TDBGrid;
     dsItensPrePagos: TDataSource;
     cdsItensPrePagosPRODUTO: TStringField;
@@ -86,8 +86,8 @@ type
     cdsItensVLR_PAGO: TFMTBCDField;
     cdsItensVLR_TOTAL: TFMTBCDField;
     cdsItensVLR_UNITARIO: TFMTBCDField;
-    btnExtornaItem: TBitBtn;
-    btnExtornaMoeda: TBitBtn;
+    btnEstornaItem: TBitBtn;
+    btnEstornaMoeda: TBitBtn;
     cdsItensPrePagosCODMOEDA: TIntegerField;
     cdsMoedasCODIGO: TIntegerField;
     cdsMoedasINDICE: TIntegerField;
@@ -129,8 +129,8 @@ type
     procedure edtCpfChange(Sender: TObject);
     procedure edtDescontoChange(Sender: TObject);
     procedure cdsItensQTD_PAGAChange(Sender: TField);
-    procedure btnExtornaItemClick(Sender: TObject);
-    procedure btnExtornaMoedaClick(Sender: TObject);
+    procedure btnEstornaItemClick(Sender: TObject);
+    procedure btnEstornaMoedaClick(Sender: TObject);
     procedure gridMoedasDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure cdsMoedasBeforeDelete(DataSet: TDataSet);
   private
@@ -155,7 +155,7 @@ type
     procedure fraciona_item;
     procedure corrigeValorMoedas;
     procedure rateiaValor;
-    procedure ExtornarItem;
+    procedure EstornarItem;
 
     function verifica_obrigatorio :Boolean;
 
@@ -255,7 +255,7 @@ begin
 
   if (key = VK_Escape) then
   begin
-    if pnlExtorna.Visible then
+    if pnlEstorna.Visible then
     begin
       btnVoltar.Click;
       key := 0;
@@ -276,8 +276,8 @@ begin
     if cdsItensPrePagos.IsEmpty then
        avisar('Não existem itens a serem estornados')
     else begin
-       pnlExtorna.Left    := trunc(self.Width / 4);
-       pnlExtorna.Visible := true;
+       pnlEstorna.Left    := trunc(self.Width / 4);
+       pnlEstorna.Visible := true;
     end;
   end;
 
@@ -429,7 +429,7 @@ begin
     Key := ',';
 end;
 
-procedure TfrmFinalizaPedido.ExtornarItem;
+procedure TfrmFinalizaPedido.EstornarItem;
 var registro :integer;
 begin
     cdsItens.Locate('CODIGO_ITEM',cdsItensPrePagosCODIGO_ITEM.AsInteger, []);
@@ -1043,45 +1043,45 @@ end;
 procedure TfrmFinalizaPedido.btnVoltarClick(Sender: TObject);
 begin
   inherited;
-  pnlExtorna.Left    := 1250;
-  pnlExtorna.Visible := false;
+  pnlEstorna.Left    := 1250;
+  pnlEstorna.Visible := false;
 end;
 
 procedure TfrmFinalizaPedido.btnEstornarClick(Sender: TObject);
 begin
   if confirma('Estornar recebimento do item selecionado?'+#13#10+cdsItensPrePagosPRODUTO.AsString+' (recebido em '+cdsItensPrePagosMOEDA.asString+')') then
   begin
-    ExtornarItem;
+    EstornarItem;
     avisar('Item estornado!');
 
     if cdsItensPrePagos.IsEmpty then begin
-      pnlExtorna.Left    := 1250;
-      pnlExtorna.Visible := false;
+      pnlEstorna.Left    := 1250;
+      pnlEstorna.Visible := false;
     end;
   end;
 end;
 
-procedure TfrmFinalizaPedido.btnExtornaItemClick(Sender: TObject);
+procedure TfrmFinalizaPedido.btnEstornaItemClick(Sender: TObject);
 begin
   if cdsItensPrePagos.IsEmpty then
      avisar('Não existem itens a serem estornados')
   else begin
-     pnlExtorna.Left    := trunc(self.Width / 4);
-     pnlExtorna.Visible := true;
+     pnlEstorna.Left    := trunc(self.Width / 4);
+     pnlEstorna.Visible := true;
   end;
 end;
 
-procedure TfrmFinalizaPedido.btnExtornaMoedaClick(Sender: TObject);
+procedure TfrmFinalizaPedido.btnEstornaMoedaClick(Sender: TObject);
 var indice :integer;
 begin
   if cdsMoedas.IsEmpty then
      avisar('Não existem pagamentos a serem estornados')
   else if cdsMoedasCODIGO.AsInteger > 0 then
-     avisar('Um pagamento salvo não pode ser extornado')
+     avisar('Um pagamento salvo não pode ser estornado')
   else begin
      indice := cdsMoedasINDICE.AsInteger;
      while cdsItensPrePagos.Locate('CODMOEDA', cdsMoedasINDICE.AsInteger, []) and (cdsMoedasINDICE.AsInteger = indice) do
-       ExtornarItem;
+       EstornarItem;
   end;
 end;
 

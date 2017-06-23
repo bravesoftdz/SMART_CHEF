@@ -3571,6 +3571,21 @@ object frmScript: TfrmScript
     TabOrder = 70
     WordWrap = False
   end
+  object versao72: TMemo
+    Left = 683
+    Top = 101
+    Width = 31
+    Height = 23
+    Ctl3D = False
+    Lines.Strings = (
+      'update RDB$FIELDS set'
+      'RDB$FIELD_SCALE = -3'
+      'where RDB$FIELD_NAME = '#39'RDB$225'#39
+      '^')
+    ParentCtl3D = False
+    TabOrder = 71
+    WordWrap = False
+  end
   object Zsql: TZSQLProcessor
     Params = <>
     Delimiter = ';'
