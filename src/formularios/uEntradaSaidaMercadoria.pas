@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, uPadrao, StdCtrls, ExtCtrls, pngimage, frameBuscaProduto,
   frameBuscaDispensa, Mask, RXToolEdit, RXCurrEdit, Buttons, DB, DBClient,
-  Grids, DBGrids, EntradaSaida;
+  Grids, DBGrids, EntradaSaida, frameBuscaPessoa, frameBuscaFornecedor;
 
 type
   TfrmEntradaSaidaMercadoria = class(TfrmPadrao)
@@ -44,6 +44,10 @@ type
     edtPrecoCusto: TCurrencyEdit;
     cdsPRECO_CUSTO: TFloatField;
     cdsTIPO_ITEM: TStringField;
+    GroupBox1: TGroupBox;
+    buscaFornecedor: TBuscaFornecedor;
+    edtVlrTotal: TCurrencyEdit;
+    StaticText7: TStaticText;
     procedure FormCreate(Sender: TObject);
     procedure rgpTipoClick(Sender: TObject);
     procedure rgpOperacaoClick(Sender: TObject);
@@ -65,6 +69,7 @@ type
     procedure limpar_campos;
     procedure limpa_info;
     procedure atualiza_preco_custo;
+    procedure buscaPorAssociacao(pCodigoProduto, pCodigoFornecedor :integer; pCodigoProdutoFornecedor :String);
 
     function verifica_obrigatorios :Boolean;
   public
@@ -77,7 +82,7 @@ var
 implementation
 
 uses StrUtils, Estoque, Repositorio, FabricaRepositorio, Math, Dispensa,
-  Produto, uModulo, Usuario;
+  Produto, uModulo, Usuario, ProdutoFornecedor, EspecificacaoProdutoFornecedorPorCodigos;
 
 {$R *.dfm}
 
@@ -104,6 +109,12 @@ begin
 
   edtPrecoCusto.Enabled := (rgpOperacao.ItemIndex = 0);
 
+  buscaFornecedor.Limpa;
+  if rgpOperacao.ItemIndex = 1 then
+    BuscaFornecedor.Desabilita
+  else
+    BuscaFornecedor.Habilita;
+
   limpar_campos;
   limpa_info;
 end;
@@ -113,6 +124,27 @@ begin
   if assigned(BuscaDispensa1.Estoque) then begin
     edtEstoque.Value     := BuscaDispensa1.Estoque.quantidade;
     edtPrecoCusto.Value  := BuscaDispensa1.Dispensa.preco_custo;
+  end;
+end;
+
+procedure TfrmEntradaSaidaMercadoria.buscaPorAssociacao(pCodigoProduto, pCodigoFornecedor :integer; pCodigoProdutoFornecedor :String);
+var ProdutoFornecedor  :TProdutoFornecedor;
+    repositorioForn    :TRepositorio;
+    especificacao      :TEspecificacaoProdutoFornecedorPorCodigos;
+begin
+  try
+    repositorioForn := TFabricaRepositorio.GetRepositorio(TProdutoFornecedor.ClassName);
+    especificacao   := TEspecificacaoProdutoFornecedorPorCodigos.Create(pCodigoFornecedor, pCodigoProduto);
+    ProdutoFornecedor := TProdutoFornecedor(repositorioForn.GetPorEspecificacao(especificacao,'CODIGO_FORNECEDOR = '+intToStr(pCodigoFornecedor)));
+
+    if not assigned(ProdutoFornecedor) then
+      ProdutoFornecedor := TProdutoFornecedor.create(pCodigoProduto, pCodigoFornecedor, pCodigoProdutoFornecedor);
+
+    repositorioForn.Salvar(ProdutoFornecedor);
+  finally
+    FreeAndNil(ProdutoFornecedor);
+    FreeAndNil(repositorioForn);
+    FreeAndNil(especificacao);
   end;
 end;
 
@@ -153,17 +185,18 @@ begin
 end;
 
 procedure TfrmEntradaSaidaMercadoria.atualiza_estoque;
-var repositorio :TRepositorio;
-    estoque     :TEstoque;
+var repositorio        :TRepositorio;
+    estoque            :TEstoque;
 begin
   repositorio := nil;
   estoque     := nil;
   try
   try
+    repositorio     := TFabricaRepositorio.GetRepositorio(TEstoque.ClassName);
     cds.First;
-
     while not cds.Eof do begin
-      repositorio := TFabricaRepositorio.GetRepositorio(TEstoque.ClassName);
+      if assigned(buscaFornecedor.Pessoa) then
+        buscaPorAssociacao(cdsCODIGO_ITEM.AsInteger, buscaFornecedor.Pessoa.Codigo, cdsCODIGO_ITEM.AsString);
 
       if cdsTIPO_ITEM.AsString = 'D' then begin
 
@@ -202,7 +235,6 @@ begin
 
         repositorio.Salvar( estoque );
       end;
-
       cds.Next;
     end;
 
@@ -213,6 +245,8 @@ begin
 
   finally
     FreeAndNil(repositorio);
+    if assigned(estoque) then
+      FreeAndNil(estoque);
   end;
 end;
 
@@ -371,12 +405,14 @@ begin
     repositorio   := TFabricaRepositorio.GetRepositorio(TEntradaSaida.ClassName);
     entrada_saida := TEntradaSaida.Create;
 
-    entrada_saida.num_documento  := edtNumDoc.AsInteger;
-    entrada_saida.data           := StrToDate(edtData.Text);
-    entrada_saida.entrada_saida  := IfThen(rgpOperacao.ItemIndex = 0, 'E', 'S');
-    entrada_saida.tipo           := IfThen(rgpTipo.ItemIndex = 0, 'P', 'D');
-    entrada_saida.observacao     := mmoObs.Text;
-    entrada_saida.codigo_usuario := fdm.UsuarioLogado.Codigo;
+    entrada_saida.num_documento     := edtNumDoc.AsInteger;
+    entrada_saida.data              := StrToDate(edtData.Text);
+    entrada_saida.entrada_saida     := IfThen(rgpOperacao.ItemIndex = 0, 'E', 'S');
+    entrada_saida.tipo              := IfThen(rgpTipo.ItemIndex = 0, 'P', 'D');
+    entrada_saida.observacao        := mmoObs.Text;
+    entrada_saida.codigo_usuario    := fdm.UsuarioLogado.Codigo;
+    entrada_saida.codigo_fornecedor := buscaFornecedor.edtCodigo.AsInteger;
+    entrada_saida.valor_total       := edtVlrTotal.Value;
 
     cds.First;
     while not cds.Eof do begin
@@ -402,8 +438,10 @@ end;
 
 procedure TfrmEntradaSaidaMercadoria.limpa_info;
 begin
-  mmoObs.Clear;
+  buscaFornecedor.Limpa;
   edtNumDoc.Clear;
+  edtVlrTotal.Clear;
+  mmoObs.Clear;
 end;
 
 procedure TfrmEntradaSaidaMercadoria.edtPrecoCustoChange(Sender: TObject);

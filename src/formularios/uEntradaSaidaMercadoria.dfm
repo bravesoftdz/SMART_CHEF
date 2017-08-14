@@ -2,16 +2,16 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
   Left = 421
   Top = 197
   Caption = 'Entrada e sa'#237'da de mercadoria'
-  ClientHeight = 518
+  ClientHeight = 581
   OnShow = FormShow
   ExplicitWidth = 595
-  ExplicitHeight = 546
+  ExplicitHeight = 609
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlPropaganda: TPanel
-    Top = 483
-    TabOrder = 3
-    ExplicitTop = 483
+    Top = 546
+    TabOrder = 2
+    ExplicitTop = 546
   end
   object rgpOperacao: TRadioGroup
     Left = 0
@@ -31,12 +31,12 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
       ' Entrada de mercadoria'
       ' Sa'#237'da de mercadoria')
     ParentFont = False
-    TabOrder = 0
+    TabOrder = 8
     OnClick = rgpOperacaoClick
   end
   object rgpTipo: TRadioGroup
     Left = 0
-    Top = 145
+    Top = 209
     Width = 589
     Height = 32
     Align = alTop
@@ -45,19 +45,19 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
     Items.Strings = (
       'Produto'
       'Dispensa')
-    TabOrder = 2
+    TabOrder = 1
     OnClick = rgpTipoClick
   end
   inline BuscaDispensa1: TBuscaDispensa
     Left = 0
-    Top = 177
+    Top = 241
     Width = 589
     Height = 56
     Align = alTop
-    TabOrder = 4
+    TabOrder = 3
     Visible = False
     OnExit = BuscaDispensa1Exit
-    ExplicitTop = 177
+    ExplicitTop = 241
     ExplicitWidth = 589
     ExplicitHeight = 56
     inherited StaticText3: TStaticText
@@ -109,13 +109,13 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
   end
   inline BuscaProduto1: TBuscaProduto
     Left = 0
-    Top = 233
+    Top = 297
     Width = 589
     Height = 56
     Align = alTop
-    TabOrder = 5
+    TabOrder = 4
     OnExit = BuscaProduto1Exit
-    ExplicitTop = 233
+    ExplicitTop = 297
     ExplicitWidth = 589
     ExplicitHeight = 56
     inherited StaticText1: TStaticText
@@ -151,7 +151,7 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
   end
   object GroupBox2: TGroupBox
     Left = 0
-    Top = 235
+    Top = 297
     Width = 589
     Height = 90
     Align = alBottom
@@ -162,7 +162,7 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
     Font.Name = 'Segoe UI'
     Font.Style = [fsBold]
     ParentFont = False
-    TabOrder = 6
+    TabOrder = 5
     object lbEstoque: TStaticText
       Left = 20
       Top = 23
@@ -232,7 +232,7 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
       Left = 461
       Top = 14
       Width = 115
-      Height = 31
+      Height = 30
       Caption = 'Adicionar'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
@@ -313,9 +313,9 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
     end
     object btnCancelar: TBitBtn
       Left = 461
-      Top = 52
+      Top = 51
       Width = 115
-      Height = 31
+      Height = 30
       Caption = 'Cancelar'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
@@ -429,28 +429,28 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
   end
   object grpInfEntrada: TGroupBox
     Left = 0
-    Top = 57
+    Top = 121
     Width = 589
     Height = 88
     Align = alTop
-    TabOrder = 1
+    TabOrder = 0
     object edtNumDoc: TCurrencyEdit
       Left = 104
       Top = 16
-      Width = 129
+      Width = 105
       Height = 21
       AutoSize = False
       DisplayFormat = '0'
       TabOrder = 0
     end
     object edtData: TEdit
-      Left = 357
+      Left = 469
       Top = 16
       Width = 100
       Height = 21
       Enabled = False
       ReadOnly = True
-      TabOrder = 1
+      TabOrder = 2
     end
     object StaticText1: TStaticText
       Left = 12
@@ -464,12 +464,12 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
       Font.Name = 'Segoe UI'
       Font.Style = []
       ParentFont = False
-      TabOrder = 2
+      TabOrder = 3
       Transparent = False
     end
     object StaticText2: TStaticText
-      Left = 324
-      Top = 19
+      Left = 433
+      Top = 20
       Width = 28
       Height = 19
       Caption = 'Data'
@@ -479,7 +479,7 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
       Font.Name = 'Segoe UI'
       Font.Style = []
       ParentFont = False
-      TabOrder = 3
+      TabOrder = 4
       Transparent = False
     end
     object mmoObs: TMemo
@@ -487,7 +487,7 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
       Top = 48
       Width = 465
       Height = 33
-      TabOrder = 4
+      TabOrder = 5
     end
     object StaticText3: TStaticText
       Left = 12
@@ -501,18 +501,47 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
       Font.Name = 'Segoe UI'
       Font.Style = []
       ParentFont = False
-      TabOrder = 5
+      TabOrder = 6
+      Transparent = False
+    end
+    object edtVlrTotal: TCurrencyEdit
+      Left = 300
+      Top = 16
+      Width = 117
+      Height = 21
+      DisplayFormat = ' ,0.00;-,0.00'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = 3026478
+      Font.Height = -11
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+    end
+    object StaticText7: TStaticText
+      Left = 244
+      Top = 19
+      Width = 51
+      Height = 19
+      Caption = 'Vlr. Total'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 7
       Transparent = False
     end
   end
   object Panel1: TPanel
     Left = 0
-    Top = 325
+    Top = 387
     Width = 589
-    Height = 158
+    Height = 159
     Align = alBottom
     BevelOuter = bvNone
-    TabOrder = 7
+    TabOrder = 6
     object btnExecutar: TBitBtn
       Left = 421
       Top = 114
@@ -637,7 +666,6 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
       Font.Style = []
       ParentFont = False
       TabOrder = 2
-      Transparent = False
     end
     object StaticText5: TStaticText
       Left = 429
@@ -652,7 +680,64 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
       Font.Style = []
       ParentFont = False
       TabOrder = 3
-      Transparent = False
+    end
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 57
+    Width = 589
+    Height = 64
+    Align = alTop
+    TabOrder = 7
+    inline buscaFornecedor: TBuscaFornecedor
+      Left = 28
+      Top = 6
+      Width = 547
+      Height = 47
+      TabOrder = 0
+      ExplicitLeft = 28
+      ExplicitTop = 6
+      ExplicitWidth = 547
+      ExplicitHeight = 47
+      inherited StaticText2: TStaticText
+        Top = 13
+        Visible = False
+        ExplicitTop = 13
+      end
+      inherited StaticText1: TStaticText
+        Left = 2
+        Top = 2
+        Width = 64
+        Height = 19
+        Caption = 'Fornecedor'
+        Font.Height = -12
+        ExplicitLeft = 2
+        ExplicitTop = 2
+        ExplicitWidth = 64
+        ExplicitHeight = 19
+      end
+      inherited edtCodigo: TCurrencyEdit
+        Height = 21
+        AutoSize = True
+        Font.Height = -11
+        ExplicitHeight = 21
+      end
+      inherited btnBusca: TBitBtn
+        Top = 19
+        Width = 27
+        Height = 25
+        ExplicitTop = 19
+        ExplicitWidth = 27
+        ExplicitHeight = 25
+      end
+      inherited edtNome: TEdit
+        Width = 422
+        Height = 21
+        AutoSize = True
+        Font.Height = -11
+        ExplicitWidth = 422
+        ExplicitHeight = 21
+      end
     end
   end
   object cds: TClientDataSet

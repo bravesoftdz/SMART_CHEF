@@ -1,11 +1,11 @@
 inherited frmRelatorioVendas: TfrmRelatorioVendas
   Top = 209
   Caption = 'Relat'#243'rio de vendas'
-  ClientHeight = 178
-  ClientWidth = 673
+  ClientHeight = 579
+  ClientWidth = 975
   OnShow = FormShow
-  ExplicitWidth = 679
-  ExplicitHeight = 206
+  ExplicitWidth = 981
+  ExplicitHeight = 607
   PixelsPerInch = 96
   TextHeight = 13
   object Label2: TLabel [0]
@@ -888,12 +888,12 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
     end
   end
   inherited pnlPropaganda: TPanel
-    Top = 143
-    Width = 673
-    ExplicitTop = 176
-    ExplicitWidth = 661
+    Top = 544
+    Width = 975
+    ExplicitTop = 166
+    ExplicitWidth = 652
     inherited Shape8: TShape
-      Width = 671
+      Width = 973
       ExplicitWidth = 687
     end
   end
@@ -901,15 +901,15 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
     Left = 0
     Top = 0
     Width = 129
-    Height = 143
+    Height = 544
     Align = alLeft
     TabOrder = 5
-    ExplicitHeight = 176
+    ExplicitHeight = 166
     object Shape12: TShape
       Left = 1
       Top = 1
       Width = 127
-      Height = 141
+      Height = 542
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119
@@ -1127,6 +1127,20 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
     ParentFont = False
     TabOrder = 6
     OnClick = chkPeriodoGeralClick
+  end
+  object rgpC: TRadioGroup
+    Left = 154
+    Top = 91
+    Width = 485
+    Height = 46
+    Caption = ' Situa'#231#227'o '
+    Columns = 3
+    ItemIndex = 0
+    Items.Strings = (
+      'Todos'
+      'Com CPF'
+      'Sem CPF')
+    TabOrder = 7
   end
   object dsVendas: TDataSource
     DataSet = cdsVendas

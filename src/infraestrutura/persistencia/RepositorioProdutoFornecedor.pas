@@ -17,6 +17,7 @@ type
     function SQLGet                      :String;            override;
     function SQLSalvar                   :String;            override;
     function SQLGetAll                   :String;            override;
+    function CondicaoSQLGetAll           :String;            override;
     function SQLRemover                  :String;            override;
     function SQLGetExiste(campo: String): String;            override;
 
@@ -40,10 +41,15 @@ end;
 implementation
 
 uses
-  SysUtils,
+  SysUtils, System.StrUtils,
   ProdutoFornecedor;
 
 { TRepositorioProdutoFornecedor }
+
+function TRepositorioProdutoFornecedor.CondicaoSQLGetAll: String;
+begin
+  result := ' WHERE '+FIdentificador;
+end;
 
 function TRepositorioProdutoFornecedor.Get(Dataset: TDataSet): TObject;
 var
@@ -154,7 +160,7 @@ end;
 
 function TRepositorioProdutoFornecedor.SQLGetAll: String;
 begin
-  result := 'select * from Produto_FORNECEDOR';
+  result := 'select * from Produto_FORNECEDOR'+ IfThen(FIdentificador = '','', CondicaoSQLGetAll);;
 end;
 
 function TRepositorioProdutoFornecedor.SQLGetExiste(campo: String): String;

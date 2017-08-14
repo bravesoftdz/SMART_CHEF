@@ -137,7 +137,7 @@ end;
 
 function TItemVenda.GetCSOSN02: TCSOSNTributadoSNSemCredito;
 begin
-   if (Produto.tipo = 'P') then
+   if (Produto.tipo <> 'S') then
      FCSOSN02 := TCSOSNTributadoSNSemCredito.Create(Produto.icms, Total);
 
    result := FCSOSN02;

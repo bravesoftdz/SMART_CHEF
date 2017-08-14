@@ -1,15 +1,15 @@
 inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
   Caption = 'Relat'#243'rio de Notas Fiscais de Entrada'
-  ClientHeight = 282
-  ClientWidth = 701
+  ClientHeight = 278
+  ClientWidth = 703
   OnShow = FormShow
-  ExplicitWidth = 707
-  ExplicitHeight = 310
+  ExplicitWidth = 709
+  ExplicitHeight = 306
   PixelsPerInch = 96
   TextHeight = 13
   object RLReport1: TRLReport [0]
-    Left = 134
-    Top = 248
+    Left = 114
+    Top = 120
     Width = 794
     Height = 1123
     Borders.Sides = sdCustom
@@ -17,13 +17,14 @@ inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
     Borders.DrawTop = True
     Borders.DrawRight = True
     Borders.DrawBottom = True
-    DataSource = dsNotas
+    DataSource = dsNotas2
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Arial'
     Font.Style = []
     Visible = False
+    BeforePrint = RLReport1BeforePrint
     object RLBand1: TRLBand
       Left = 39
       Top = 39
@@ -102,73 +103,9 @@ inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
         ParentFont = False
       end
     end
-    object RLBand2: TRLBand
-      Left = 39
-      Top = 130
-      Width = 716
-      Height = 23
-      BandType = btColumnHeader
-      Borders.Sides = sdCustom
-      Borders.DrawLeft = False
-      Borders.DrawTop = False
-      Borders.DrawRight = False
-      Borders.DrawBottom = False
-      object RLLabel1: TRLLabel
-        Left = 143
-        Top = 6
-        Width = 51
-        Height = 16
-        Caption = 'N'#186' Nota'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Height = -13
-        Font.Name = 'Arial'
-        Font.Style = [fsBold]
-        ParentFont = False
-      end
-      object RLLabel2: TRLLabel
-        Left = 7
-        Top = 6
-        Width = 109
-        Height = 16
-        Caption = 'Data de emiss'#227'o'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Height = -13
-        Font.Name = 'Arial'
-        Font.Style = [fsBold]
-        ParentFont = False
-      end
-      object RLLabel3: TRLLabel
-        Left = 631
-        Top = 6
-        Width = 38
-        Height = 16
-        Caption = 'Valor'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Height = -13
-        Font.Name = 'Arial'
-        Font.Style = [fsBold]
-        ParentFont = False
-      end
-      object RLLabel9: TRLLabel
-        Left = 247
-        Top = 6
-        Width = 40
-        Height = 16
-        Caption = 'CFOP'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Height = -13
-        Font.Name = 'Arial'
-        Font.Style = [fsBold]
-        ParentFont = False
-      end
-    end
     object RLBand4: TRLBand
       Left = 39
-      Top = 217
+      Top = 402
       Width = 716
       Height = 22
       AlignToBottom = True
@@ -178,17 +115,8 @@ inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
       Borders.DrawTop = True
       Borders.DrawRight = False
       Borders.DrawBottom = False
-      object RLDBResult1: TRLDBResult
-        Left = 608
-        Top = 2
-        Width = 87
-        Height = 16
-        DataField = 'VALOR'
-        DataSource = dsNotas
-        Info = riSum
-        Text = ''
-      end
-      object RLLabel7: TRLLabel
+      BeforePrint = RLBand4BeforePrint
+      object rlbTotalGeral: TRLLabel
         Left = 479
         Top = 2
         Width = 87
@@ -200,19 +128,163 @@ inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
         Font.Name = 'Arial'
         Font.Style = [fsBold]
         ParentFont = False
+        BeforePrint = rlbTotalGeralBeforePrint
       end
     end
-    object RLGroup1: TRLGroup
+    object RLSubDetail1: TRLSubDetail
       Left = 39
-      Top = 153
+      Top = 265
       Width = 716
-      Height = 64
-      DataFields = 'CODIGO_EMITENTE'
-      object RLBand5: TRLBand
+      Height = 137
+      DataSource = dsNotas2
+      object RLGroup1: TRLGroup
+        Left = 0
+        Top = 46
+        Width = 716
+        Height = 51
+        DataFields = 'CODIGO_FORNECEDOR'
+        object RLBand7: TRLBand
+          Left = 0
+          Top = 22
+          Width = 716
+          Height = 20
+          Borders.Sides = sdCustom
+          Borders.DrawLeft = False
+          Borders.DrawTop = False
+          Borders.DrawRight = False
+          Borders.DrawBottom = True
+          Borders.Color = 9868950
+          object RLDBText6: TRLDBText
+            Left = 604
+            Top = 1
+            Width = 91
+            Height = 18
+            Alignment = taRightJustify
+            DataField = 'VALOR_TOTAL'
+            DataSource = dsNotas2
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -15
+            Font.Name = 'Calibri'
+            Font.Style = []
+            ParentFont = False
+            Text = ''
+          end
+          object RLDBText7: TRLDBText
+            Left = 146
+            Top = 1
+            Width = 123
+            Height = 18
+            DataField = 'NUM_DOCUMENTO'
+            DataSource = dsNotas2
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -15
+            Font.Name = 'Calibri'
+            Font.Style = []
+            ParentFont = False
+            Text = ''
+          end
+          object RLDBText8: TRLDBText
+            Left = 18
+            Top = 1
+            Width = 38
+            Height = 18
+            Alignment = taCenter
+            DataField = 'DATA'
+            DataSource = dsNotas2
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -15
+            Font.Name = 'Calibri'
+            Font.Style = []
+            ParentFont = False
+            Text = ''
+          end
+        end
+        object RLBand9: TRLBand
+          Left = 0
+          Top = 0
+          Width = 716
+          Height = 22
+          BandType = btColumnHeader
+          Borders.Sides = sdCustom
+          Borders.DrawLeft = False
+          Borders.DrawTop = False
+          Borders.DrawRight = False
+          Borders.DrawBottom = True
+          Color = clWhite
+          ParentColor = False
+          Transparent = False
+          object RLDraw3: TRLDraw
+            Left = 0
+            Top = 0
+            Width = 716
+            Height = 20
+            Borders.Sides = sdCustom
+            Borders.DrawLeft = False
+            Borders.DrawTop = False
+            Borders.DrawRight = False
+            Borders.DrawBottom = False
+            Brush.Color = 16119285
+            Pen.Style = psClear
+            Transparent = False
+          end
+          object RLDBText10: TRLDBText
+            Left = 16
+            Top = 4
+            Width = 77
+            Height = 15
+            DataField = 'FORNECEDOR'
+            DataSource = dsNotas2
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = 3618615
+            Font.Height = -13
+            Font.Name = 'Calibri'
+            Font.Style = [fsBold]
+            ParentFont = False
+            Text = ''
+          end
+        end
+      end
+      object RLBand8: TRLBand
         Left = 0
         Top = 0
         Width = 716
-        Height = 27
+        Height = 23
+        BandType = btHeader
+        Borders.Sides = sdCustom
+        Borders.DrawLeft = False
+        Borders.DrawTop = False
+        Borders.DrawRight = False
+        Borders.DrawBottom = False
+        Borders.Color = 9868950
+        Color = 16512227
+        ParentColor = False
+        Transparent = False
+        object RLLabel14: TRLLabel
+          Left = 0
+          Top = 3
+          Width = 716
+          Height = 20
+          Align = faBottom
+          Alignment = taCenter
+          AutoSize = False
+          Caption = 'ENTRADAS SEM XML'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Transparent = False
+        end
+      end
+      object RLBand12: TRLBand
+        Left = 0
+        Top = 23
+        Width = 716
+        Height = 23
         BandType = btColumnHeader
         Borders.Sides = sdCustom
         Borders.DrawLeft = False
@@ -222,41 +294,11 @@ inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
         Color = clWhite
         ParentColor = False
         Transparent = False
-        object RLDraw2: TRLDraw
+        object RLLabel15: TRLLabel
           Left = 0
-          Top = 6
-          Width = 716
-          Height = 20
-          Borders.Sides = sdCustom
-          Borders.DrawLeft = False
-          Borders.DrawTop = True
-          Borders.DrawRight = False
-          Borders.DrawBottom = False
-          Brush.Color = 16119285
-          Pen.Style = psClear
-          Transparent = False
-        end
-        object RLDBText5: TRLDBText
-          Left = 16
-          Top = 9
-          Width = 77
-          Height = 15
-          DataField = 'FORNECEDOR'
-          DataSource = dsNotas
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = 3618615
-          Font.Height = -13
-          Font.Name = 'Calibri'
-          Font.Style = [fsBold]
-          ParentFont = False
-          Text = ''
-          Transparent = False
-        end
-        object RLLabel8: TRLLabel
-          Left = 0
-          Top = 7
+          Top = 0
           Width = 8
-          Height = 19
+          Height = 22
           AutoSize = False
           Caption = ' '
           Color = 15652774
@@ -269,77 +311,353 @@ inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
           ParentFont = False
           Transparent = False
         end
+        object RLLabel10: TRLLabel
+          Left = 143
+          Top = 4
+          Width = 51
+          Height = 16
+          Caption = 'N'#186' Nota'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object RLLabel11: TRLLabel
+          Left = 7
+          Top = 4
+          Width = 106
+          Height = 16
+          Caption = 'Data de entrada'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object RLLabel12: TRLLabel
+          Left = 631
+          Top = 4
+          Width = 38
+          Height = 16
+          Caption = 'Valor'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
       end
-      object RLBand3: TRLBand
+      object RLBand11: TRLBand
         Left = 0
-        Top = 27
+        Top = 97
         Width = 716
         Height = 20
+        BandType = btSummary
+        Borders.Sides = sdCustom
+        Borders.DrawLeft = False
+        Borders.DrawTop = True
+        Borders.DrawRight = False
+        Borders.DrawBottom = True
+        Borders.Color = 9868950
+        object RLDBResult2: TRLDBResult
+          Left = 555
+          Top = 2
+          Width = 140
+          Height = 16
+          Alignment = taRightJustify
+          DataField = 'VALOR_TOTAL'
+          DataSource = dsNotas2
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 2105376
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Info = riSum
+          ParentFont = False
+          Text = ''
+        end
+      end
+    end
+    object RLSubDetail2: TRLSubDetail
+      Left = 39
+      Top = 130
+      Width = 716
+      Height = 135
+      DataSource = dsNotas
+      object RLBand2: TRLBand
+        Left = 0
+        Top = 0
+        Width = 716
+        Height = 23
+        BandType = btHeader
         Borders.Sides = sdCustom
         Borders.DrawLeft = False
         Borders.DrawTop = False
         Borders.DrawRight = False
         Borders.DrawBottom = False
-        object RLDBText1: TRLDBText
-          Left = 146
-          Top = 2
-          Width = 150
-          Height = 18
-          DataField = 'NUMERO_NOTA_FISCAL'
-          DataSource = dsNotas
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -15
-          Font.Name = 'Calibri'
-          Font.Style = []
-          ParentFont = False
-          Text = ''
-        end
-        object RLDBText2: TRLDBText
-          Left = 12
-          Top = 2
-          Width = 100
-          Height = 18
+        Borders.Color = 9868950
+        Color = 16512227
+        ParentColor = False
+        Transparent = False
+        object RLLabel7: TRLLabel
+          Left = 0
+          Top = 3
+          Width = 716
+          Height = 20
+          Align = faBottom
           Alignment = taCenter
-          DataField = 'DATA_EMISSAO'
-          DataSource = dsNotas
+          AutoSize = False
+          Caption = 'ENTRADAS COM XML'
+          Color = 15857895
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -15
-          Font.Name = 'Calibri'
-          Font.Style = []
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          ParentColor = False
           ParentFont = False
-          Text = ''
+          Transparent = False
         end
-        object RLDBText3: TRLDBText
-          Left = 650
+      end
+      object RLGroup2: TRLGroup
+        Left = 0
+        Top = 46
+        Width = 716
+        Height = 51
+        DataFields = 'CODIGO_EMITENTE'
+        object RLBand3: TRLBand
+          Left = 0
+          Top = 21
+          Width = 716
+          Height = 20
+          Borders.Sides = sdCustom
+          Borders.DrawLeft = False
+          Borders.DrawTop = False
+          Borders.DrawRight = False
+          Borders.DrawBottom = False
+          object RLDBText1: TRLDBText
+            Left = 146
+            Top = 2
+            Width = 150
+            Height = 18
+            DataField = 'NUMERO_NOTA_FISCAL'
+            DataSource = dsNotas
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -15
+            Font.Name = 'Calibri'
+            Font.Style = []
+            ParentFont = False
+            Text = ''
+          end
+          object RLDBText2: TRLDBText
+            Left = 12
+            Top = 2
+            Width = 100
+            Height = 18
+            Alignment = taCenter
+            DataField = 'DATA_EMISSAO'
+            DataSource = dsNotas
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -15
+            Font.Name = 'Calibri'
+            Font.Style = []
+            ParentFont = False
+            Text = ''
+          end
+          object RLDBText3: TRLDBText
+            Left = 650
+            Top = 2
+            Width = 45
+            Height = 18
+            Alignment = taRightJustify
+            DataField = 'VALOR'
+            DataSource = dsNotas
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -15
+            Font.Name = 'Calibri'
+            Font.Style = []
+            ParentFont = False
+            Text = ''
+          end
+          object RLDBText4: TRLDBText
+            Left = 246
+            Top = 2
+            Width = 44
+            Height = 18
+            Alignment = taCenter
+            DataField = 'CFOPS'
+            DataSource = dsNotas
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -15
+            Font.Name = 'Calibri'
+            Font.Style = []
+            ParentFont = False
+            Text = ''
+          end
+        end
+        object RLBand5: TRLBand
+          Left = 0
+          Top = 0
+          Width = 716
+          Height = 21
+          BandType = btColumnHeader
+          Borders.Sides = sdCustom
+          Borders.DrawLeft = False
+          Borders.DrawTop = False
+          Borders.DrawRight = False
+          Borders.DrawBottom = True
+          Color = clWhite
+          ParentColor = False
+          Transparent = False
+          object RLDraw2: TRLDraw
+            Left = 0
+            Top = 0
+            Width = 716
+            Height = 20
+            Borders.Sides = sdCustom
+            Borders.DrawLeft = False
+            Borders.DrawTop = False
+            Borders.DrawRight = False
+            Borders.DrawBottom = False
+            Brush.Color = 16119285
+            Pen.Style = psClear
+            Transparent = False
+          end
+          object RLDBText5: TRLDBText
+            Left = 16
+            Top = 3
+            Width = 77
+            Height = 15
+            DataField = 'FORNECEDOR'
+            DataSource = dsNotas
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = 3618615
+            Font.Height = -13
+            Font.Name = 'Calibri'
+            Font.Style = [fsBold]
+            ParentFont = False
+            Text = ''
+          end
+        end
+      end
+      object RLBand6: TRLBand
+        Left = 0
+        Top = 23
+        Width = 716
+        Height = 23
+        BandType = btColumnHeader
+        Borders.Sides = sdCustom
+        Borders.DrawLeft = False
+        Borders.DrawTop = False
+        Borders.DrawRight = False
+        Borders.DrawBottom = True
+        Color = clWhite
+        ParentColor = False
+        Transparent = False
+        object RLLabel8: TRLLabel
+          Left = 0
+          Top = 0
+          Width = 8
+          Height = 22
+          AutoSize = False
+          Caption = ' '
+          Color = 14150314
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          ParentColor = False
+          ParentFont = False
+          Transparent = False
+        end
+        object RLLabel1: TRLLabel
+          Left = 143
+          Top = 5
+          Width = 51
+          Height = 16
+          Caption = 'N'#186' Nota'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object RLLabel2: TRLLabel
+          Left = 7
+          Top = 5
+          Width = 109
+          Height = 16
+          Caption = 'Data de emiss'#227'o'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object RLLabel3: TRLLabel
+          Left = 631
+          Top = 5
+          Width = 38
+          Height = 16
+          Caption = 'Valor'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object RLLabel9: TRLLabel
+          Left = 247
+          Top = 5
+          Width = 40
+          Height = 16
+          Caption = 'CFOP'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+      end
+      object RLBand10: TRLBand
+        Left = 0
+        Top = 97
+        Width = 716
+        Height = 20
+        BandType = btSummary
+        Borders.Sides = sdCustom
+        Borders.DrawLeft = False
+        Borders.DrawTop = True
+        Borders.DrawRight = False
+        Borders.DrawBottom = True
+        Borders.Color = 9868950
+        object RLDBResult3: TRLDBResult
+          Left = 605
           Top = 2
-          Width = 45
-          Height = 18
+          Width = 90
+          Height = 16
           Alignment = taRightJustify
           DataField = 'VALOR'
           DataSource = dsNotas
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -15
-          Font.Name = 'Calibri'
-          Font.Style = []
-          ParentFont = False
-          Text = ''
-        end
-        object RLDBText4: TRLDBText
-          Left = 246
-          Top = 2
-          Width = 44
-          Height = 18
-          Alignment = taCenter
-          DataField = 'CFOPS'
-          DataSource = dsNotas
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -15
-          Font.Name = 'Calibri'
-          Font.Style = []
+          Font.Color = 2105376
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Info = riSum
           ParentFont = False
           Text = ''
         end
@@ -347,12 +665,12 @@ inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
     end
   end
   inherited pnlPropaganda: TPanel
-    Top = 247
-    Width = 701
-    ExplicitTop = 247
-    ExplicitWidth = 705
+    Top = 243
+    Width = 703
+    ExplicitTop = 234
+    ExplicitWidth = 702
     inherited Shape8: TShape
-      Width = 699
+      Width = 701
       ExplicitWidth = 577
     end
   end
@@ -452,14 +770,15 @@ inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
     Left = 0
     Top = 0
     Width = 129
-    Height = 247
+    Height = 243
     Align = alLeft
     TabOrder = 4
+    ExplicitHeight = 234
     object Shape12: TShape
       Left = 1
       Top = 1
       Width = 127
-      Height = 245
+      Height = 241
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119
@@ -720,9 +1039,11 @@ inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
       end
       inherited edtCodigo: TCurrencyEdit
         Width = 70
+        Height = 25
         AutoSize = True
         Font.Height = -13
         ExplicitWidth = 70
+        ExplicitHeight = 25
       end
       inherited btnBusca: TBitBtn
         Left = 75
@@ -735,10 +1056,12 @@ inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
       inherited edtNome: TEdit
         Left = 108
         Width = 397
+        Height = 25
         AutoSize = True
         Font.Height = -13
         ExplicitLeft = 108
         ExplicitWidth = 397
+        ExplicitHeight = 25
       end
     end
   end
@@ -797,5 +1120,60 @@ inherited frmRelatorioNotasFiscaisEntrada: TfrmRelatorioNotasFiscaisEntrada
     DataSet = qryNotas
     Left = 48
     Top = 184
+  end
+  object qryNotas2: TFDQuery
+    SQL.Strings = (
+      'select es.num_documento, es.data, es.codigo_fornecedor,'
+      ' fn.razao fornecedor, es.valor_total from entrada_saida es'
+      
+        ' left join pessoas fn on fn.codigo = es.codigo_fornecedor       ' +
+        '  '
+      
+        ' where not(es.codigo_fornecedor is null)                        ' +
+        '  '
+      
+        ' group by es.num_documento, es.data, es.codigo_fornecedor, fn.ra' +
+        'zao, es.valor_total'
+      ' order by es.num_documento, es.codigo_fornecedor')
+    Left = 112
+    Top = 128
+    object qryNotas2NUM_DOCUMENTO: TIntegerField
+      FieldName = 'NUM_DOCUMENTO'
+      Origin = 'NUM_DOCUMENTO'
+    end
+    object qryNotas2DATA: TDateField
+      FieldName = 'DATA'
+      Origin = '"DATA"'
+    end
+    object qryNotas2CODIGO_FORNECEDOR: TIntegerField
+      FieldName = 'CODIGO_FORNECEDOR'
+      Origin = 'CODIGO_FORNECEDOR'
+    end
+    object qryNotas2FORNECEDOR: TStringField
+      AutoGenerateValue = arDefault
+      FieldName = 'FORNECEDOR'
+      Origin = 'RAZAO'
+      ProviderFlags = []
+      ReadOnly = True
+      Size = 60
+    end
+    object qryNotas2VALOR_TOTAL: TSingleField
+      FieldName = 'VALOR_TOTAL'
+      Origin = 'VALOR_TOTAL'
+      DisplayFormat = ',0.00; ,0.00'
+    end
+  end
+  object dsNotas2: TDataSource
+    DataSet = qryNotas2
+    Left = 112
+    Top = 184
+  end
+  object RLPDFFilter1: TRLPDFFilter
+    DocumentInfo.Creator = 
+      'FortesReport Community Edition v4.0 \251 Copyright '#169' 1999-2015 F' +
+      'ortes Inform'#225'tica'
+    DisplayName = 'Documento PDF'
+    Left = 576
+    Top = 104
   end
 end

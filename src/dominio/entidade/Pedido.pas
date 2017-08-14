@@ -210,7 +210,7 @@ begin
   result := 0;
 
   for i := 0 to self.Itens.Count - 1 do
-    if TItem(Itens.Items[i]).Produto.tipo = 'P' then
+    if TItem(Itens.Items[i]).Produto.tipo <> 'S' then
     begin
       result := result + (Itens.Items[i].valor_Unitario * Itens.Items[i].quantidade)
                        +  Itens.Items[i].quantidade * Itens.Items[i].totalAdicionais ;

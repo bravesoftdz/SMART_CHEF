@@ -342,7 +342,8 @@ uses
   uPedidos in 'src\formularios\uPedidos.pas' {frmPedidos},
   uEstornoEntrada in 'src\formularios\uEstornoEntrada.pas' {frmEstornoEntrada},
   uCadastroNcmIBPT in 'src\formularios\uCadastroNcmIBPT.pas' {frmCadastroNcmIBPT},
-  uRelatorioMovimentacaoGeral in 'src\formularios\relatorios\Fortes\uRelatorioMovimentacaoGeral.pas' {frmRelatorioMovimentacaoGeral};
+  uRelatorioMovimentacaoGeral in 'src\formularios\relatorios\Fortes\uRelatorioMovimentacaoGeral.pas' {frmRelatorioMovimentacaoGeral},
+  EspecificacaoProdutoFornecedorPorCodigos in 'src\dominio\objetoValor\especificacao\EspecificacaoProdutoFornecedorPorCodigos.pas';
 
 {$R *.res}
 

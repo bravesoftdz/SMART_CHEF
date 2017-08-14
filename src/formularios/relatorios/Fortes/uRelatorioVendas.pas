@@ -111,6 +111,7 @@ type
     qryVendasQTD_FRACIONADO: TIntegerField;
     qryVendasVLR_TOTAL_IT: TFMTBCDField;
     qryVendasVLR_TOTAL_AD: TFMTBCDField;
+    rgpC: TRadioGroup;
     procedure FormShow(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
     procedure chkPeriodoGeralClick(Sender: TObject);
@@ -193,6 +194,7 @@ begin
                         '   where ait.codigo_item = i.codigo ) vlr_total_ad             '+
                         ' from pedidos ped                                              '+
 
+                        ' left join nfce    on nfce.codigo_pedido = ped.codigo          '+
                         ' left join itens i on i.codigo_pedido = ped.codigo             '+
                         ' left join produtos p on p.codigo = i.codigo_produto           '+
                         ' left join grupos gr on gr.codigo = p.codigo_grupo             '+
@@ -205,6 +207,7 @@ begin
 
                           ' from pedidos ped                                              '+
 
+                          ' left join nfce    on nfce.codigo_pedido = ped.codigo          '+
                           ' left join itens i on i.codigo_pedido = ped.codigo             '+
                           ' left join produtos p on p.codigo = i.codigo_produto           '+
                           ' left join grupos gr on gr.codigo = p.codigo_grupo             '+
@@ -212,6 +215,11 @@ begin
 
                           ' where ped.situacao = ''F'' ';
 
+  if rgpC.ItemIndex > 0 then
+  begin
+    qryVendas.SQL.Add(' and '+IfThen(rgpC.ItemIndex = 1,'not','')+'(nfce.codigo is null) ');
+    qryPedidos.SQL.Add(' and '+IfThen(rgpC.ItemIndex = 1,'not','')+'(nfce.codigo is null) ');
+  end;
 
   if not chkPeriodoGeral.Checked then begin
   {  qryVendas.SQL.Add(' and ((ped.data between :dti and :dtf)                                                                      ');
@@ -336,12 +344,13 @@ begin
 end;
 
 procedure TfrmRelatorioVendas.agrupa_produtos_iguais;
+var total :real;
 begin
   if not cdsVendas.Active then
     cdsVendas.CreateDataSet;
 
   cdsVendas.EmptyDataSet;  
-
+  total := 0;
   qryVendas.First;
   while not qryVendas.Eof do begin
     if cdsVendas.Locate('CODGRUPO;PRODUTO', VarArrayOf([qryVendasCODGRUPO.AsInteger, TRIM(qryVendasPRODUTO.AsString)]), []) then
@@ -364,11 +373,21 @@ begin
 
     cdsVendas.Post;
 
+    total := total + cdsVendasVLR_TOTAL_IT.AsFloat;
+
     qryVendas.Next;
   end;
 
   cdsVendas.First;
+  while not cdsVendas.Eof do begin
 
+    total := total + cdsVendasVLR_TOTAL_IT.AsFloat;
+
+    cdsVendas.Next;
+  end;
+
+
+  avisar(floattostr(total));
 end;
 
 end.

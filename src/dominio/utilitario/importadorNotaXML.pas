@@ -74,12 +74,9 @@ procedure TImportadorNotaXML.XMLparaNFe;
 begin
   try
     self.AcbrNfe.NotasFiscais.LoadFromFile(self.FCaminhoArquivo);
-   // dm.conexao.AutoCommit := false;
 
     if GravarProdutos(FAcbrNfe.NotasFiscais.Items[0]) then
       GravarNotaFiscal(FAcbrNfe.NotasFiscais.Items[0]);
-
-  //  dm.conexao.Commit;
   Except
     on e : Exception do
       begin
@@ -242,7 +239,6 @@ begin
     ProdutoFornecedor.codigo_Produto_fornecedor := codigo_produto_fornecedor;
 
     repositorio.Salvar(ProdutoFornecedor);
-
   Except
     raise Exception.Create('Erro ao salvar associação');
   end;

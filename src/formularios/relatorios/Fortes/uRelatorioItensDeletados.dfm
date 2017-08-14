@@ -2,11 +2,11 @@ inherited frmRelatorioItensDeletados: TfrmRelatorioItensDeletados
   Left = 473
   Top = 217
   Caption = 'Relat'#243'rio de itens deletados'
-  ClientHeight = 202
+  ClientHeight = 208
   ClientWidth = 596
   OnShow = FormShow
   ExplicitWidth = 602
-  ExplicitHeight = 230
+  ExplicitHeight = 236
   PixelsPerInch = 96
   TextHeight = 13
   object Label2: TLabel [0]
@@ -515,7 +515,7 @@ inherited frmRelatorioItensDeletados: TfrmRelatorioItensDeletados
     end
   end
   inherited pnlPropaganda: TPanel
-    Top = 167
+    Top = 173
     Width = 596
     ExplicitTop = 167
     ExplicitWidth = 596
@@ -528,17 +528,19 @@ inherited frmRelatorioItensDeletados: TfrmRelatorioItensDeletados
     Left = 0
     Top = 0
     Width = 129
-    Height = 167
+    Height = 173
     Align = alLeft
     TabOrder = 2
+    ExplicitHeight = 167
     object Shape12: TShape
       Left = 1
       Top = 1
       Width = 127
-      Height = 165
+      Height = 171
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119
+      ExplicitHeight = 165
     end
     object BitBtn1: TBitBtn
       Left = 11

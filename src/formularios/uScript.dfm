@@ -1898,7 +1898,7 @@ object frmScript: TfrmScript
     WordWrap = False
   end
   object versao55: TMemo
-    Left = 6
+    Left = 8
     Top = 101
     Width = 31
     Height = 23
@@ -3584,6 +3584,39 @@ object frmScript: TfrmScript
       '^')
     ParentCtl3D = False
     TabOrder = 71
+    WordWrap = False
+  end
+  object versao73: TMemo
+    Left = 8
+    Top = 133
+    Width = 31
+    Height = 23
+    Ctl3D = False
+    Lines.Strings = (
+      'ALTER TABLE ENTRADA_SAIDA'
+      'ADD CODIGO_FORNECEDOR INTEGER'
+      '^'
+      'alter table ENTRADA_SAIDA'
+      'add constraint FK_ENTRADA_SAIDA_2'
+      'foreign key (CODIGO_FORNECEDOR)'
+      'references PESSOAS(CODIGO)'
+      '^')
+    ParentCtl3D = False
+    TabOrder = 72
+    WordWrap = False
+  end
+  object versao74: TMemo
+    Left = 46
+    Top = 133
+    Width = 31
+    Height = 23
+    Ctl3D = False
+    Lines.Strings = (
+      'ALTER TABLE ENTRADA_SAIDA'
+      'ADD VALOR_TOTAL FLOAT'
+      '^')
+    ParentCtl3D = False
+    TabOrder = 73
     WordWrap = False
   end
   object Zsql: TZSQLProcessor

@@ -30,6 +30,7 @@ function retorna_estado(const codigo_estado :integer; const uf :String):Variant;
 function charEsquerda(texto :String; tamMax :integer; char :string) :String;
 function DataSEFAZToDateTime(const Data: String): TDateTime;
 function cortaCasasDecimais(valor :Real; casasDesejadas :integer) :Real;
+function RemoveAcento(Str: string): string;
 
 implementation
 
@@ -41,6 +42,18 @@ begin
 
   if tipo in [ftSmallint, ftInteger] then
     result := StrToIntDef(conteudo,0)
+end;
+
+function RemoveAcento(Str: string): string;
+const ComAcento = 'àâêôûãõáéíóúçüÀÂÊÔÛÃÕÁÉÍÓÚÜ';
+      SemAcento = 'aaeouaoaeioucuAAEOUAOAEIOUU';
+var x: Integer;
+begin
+  for x := 1 to Length(Str) do
+    if Pos(Str[x],ComAcento) <> 0 then
+      Str[x] := SemAcento[Pos(Str[x], ComAcento)];
+
+  Result := Str;
 end;
 
 function ApenasNumeros(const Texto: String): String;

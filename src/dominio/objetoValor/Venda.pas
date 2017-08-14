@@ -168,7 +168,7 @@ begin
 
       for nX := 0 to (Itens.Count-1) do begin
         try
-          if Itens.Items[nX].Produto.tipo = 'P' then
+          if Itens.Items[nX].Produto.tipo <> 'S' then
             result := result + Itens.Items[nX].CSOSN02.Base;
         except
           continue;
@@ -242,7 +242,7 @@ begin
 
       for nX := 0 to (Itens.Count-1) do begin
         try
-          if Itens.Items[nX].Produto.tipo = 'P' then
+          if Itens.Items[nX].Produto.tipo <> 'S' then
             result := result + Itens.Items[nX].CSOSN02.Valor;
         except
           continue;
@@ -322,7 +322,7 @@ begin
       result := 0;
 
       for nX := 0 to (Itens.Count-1) do begin
-        if Itens.Items[nX].Produto.tipo = 'P' then
+        if Itens.Items[nX].Produto.tipo <> 'S' then
           result := result + roundTo(Itens.Items[nX].Total,-2);
       end;
    except
@@ -356,7 +356,7 @@ begin
       imposto_item  := 0;
 
       for nX := 0 to (Itens.Count-1) do begin
-        if Itens.Items[nX].Produto.tipo = 'P' then begin
+        if Itens.Items[nX].Produto.tipo <> 'S' then begin
           imposto_item := ((Itens.Items[nX].Produto.NcmIBPT.aliqnacional_ibpt * (Itens.Items[nX].Quantidade * Itens.Items[nX].ValorUnitario))/100);
           result := result + Arredonda( imposto_item );
 

@@ -98,8 +98,10 @@ var repositorio :TRepositorio;
     nx, i :integer;
     FAcbrNfe: TACBrNFe;
     FXMLStringList    :TStringList;
+    total :real;
 begin
   try
+    total := 0;
     FAcbrNfe        := TACBrNFe.Create(nil);
     FXMLStringList  := TStringList.Create;
 
@@ -125,6 +127,8 @@ begin
       cdsDATA.AsDateTime  := FAcbrNfe.NotasFiscais.Items[nx].NFe.Ide.dEmi;
       cdsVALOR.AsFloat    := FAcbrNfe.NotasFiscais.Items[nx].NFe.Total.ICMSTot.vNF;
 
+          total := total + cdsVALOR.AsFloat;
+
       for i := 0 to  FAcbrNfe.NotasFiscais.Items[nx].NFe.pag.Count -1 do
       begin
         case FAcbrNfe.NotasFiscais.Items[nx].NFe.pag[i].tPag of
@@ -137,6 +141,8 @@ begin
 
       cds.Post;
     end;
+
+      avisar(floattostr(total));
 
     if cds.IsEmpty then begin
       avisar('Não foram encontrados registros com os filtros informados.');

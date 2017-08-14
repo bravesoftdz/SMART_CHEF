@@ -41,7 +41,9 @@ type
     destructor  Destroy;                    override;
 
   public
-    procedure Limpa;
+    procedure Limpa;virtual;
+    procedure Desabilita;virtual;
+    procedure Habilita;virtual;
 
   public
     property Pessoa  :TPessoa      read FPessoa           write SetPessoa;
@@ -75,6 +77,13 @@ begin
   self.FCriou    := false;
 end;
 
+procedure TBuscaPessoa.Desabilita;
+begin
+  edtCodigo.Enabled := false;
+  edtNome.Enabled   := false;
+  btnBusca.Enabled  := false;
+end;
+
 destructor TBuscaPessoa.Destroy;
 begin
   if self.FCriou and Assigned(self.FPessoa) then
@@ -105,6 +114,13 @@ end;
 procedure TBuscaPessoa.edtNomeExit(Sender: TObject);
 begin
    self.Buscar( edtCodigo.AsInteger );
+end;
+
+procedure TBuscaPessoa.Habilita;
+begin
+  edtCodigo.Enabled := true;
+  edtNome.Enabled   := true;
+  btnBusca.Enabled  := true;
 end;
 
 procedure TBuscaPessoa.Limpa;
