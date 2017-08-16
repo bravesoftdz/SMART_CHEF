@@ -10,7 +10,7 @@ uses
   ACBrDANFCeFortesFr,
   ContNrs, DateTimeUtilitario, Classes, AcbrNfe,  pcnConversao, pcnNFe,
   pcnRetInutNFe, pcnRetConsSitNFe, pcnCCeNFe, ACBrNFeWebServices, NFCe,
-  pcnEventoNFe, pcnConversaoNFe,   pcnProcNFe, funcoes, Pedido, Generics.Collections;
+  pcnEventoNFe, pcnConversaoNFe,   pcnProcNFe, funcoes, Pedido, Generics.Collections, ACBrDFeSSL;
 
 type
   TServicoEmissorNFCe = class
@@ -103,6 +103,7 @@ begin
    FACBrNFe.Configuracoes.Geral.ModeloDF                  := moNFCe;
    FACBrNFe.Configuracoes.Geral.VersaoDF                  := TPcnVersaoDF(Configuracoes.NFCe.VersaoDF);
    FACBrNFe.Configuracoes.Geral.IncluirQRCodeXMLNFCe      := true;
+   FACBrNFe.Configuracoes.Geral.SSLLib                    := libCapicom;
 
    try
      FACBrNFe.Configuracoes.Geral.IdCSC := FParametros.NFCe.ID_TOKEN;

@@ -385,9 +385,6 @@ begin
 
     cdsVendas.Next;
   end;
-
-
-  avisar(floattostr(total));
 end;
 
 end.

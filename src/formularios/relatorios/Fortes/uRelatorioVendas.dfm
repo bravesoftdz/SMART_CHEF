@@ -1,11 +1,11 @@
 inherited frmRelatorioVendas: TfrmRelatorioVendas
   Top = 209
   Caption = 'Relat'#243'rio de vendas'
-  ClientHeight = 579
-  ClientWidth = 975
+  ClientHeight = 196
+  ClientWidth = 659
   OnShow = FormShow
-  ExplicitWidth = 981
-  ExplicitHeight = 607
+  ExplicitWidth = 665
+  ExplicitHeight = 224
   PixelsPerInch = 96
   TextHeight = 13
   object Label2: TLabel [0]
@@ -888,12 +888,12 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
     end
   end
   inherited pnlPropaganda: TPanel
-    Top = 544
-    Width = 975
-    ExplicitTop = 166
-    ExplicitWidth = 652
+    Top = 161
+    Width = 659
+    ExplicitTop = 544
+    ExplicitWidth = 975
     inherited Shape8: TShape
-      Width = 973
+      Width = 657
       ExplicitWidth = 687
     end
   end
@@ -901,15 +901,15 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
     Left = 0
     Top = 0
     Width = 129
-    Height = 544
+    Height = 161
     Align = alLeft
     TabOrder = 5
-    ExplicitHeight = 166
+    ExplicitHeight = 544
     object Shape12: TShape
       Left = 1
       Top = 1
       Width = 127
-      Height = 542
+      Height = 159
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119
