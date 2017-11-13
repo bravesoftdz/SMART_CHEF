@@ -178,7 +178,7 @@ begin
     end
     else begin
 
-      if dm.Configuracoes.possui_delivery then
+      if dm.Configuracoes.possuiDelivery then
         taxa_entrega := TStringUtilitario.CaracterAEsquerda(' ','% Taxa de serviço '+FormatFloat('%  ,0.00; -,0.00;',edtTaxaEntrega.Value), 65);
 
       if not confirma('ATENÇÃO! As opções de couvert artístico e taxa de serviço não poderão ser alteradas após a abertura do caixa.'+#13#10+
@@ -186,7 +186,7 @@ begin
                       +#13#10+ TStringUtilitario.CaracterAEsquerda(' ','Valor abertura '+FormatFloat('R$  ,0.00; -,0.00;',edtValorAbertura.Value),60)
                       +#13#10+ TStringUtilitario.CaracterAEsquerda(' ','Couvert artístico '+FormatFloat('R$  ,0.00; -,0.00;',edtCouvert.Value),65)
                       +#13#10+ TStringUtilitario.CaracterAEsquerda(' ','% Taxa de serviço '+FormatFloat('%  ,0.00; -,0.00;',edtPercTxServ.Value), 65)
-                      +IfThen(dm.Configuracoes.possui_delivery, #13#10+taxa_entrega, '')) then
+                      +IfThen(dm.Configuracoes.possuiDelivery, #13#10+taxa_entrega, '')) then
         Exit;
 
       if AbreCaixa then
@@ -281,9 +281,9 @@ end;
 
 procedure TfrmCaixa.FormShow(Sender: TObject);
 begin
-  label11.visible           := dm.Configuracoes.possui_delivery;
-  edtTaxaEntrega.Visible    := dm.Configuracoes.possui_delivery;
-  btnAlterarEntrega.Visible := dm.Configuracoes.possui_delivery;
+  label11.visible           := dm.Configuracoes.possuiDelivery;
+  edtTaxaEntrega.Visible    := dm.Configuracoes.possuiDelivery;
+  btnAlterarEntrega.Visible := dm.Configuracoes.possuiDelivery;
 
   edtDataCorrente.Text := FormatDateTime('dd/mm/yyyy', now);
   edtHoraCorrente.Text := FormatDateTime('hh:mm:ss', now);

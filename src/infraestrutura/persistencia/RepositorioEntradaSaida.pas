@@ -55,6 +55,7 @@ begin
    EntradaSaida.preco_custo       := self.FQuery.FieldByName('preco_custo').AsFloat;
    EntradaSaida.codigo_fornecedor := self.FQuery.FieldByName('codigo_fornecedor').AsInteger;
    EntradaSaida.valor_total       := self.FQuery.FieldByName('valor_total').AsFloat;
+   EntradaSaida.codigo_validade   := self.FQuery.FieldByName('codigo_validade').AsInteger;
 
    result := EntradaSaida;
 end;
@@ -119,6 +120,9 @@ begin
 
    if (EntradaSaidaAntigo.valor_total <> EntradaSaidaNovo.valor_total) then
      Auditoria.AdicionaCampoAlterado('valor_total', FloatToStr(EntradaSaidaAntigo.valor_total), FloatToStr(EntradaSaidaNovo.valor_total));
+
+   if (EntradaSaidaAntigo.codigo_validade <> EntradaSaidaNovo.codigo_validade) then
+     Auditoria.AdicionaCampoAlterado('codigo_validade', IntToStr(EntradaSaidaAntigo.codigo_validade), IntToStr(EntradaSaidaNovo.codigo_validade));
 end;
 
 procedure TRepositorioEntradaSaida.SetCamposExcluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -138,6 +142,7 @@ begin
   Auditoria.AdicionaCampoExcluido('preco_custo'   , FloatToStr(EntradaSaida.preco_custo));
   Auditoria.AdicionaCampoExcluido('codigo_fornecedor' , IntToStr(EntradaSaida.codigo_fornecedor));
   Auditoria.AdicionaCampoExcluido('valor_total'   , FloatToStr(EntradaSaida.valor_total));
+  Auditoria.AdicionaCampoExcluido('codigo_validade', IntToStr(EntradaSaida.codigo_validade));
 end;
 
 procedure TRepositorioEntradaSaida.SetCamposIncluidos(Auditoria :TAuditoria;               Objeto :TObject);
@@ -157,6 +162,7 @@ begin
   Auditoria.AdicionaCampoIncluido('preco_custo'   , FloatToStr(EntradaSaida.preco_custo));
   Auditoria.AdicionaCampoIncluido('codigo_fornecedor' , IntToStr(EntradaSaida.codigo_fornecedor));
   Auditoria.AdicionaCampoIncluido('valor_total'   , FloatToStr(EntradaSaida.valor_total));
+  Auditoria.AdicionaCampoIncluido('codigo_validade', IntToStr(EntradaSaida.codigo_validade));
 end;
 
 procedure TRepositorioEntradaSaida.SetIdentificador(Objeto: TObject; Identificador: Variant);
@@ -185,6 +191,9 @@ begin
     self.FQuery.ParamByName('codigo_fornecedor').AsInteger    := EntradaSaida.codigo_fornecedor;
 
   self.FQuery.ParamByName('valor_total').AsFloat      := EntradaSaida.valor_total;
+
+  if EntradaSaida.codigo_validade > 0 then
+    self.FQuery.ParamByName('codigo_validade').AsInteger    := EntradaSaida.codigo_validade;
 end;
 
 function TRepositorioEntradaSaida.SQLGet: String;
@@ -209,8 +218,10 @@ end;
 
 function TRepositorioEntradaSaida.SQLSalvar: String;
 begin
-  result := 'update or insert into ENTRADA_SAIDA (  CODIGO ,  NUM_DOCUMENTO ,  DATA ,  ENTRADA_SAIDA ,  TIPO ,  OBSERVACAO ,  CODIGO_ITEM ,  QUANTIDADE ,  CODIGO_USUARIO,  preco_custo, codigo_fornecedor, valor_total) '+
-           '                              values ( :CODIGO , :NUM_DOCUMENTO , :DATA , :ENTRADA_SAIDA , :TIPO , :OBSERVACAO , :CODIGO_ITEM , :QUANTIDADE , :CODIGO_USUARIO, :preco_custo, :codigo_fornecedor, :valor_total) ';
+  result := 'update or insert into ENTRADA_SAIDA ( CODIGO, NUM_DOCUMENTO, DATA, ENTRADA_SAIDA, TIPO, OBSERVACAO, CODIGO_ITEM, '+
+            '                                      QUANTIDADE, CODIGO_USUARIO, preco_custo, codigo_fornecedor, valor_total, CODIGO_VALIDADE) '+
+            '                             values ( :CODIGO, :NUM_DOCUMENTO, :DATA, :ENTRADA_SAIDA, :TIPO, :OBSERVACAO, :CODIGO_ITEM, '+
+            '                                      :QUANTIDADE , :CODIGO_USUARIO, :preco_custo, :codigo_fornecedor, :valor_total, :CODIGO_VALIDADE) ';
 end;
 
 end.

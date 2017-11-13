@@ -84,6 +84,7 @@ type
     chk41: TCheckBox;
     chk42: TCheckBox;
     chk43: TCheckBox;
+    chk44: TCheckBox;
     procedure FormShow(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -377,8 +378,8 @@ begin
     if self.Tag = 1 then
        Perfil.codigo := 0;
 
-    if (dm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
-       Rep.Salvar_2(Perfil);
+  //  if (dm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
+  //     Rep.Salvar_2(Perfil);
 
     cds.Close;
     cds.Open;

@@ -46,7 +46,7 @@ implementation
 
 uses
   SysUtils,
-  Item, StrUtils, AdicionalItem, Contnrs;
+  Item, StrUtils, AdicionalItem, Contnrs, MateriaDoProduto, QuantidadePorValidade;
 
 { TRepositorioItem }
 
@@ -57,31 +57,64 @@ end;
 
 procedure TRepositorioItem.ExecutaDepoisDeSalvar(Objeto: TObject);
 var Item        :TItem;
-    repositorio :TRepositorio;
+    Adicional   :TAdicionalItem;
+    Materia     :TMateriaDoProduto;
+    Quantidade  :TQuantidadePorValidade;
+    repAdicional, repMateria, repQuantidade :TRepositorio;
     i           :integer;
 begin
  try
-   repositorio  := nil;
-   Item         := (Objeto as TItem);
-   repositorio  := TFabricaRepositorio.GetRepositorio(TAdicionalItem.ClassName);
+   Item          := (Objeto as TItem);
+   repAdicional  := nil;
+   repMateria    := nil;
+   repQuantidade := nil;
 
-   try
-     Item.Adicionais.Items[0];
-   except
-     Exit;
+   if assigned(Item.Adicionais) and (Item.Adicionais.Count > 0) then
+   begin
+     repAdicional  := TFabricaRepositorio.GetRepositorio(TAdicionalItem.ClassName);
+
+     for Adicional in Item.Adicionais do begin
+      //  if self.FQuery.Connection.Params.Database = fdm.FDConnection.Params.Database then
+      //    Adicional.codigo := 0;
+
+        Adicional.codigo_item := Item.codigo;
+        repAdicional.Salvar( Adicional );
+     end;
    end;
 
-   for i := 0 to Item.Adicionais.Count -1 do begin
+   if assigned(Item.MateriasDoProduto) and (Item.MateriasDoProduto.Count > 0) then
+   begin
+     repMateria  := TFabricaRepositorio.GetRepositorio(TMateriaDoProduto.ClassName);
 
-      if self.FQuery.Connection.Params.Database = fdm.FDConnection.Params.Database then
-        (Item.Adicionais[i] as TAdicionalItem).codigo := 0;
+     for Materia in Item.MateriasDoProduto do begin
+      //  if self.FQuery.Connection.Params.Database = fdm.FDConnection.Params.Database then
+       //   Materia.codigo := 0;
 
-      (Item.Adicionais[i] as TAdicionalItem).codigo_item := Item.codigo;
-      repositorio.Salvar( Item.Adicionais[i] );
+        Materia.codigo_item := Item.codigo;
+        repMateria.Salvar( Materia );
+     end;
+   end;
+
+   if assigned(Item.quantidadesPorValidade) and (Item.quantidadesPorValidade.Count > 0) then
+   begin
+     repQuantidade  := TFabricaRepositorio.GetRepositorio(TQuantidadePorValidade.ClassName);
+
+     for Quantidade in Item.quantidadesPorValidade do begin
+       // if self.FQuery.Connection.Params.Database = fdm.FDConnection.Params.Database then
+        //  Quantidade.codigo := 0;
+
+        Quantidade.codigo_item := Item.codigo;
+        repQuantidade.Salvar( Quantidade );
+     end;
    end;
 
  finally
-   FreeAndNil(repositorio);
+   if assigned(repAdicional) then
+     FreeAndNil(repAdicional);
+   if assigned(repMateria) then
+     FreeAndNil(repMateria);
+   if assigned(repQuantidade) then
+     FreeAndNil(repQuantidade);
  end;
 end;
 
@@ -263,8 +296,10 @@ end;
 
 function TRepositorioItem.SQLSalvar: String;
 begin
-   result := 'update or insert into Itens(codigo,   codigo_pedido,  codigo_produto, valor_Unitario,  hora,  quantidade,  impresso, codigo_usuario, fracionado, QUANTIDADE_PG, qtd_fracionado, cancelado, motivo_cancelamento) '+
-             '                     values(:codigo, :codigo_pedido, :codigo_produto, :valor_Unitario, :hora, :quantidade, :impresso, :codigo_usuario, :fracionado, :QUANTIDADE_PG, :qtd_fracionado, :cancelado, :motivo_cancelamento) ';
+   result := 'update or insert into Itens(codigo,   codigo_pedido,  codigo_produto, valor_Unitario,  hora,  quantidade, impresso,   '+
+             'codigo_usuario, fracionado, QUANTIDADE_PG, qtd_fracionado, cancelado, motivo_cancelamento)           '+
+             '                     values(:codigo, :codigo_pedido, :codigo_produto, :valor_Unitario, :hora, :quantidade, :impresso, '+
+             ':codigo_usuario, :fracionado, :QUANTIDADE_PG, :qtd_fracionado, :cancelado, :motivo_cancelamento)    ';
 end;
 
 end.

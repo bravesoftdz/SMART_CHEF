@@ -93,6 +93,7 @@ begin
    Produto.codbar              := self.FQuery.FieldByName('codbar').AsString;
    Produto.referencia          := self.FQuery.FieldByName('referencia').AsString;
    Produto.codigo_balanca      := self.FQuery.FieldByName('codigo_balanca').AsString;
+   Produto.agranel             := self.FQuery.FieldByName('agranel').AsString = 'S';
 
    result := Produto;
 end;
@@ -253,6 +254,7 @@ begin
    self.FQuery.ParamByName('codbar').AsString               := Produto.codbar;
    self.FQuery.ParamByName('referencia').AsString           := Produto.referencia;
    self.FQuery.ParamByName('codigo_balanca').AsString       := Produto.codigo_balanca;
+   self.FQuery.ParamByName('agranel').AsString              := IfThen(Produto.agranel,'S', 'N');
 end;
 
 function TRepositorioProduto.SQLGet: String;
@@ -278,9 +280,9 @@ end;
 function TRepositorioProduto.SQLSalvar: String;
 begin
    result := 'update or insert into Produtos ( codigo,  codigo_grupo,  descricao,  valor,  ativo,  codigo_departamento,  codigo_ibpt, '+
-             '  tipo,  icms,  tributacao, preparo, preco_custo, altera_preco, codbar, referencia, codigo_balanca)                     '+
+             '  tipo,  icms,  tributacao, preparo, preco_custo, altera_preco, codbar, referencia, codigo_balanca, agranel)            '+
              '                        values (:codigo, :codigo_grupo, :descricao, :valor, :ativo, :codigo_departamento, :codigo_ibpt, '+
-             ' :tipo, :icms, :tributacao, :preparo, :preco_custo, :altera_preco, :codbar, :referencia, :codigo_balanca)               ';
+             ' :tipo, :icms, :tributacao, :preparo, :preco_custo, :altera_preco, :codbar, :referencia, :codigo_balanca, :agranel)     ';
 end;
 
 end.

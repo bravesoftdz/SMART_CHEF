@@ -5,7 +5,7 @@ interface
 uses
   SysUtils,
   Contnrs,
-  Produto, Usuario, AdicionalItem, Generics.Collections;
+  Produto, Usuario, AdicionalItem, Generics.Collections, MateriaDoProduto, QuantidadePorValidade;
 
 type
   TItem = class
@@ -19,6 +19,7 @@ type
     FProduto :TProduto;
     Fquantidade: Real;
     FAdicionais :TObjectList<TAdicionalItem>;
+    FMateriasDoProduto :TObjectList<TMateriaDoProduto>;
     Fimpresso :String;
     FvalorUnitario :Real;
     FCodigo_usuario :integer;
@@ -28,6 +29,9 @@ type
     FQtd_fracionado: Integer;
     FCancelado :String;
     FMotivoCancelamento :String;
+    FCodigo_validade: integer;
+
+    FQuantidadesPorValidade :TObjectList<TQuantidadePorValidade>;
 
     function GetProduto: TProduto;
     function GetAdicionais: TObjectList<TAdicionalItem>;
@@ -37,6 +41,8 @@ type
     function GetTotalAdicionais: Real;
     function GetTotalBruto: Real;
     function GetTotalLiquido: Real;
+    function GetMateriasDoProduto: TObjectList<TMateriaDoProduto>;
+    function GetQuantidadesPorValidade: TObjectList<TQuantidadePorValidade>;
 
   public
     property codigo         :integer     read Fcodigo         write Fcodigo;
@@ -53,18 +59,21 @@ type
     property qtd_fracionado :Integer     read FQtd_fracionado write FQtd_fracionado;
     property Cancelado       :String     read FCancelado      write FCancelado;
     property MotivoCancelamento       :String     read FMotivoCancelamento      write FMotivoCancelamento;
+
     property totalAdicionais :Real       read GetTotalAdicionais;
     property totalBruto      :Real       read GetTotalBruto;
     property totalLiquido    :Real       read GetTotalLiquido;
 
   public
-    property Produto        :TProduto    read GetProduto;
-    property Usuario        :TUsuario    read GetUsuario;
+    property Produto                :TProduto    read GetProduto;
+    property MateriasDoProduto      :TObjectList<TMateriaDoProduto> read GetMateriasDoProduto write FMateriasDoProduto;
+    property Usuario                :TUsuario    read GetUsuario;
+    property quantidadesPorValidade :TObjectList<TQuantidadePorValidade> read GetQuantidadesPorValidade write FQuantidadesPorValidade;
 end;
 
 implementation
 
-uses Repositorio, FabricaRepositorio, EspecificacaoAdicionalDoItem;
+uses Repositorio, FabricaRepositorio, EspecificacaoAdicionalDoItem, EspecificacaoMateriaDoProdutoItem, EspecificacaoQuantidadesDoItem;
 
 { TItem }
 
@@ -96,6 +105,28 @@ begin
    end;
 end;
 
+function TItem.GetMateriasDoProduto: TObjectList<TMateriaDoProduto>;
+var
+  Repositorio   :TRepositorio;
+  Especificacao :TEspecificacaoMateriaDoProdutoItem;
+begin
+   Repositorio    := nil;
+   Especificacao  := nil;
+
+   try
+      if not Assigned(self.FMateriasDoProduto) then begin
+        Especificacao           := TEspecificacaoMateriaDoProdutoItem.Create(self);
+        Repositorio             := TFabricaRepositorio.GetRepositorio(TMateriaDoProduto.ClassName);
+        self.FMateriasDoProduto := Repositorio.GetListaPorEspecificacao<TMateriaDoProduto>(Especificacao, 'CODIGO_ITEM ='+IntToStr(self.Codigo));
+      end;
+
+      result := self.FMateriasDoProduto;
+   finally
+     FreeAndNil(Especificacao);
+     FreeAndNil(Repositorio);
+   end;
+end;
+
 function TItem.GetProduto: TProduto;
 var
   Repositorio   :TRepositorio;
@@ -114,6 +145,28 @@ begin
    end;
 end;
 
+
+function TItem.GetQuantidadesPorValidade: TObjectList<TQuantidadePorValidade>;
+var
+  Repositorio   :TRepositorio;
+  Especificacao :TEspecificacaoQuantidadesDoItem;
+begin
+   Repositorio    := nil;
+   Especificacao  := nil;
+
+   try
+      if not Assigned(self.FQuantidadesPorValidade) then begin
+        Especificacao                := TEspecificacaoQuantidadesDoItem.Create(self);
+        Repositorio                  := TFabricaRepositorio.GetRepositorio(TQuantidadePorValidade.ClassName);
+        self.FQuantidadesPorValidade := Repositorio.GetListaPorEspecificacao<TQuantidadePorValidade>(Especificacao, 'CODIGO_ITEM = '+IntToStr(self.Codigo));
+      end;
+
+      result := self.FQuantidadesPorValidade;
+   finally
+     FreeAndNil(Especificacao);
+     FreeAndNil(Repositorio);
+   end;
+end;
 
 function TItem.GetTotalAdicionais: Real;
 var i :integer;

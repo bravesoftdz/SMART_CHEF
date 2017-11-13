@@ -14,9 +14,6 @@ type
     Shape1: TShape;
     btnConfirma: TBitBtn;
     btnCancela: TBitBtn;
-    Label1: TLabel;
-    Shape2: TShape;
-    Shape3: TShape;
     btn3opcao: TBitBtn;
     procedure btnConfirmaClick(Sender: TObject);
     procedure btnCancelaClick(Sender: TObject);

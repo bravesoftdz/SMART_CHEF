@@ -1,11 +1,11 @@
 inherited frmRelatorioVendas: TfrmRelatorioVendas
   Top = 209
   Caption = 'Relat'#243'rio de vendas'
-  ClientHeight = 196
-  ClientWidth = 659
+  ClientHeight = 205
+  ClientWidth = 665
   OnShow = FormShow
-  ExplicitWidth = 665
-  ExplicitHeight = 224
+  ExplicitWidth = 671
+  ExplicitHeight = 233
   PixelsPerInch = 96
   TextHeight = 13
   object Label2: TLabel [0]
@@ -888,12 +888,12 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
     end
   end
   inherited pnlPropaganda: TPanel
-    Top = 161
-    Width = 659
-    ExplicitTop = 544
-    ExplicitWidth = 975
+    Top = 170
+    Width = 665
+    ExplicitTop = 632
+    ExplicitWidth = 939
     inherited Shape8: TShape
-      Width = 657
+      Width = 663
       ExplicitWidth = 687
     end
   end
@@ -901,15 +901,15 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
     Left = 0
     Top = 0
     Width = 129
-    Height = 161
+    Height = 170
     Align = alLeft
     TabOrder = 5
-    ExplicitHeight = 544
+    ExplicitHeight = 632
     object Shape12: TShape
       Left = 1
       Top = 1
       Width = 127
-      Height = 159
+      Height = 168
       Align = alClient
       Brush.Color = 14737632
       Pen.Color = 12040119
@@ -1194,110 +1194,35 @@ inherited frmRelatorioVendas: TfrmRelatorioVendas
     Top = 88
   end
   object qryPedidos: TFDQuery
-    SQL.Strings = (
-      'select ped.codigo, ped.couvert, ped.taxa_servico, ped.desconto'
-      ''
-      'from pedidos ped'
-      ''
-      'left join itens i on i.codigo_pedido = ped.codigo'
-      'left join produtos p on p.codigo = i.codigo_produto'
-      'left join grupos gr on gr.codigo = p.codigo_grupo'
-      ''
-      'where ped.situacao = '#39'F'#39' and (ped.data between :dti and :dtf)'
-      
-        '  and (iif( (ped.data <> :dti) or ((ped.data = :dti)and(i.hora >' +
-        ' '#39'07:00:00'#39')) ,1,0) = 1)'
-      
-        '  and (iif( (ped.data <> :dtf) or ((ped.data = :dtf)and(i.hora <' +
-        ' '#39'07:00:00'#39')) ,1,0) = 1)'
-      ''
-      
-        'group by ped.codigo, ped.couvert, ped.taxa_servico, ped.valor_to' +
-        'tal, ped.desconto'
-      '')
     Left = 312
-    Top = 88
-    ParamData = <
-      item
-        Name = 'DTI'
-        DataType = ftDate
-        ParamType = ptInput
-      end
-      item
-        Name = 'DTF'
-        DataType = ftDate
-        ParamType = ptInput
-      end>
-    object qryPedidosCODIGO: TIntegerField
+    Top = 104
+    object qryPedidosCODIGO: TStringField
       FieldName = 'CODIGO'
       Origin = 'CODIGO'
       ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
       Required = True
-    end
-    object qryPedidosCOUVERT: TBCDField
-      FieldName = 'COUVERT'
-      Origin = 'COUVERT'
-      DisplayFormat = ',0.00; ,0.00'
-      Precision = 18
-      Size = 2
-    end
-    object qryPedidosTAXA_SERVICO: TBCDField
-      FieldName = 'TAXA_SERVICO'
-      Origin = 'TAXA_SERVICO'
-      DisplayFormat = ',0.00; ,0.00'
-      Precision = 18
-      Size = 2
+      Size = 17
     end
     object qryPedidosDESCONTO: TBCDField
       FieldName = 'DESCONTO'
       Origin = 'DESCONTO'
-      DisplayFormat = ',0.00; ,0.00'
       Precision = 18
       Size = 2
     end
+    object qryPedidosTAXA_SERVICO: TBCDField
+      FieldKind = fkCalculated
+      FieldName = 'TAXA_SERVICO'
+      Calculated = True
+    end
+    object qryPedidosCOUVERT: TBCDField
+      FieldKind = fkCalculated
+      FieldName = 'COUVERT'
+      Calculated = True
+    end
   end
   object qryVendas: TFDQuery
-    SQL.Strings = (
-      
-        'select iif( gr.codigo is null, 0, gr.codigo) codgrupo , iif( gr.' +
-        'descricao is null, '#39'SERVI'#199'O'#39', gr.descricao) grupo ,'
-      ' p.descricao produto,'
-      'sum( iif(i.quantidade > 599, 0, i.quantidade )) qtde,'
-      'sum(i.valor_unitario) vlr_uni,'
-      
-        ' sum(i.valor_unitario * i.quantidade) vlr_total_it, i.qtd_fracio' +
-        'nado,'
-      
-        '( select sum(i.quantidade * ait.quantidade * ait.valor_unitario ' +
-        ') from adicionais_item ait'
-      '    where ait.codigo_item = i.codigo ) vlr_total_ad'
-      ''
-      'from pedidos ped'
-      ''
-      'left join itens i on i.codigo_pedido = ped.codigo'
-      'left join produtos p on p.codigo = i.codigo_produto'
-      'left join grupos gr on gr.codigo = p.codigo_grupo'
-      ''
-      'where ped.situacao = '#39'F'#39' and (ped.data between :dti and :dtf)'
-      ''
-      
-        'group by gr.codigo , gr.descricao , p.descricao, i.codigo, i.qua' +
-        'ntidade, i.qtd_fracionado'
-      'order by 1'
-      '')
     Left = 312
     Top = 32
-    ParamData = <
-      item
-        Name = 'DTI'
-        DataType = ftDate
-        ParamType = ptInput
-      end
-      item
-        Name = 'DTF'
-        DataType = ftDate
-        ParamType = ptInput
-      end>
     object qryVendasCODGRUPO: TIntegerField
       AutoGenerateValue = arDefault
       FieldName = 'CODGRUPO'

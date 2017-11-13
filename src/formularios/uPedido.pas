@@ -11,7 +11,7 @@ uses
   ImgList, ComCtrls, ACBrBase, DateTimeUtilitario, ACBrDevice, Parametros,
   frameBuscaCliente, System.ImageList, generics.collections, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error,
   FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Cliente,
-  frameFone;
+  frameFone, Item, QuantidadePorValidade;
 
 type
   TfrmPedido = class(TfrmPadrao)
@@ -178,6 +178,18 @@ type
     Fone1: TFone;
     chkMaquinaCartao: TCheckBox;
     btnConsulta: TBitBtn;
+    cdsMateriaDoProduto: TClientDataSet;
+    cdsMateriaDoProdutoCODIGO: TIntegerField;
+    cdsMateriaDoProdutoINDICE_ITEM: TIntegerField;
+    cdsMateriaDoProdutoCODIGO_ITEM: TIntegerField;
+    cdsMateriaDoProdutoCODIGO_MATERIA: TIntegerField;
+    cdsMateriaDoProdutoQUANTIDADE: TFloatField;
+    cdsQtdValidade: TClientDataSet;
+    cdsQtdValidadeCODIGO: TIntegerField;
+    cdsQtdValidadeCODIGO_ITEM: TIntegerField;
+    cdsQtdValidadeCODIGO_VALIDADE: TIntegerField;
+    cdsQtdValidadeQUANTIDADE: TFloatField;
+    cdsQtdValidadeINDICE_ITEM: TIntegerField;
     procedure FormCreate(Sender: TObject);
     procedure btnAddClick(Sender: TObject);
     procedure gridItensDrawColumnCell(Sender: TObject; const Rect: TRect;
@@ -258,9 +270,13 @@ type
     procedure busca_item_para_inclusao(AdicionaRemove :String);
 
   public
-    procedure adiciona_item(Produto :TProduto; quantidade, valor :Real; impresso :String; codigo_usu :integer; hora, fracionado: String; quantidade_paga :Real; qtd_fracionado :integer; const codigo :integer = 0);
+    function selecionaValidade(codigoProduto:integer; var pValidadeCadastrada :boolean):TObjectList<TQuantidadePorValidade>;
+    procedure adiciona_item(Item :TItem);
     procedure adiciona_no_produto(Materia :TMateriaPrima; quantidade :Integer; codigo_produto :integer; flag :String;
                                   const codigo_item :integer =0; const codigo :integer = 0);
+    procedure adicionaMateriaProduto(item :TItem);
+    procedure adicionaQuantidadePorValidade(item :TItem);
+    procedure adicionaMateriasDoProdutoItem(item :TItem);
 
   private
     procedure calcula_totais;
@@ -293,6 +309,7 @@ type
     procedure Gera_cupom_eletronico;
 
     function tem_movimento  :Boolean;
+    function possuiValidadeCadastrada(codProduto :integer) :Boolean;
     procedure imprimir_pedido(Pedido :TPedido; const pelo_botao :boolean = false);
 
     procedure finalizaPedido(const rapido :Boolean = false);
@@ -312,12 +329,12 @@ var
 
 implementation
 
-uses Usuario, Item, Comanda, uModulo, repositorio, FabricaRepositorio, Empresa, uAdicionaItemProduto,
+uses Usuario, Comanda, uModulo, repositorio, FabricaRepositorio, Empresa, uAdicionaItemProduto,
      Math, AdicionalItem, CriaBalaoInformacao, uFinalizaPedido, Movimento, RepositorioPedido,
      ZConnection, Departamento, Estoque, EspecificacaoEstoquePorProduto, uInicial, PermissoesAcesso, ItemDeletado,
      uPesquisaSimples, Venda, ServicoEmissorNFCe, ConfiguracoesSistema, Endereco, uImpressaoPedido,
-     ParametrosNFCe, ParametrosDANFE, StringUtilitario, EspecificacaoClientePorCpfCnpj,
-     EspecificacaoMovimentosPorCodigoPedido, ProdutoHasMateria, NFCe, UtilitarioEstoque;
+     ParametrosNFCe, ParametrosDANFE, StringUtilitario, EspecificacaoClientePorCpfCnpj, MateriaDoProduto,
+     EspecificacaoMovimentosPorCodigoPedido, ProdutoHasMateria, NFCe, UtilitarioEstoque, TipoDado, uSelecionaValidadeItemPedido;
 
 {$R *.dfm}
 
@@ -326,18 +343,23 @@ begin
   inherited;
   cdsItens.CreateDataSet;
   cdsAdicionais.CreateDataSet;
+  cdsMateriaDoProduto.CreateDataSet;
+  cdsQtdValidade.CreateDataSet;
   carrega_padroes;
   FItensDeletados      := TStringList.Create;
   FAdicionaisDeletados := TStringList.Create;
   label19.Caption      := ' N° comanda '; //IfThen(dm.Configuracoes.Utiliza_comandas, 'N° comanda', 'N° mesa');
-  label1.Visible       := dm.Configuracoes.Utiliza_comandas;
-  cbMesa.Visible       := dm.Configuracoes.Utiliza_comandas;
-  cbmesa.ItemIndex     := IfThen(dm.Configuracoes.Utiliza_comandas, -1, 0);
-  buscaComanda1.btnFormaBusca.Visible := dm.Configuracoes.possui_delivery;
-  edtValorDesconto.Enabled := dm.Configuracoes.desconto_pedido;
+  label1.Visible       := dm.Configuracoes.utilizaComandas;
+  cbMesa.Visible       := dm.Configuracoes.utilizaComandas;
+  cbmesa.ItemIndex     := IfThen(dm.Configuracoes.utilizaComandas, -1, 0);
+  buscaComanda1.btnFormaBusca.Visible := dm.Configuracoes.possuiDelivery;
+  edtValorDesconto.Enabled := dm.Configuracoes.descontoPedido;
 end;
 
 procedure TfrmPedido.btnAddClick(Sender: TObject);
+var Item :TItem;
+    codigoValidade :integer;
+    validadeCadastrada :boolean;
 begin
   if not assigned(BuscaProduto1.Produto) then begin
     avisar('Nenhum produto foi selecionado para a inserção');
@@ -351,51 +373,67 @@ begin
     avisar('O preço não foi informado');
     edtPreco.SetFocus;
   end
-  else begin
-    adiciona_item(BuscaProduto1.Produto,
-                  edtQuantidade.Value,
-                  IfThen(edtpreco.Value > 0, edtPreco.Value, Buscaproduto1.Produto.valor),
-                  IfThen(BuscaProduto1.Produto.tipo = 'S', 'S', ''),
-                  dm.UsuarioLogado.Codigo,
-                  TimeToStr(Time),
-                  'N',
-                  0,
-                  0);
+  else
+  begin
+    try
+      Item                 := TItem.Create;
+      Item.codigo          := 0;
+      Item.codigo_produto  := BuscaProduto1.Produto.codigo;
+      Item.quantidade      := edtQuantidade.Value;
+      Item.valor_Unitario  := IfThen(edtpreco.Value > 0, edtPreco.Value, Buscaproduto1.Produto.valor);
+      Item.impresso        := IfThen(BuscaProduto1.Produto.tipo = 'S', 'S', '');
+      Item.codigo_usuario  := dm.UsuarioLogado.Codigo;
+      Item.Fracionado      := 'N';
+      Item.quantidade_pg   := 0;
+      Item.qtd_fracionado  := 0;
 
+      if dm.Configuracoes.controlaValidade and possuiValidadeCadastrada(Item.codigo_produto) then
+      begin
+        Item.quantidadesPorValidade := selecionaValidade(Item.Produto.codigo, validadeCadastrada);
+        if not assigned(Item.quantidadesPorValidade) and validadeCadastrada then
+          exit;
+      end;
+
+      adiciona_item(Item);
+    finally
+      FreeAndNil(Item);
+    end;
     if BuscaProduto1.edtCodigo.Enabled then
       BuscaProduto1.edtCodigo.SetFocus;
   end;
 end;
 
-procedure TfrmPedido.adiciona_item(Produto: TProduto; quantidade, valor :Real; impresso :String; codigo_usu :integer; hora, fracionado: String; quantidade_paga :Real; qtd_fracionado :integer; const codigo :integer);
+procedure TfrmPedido.adiciona_item(Item :TItem);
 var sobra, diferenca, qtde, valorD :Real;
     primeiroFracionado :Boolean;
 begin
+  try
   sobra     := 0;
   qtde      := 0;
   diferenca := 0;
   primeiroFracionado := false;
 
-  if (qtd_fracionado > 0) and not (cdsItens.Locate('CODIGO_PRODUTO;FRACIONADO',varArrayOf([Produto.codigo, fracionado]),[]))then
+  if (Item.qtd_fracionado > 0) and not (cdsItens.Locate('CODIGO_PRODUTO;FRACIONADO',varArrayOf([Item.Produto.codigo, Item.fracionado]),[]))then
     primeiroFracionado := true;
 
   if BuscaProduto1.edtCodigo.Enabled then begin
     cdsItens.Append;
 
-    cdsItensCODIGO.AsInteger         := codigo;
-    cdsItensCODIGO_PRODUTO.AsInteger := Produto.codigo;
-    cdsItensDESCRICAO.AsString       := Produto.descricao;
-    cdsItensHORA.AsString            := hora;
-    cdsItensINDICE.AsInteger         := cdsItens.RecordCount + 1;
-    cdsItensTIPO.AsString            := Produto.tipo;
-    cdsItensIMPRESSO.AsString        := impresso;
-    cdsItensCODIGO_USUARIO.AsInteger := codigo_usu;
-    cdsItensFRACIONADO.AsString      := fracionado;
-    cdsItensQUANTIDADE_PG.AsFloat    := quantidade_paga;
-    cdsItensQTD_FRACIONADO.AsInteger := qtd_fracionado;
+    cdsItensCODIGO.AsInteger          := Item.codigo;
+    cdsItensCODIGO_PRODUTO.AsInteger  := Item.Produto.codigo;
+    cdsItensDESCRICAO.AsString        := Item.Produto.descricao;
+    cdsItensHORA.AsString             := TimeToStr(Item.hora);
+    cdsItensINDICE.AsInteger          := cdsItens.RecordCount + 1;
+    cdsItensTIPO.AsString             := Item.Produto.tipo;
+    cdsItensIMPRESSO.AsString         := Item.impresso;
+    cdsItensCODIGO_USUARIO.AsInteger  := Item.codigo_usuario;
+    cdsItensFRACIONADO.AsString       := Item.fracionado;
+    cdsItensQUANTIDADE_PG.AsFloat     := Item.quantidade_pg;
+    cdsItensQTD_FRACIONADO.AsInteger  := Item.qtd_fracionado;
+ //   cdsItensCODIGO_VALIDADE.AsInteger := Item.codigo_validade;
 
-   if cdsItensTIPO.AsString = 'P' then
-     inc( produtos_no_pedido );
+    if cdsItensTIPO.AsString = 'P' then
+      inc( produtos_no_pedido );
   end
   else begin
     cdsItens.Edit;
@@ -405,35 +443,41 @@ begin
     btnAdd.Caption                  := ' ADICIONA';
   end;
 
-  cdsItensVALOR_UNITARIO.AsFloat    := valor;
+  cdsItensVALOR_UNITARIO.AsFloat    := Item.valor_Unitario;
 
   {se for serviço e for quantidade > 599, quer dizer que é boliche, que é medido em tempo e armazena os segundos}
-  if (Produto.tipo = 'S') and (((quantidade > 198)and(Fracionado = 'S')) or (quantidade > 599)) then begin //00 = 10min
-    cdsItensQUANTIDADE.AsString       := TDateTimeUtilitario.SegundosParaTime(trunc(quantidade));
+  if (Item.Produto.tipo = 'S') and (((Item.quantidade > 198)and(Item.Fracionado = 'S')) or (Item.quantidade > 599)) then begin //00 = 10min
+    cdsItensQUANTIDADE.AsString       := TDateTimeUtilitario.SegundosParaTime(trunc(Item.quantidade));
 
-    if qtd_fracionado > 0 then
+    if Item.qtd_fracionado > 0 then
     begin
-      qtde := RoundTo(1/qtd_fracionado,-3);
-      sobra := 1- (RoundTo(1/qtd_fracionado,-3) * qtd_fracionado);
+      qtde := RoundTo(1/Item.qtd_fracionado,-3);
+      sobra := 1- (RoundTo(1/Item.qtd_fracionado,-3) * Item.qtd_fracionado);
     end
     else
       qtde := 1;
 
     if primeiroFracionado then
     begin
-      valorD := roundTo( qtde * valor, -3) * qtd_fracionado;
-      valorD := valorD + roundTo(sobra * valor,-3);
-      diferenca := valor - valorD;
+      valorD := roundTo( qtde * Item.valor_Unitario, -3) * Item.qtd_fracionado;
+      valorD := valorD + roundTo(sobra * Item.valor_Unitario,-3);
+      diferenca := Item.valor_Unitario - valorD;
 
       qtde   := qtde + sobra;
     end;
 
-    cdsItensVALOR.AsCurrency          := roundTo(valor * qtde, -3) + diferenca;
+    cdsItensVALOR.AsCurrency          := roundTo(Item.valor_Unitario * qtde, -3) + diferenca;
   end
   else begin
-    cdsItensQUANTIDADE.AsString       := FormatFloat(' ,0.000; -,0.000;',quantidade);
-    cdsItensVALOR.AsCurrency          := RoundTo((quantidade * valor),-3);
+    cdsItensQUANTIDADE.AsString       := FormatFloat(' ,0.000; -,0.000;',Item.quantidade);
+    cdsItensVALOR.AsCurrency          := RoundTo((Item.quantidade * Item.valor_Unitario),-3);
   end;
+
+  { * * Adiciona Materias do produto * * }
+  adicionaMateriaProduto(Item);
+
+  { * * Adiciona Quantidades por Validade * * }
+  adicionaQuantidadePorValidade(Item);
 
   cdsItens.Post;
 
@@ -442,6 +486,12 @@ begin
   edtPreco.Clear;
 
   calcula_totais;
+  finally
+    if cdsItens.State in [dsEdit, dsInsert] then
+      cdsItens.Cancel;
+    if cdsMateriaDoProduto.State in [dsEdit, dsInsert] then
+      cdsMateriaDoProduto.Cancel;
+  end;
 end;
 
 procedure TfrmPedido.gridItensDrawColumnCell(Sender: TObject;
@@ -587,14 +637,14 @@ begin
 
          imprimePedido := true;
          if dm.Configuracoes.perguntaImprimirPedido and
-           (frmFinalizaPedido.pagamento_completo or ( not frmFinalizaPedido.pagamento_completo and dm.Configuracoes.impressoes_parciais)) then
+           (frmFinalizaPedido.pagamento_completo or ( not frmFinalizaPedido.pagamento_completo and dm.Configuracoes.impressoesParciais)) then
            imprimePedido := confirma('Deseja imprimir pedido?');
 
          Salva_Pedido_pos_recebimento(imprimePedido, edtCpf.text, true, frmFinalizaPedido.pagamento_completo );
 
          buscaComanda1.CodigoPedido := Self.Fcodigo_pedido;
 
-         if (imprimePedido)and((dm.Configuracoes.impressoes_parciais) and not (frmFinalizaPedido.cdsItensPrePagos.IsEmpty) and (frmFinalizaPedido.edtTotalRestante.Value > 0)) then
+         if (imprimePedido)and((dm.Configuracoes.impressoesParciais) and not (frmFinalizaPedido.cdsItensPrePagos.IsEmpty) and (frmFinalizaPedido.edtTotalRestante.Value > 0)) then
           //or (not (dm.Configuracoes.impressoes_parciais) and (frmFinalizaPedido.pagamento_completo)) then
             cria_imprime_pedido_parcial;
 
@@ -686,6 +736,7 @@ end;
 procedure TfrmPedido.carrega_dados_pedido(Pedido :TPedido);
 var i, x :integer;
     Item :TItem;
+    Adicional :TAdicionalItem;
     Cliente :TCliente;
     repositorio :TRepositorio;
 begin
@@ -728,6 +779,10 @@ begin
       cdsAdicionais.EmptyDataSet;
     if not cdsItens.IsEmpty then
       cdsItens.EmptyDataSet;
+    if not cdsMateriaDoProduto.IsEmpty then
+      cdsMateriaDoProduto.EmptyDataSet;
+    if not cdsQtdValidade.IsEmpty then
+      cdsQtdValidade.EmptyDataSet;
 
     cdsAdicionais.DisableControls;
     cdsItens.DisableControls;
@@ -748,33 +803,22 @@ begin
       exit;
     end;
 
-    for i := 0 to Pedido.Itens.Count -1 do begin
-      Item := (Pedido.Itens[i] as TItem);
+    for Item in Pedido.Itens do
+    begin
       {Se for boliche pega o valor do arquivo e nao o cadastrado no produto}
-      if (Pedido.Itens[i] as TItem).Produto.codigo = 1 then
-        Item.Produto.valor := (Pedido.Itens[i] as TItem).valor_Unitario;
+      if Item.Produto.codigo = 1 then
+        Item.Produto.valor := Item.valor_Unitario;
 
-      adiciona_item( Item.Produto,
-                     Item.quantidade,
-                     Item.valor_Unitario,
-                     Item.impresso,
-                     Item.codigo_usuario,
-                     TimeToStr(Item.hora),
-                     Item.Fracionado,
-                     Item.quantidade_pg,
-                     Item.qtd_fracionado,
-                     Item.codigo);
+      adiciona_item( Item );
 
-      if assigned((Pedido.Itens[i] as TItem).Adicionais) then begin
-
-        for x :=0 to (Pedido.Itens[i] as TItem).Adicionais.Count -1 do
-          adiciona_no_produto( (Item.Adicionais.items[x] as TAdicionalItem).Materia,
-                               (Item.Adicionais.items[x] as TAdicionalItem).quantidade,
+      if assigned(Item.Adicionais) then
+        for Adicional in Item.Adicionais do
+          adiciona_no_produto( Adicional.Materia,
+                               Adicional.quantidade,
                                Item.codigo_produto,
-                               (Item.Adicionais.items[x] as TAdicionalItem).flag,
-                               (Item.Adicionais.items[x] as TAdicionalItem).codigo_item,
-                               (Item.Adicionais.items[x] as TAdicionalItem).codigo);
-      end;
+                               Adicional.flag,
+                               Adicional.codigo_item,
+                               Adicional.codigo);
     end;
 
     gridAdicionais.SelectedIndex := 1;
@@ -834,7 +878,7 @@ end;
 procedure TfrmPedido.limpa_dados_pedido;
 begin
   buscaComanda1.limpa;
-  cbmesa.ItemIndex     := IfThen(dm.Configuracoes.Utiliza_comandas, -1, 0);
+  cbmesa.ItemIndex     := IfThen(dm.Configuracoes.utilizaComandas, -1, 0);
   edtData.Clear;
   edtStatus.Clear;
   edtStatusPedExterno.Clear;
@@ -842,6 +886,8 @@ begin
   cdsItens.EmptyDataSet;
   gridItens.Repaint;
   cdsAdicionais.EmptyDataSet;
+  cdsMateriaDoProduto.EmptyDataSet;
+  cdsQtdValidade.EmptyDataSet;
   edtQtdeTotal.Clear;
   edtValorTotal.Clear;
   edtTotalItens.Clear;
@@ -937,6 +983,8 @@ var repositorio   :TRepositorio;
     Item          :TItem;
     Itens         :TObjectList<TItem>;
     AdicionalItem :TAdicionalItem;
+    Materia       :TMateriaDoProduto;
+    Quantidade    :TQuantidadePorValidade;
     Caminho_externo :String;
     before_Conect  :TNotifyEvent;
     codigo_pedido :integer;
@@ -1010,7 +1058,6 @@ begin
    while not cdsItens.Eof do begin
 
      Item                := TItem.Create;
-   //  testar as formas que passa por aqui.. se sempre que ja tem item que foi salvo, esta puxando o seu codigo
      Item.codigo         := cdsItensCODIGO.AsInteger;
      Item.codigo_produto := cdsItensCODIGO_PRODUTO.AsInteger;
      Item.valor_Unitario := cdsItensVALOR_UNITARIO.AsFloat;
@@ -1055,6 +1102,57 @@ begin
          Item.Adicionais.Add( AdicionalItem );
 
          cdsAdicionais.Next;
+       end;
+
+     end;
+
+     Item.MateriasDoProduto.Free;
+     Item.MateriasDoProduto := nil;
+
+     cdsItensAfterScroll(nil);
+     if not cdsMateriaDoProduto.IsEmpty then begin
+
+       Materia   := nil;
+       Item.MateriasDoProduto := TObjectList<TMateriaDoProduto>.Create;
+
+       {salva apenas matérias que tem um "produto-matéria" associado a ela (para posterior baixa no estoque)}
+       cdsMateriaDoProduto.First;
+       while not cdsMateriaDoProduto.Eof do begin
+
+         Materia                := TMateriaDoProduto.Create;
+         Materia.codigo         := cdsMateriaDoProdutoCODIGO.AsInteger;
+         Materia.codigo_item    := cdsMateriaDoProdutoCODIGO_ITEM.AsInteger;
+         Materia.codigo_materia := cdsMateriaDoProdutoCODIGO_MATERIA.AsInteger;
+         Materia.quantidade     := cdsMateriaDoProdutoQUANTIDADE.AsFloat;
+
+         Item.MateriasDoProduto.Add( Materia );
+
+         cdsMateriaDoProduto.Next;
+       end;
+
+     end;
+
+     Item.quantidadesPorValidade.Free;
+     Item.quantidadesPorValidade := nil;
+     cdsItensAfterScroll(nil);
+     if not cdsQtdValidade.IsEmpty then begin
+
+       Quantidade   := nil;
+       Item.quantidadesPorValidade := TObjectList<TQuantidadePorValidade>.Create;
+
+       {salva apenas matérias que tem um "produto-matéria" associado a ela (para posterior baixa no estoque)}
+       cdsQtdValidade.First;
+       while not cdsQtdValidade.Eof do begin
+
+         Quantidade                 := TQuantidadePorValidade.Create;
+         Quantidade.codigo          := cdsQtdValidadeCODIGO.AsInteger;
+         Quantidade.codigo_item     := cdsQtdValidadeCODIGO_ITEM.AsInteger;
+         Quantidade.codigo_validade := cdsQtdValidadeCODIGO_VALIDADE.AsInteger;
+         Quantidade.quantidade      := cdsQtdValidadeQUANTIDADE.AsFloat;
+
+         Item.quantidadesPorValidade.Add( Quantidade );
+
+         cdsQtdValidade.Next;
        end;
 
      end;
@@ -1161,9 +1259,10 @@ begin
      fdm.conexao.Commit;
 
    { se esta finalizando o pedido e não foi fechado com F10(sem cupom), salva tbm na base local}
-   if finalizando and not(frmFinalizaPedido.ckbSC.Checked) and
+  { if finalizando and not(frmFinalizaPedido.ckbSC.Checked) and
       ((dm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') or
-       (dm.ArquivoConfiguracao.CaminhoBancoDeDados = dm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal))then begin
+       (dm.ArquivoConfiguracao.CaminhoBancoDeDados = dm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal))then
+   begin
 
      codigo_pedido       := Pedido.codigo;
 
@@ -1178,7 +1277,7 @@ begin
      if fdm.conexao.InTransaction then
        fdm.conexao.Commit;
 
-     {zera o codigo para não acusar como alteração na base externa}
+     //zera o codigo para não acusar como alteração na base externa
      Pedido.codigo := 0;
 
      //salva base local
@@ -1198,7 +1297,7 @@ begin
 
   //   Pedido.codigo := codigo_pedido;
 
-   end;
+   end;  }
 
    buscaComanda1.limpa;
 
@@ -1207,13 +1306,13 @@ begin
      fdm.conexao.Rollback;
      buscaComanda1.Pedido.codigo := 0;
 
-     if dm.conexao.Params.Database = dm.FDConnection.Params.Database then begin
+ {    if dm.conexao.Params.Database = dm.FDConnection.Params.Database then begin
        if dm.conexao.Connected then
          dm.conexao.Connected := true;
 
        dm.conexao.Params.Database := Caminho_externo;
        dm.conexao.Connected := true;
-     end;
+     end;   }
 
      raise Exception.Create('Erro ao efetuar recebimento. Operação cancelada. '+#13#10+e.Message);
    end;
@@ -1331,6 +1430,15 @@ begin
   end;
 end;
 
+function TfrmPedido.possuiValidadeCadastrada(codProduto: integer): Boolean;
+begin
+  dm.qryGenerica.Close;
+  dm.qryGenerica.SQL.Text := 'select codigo from produto_validade where codigo_produto = :codpro and quantidade > 0';
+  dm.qryGenerica.ParamByName('codpro').AsInteger := codProduto;
+  dm.qryGenerica.Open;
+  result := not dm.qryGenerica.IsEmpty;
+end;
+
 procedure TfrmPedido.adiciona_no_produto(Materia: TMateriaPrima;
   quantidade: Integer; codigo_produto: integer; flag :String; const codigo_item :integer =0; const codigo :integer = 0);
 begin
@@ -1397,6 +1505,86 @@ begin
  end;
 end;
 
+procedure TfrmPedido.adicionaMateriaProduto(item: TItem);
+var
+    listaDeMaterias   :TObjectList<TProdutoHasMateria>;
+    produtoMateria    :TProdutoHasMateria;
+    quantidade        :Real;
+begin
+  try
+    listaDeMaterias := nil;
+
+    if assigned(Item.MateriasDoProduto) and (Item.MateriasDoProduto.count > 0) then
+       adicionaMateriasDoProdutoItem(Item)
+    else
+    begin
+      listaDeMaterias := TProdutoHasMateria.MateriasDoProduto(Item.Produto.codigo);
+
+      if assigned(listaDeMaterias) then
+        for produtoMateria in listaDeMaterias do
+        begin
+           if produtoMateria.materia_prima.codigoProduto > 0 then
+           begin
+             cdsMateriaDoProduto.Append;
+             cdsMateriaDoProdutoINDICE_ITEM.AsInteger    := cdsItensINDICE.AsInteger;
+             cdsMateriaDoProdutoCODIGO_MATERIA.AsInteger := produtoMateria.codigo_materia;
+             cdsMateriaDoProdutoQUANTIDADE.AsFloat       := produtoMateria.materia_prima.quantidade;
+
+             if cdsMateriaDoProdutoQUANTIDADE.AsFloat = 0 then
+             begin
+               quantidade := chamaInput(tpQuantidade, 'Quantidade de '+produtoMateria.materia_prima.descricao);
+
+               cdsMateriaDoProdutoQUANTIDADE.AsFloat := quantidade;
+               if cdsMateriaDoProdutoQUANTIDADE.AsFloat <= 0 then
+                 exit;
+             end;
+
+             cdsMateriaDoProduto.Post;
+           end;
+        end;
+    end;
+
+  finally
+    FreeAndNil(listaDeMaterias);
+  end;
+end;
+
+procedure TfrmPedido.adicionaMateriasDoProdutoItem(item: TItem);
+var Materia :TMateriaDoProduto;
+begin
+  if not assigned(item.MateriasDoProduto) then
+    exit;
+
+  for Materia in item.MateriasDoProduto do
+  begin
+    cdsMateriaDoProduto.Append;
+    cdsMateriaDoProdutoCODIGO.AsInteger         := Materia.codigo;
+    cdsMateriaDoProdutoINDICE_ITEM.AsInteger    := cdsItensINDICE.AsInteger;
+    cdsMateriaDoProdutoCODIGO_ITEM.AsInteger    := Materia.codigo_item;
+    cdsMateriaDoProdutoCODIGO_MATERIA.AsInteger := Materia.codigo_materia;
+    cdsMateriaDoProdutoQUANTIDADE.AsFloat       := Materia.quantidade;
+    cdsMateriaDoProduto.Post;
+  end;
+end;
+
+procedure TfrmPedido.adicionaQuantidadePorValidade(item: TItem);
+var Quantitade :TQuantidadePorValidade;
+begin
+  if not assigned(item.quantidadesPorValidade) then
+    exit;
+
+  for Quantitade in item.quantidadesPorValidade do
+  begin
+    cdsQtdValidade.Append;
+    cdsQtdValidadeCODIGO.AsInteger          := Quantitade.codigo;
+    cdsQtdValidadeINDICE_ITEM.AsInteger     := cdsItensINDICE.AsInteger;
+    cdsQtdValidadeCODIGO_ITEM.AsInteger     := Quantitade.codigo_item;
+    cdsQtdValidadeCODIGO_VALIDADE.AsInteger := Quantitade.codigo_validade;
+    cdsQtdValidadeQUANTIDADE.AsFloat        := Quantitade.quantidade;
+    cdsQtdValidade.Post;
+  end;
+end;
+
 procedure TfrmPedido.AdicionarItem1Click(Sender: TObject);
 begin
   busca_item_para_inclusao('A');
@@ -1415,12 +1603,28 @@ begin
     gridItens.PopupMenu := PopupMenu1;
 
   cdsAdicionais.Filtered := false;
-    
+
   if (cdsAdicionais.IsEmpty) or (TRIM(cdsItensCODIGO_PRODUTO.AsString) = '') then
     Exit;
 
   cdsAdicionais.Filter   := 'INDICE_ITEM = '+cdsItensINDICE.AsString;
   cdsAdicionais.Filtered := true;
+
+  cdsMateriaDoProduto.Filtered := false;
+
+  if (cdsMateriaDoProduto.IsEmpty) or (TRIM(cdsItensCODIGO_PRODUTO.AsString) = '') then
+    Exit;
+
+  cdsMateriaDoProduto.Filter   := 'INDICE_ITEM = '+cdsItensINDICE.AsString;
+  cdsMateriaDoProduto.Filtered := true;
+
+  cdsQtdValidade.Filtered := false;
+
+  if (cdsQtdValidade.IsEmpty) then
+    Exit;
+
+  cdsQtdValidade.Filter   := 'INDICE_ITEM = '+cdsItensINDICE.AsString;
+  cdsQtdValidade.Filtered := true;
 end;
 
 procedure TfrmPedido.chkMaquinaCartaoClick(Sender: TObject);
@@ -1464,6 +1668,14 @@ begin
       while not cdsAdicionais.IsEmpty do
         cdsAdicionais.Delete;
 
+      cdsMateriaDoProduto.First;
+      while not cdsMateriaDoProduto.IsEmpty do
+        cdsMateriaDoProduto.Delete;
+
+      cdsQtdValidade.First;
+      while not cdsQtdValidade.IsEmpty do
+        cdsQtdValidade.Delete;
+
       cdsItens.Delete;
       calcula_totais;
     end
@@ -1506,7 +1718,7 @@ begin
 
     if cdsItensCODIGO.AsInteger > 0 then begin
 
-      justificativa := chamaInput('TEXT','Justificativa do cancelamento');
+      justificativa := chamaInput(tpTexto,'Justificativa do cancelamento');
 
       if justificativa <> '' then
         FItensDeletados.Add(cdsItensCODIGO.AsString+';'+justificativa+';'+usuario)
@@ -1652,7 +1864,7 @@ begin
       frmFinalizaPedido.cdsMoedas.Next;
     end;
 
-    if dm.conexao.Params.Database <> dm.FDConnection.Params.Database then
+   // if dm.conexao.Params.Database <> dm.FDConnection.Params.Database then
       salva_recebimento_por_item;
 
   Finally
@@ -1673,14 +1885,14 @@ begin
   lbCodigoUsuario.Caption   := IntToStr( fdm.UsuarioLogado.Codigo );
   lbUsuario.Caption         := '- '+fdm.UsuarioLogado.Nome;
   btnFinalizar.Visible      := AnsiMatchText(dm.UsuarioLogado.Departamento.nome, ['CAIXA','SERVIDOR']);
-  btnAgrupa.Visible         := (AnsiMatchText(dm.UsuarioLogado.Departamento.nome, ['CAIXA','SERVIDOR'])) and (dm.Configuracoes.Utiliza_comandas);
+  btnAgrupa.Visible         := (AnsiMatchText(dm.UsuarioLogado.Departamento.nome, ['CAIXA','SERVIDOR'])) and (dm.Configuracoes.utilizaComandas);
   btnLiberarComanda.Visible := AnsiMatchText(dm.UsuarioLogado.Departamento.nome, ['CAIXA','SERVIDOR']); // and (dm.Configuracoes.possui_dispensadora);
 
   Parametros                := TParametros.Create;
 
   produtos_no_pedido        := 0;
-  chkDuasVias.Checked       := dm.Configuracoes.duas_vias_pedido;
-  edtPreco.Enabled          := dm.Configuracoes.preco_produto_alteravel;
+  chkDuasVias.Checked       := dm.Configuracoes.duasViasPedido;
+  edtPreco.Enabled          := dm.Configuracoes.precoProdutoAlteravel;
   Parametros.NFCe.DANFE.ImprimirItens := Parametros.NFCe.DANFE.ImprimirItens;
   qryClientes.Connection    := dm.conexao;
 end;
@@ -2418,6 +2630,34 @@ begin
     FreeAndNil(repositorio);
     FreeAndNil(Item);
   end;
+end;
+
+function TfrmPedido.selecionaValidade(codigoProduto: integer; var pValidadeCadastrada :boolean): TObjectList<TQuantidadePorValidade>;
+var Quantidade :TQuantidadePorValidade;
+begin
+  result := nil;
+  frmSelecionaValidadeItemPedido := TfrmSelecionaValidadeItemPedido.Create(nil, codigoProduto, edtQuantidade.Value);
+  if frmSelecionaValidadeItemPedido.ShowModal = mrOk then
+  begin
+    result := TObjectList<TQuantidadePorValidade>.Create;
+    frmSelecionaValidadeItemPedido.cdsValidades.First;
+    while not frmSelecionaValidadeItemPedido.cdsValidades.Eof do
+    begin
+      if frmSelecionaValidadeItemPedido.cdsValidadesQTDE.AsFloat > 0 then
+      begin
+        Quantidade                 := TQuantidadePorValidade.Create;
+        Quantidade.codigo_validade := frmSelecionaValidadeItemPedido.cdsValidadesCODIGO.AsInteger;
+        Quantidade.quantidade      := frmSelecionaValidadeItemPedido.cdsValidadesQTDE.AsFloat;
+        result.Add(Quantidade);
+      end;
+      frmSelecionaValidadeItemPedido.cdsValidades.Next;
+    end;
+  end;
+
+  pValidadeCadastrada := not frmSelecionaValidadeItemPedido.cdsValidades.IsEmpty;
+
+  frmSelecionaValidadeItemPedido.Release;
+  frmSelecionaValidadeItemPedido := nil;
 end;
 
 procedure TfrmPedido.atualiza_tela;

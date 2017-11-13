@@ -4,6 +4,8 @@ inherited frmCadastroGrupo: TfrmCadastroGrupo
   Caption = 'Cadastro de Grupos'
   ClientHeight = 366
   ClientWidth = 528
+  ExplicitWidth = 320
+  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   inherited Splitter1: TSplitter

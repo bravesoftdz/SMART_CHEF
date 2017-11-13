@@ -127,8 +127,8 @@ begin
      if self.EstadoTela = tetIncluir then
        Grupo.codigo := 0;
 
-     if (fdm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
-       RepositorioGrupo.Salvar_2(Grupo);
+   //  if (fdm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
+   //    RepositorioGrupo.Salvar_2(Grupo);
      
      result := Grupo;
 

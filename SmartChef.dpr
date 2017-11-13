@@ -343,7 +343,23 @@ uses
   uEstornoEntrada in 'src\formularios\uEstornoEntrada.pas' {frmEstornoEntrada},
   uCadastroNcmIBPT in 'src\formularios\uCadastroNcmIBPT.pas' {frmCadastroNcmIBPT},
   uRelatorioMovimentacaoGeral in 'src\formularios\relatorios\Fortes\uRelatorioMovimentacaoGeral.pas' {frmRelatorioMovimentacaoGeral},
-  EspecificacaoProdutoFornecedorPorCodigos in 'src\dominio\objetoValor\especificacao\EspecificacaoProdutoFornecedorPorCodigos.pas';
+  EspecificacaoProdutoFornecedorPorCodigos in 'src\dominio\objetoValor\especificacao\EspecificacaoProdutoFornecedorPorCodigos.pas',
+  MateriaDoProduto in 'src\dominio\entidade\MateriaDoProduto.pas',
+  RepositorioMateriaDoProduto in 'src\infraestrutura\persistencia\RepositorioMateriaDoProduto.pas',
+  EspecificacaoMateriaDoProdutoItem in 'src\dominio\objetoValor\especificacao\EspecificacaoMateriaDoProdutoItem.pas',
+  TipoDado in 'src\dominio\tipo\TipoDado.pas',
+  uInformaValidade in 'src\formularios\uInformaValidade.pas' {frmInformaValidade},
+  LoteValidade in 'src\dominio\entidade\LoteValidade.pas',
+  ProdutoValidade in 'src\dominio\entidade\ProdutoValidade.pas',
+  RepositorioLoteValidade in 'src\infraestrutura\persistencia\RepositorioLoteValidade.pas',
+  RepositorioProdutoValidade in 'src\infraestrutura\persistencia\RepositorioProdutoValidade.pas',
+  EspecificacaoItensDoLoteValidade in 'src\dominio\objetoValor\especificacao\EspecificacaoItensDoLoteValidade.pas',
+  uLancaValidadeProdutos in 'src\formularios\uLancaValidadeProdutos.pas' {frmLancaValidadeProdutos},
+  QuantidadePorValidade in 'src\dominio\entidade\QuantidadePorValidade.pas',
+  RepositorioQuantidadePorValidade in 'src\infraestrutura\persistencia\RepositorioQuantidadePorValidade.pas',
+  EspecificacaoQuantidadesDoItem in 'src\dominio\objetoValor\especificacao\EspecificacaoQuantidadesDoItem.pas',
+  uSelecionaValidadeItemPedido in 'src\formularios\uSelecionaValidadeItemPedido.pas' {frmSelecionaValidadeItemPedido},
+  uRelatorioValidades in 'src\formularios\relatorios\Fortes\uRelatorioValidades.pas' {frmRelatorioValidades};
 
 {$R *.res}
 
@@ -367,9 +383,7 @@ begin
   Application.Initialize;
   Application.Title := 'SMART CHEF';
   Application.CreateForm(Tdm, dm);
-  Application.CreateForm(TfrmEstornoEntrada, frmEstornoEntrada);
-  Application.CreateForm(TfrmCadastroNcmIBPT, frmCadastroNcmIBPT);
-  Application.CreateForm(TfrmRelatorioMovimentacaoGeral, frmRelatorioMovimentacaoGeral);
+  Application.CreateForm(TfrmRelatorioValidades, frmRelatorioValidades);
   if not dm.cancelaInicializacao then begin
     //------------------------------------------------------------------------------------------------//
     // Se não for encontrado o Banco de Dados, então é solicitado para o usário configurá-lo.         //

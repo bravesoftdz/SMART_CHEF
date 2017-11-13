@@ -28,6 +28,8 @@ type
     FCodigo_balanca: String;
     FEstoque :TEstoque;
     FReferencia: String;
+    FAgranel: Boolean;
+
 
     function GetNcmIBPT :TNcmIBPT;                                      
     function GetIcmsParaECF :String;
@@ -53,6 +55,7 @@ type
     property codbar              :String  read Fcodbar              write Fcodbar;
     property referencia          :String  read FReferencia          write FReferencia;
     property codigo_balanca      :String  read FCodigo_balanca      write FCodigo_balanca;
+    property agranel             :Boolean read FAgranel             write FAgranel;
 
     property NcmIBPT             :TNcmIBPT read GetNcmIBPT write SetNcmIBPT;
 

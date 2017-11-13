@@ -797,7 +797,7 @@ inherited frmPedido: TfrmPedido
       Visible = False
     end
     object Shape15: TShape
-      Left = 342
+      Left = 341
       Top = 20
       Width = 334
       Height = 86
@@ -4873,7 +4873,7 @@ inherited frmPedido: TfrmPedido
       Pen.Color = 11974326
     end
     object Shape4: TShape
-      Left = 454
+      Left = 455
       Top = 160
       Width = 412
       Height = 26
@@ -5976,7 +5976,7 @@ inherited frmPedido: TfrmPedido
       ExplicitLeft = 930
     end
     object Label29: TLabel
-      Left = 895
+      Left = 893
       Top = 443
       Width = 44
       Height = 17
@@ -5989,7 +5989,7 @@ inherited frmPedido: TfrmPedido
       ParentFont = False
     end
     object Label30: TLabel
-      Left = 895
+      Left = 893
       Top = 406
       Width = 53
       Height = 17
@@ -6002,7 +6002,7 @@ inherited frmPedido: TfrmPedido
       ParentFont = False
     end
     object Label31: TLabel
-      Left = 895
+      Left = 893
       Top = 373
       Width = 43
       Height = 17
@@ -8300,8 +8300,8 @@ inherited frmPedido: TfrmPedido
       TabOrder = 7
     end
     object gridAdicionais: TDBGridCBN
-      Left = 454
-      Top = 185
+      Left = 455
+      Top = 184
       Width = 412
       Height = 276
       Anchors = [akLeft, akTop, akBottom]
@@ -9078,7 +9078,7 @@ inherited frmPedido: TfrmPedido
     Left = 632
     Top = 313
     Bitmap = {
-      494C010104000900340110001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104000900680110001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -9387,6 +9387,51 @@ inherited frmPedido: TfrmPedido
       FieldName = 'RAZAO'
       Origin = 'RAZAO'
       Size = 60
+    end
+  end
+  object cdsMateriaDoProduto: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'DataSetProvider1'
+    Left = 288
+    Top = 305
+    object cdsMateriaDoProdutoCODIGO: TIntegerField
+      FieldName = 'CODIGO'
+    end
+    object cdsMateriaDoProdutoINDICE_ITEM: TIntegerField
+      FieldName = 'INDICE_ITEM'
+    end
+    object cdsMateriaDoProdutoCODIGO_ITEM: TIntegerField
+      FieldName = 'CODIGO_ITEM'
+    end
+    object cdsMateriaDoProdutoCODIGO_MATERIA: TIntegerField
+      FieldName = 'CODIGO_MATERIA'
+    end
+    object cdsMateriaDoProdutoQUANTIDADE: TFloatField
+      FieldName = 'QUANTIDADE'
+    end
+  end
+  object cdsQtdValidade: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'DataSetProvider1'
+    AfterScroll = cdsItensAfterScroll
+    Left = 176
+    Top = 433
+    object cdsQtdValidadeCODIGO: TIntegerField
+      FieldName = 'CODIGO'
+    end
+    object cdsQtdValidadeCODIGO_ITEM: TIntegerField
+      FieldName = 'CODIGO_ITEM'
+    end
+    object cdsQtdValidadeCODIGO_VALIDADE: TIntegerField
+      FieldName = 'CODIGO_VALIDADE'
+    end
+    object cdsQtdValidadeQUANTIDADE: TFloatField
+      FieldName = 'QUANTIDADE'
+    end
+    object cdsQtdValidadeINDICE_ITEM: TIntegerField
+      FieldName = 'INDICE_ITEM'
     end
   end
 end

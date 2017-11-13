@@ -3619,10 +3619,223 @@ object frmScript: TfrmScript
     TabOrder = 73
     WordWrap = False
   end
+  object versao75: TMemo
+    Left = 86
+    Top = 133
+    Width = 31
+    Height = 23
+    Ctl3D = False
+    Lines.Strings = (
+      'CREATE GENERATOR GEN_MATERIAS_DO_PRODUTO_ID'
+      '^'
+      'CREATE TABLE MATERIAS_DO_PRODUTO ('
+      '    CODIGO INTEGER NOT NULL,'
+      '    CODIGO_ITEM INTEGER,'
+      '    CODIGO_MATERIA INTEGER,'
+      '    QUANTIDADE NUMERIC(15,4))'
+      '^')
+    ParentCtl3D = False
+    TabOrder = 74
+    WordWrap = False
+  end
+  object versao76: TMemo
+    Left = 126
+    Top = 133
+    Width = 31
+    Height = 23
+    Ctl3D = False
+    Lines.Strings = (
+      'alter table MATERIAS_DO_PRODUTO'
+      'add constraint PK_MATERIAS_DO_PRODUTO'
+      'primary key (CODIGO)'
+      '^'
+      'alter table MATERIAS_DO_PRODUTO'
+      'add constraint FK_MATERIAS_DO_PRODUTO_2'
+      'foreign key (CODIGO_MATERIA)'
+      'references MATERIAS_PRIMAS(CODIGO)'
+      '^'
+      'alter table MATERIAS_DO_PRODUTO'
+      'add constraint FK_MATERIAS_DO_PRODUTO_1'
+      'foreign key (CODIGO_ITEM)'
+      'references ITENS(CODIGO)'
+      'on delete CASCADE'
+      '^'
+      'CREATE TRIGGER MATERIAS_DO_PRODUTO_BI FOR MATERIAS_DO_PRODUTO'
+      'ACTIVE BEFORE INSERT POSITION 0'
+      'AS'
+      'BEGIN'
+      '  IF ((NEW.CODIGO IS NULL) or (NEW.CODIGO = 0)) THEN'
+      '    NEW.CODIGO = GEN_ID(GEN_MATERIAS_DO_PRODUTO_ID,1);'
+      'END'
+      '^')
+    ParentCtl3D = False
+    TabOrder = 75
+    WordWrap = False
+  end
+  object versao77: TMemo
+    Left = 166
+    Top = 133
+    Width = 31
+    Height = 23
+    Ctl3D = False
+    Lines.Strings = (
+      'CREATE TABLE LOTES_VALIDADE ('
+      '    CODIGO INTEGER NOT NULL,'
+      '    CRIACAO DATE,'
+      '    NUMERO_DOC INTEGER,'
+      '    NUMERO_NOTA INTEGER)'
+      '^'
+      'alter table LOTES_VALIDADE'
+      'add constraint PK_LOTES_VALIDADE'
+      'primary key (CODIGO)'
+      '^'
+      'CREATE GENERATOR GEN_LOTES_VALIDADE_ID'
+      '^'
+      'CREATE TRIGGER LOTES_VALIDADE_BI FOR LOTES_VALIDADE'
+      'ACTIVE BEFORE INSERT POSITION 0'
+      'AS'
+      'BEGIN'
+      '  IF ((NEW.CODIGO IS NULL) or (NEW.CODIGO = 0)) THEN'
+      '    NEW.CODIGO = GEN_ID(GEN_LOTES_VALIDADE_ID,1);'
+      'END'
+      '^')
+    ParentCtl3D = False
+    TabOrder = 76
+    WordWrap = False
+  end
+  object versao78: TMemo
+    Left = 206
+    Top = 133
+    Width = 31
+    Height = 23
+    Ctl3D = False
+    Lines.Strings = (
+      'CREATE TABLE PRODUTO_VALIDADE ('
+      '    CODIGO INTEGER NOT NULL,'
+      '    CODIGO_LOTE INTEGER,'
+      '    CODIGO_PRODUTO INTEGER,'
+      '    CODIGO_ENTRADA INTEGER,'
+      '    CODIGO_ITEM INTEGER,'
+      '    QUANTIDADE NUMERIC(15,4),'
+      '    VALIDADE DATE)'
+      '^'
+      'alter table PRODUTO_VALIDADE'
+      'add constraint PK_PRODUTO_VALIDADE'
+      'primary key (CODIGO)'
+      '^'
+      'alter table PRODUTO_VALIDADE'
+      'add constraint FK_PRODUTO_VALIDADE_2'
+      'foreign key (CODIGO_ITEM)'
+      'references ITENS_NOTAS_FISCAIS(CODIGO)'
+      '^'
+      'alter table PRODUTO_VALIDADE'
+      'add constraint FK_PRODUTO_VALIDADE_1'
+      'foreign key (CODIGO_ENTRADA)'
+      'references ENTRADA_SAIDA(CODIGO)'
+      '^'
+      'CREATE GENERATOR GEN_PRODUTO_VALIDADE_ID'
+      '^'
+      'CREATE TRIGGER PRODUTO_VALIDADE_BI FOR PRODUTO_VALIDADE'
+      'ACTIVE BEFORE INSERT POSITION 0'
+      'AS'
+      'BEGIN'
+      '  IF ((NEW.CODIGO IS NULL) or (NEW.CODIGO = 0)) THEN'
+      '    NEW.CODIGO = GEN_ID(GEN_PRODUTO_VALIDADE_ID,1);'
+      'END'
+      '^'
+      'alter table PRODUTO_VALIDADE'
+      'add constraint FK_PRODUTO_VALIDADE_3'
+      'foreign key (CODIGO_LOTE)'
+      'references LOTES_VALIDADE(CODIGO)'
+      'on delete CASCADE'
+      '^'
+      'alter table PRODUTO_VALIDADE'
+      'add constraint FK_PRODUTO_VALIDADE_4'
+      'foreign key (CODIGO_PRODUTO)'
+      'references PRODUTOS(CODIGO)'
+      '^')
+    ParentCtl3D = False
+    TabOrder = 77
+    WordWrap = False
+  end
+  object versao79: TMemo
+    Left = 246
+    Top = 133
+    Width = 31
+    Height = 23
+    Ctl3D = False
+    Lines.Strings = (
+      'CREATE TABLE QTD_ITEM_POR_VALIDADE ('
+      '    CODIGO INTEGER NOT NULL,'
+      '    CODIGO_ITEM INTEGER,'
+      '    CODIGO_VALIDADE INTEGER,'
+      '    QUANTIDADE INTEGER)'
+      '^'
+      'alter table QTD_ITEM_POR_VALIDADE'
+      'add constraint PK_QTD_ITEM_POR_VALIDADE'
+      'primary key (CODIGO)'
+      '^'
+      'alter table QTD_ITEM_POR_VALIDADE'
+      'add constraint FK_QTD_ITEM_POR_VALIDADE_2'
+      'foreign key (CODIGO_VALIDADE)'
+      'references PRODUTO_VALIDADE(CODIGO)'
+      '^'
+      'alter table QTD_ITEM_POR_VALIDADE'
+      'add constraint FK_QTD_ITEM_POR_VALIDADE_1'
+      'foreign key (CODIGO_ITEM)'
+      'references ITENS(CODIGO)'
+      '^'
+      'CREATE GENERATOR GEN_QTD_ITEM_POR_VALIDADE_ID'
+      '^'
+      
+        'CREATE TRIGGER QTD_ITEM_POR_VALIDADE_BI FOR QTD_ITEM_POR_VALIDAD' +
+        'E'
+      'ACTIVE BEFORE INSERT POSITION 0'
+      'AS'
+      'BEGIN'
+      '  IF ((NEW.CODIGO IS NULL) or (NEW.CODIGO = 0)) THEN'
+      '    NEW.CODIGO = GEN_ID(GEN_QTD_ITEM_POR_VALIDADE_ID,1);'
+      'END'
+      '^'
+      'ALTER TABLE CONFIGURACOES_SISTEMA'
+      'ADD CONTROLA_VALIDADE SMALLINT'
+      '^')
+    ParentCtl3D = False
+    TabOrder = 78
+    WordWrap = False
+  end
+  object versao80: TMemo
+    Left = 286
+    Top = 133
+    Width = 31
+    Height = 23
+    Ctl3D = False
+    Lines.Strings = (
+      'ALTER TABLE PRODUTOS'
+      'ADD AGRANEL CHAR(1)'
+      '^')
+    ParentCtl3D = False
+    TabOrder = 79
+    WordWrap = False
+  end
+  object versao81: TMemo
+    Left = 326
+    Top = 133
+    Width = 31
+    Height = 23
+    Ctl3D = False
+    Lines.Strings = (
+      'ALTER TABLE ENTRADA_SAIDA'
+      'ADD CODIGO_VALIDADE INTEGER'
+      '^')
+    ParentCtl3D = False
+    TabOrder = 80
+    WordWrap = False
+  end
   object Zsql: TZSQLProcessor
     Params = <>
     Delimiter = ';'
-    Left = 24
-    Top = 112
+    Left = 8
+    Top = 184
   end
 end

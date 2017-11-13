@@ -67,7 +67,7 @@ var
 implementation
 
 uses Repositorio, FabricaRepositorio, NFCE, EspecificacaoFiltraNFCe, ServicoEmissorNFCe, Parametros,
-  Math, StrUtils, Pedido, UtilitarioEstoque;
+  Math, StrUtils, Pedido, TipoDado, UtilitarioEstoque;
 
 {$R *.dfm}
 
@@ -175,7 +175,7 @@ begin
    Servico    := TServicoEmissorNFCe.Create(Parametro);
    XML        := TStringStream.Create(cdsNFCesXML.AsString);
 
-   Justificativa := chamaInput('STRING', 'Justificativa de cancelamento');
+   Justificativa := chamaInput(tpTexto, 'Justificativa de cancelamento');
 
    Servico.CancelarNFCe( XML , Justificativa);
 

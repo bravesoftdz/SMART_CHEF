@@ -143,8 +143,8 @@ begin
      if self.EstadoTela = tetIncluir then
        Dispensa.codigo := 0;
 
-     if (fdm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
-       RepositorioDispensa.Salvar_2(Dispensa);
+//     if (fdm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
+//       RepositorioDispensa.Salvar_2(Dispensa);
 
      { * * * SALVA ESTOQUE DA DISPENSA * * * }
 

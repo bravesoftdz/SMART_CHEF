@@ -202,7 +202,7 @@ begin
          else begin
            mesaComanda := ' MESA: '+IfThen( Pedido.codigo_mesa = 99, 'BALCAO',IntToStr(Pedido.codigo_mesa))+ ' COMANDA: '+IntToStr(Pedido.codigo_comanda);
 
-           if not dm.Configuracoes.Utiliza_comandas then
+           if not dm.Configuracoes.utilizaComandas then
              mesaComanda := ' MESA: '+ IntToStr(Pedido.codigo_comanda);
 
            memoInfoPedido.Lines.Add(mesaComanda);

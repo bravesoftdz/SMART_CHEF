@@ -20,6 +20,7 @@ type
     function SQLGet                      :String;            override;
     function SQLSalvar                   :String;            override;
     function SQLGetAll                   :String;            override;
+    function CondicaoSQLGetAll           :String;            override;
     function SQLRemover                  :String;            override;
 
   protected
@@ -48,9 +49,14 @@ uses
   IpiNt,
   PisNt,
   CofinsNt,
-  SysUtils;
+  SysUtils, System.StrUtils;
 
 { TRepositorioItemNotaFiscal }
+
+function TRepositorioItemNotaFiscal.CondicaoSQLGetAll: String;
+begin
+  result := ' WHERE CODIGO_NOTA_FISCAL = '+FIdentificador;
+end;
 
 procedure TRepositorioItemNotaFiscal.ExecutaDepoisDeSalvar(
   Objeto: TObject);
@@ -241,7 +247,7 @@ end;
 
 function TRepositorioItemNotaFiscal.SQLGetAll: String;
 begin
-   result := 'select * from '+self.GetNomeDaTabela+' order by codigo';
+   result := 'select * from '+self.GetNomeDaTabela + ' ' + IfThen(FIdentificador = '','', CondicaoSQLGetAll)+' order by codigo';
 end;
 
 function TRepositorioItemNotaFiscal.SQLRemover: String;

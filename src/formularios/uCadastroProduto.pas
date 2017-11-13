@@ -75,6 +75,7 @@ type
     cdsDESCRICAO: TStringField;
     cdsVALOR: TBCDField;
     cdsATIVO: TStringField;
+    chbAGranel: TCheckBox;
     procedure FormShow(Sender: TObject);
     procedure btnAddMateriaClick(Sender: TObject);
     procedure gridItensKeyDown(Sender: TObject; var Key: Word;
@@ -207,6 +208,7 @@ begin
      Produto.codbar              := self.edtCodBar.Text;
      Produto.referencia          := self.edtReferencia.Text;
      Produto.codigo_balanca      := self.edtCodigoBalanca.Text;
+     Produto.agranel             := self.chbAGranel.Checked;
 
      if assigned(BuscaNCM1.NCM) then
        Produto.codigo_ibpt         := BuscaNCM1.NCM.codigo;
@@ -247,8 +249,8 @@ begin
      if self.EstadoTela = tetIncluir then
        Produto.codigo := 0;
 
-     if (fdm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
-       Repositorio.Salvar_2(Produto);
+   //  if (fdm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
+   //    Repositorio.Salvar_2(Produto);
 
 
      { * * * SALVA MATÉRIAS-PRIMAS DO PRODUTO * * * }
@@ -272,8 +274,8 @@ begin
           if cdsMateriasCODIGO.AsInteger = 0 then
             ProdutoHasMateria.codigo := 0;
 
-          if (fdm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
-            Repositorio.Salvar_2( ProdutoHasMateria);
+   //       if (fdm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
+    //        Repositorio.Salvar_2( ProdutoHasMateria);
 
           cdsMaterias.Next;
         end;
@@ -346,6 +348,7 @@ begin
   edtUNEntrada.Clear;
   edtMultiplicador.Clear;
   cbAdicional.ItemIndex := 0;
+  chbAGranel.Checked := false;
 end;
 
 procedure TfrmCadastroProduto.MostrarDados;
@@ -391,6 +394,7 @@ begin
     self.edtCodBar.Text             := Produto.codbar;
     self.edtReferencia.Text         := Produto.referencia;
     self.edtCodigoBalanca.Text      := Produto.codigo_balanca;
+    self.chbAGranel.Checked         := Produto.agranel;
 
     case AnsiIndexStr(UpperCase(Produto.tributacao), ['T', 'II','NN','FF','S','SI','SN','SF']) of
      0,4 : cbTributacao.ItemIndex := 0;
@@ -659,6 +663,8 @@ begin
   edtUNEntrada.Visible       := not(cbTipo.ItemIndex in [1,3]);
   lblMultiplicador.Visible   := not(cbTipo.ItemIndex in [1,3]);
   edtMultiplicador.Visible   := not(cbTipo.ItemIndex in [1,3]);
+  chbAGranel.Visible         := cbTipo.ItemIndex = 3;
+  chbAGranel.Checked         := false;
   cbAdicional.Visible        := (cbTipo.ItemIndex <> 1);
   lbAdicional.Visible        := (cbTipo.ItemIndex <> 1);
 

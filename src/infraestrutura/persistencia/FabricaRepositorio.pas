@@ -81,7 +81,11 @@ uses
   RepositorioVolumesNotaFiscal,
   RepositorioTransportadora,
   RepositorioCFOP,
-  RepositorioConfiguracoesNFEmail;
+  RepositorioConfiguracoesNFEmail,
+  RepositorioMateriaDoProduto,
+  RepositorioLoteValidade,
+  RepositorioProdutoValidade,
+  RepositorioQuantidadePorValidade;
 
 { TFabricaRepositorio }
 
@@ -152,6 +156,10 @@ begin
    else if (NomeDaEntidade  = 'TTransportadora')            then result := TRepositorioTransportadora.Create
    else if (NomeDaEntidade  = 'TCFOP')                      then result := TRepositorioCFOP.Create
    else if (NomeDaEntidade  = 'TConfiguracoesNFEmail')      then result := TRepositorioConfiguracoesNFEmail.Create
+   else if (NomeDaEntidade  = 'TMateriaDoProduto')          then result := TRepositorioMateriaDoProduto.Create
+   else if (NomeDaEntidade  = 'TLoteValidade')              then result := TRepositorioLoteValidade.Create
+   else if (NomeDaEntidade  = 'TProdutoValidade')           then result := TRepositorioProdutoValidade.Create
+   else if (NomeDaEntidade  = 'TQuantidadePorValidade')     then result := TRepositorioQuantidadePorValidade.Create
 
    else begin
      dm.LogErros.AdicionaErro('FabricaRepositorio', 'TExcecaoRepositorioNaoEncontrado', 'Repositório para a '+ NomeDaEntidade + ' não foi encontrado!');
@@ -159,4 +167,4 @@ begin
    end;
 end;
 
-end.
+end.               

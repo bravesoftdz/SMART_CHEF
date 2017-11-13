@@ -24,8 +24,9 @@ type
     BuscaProduto1: TBuscaProduto;
     Label3: TLabel;
     edtQuantidade: TCurrencyEdit;
-    Label5: TLabel;
+    SpeedButton1: TSpeedButton;
     procedure FormShow(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
   private
     { Altera um registro existente no CDS de consulta }
     procedure AlterarRegistroNoCDS(Registro :TObject); override;
@@ -153,8 +154,8 @@ begin
      if self.EstadoTela = tetIncluir then
        MateriaPrima.codigo := 0;
 
-     if (fdm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
-       RepositorioMateriaPrima.Salvar_2(MateriaPrima);
+    // if (fdm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
+    //   RepositorioMateriaPrima.Salvar_2(MateriaPrima);
      
      result := MateriaPrima;
 
@@ -181,10 +182,11 @@ end;
 procedure TfrmCadastroMateriaPrima.LimparDados;
 begin
   inherited;
-
   self.edtCodigo.Clear;
   self.edtMateria.Clear;
   self.edtValor.Clear;
+  edtDescricao2.Clear;
+  BuscaProduto1.limpa;
 end;
 
 procedure TfrmCadastroMateriaPrima.MostrarDados;
@@ -216,6 +218,11 @@ begin
   end;
 end;
 
+procedure TfrmCadastroMateriaPrima.SpeedButton1Click(Sender: TObject);
+begin
+  avisar('Se a quantidade não for pré-cadastrada, ela será informada no momento da venda.');
+end;
+
 function TfrmCadastroMateriaPrima.VerificaDados: Boolean;
 begin
   result := false;
@@ -224,10 +231,10 @@ begin
     avisar('Favor informar a descrição da matéria');
     edtMateria.SetFocus;
   end
-  else if assigned(BuscaProduto1.Produto) and (edtQuantidade.Value <= 0) then begin
+ { else if assigned(BuscaProduto1.Produto) and (edtQuantidade.Value <= 0) then begin
     avisar('Favor informar a quantidade correspondente à matéria');
     edtQuantidade.SetFocus;
-  end
+  end }
   else if not assigned(BuscaProduto1.Produto) and (edtQuantidade.Value > 0) then begin
     avisar('Favor informar o produto correspondente à matéria');
     BuscaProduto1.edtCodigo.SetFocus;

@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, uModulo, stdCtrls, DBCtrls, Mask, RXCurrEdit, PermissoesAcesso,
-  ExtCtrls, ComCtrls, ImgList, pngimage;
+  ExtCtrls, ComCtrls, ImgList, pngimage, TipoDado;
 
 type
   TfrmPadrao = class(TForm)
@@ -28,7 +28,7 @@ type
     procedure KeyDownPadrao(Sender: TObject; var Key: Word; Shift: TShiftState);
 
   public
-    function chamaInput(REAL_INTEGER_DATE_STRING_TEXT, titulo :string):String;
+    function chamaInput(pTipoDado :TTipoDado; titulo: string):Variant;
     function confirma(mensagem:String) :Boolean;
 
   public
@@ -77,9 +77,9 @@ begin
   frmAvisar := nil;
 end;
 
-function TfrmPadrao.chamaInput(REAL_INTEGER_DATE_STRING_TEXT, titulo: string):String;
+function TfrmPadrao.chamaInput(pTipoDado :TTipoDado; titulo: string):Variant;
 begin
-  frmInputBox := TfrmInputBox.Create(Self,REAL_INTEGER_DATE_STRING_TEXT, titulo);
+  frmInputBox := TfrmInputBox.Create(Self, titulo, pTipoDado);
   if frmInputBox.ShowModal = mrOk then
     Result := frmInputBox.Retorno;
   frmInputBox.Release;

@@ -299,8 +299,8 @@ begin
      if self.EstadoTela = tetIncluir then
        Empresa.codigo := 0;
 
-     if (dm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
-       Repositorio.Salvar_2(Empresa);
+   //  if (dm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
+   //    Repositorio.Salvar_2(Empresa);
      
      result := Empresa;
      

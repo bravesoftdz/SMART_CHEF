@@ -144,8 +144,8 @@ begin
      if self.EstadoTela = tetIncluir then
        Comanda.codigo := 0;
 
-     if (fdm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
-       RepositorioComanda.Salvar_2(Comanda);
+ //    if (fdm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
+ //      RepositorioComanda.Salvar_2(Comanda);
 
      result := Comanda;
 

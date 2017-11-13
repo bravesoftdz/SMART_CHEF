@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, uPadrao, StdCtrls, Mask, RXToolEdit, RXCurrEdit, Buttons, ExtCtrls,
-  ImgList, pngimage, DB, DBClient, Grids, DBGrids, ContNrs, Item, Menus,
+  ImgList, pngimage, DB, DBClient, Grids, DBGrids, ContNrs, Item, Menus, TipoDado,
   AdicionalItem, Funcoes, CriaBalaoInformacao, generics.collections, System.ImageList;
 
 type
@@ -182,7 +182,7 @@ var
 implementation
 
 uses Math, uModulo, Repositorio, FabricaRepositorio, Produto, MateriaPrima, EspecificacaoMovimentosPorCodigoPedido,
-     Movimento, StrUtils;
+     Movimento, StrUtils, MateriaDoProduto;
 
 {$R *.dfm}
 
@@ -1216,11 +1216,13 @@ var partes, i, x, linha :integer;
     Adicional :TAdicionalItem;
     repositorio :Trepositorio;
     repositorioAd :TRepositorio;
+    repositorioMateria :TRepositorio;
     contem_adicional :Boolean;
     diferenca, quantidade, quantidadeReal, quantidadeLocal, centavos :Real;
     lista_adicionais :TObjectList<TAdicionalItem>;
+    listaMateriasDoProduto :TObjectList<TMateriaDoProduto>;
 begin
- partes              := StrToIntDef( chamaInput('INTEGER', 'Fracionar produto em quantas partes?'),0);
+ partes              := chamaInput(tpInteiro, 'Fracionar produto em quantas partes?');
 
  if (partes = 0) or not confirma('Atenção! Confirma particionamento do produto:'+#13#10+
                                  cdsItensPRODUTO.AsString+'?'#13#10+#13#10+
@@ -1237,6 +1239,15 @@ begin
 
    repositorio         := TFabricaRepositorio.GetRepositorio(TItem.ClassName);
    ListaItens.Add( TItem(repositorio.Get(cdsItensCODIGO_ITEM.AsInteger)) );
+
+   if assigned(ListaItens.Items[0].MateriasDoProduto) then
+   begin
+     repositorioMateria     := TFabricaRepositorio.GetRepositorio(TMateriaDoProduto.ClassName);
+     listaMateriasDoProduto := TObjectList<TMateriaDoProduto>.Create();
+     for i := 0 to ListaItens.Items[0].MateriasDoProduto.Count-1 do
+       listaMateriasDoProduto.Add(ListaItens.Items[0].MateriasDoProduto.Items[i]);
+   end;
+
 
    quantidade          := RoundTo(ListaItens[0].quantidade / partes, -4);
    diferenca           := roundTo(ListaItens[0].quantidade - (quantidade * partes),-4);
@@ -1295,6 +1306,15 @@ begin
           lista_adicionais.Items[x].codigo      := 0;
           lista_adicionais.Items[x].codigo_item := ListaItens[i].codigo;
           repositorioAd.Salvar( lista_adicionais.Items[x] );
+       end;
+     end;
+
+     if assigned(listaMateriasDoProduto) then begin
+       //salva materias para cada item criado
+       for x := 0 to listaMateriasDoProduto.Count - 1 do begin
+          listaMateriasDoProduto.Items[x].codigo      := 0;
+          listaMateriasDoProduto.Items[x].codigo_item := ListaItens[i].codigo;
+          repositorioMateria.Salvar( listaMateriasDoProduto.Items[x] );
        end;
      end;
    end;

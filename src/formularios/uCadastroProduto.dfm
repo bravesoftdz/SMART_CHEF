@@ -34,6 +34,8 @@ inherited frmCadastroProduto: TfrmCadastroProduto
     ExplicitWidth = 614
     ExplicitHeight = 606
     inherited tsConsulta: TTabSheet
+      ExplicitLeft = 0
+      ExplicitTop = 0
       ExplicitWidth = 606
       ExplicitHeight = 575
       inherited gridConsulta: TDBGridCBN
@@ -86,6 +88,8 @@ inherited frmCadastroProduto: TfrmCadastroProduto
       end
     end
     inherited tsDados: TTabSheet
+      ExplicitLeft = 0
+      ExplicitTop = 0
       ExplicitWidth = 606
       ExplicitHeight = 575
       inherited pnlDados: TPanel
@@ -1900,6 +1904,14 @@ inherited frmCadastroProduto: TfrmCadastroProduto
           MaxLength = 18
           TabOrder = 5
         end
+        object chbAGranel: TCheckBox
+          Left = 357
+          Top = 276
+          Width = 97
+          Height = 17
+          Caption = 'A GRANEL'
+          TabOrder = 32
+        end
       end
     end
   end
@@ -1965,7 +1977,7 @@ inherited frmCadastroProduto: TfrmCadastroProduto
     Left = 435
     Top = 515
     Bitmap = {
-      494C010102000800680010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010102000800780010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       00000000000000000000000000000000000000000000035703000355030084AB
       8400E8EFE80074A0740012631200046B0700046A0700046A0700046A0700046B
@@ -2116,6 +2128,6 @@ inherited frmCadastroProduto: TfrmCadastroProduto
   object DataSetProvider1: TDataSetProvider
     DataSet = qry1
     Left = 272
-    Top = 296
+    Top = 320
   end
 end

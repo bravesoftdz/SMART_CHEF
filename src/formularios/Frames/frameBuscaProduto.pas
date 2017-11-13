@@ -3,7 +3,7 @@ unit frameBuscaProduto;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, 
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, System.StrUtils,
   Dialogs, StdCtrls, Buttons, Mask, RXToolEdit, RXCurrEdit, Produto, Estoque;
 
 type
@@ -37,6 +37,9 @@ type
     procedure SetExecutarAposBuscar(const Value: TNotifyEvent);
     procedure SetExecutarAposLimpar(const Value: TNotifyEvent);
 
+  private
+    FIncluiInativos: Boolean;
+
   public
     FSelecionado: Boolean;
     procedure limpa;
@@ -46,6 +49,8 @@ type
     property Estoque  :TEstoque read FEstoque    write SetEstoque;
     property ProdutoMateria :Boolean read FProdutoMateria write FProdutoMateria;
     property Quantidade :Real   read FQuantidade write FQuantidade;
+
+    property IncluiInativos :Boolean read FIncluiInativos write FIncluiInativos;
 
   public
     property ExecutarAposBuscar :TNotifyEvent read FExecutarAposBuscar write SetExecutarAposBuscar;
@@ -86,19 +91,20 @@ begin
 end;
 
 function TBuscaProduto.selecionaProduto: String;
-var condicao_boliche, condicao_produtoMateria :String;
+var condicao_boliche, condicao_ativo, condicao_produtoMateria :String;
 begin
   Result := '';
   FSelecionado:= False;
-  if dm.Configuracoes.possui_boliche then
-    condicao_boliche := 'where codigo > 1'
-  else
-    condicao_boliche := 'where ativo = ''S''';
+  if dm.Configuracoes.possuiBoliche then
+    condicao_boliche := 'where codigo > 1';
+
+  if not FIncluiInativos then
+    condicao_ativo := IfThen(condicao_boliche.IsEmpty, 'where', 'and')+' ativo = ''S'' ';
 
   if FProdutoMateria then
     condicao_produtoMateria := ' and tipo = ''M'' ';
 
-  frmPesquisaSimples := TFrmPesquisaSimples.Create(Self,'Select ativo, codigo, descricao, referencia, valor from produtos '+condicao_boliche+condicao_produtoMateria+' order by codigo',
+  frmPesquisaSimples := TFrmPesquisaSimples.Create(Self,'Select ativo, codigo, descricao, referencia, valor from produtos '+condicao_boliche+condicao_ativo+condicao_produtoMateria+' order by codigo',
                                                         'CODIGO', 'Selecione o Produto desejado...',False,800,500);
 
   if frmPesquisaSimples.ShowModal = mrOk then begin
@@ -150,10 +156,10 @@ begin
   else
     FProduto   := TProduto(RepProduto.Get(edtCodigo.Text));
 
-  if assigned(FProduto) and not FProduto.ativo then
+  if assigned(FProduto) and not FProduto.ativo and not FIncluiInativos then
     FreeAndNil(FProduto);
 
-  codigo       := IfThen(dm.Configuracoes.possui_boliche,1,0);
+  codigo       := IfThen(dm.Configuracoes.possuiBoliche,1,0);
   FSelecionado := False;
   if Assigned(FProduto) and (FProduto.codigo > codigo) then begin
     FSelecionado:= True;

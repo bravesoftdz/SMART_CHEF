@@ -2,6 +2,8 @@ inherited frmCadastroDispensa: TfrmCadastroDispensa
   Caption = 'Cadastro de itens da dispensa'
   ClientHeight = 236
   ClientWidth = 726
+  ExplicitWidth = 320
+  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   inherited Splitter1: TSplitter

@@ -127,8 +127,8 @@ begin
      if self.EstadoTela = tetIncluir then
        Departamento.codigo := 0;
 
-     if (fdm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
-       RepositorioDepartamento.Salvar_2(Departamento);
+   //  if (fdm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
+   //    RepositorioDepartamento.Salvar_2(Departamento);
 
      result := Departamento;
 

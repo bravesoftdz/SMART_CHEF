@@ -95,6 +95,8 @@ type
     Estorno1: TMenuItem;
     NCM1: TMenuItem;
     MovimentaoGeral1: TMenuItem;
+    LanarValidadeProdutoEstoque1: TMenuItem;
+    ValidadedosProdutos1: TMenuItem;
     procedure Perfisdeacesso1Click(Sender: TObject);
     procedure Usurios1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -166,6 +168,8 @@ type
     procedure Estorno1Click(Sender: TObject);
     procedure NCM1Click(Sender: TObject);
     procedure MovimentaoGeral1Click(Sender: TObject);
+    procedure LanarValidadeProdutoEstoque1Click(Sender: TObject);
+    procedure ValidadedosProdutos1Click(Sender: TObject);
 
   private
     procedure SalvaPedido;
@@ -207,7 +211,8 @@ uses uCadastroPerfilAcesso, PermissoesAcesso, uCadastroUsuario, uCadastroGrupo, 
      uRelatorioEntradaSaida, uRelatorioCaixa48Colunas, uRelatorioItensDeletados, uConfiguraNFCe, uNFCes, uCadastroFornecedor,
      uConfiguracoesSistema, uCadastroCliente, uRelatorioProdutos, funcoes, uRelatorioCuponsFiscais, uImpressaoPedido,
      uEntradaNota, uCadastroCfopCorrespondente, uLancaSangriaReforco, uConfirmaEntrada, uSupervisor, uRelatorioNotasFiscaisEntrada,
-     uCadastroTransportadora, uEstornoEntrada, uCadastroNCMIBPT, uRelatorioMovimentacaoGeral;
+     uCadastroTransportadora, uEstornoEntrada, uCadastroNCMIBPT, uRelatorioMovimentacaoGeral, uLancaValidadeProdutos,
+     uRelatorioValidades;
 
 {$R *.dfm}
 
@@ -309,7 +314,7 @@ begin
   lbUsuario.Caption       := dm.UsuarioLogado.Nome;
   lbDepartamento.Caption  := dm.UsuarioLogado.Departamento.nome;
   lbDepartamento.Left     := lbUsuario.Left;
-  Utilitrios1.Visible     := dm.Configuracoes.possui_boliche;
+  Utilitrios1.Visible     := dm.Configuracoes.possuiBoliche;
   lbVersaoSistema.Caption := IntToStr(dm.Versao_Sistema);
   lbVersaoBd.Caption      := IntToStr(dm.Versao_BD);  
 
@@ -1148,6 +1153,11 @@ begin
   Application.Terminate;
 end;
 
+procedure TfrmInicial.ValidadedosProdutos1Click(Sender: TObject);
+begin
+  AbreForm(TfrmRelatorioValidades, paRelatorioValidades);
+end;
+
 procedure TfrmInicial.Vendas2Click(Sender: TObject);
 begin
   AbreForm(TfrmRelatorioVendas, paRelatorioVendas);
@@ -1308,6 +1318,12 @@ end;
 procedure TfrmInicial.ItensDispensa1Click(Sender: TObject);
 begin
   AbreForm(TfrmCadastroDispensa, paCadastroDispensa);
+end;
+
+procedure TfrmInicial.LanarValidadeProdutoEstoque1Click(Sender: TObject);
+begin
+  inherited;
+  AbreForm(TfrmLancaValidadeProdutos, paCadastroProduto);
 end;
 
 procedure TfrmInicial.EntradaSada1Click(Sender: TObject);

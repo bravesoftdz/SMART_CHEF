@@ -164,6 +164,7 @@ uses
   GeradorNFe,
   StringUtilitario,
   //Fatura,
+  TipoDado,
   NotaInutilizada,
   Pedido,
   Item, ItemAvulso,
@@ -807,7 +808,7 @@ begin
    dm.conexao.TxOptions.AutoCommit := false;
 
    try
-     Justificativa              := chamaInput('TEXT','Digite a justificativa. (Se não digitar a justificativa será: CANCELAMENTO DE NF-E)');
+     Justificativa              := chamaInput(tpTexto,'Digite a justificativa. (Se não digitar a justificativa será: CANCELAMENTO DE NF-E)');
      RepositorioNotaFiscal      := TFabricaRepositorio.GetRepositorio(TNotaFiscal.ClassName);
 
      GeradorNFe := TGeradorNFe.Create(FDM.Logo);

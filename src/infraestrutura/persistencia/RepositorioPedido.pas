@@ -91,17 +91,17 @@ begin
      for i := 0 to Pedido.Itens.Count -1 do begin
 
        {Se a conexao atual for externa, eh sempre insercao| e tbm a quantidade paga sera a total pois sera o final do recebimento}
-       if self.FQuery.Connection.Params.Database = fdm.FDConnection.Params.Database then begin
+       {if self.FQuery.Connection.Params.Database = fdm.FDConnection.Params.Database then begin
          (Pedido.Itens[i] as TItem).codigo := 0;
          (Pedido.Itens[i] as TItem).quantidade_pg := (Pedido.Itens[i] as TItem).quantidade;
-       end;
+       end;    }
 
         (Pedido.Itens[i] as TItem).codigo_pedido := Pedido.codigo;
         repositorio.Salvar( Pedido.Itens[i] );
      end;
    end;
 
-   if primeira_venda or ((UpperCase(Pedido.situacao) = 'F') and (self.FQuery.Connection.Params.Database <> fdm.FDConnection.Params.Database))
+   if primeira_venda{ or ((UpperCase(Pedido.situacao) = 'F') and (self.FQuery.Connection.Params.Database <> fdm.FDConnection.Params.Database)) }
    or (UpperCase(Pedido.situacao) = 'C')then
       Gera_xml_para_dispensadora(Pedido, (primeira_venda) and (Pedido.situacao <> 'F') );
 
@@ -404,19 +404,19 @@ begin
 
          ReWrite(Arq);
 
-         if dm.Configuracoes.imp_dep_espacada then begin
+         if dm.Configuracoes.impDepEspacada then begin
             Writeln(Arq, '');
             Writeln(Arq, '');
          end;
 
          Writeln(Arq, ' USUARIO: '+(Pedido.Itens[i] as TItem).Usuario.Nome);
 
-         if dm.Configuracoes.imp_dep_espacada then
+         if dm.Configuracoes.impDepEspacada then
             Writeln(Arq, '');
 
          Writeln(Arq, ' '+preparo+StringOfChar(' ', 48- (length(DateTimeToStr(now)+preparo)+1) ) + DateTimeToStr(now));
 
-         if dm.Configuracoes.imp_dep_espacada then
+         if dm.Configuracoes.impDepEspacada then
             Writeln(Arq, '');
 
          if Pedido.paraEntrega then begin
@@ -433,7 +433,7 @@ begin
            Writeln(Arq, I_NEGRITO+ '  MESA: '+IfThen( Pedido.codigo_mesa = 99, 'BALCAO',IntToStr(Pedido.codigo_mesa))+ ' COMANDA: '+IntToStr(Pedido.codigo_comanda)+ F_NEGRITO);
          //           123456789012345678901234567890123456789012345678
 
-         if dm.Configuracoes.imp_dep_espacada then
+         if dm.Configuracoes.impDepEspacada then
             Writeln(Arq, '');
 
          WriteLn(Arq, I_ITALICO+' ITEM                                       QTDE'+F_ITALICO);
@@ -456,7 +456,7 @@ begin
        quantidade := FloatToStr((Pedido.Itens[i] as TItem).quantidade);
        quantidade := quantidade + StringOfChar(' ',4-length(quantidade));
 
-       if dm.Configuracoes.imp_dep_espacada then
+       if dm.Configuracoes.impDepEspacada then
           Writeln(Arq, '');
 
 
@@ -480,7 +480,7 @@ begin
            WriteLn(Arq, '   > '+acao+' ' + quantidade + materia);
          end;
 
-       if dm.Configuracoes.imp_dep_espacada then begin
+       if dm.Configuracoes.impDepEspacada then begin
           Writeln(Arq, '');
           Writeln(Arq, '');
        end;
@@ -750,7 +750,7 @@ var Lista        :TStringList;
     repositorio  :TREpositorio;
 begin
  try
-   if not dm.Configuracoes.possui_dispensadora then
+   if not dm.Configuracoes.possuiDispensadora then
      Exit;
 
    Lista        := TStringList.Create;

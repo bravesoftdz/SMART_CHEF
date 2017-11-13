@@ -112,7 +112,7 @@ begin
 
 procedure TfrmLogin.FormShow(Sender: TObject);
 begin
-  try
+ { try
     dm.verificaVersaoBDs;
   Except
     on e :Exception do
@@ -120,7 +120,7 @@ begin
       avisar(e.Message);
       Application.Terminate;
     end;
-  end;
+  end;     }
 end;
 
 end.

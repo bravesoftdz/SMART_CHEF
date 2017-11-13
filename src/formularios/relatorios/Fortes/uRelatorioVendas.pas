@@ -98,10 +98,6 @@ type
     cdsVendasVLR_TOTAL_AD: TFloatField;
     RLPDFFilter1: TRLPDFFilter;
     qryPedidos: TFDQuery;
-    qryPedidosCODIGO: TIntegerField;
-    qryPedidosCOUVERT: TBCDField;
-    qryPedidosTAXA_SERVICO: TBCDField;
-    qryPedidosDESCONTO: TBCDField;
     qryVendas: TFDQuery;
     qryVendasCODGRUPO: TIntegerField;
     qryVendasGRUPO: TStringField;
@@ -112,6 +108,10 @@ type
     qryVendasVLR_TOTAL_IT: TFMTBCDField;
     qryVendasVLR_TOTAL_AD: TFMTBCDField;
     rgpC: TRadioGroup;
+    qryPedidosCODIGO: TStringField;
+    qryPedidosDESCONTO: TBCDField;
+    qryPedidosTAXA_SERVICO: TBCDField;
+    qryPedidosCOUVERT: TBCDField;
     procedure FormShow(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
     procedure chkPeriodoGeralClick(Sender: TObject);
@@ -126,6 +126,15 @@ type
   private
 
     procedure monta_sql;
+    procedure monta_sql_vendas;
+    procedure monta_sql_pedidos;
+
+    function sql_vendas_nfce :String;
+    function sql_vendas_nfe :String;
+
+    function sql_pedidos_nfce :String;
+    function sql_pedidos_nfe :String;
+
     procedure calcula_totais;
     procedure agrupa_produtos_iguais;
   public
@@ -148,7 +157,7 @@ begin
   qryPedidos.Connection := dm.conexao;
   qryVendas.Connection := dm.conexao;
 
-  listaGrupos.setValores('select 0 CODIGO, ''SERVIÇO'' DESCRICAO from grupos '+
+  listaGrupos.setValores('select 0 CODIGO, ''GRUPO'' DESCRICAO from grupos '+
                          'union ' +
                          'select * from grupos', 'Descricao', 'Grupo');
   listaGrupos.executa;
@@ -183,87 +192,50 @@ end;
 
 procedure TfrmRelatorioVendas.monta_sql;
 begin
+  monta_sql_vendas;
+  monta_sql_pedidos;
+end;
 
-  qryVendas.SQL.Text := 'select iif( gr.codigo is null, 0, gr.codigo) codgrupo ,        '+
-                        ' iif( gr.descricao is null, ''SERVIÇO'', gr.descricao) grupo , '+
-                        ' p.descricao produto,                                          '+
-                        ' sum( i.quantidade ) qtde,                                     '+
-                        ' sum(i.valor_unitario) vlr_uni, i.qtd_fracionado,              '+
-                        ' sum(i.valor_unitario * iif(((i.quantidade > 198)and(i.fracionado = ''S''))or(i.quantidade > 599), 1, i.quantidade )) vlr_total_it,            '+
-                        ' ( select sum(i.quantidade * ait.quantidade * ait.valor_unitario ) from adicionais_item ait '+
-                        '   where ait.codigo_item = i.codigo ) vlr_total_ad             '+
-                        ' from pedidos ped                                              '+
+procedure TfrmRelatorioVendas.monta_sql_pedidos;
+begin
+  qryPedidos.SQL.Text := sql_pedidos_nfce +
+                         //so add notas se selecionar filtro Todos ou COM Cpf
+                         ifThen(rgpC.ItemIndex in [0,1],
+                                ' UNION ALL '+
+                                sql_pedidos_nfe, '')+
+                                ' order by 1 ';
 
-                        ' left join nfce    on nfce.codigo_pedido = ped.codigo          '+
-                        ' left join itens i on i.codigo_pedido = ped.codigo             '+
-                        ' left join produtos p on p.codigo = i.codigo_produto           '+
-                        ' left join grupos gr on gr.codigo = p.codigo_grupo             '+
-                        ' left join verifica_hora_item(ped.codigo)  vant on 1=1         '+
-
-                        ' where ped.situacao = ''F'' ';
-
-
-   qryPedidos.SQL.Text := 'select ped.codigo, ped.couvert, ped.taxa_servico, ped.desconto '+
-
-                          ' from pedidos ped                                              '+
-
-                          ' left join nfce    on nfce.codigo_pedido = ped.codigo          '+
-                          ' left join itens i on i.codigo_pedido = ped.codigo             '+
-                          ' left join produtos p on p.codigo = i.codigo_produto           '+
-                          ' left join grupos gr on gr.codigo = p.codigo_grupo             '+
-                          ' left join verifica_hora_item(ped.codigo)  vant on 1=1         '+
-
-                          ' where ped.situacao = ''F'' ';
-
-  if rgpC.ItemIndex > 0 then
+  if not chkPeriodoGeral.Checked then
   begin
-    qryVendas.SQL.Add(' and '+IfThen(rgpC.ItemIndex = 1,'not','')+'(nfce.codigo is null) ');
-    qryPedidos.SQL.Add(' and '+IfThen(rgpC.ItemIndex = 1,'not','')+'(nfce.codigo is null) ');
-  end;
-
-  if not chkPeriodoGeral.Checked then begin
-  {  qryVendas.SQL.Add(' and ((ped.data between :dti and :dtf)                                                                      ');
-    qryVendas.SQL.Add(' and ( (iif( ((ped.data = :dti) and ( ((vant.item_valida_horario = 1) and (i.hora < ''07:00:00'')) or (i.hora > ''07:00:00'') )) ,1,0) = 1) ');
-    qryVendas.SQL.Add(' or (  iif( (ped.data = :dtf) and (i.hora < ''07:00:00'') ,1,0) = 1))                                       ');
-    qryVendas.SQL.Add(' or ((ped.data > :dti) and (ped.data < :dtf) ))                                                             ');  }
-
-  qryVendas.SQL.Add('and ((  (ped.data > :dti) and (ped.data < :dtf) )  ');
-  qryVendas.SQL.Add('or ( (iif( ((ped.data = :dti) and ( ((vant.item_valida_horario = 1) and (i.hora < ''07:00:00'')) or (i.hora > ''07:00:00'') )) ,1,0) = 1) ');
-  qryVendas.SQL.Add('  or (  iif( (ped.data = :dtf) and ((vant.item_valida_horario = 0)and (i.hora < ''07:00:00'')) ,1,0) = 1)))');
-
-    qryVendas.ParamByName('dti').AsDateTime := dtpInicio.DateTime;
-    qryVendas.ParamByName('dtf').AsDateTime := dtpFim.DateTime +1;
-
-  qryPedidos.SQL.Add('and ((  (ped.data > :dti) and (ped.data < :dtf) )  ');
-  qryPedidos.SQL.Add('or ( (iif( ((ped.data = :dti) and ( ((vant.item_valida_horario = 1) and (i.hora < ''07:00:00'')) or (i.hora > ''07:00:00'') )) ,1,0) = 1) ');
-  qryPedidos.SQL.Add('  or (  iif( (ped.data = :dtf) and ((vant.item_valida_horario = 0)and (i.hora < ''07:00:00'')) ,1,0) = 1)))');
-
     qryPedidos.ParamByName('dti').AsDateTime := dtpInicio.DateTime;
     qryPedidos.ParamByName('dtf').AsDateTime := dtpFim.DateTime +1;
   end;
 
-  if listaGrupos.comListaCampo.items[ listaGrupos.comListaCampo.itemIndex ] <> '' then begin
-    qryVendas.SQL.Add( IfThen(listaGrupos.comListaCampo.items[ listaGrupos.comListaCampo.itemIndex ] = 'SERVIÇO',
-                       ' and gr.codigo is null ' ,
-                       ' and gr.codigo = :cod_grupo '));
-
-    if listaGrupos.comListaCampo.items[ listaGrupos.comListaCampo.itemIndex ] <> 'SERVIÇO' then
-      qryVendas.ParamByName('cod_grupo').AsInteger := listaGrupos.CodCampo;
-
-    qryPedidos.SQL.Add(IfThen(listaGrupos.comListaCampo.items[ listaGrupos.comListaCampo.itemIndex ] = 'SERVIÇO',
-                       ' and gr.codigo is null ' ,
-                       ' and gr.codigo = :cod_grupo '));
-
+  if listaGrupos.comListaCampo.items[ listaGrupos.comListaCampo.itemIndex ] <> '' then
     if listaGrupos.comListaCampo.items[ listaGrupos.comListaCampo.itemIndex ] <> 'SERVIÇO' then
       qryPedidos.ParamByName('cod_grupo').AsInteger := listaGrupos.CodCampo;
+end;
+
+procedure TfrmRelatorioVendas.monta_sql_vendas;
+begin
+  qryVendas.SQL.text :=  sql_vendas_nfce +
+                         //so add notas se selecionar filtro Todos ou COM Cpf
+                         ifThen(rgpC.ItemIndex in [0,1],
+                                ' UNION ALL '+
+                                sql_vendas_nfe, '')+
+                                ' order by 1, 3 ';
+
+  if not chkPeriodoGeral.Checked then
+  begin
+    qryVendas.ParamByName('dti').AsDateTime := dtpInicio.DateTime;
+    qryVendas.ParamByName('dtf').AsDateTime := dtpFim.DateTime +1;
   end;
 
-
-  qryVendas.SQL.Add(' group by gr.codigo , gr.descricao , p.descricao, i.codigo, i.quantidade, i.qtd_fracionado ');
-  qryVendas.SQL.Add(' order by 1, 3 ');
-
-  qryPedidos.SQL.Add(' group by ped.codigo, ped.couvert, ped.taxa_servico, ped.valor_total, ped.desconto');
-
+  if listaGrupos.comListaCampo.items[ listaGrupos.comListaCampo.itemIndex ] <> '' then
+  begin
+    if listaGrupos.comListaCampo.items[ listaGrupos.comListaCampo.itemIndex ] <> 'SERVIÇO' then
+      qryVendas.ParamByName('cod_grupo').AsInteger := listaGrupos.CodCampo;
+  end;
 end;
 
 procedure TfrmRelatorioVendas.chkPeriodoGeralClick(Sender: TObject);
@@ -294,6 +266,113 @@ begin
     RLDBResult6.Visible := true;
 
   inherited;
+end;
+
+function TfrmRelatorioVendas.sql_pedidos_nfce: String;
+begin
+   result := 'select ''P''||CAST(ped.codigo as VARCHAR(15)) codigo, ped.couvert, '+
+             ' ped.taxa_servico, ped.desconto                                    '+
+
+             ' from pedidos ped                                                  '+
+
+             ' left join nfce    on nfce.codigo_pedido = ped.codigo              '+
+             ' left join itens i on i.codigo_pedido = ped.codigo                 '+
+             ' left join produtos p on p.codigo = i.codigo_produto               '+
+             ' left join grupos gr on gr.codigo = p.codigo_grupo                 '+
+             ' left join verifica_hora_item(ped.codigo)  vant on 1=1             '+
+             ' where ped.situacao = ''F''                                        ';
+
+  if rgpC.ItemIndex > 0 then
+    result := result +' and '+IfThen(rgpC.ItemIndex = 1,'not','')+'(nfce.codigo is null) ';
+
+  if not chkPeriodoGeral.Checked then
+    result := result + 'and ((  (iif(nfce.codigo is null , ped.data, Cast(nfce.dh_recebimento as Date)) >= :dti) and (iif(nfce.codigo is null , ped.data, Cast(nfce.dh_recebimento as Date)) < :dtf) ) ) ';
+
+
+  if listaGrupos.comListaCampo.items[ listaGrupos.comListaCampo.itemIndex ] <> '' then
+    result := result + IfThen(listaGrupos.comListaCampo.items[ listaGrupos.comListaCampo.itemIndex ] = 'SERVIÇO',
+                              ' and gr.codigo is null ' ,
+                              ' and gr.codigo = :cod_grupo ');
+
+  result := result + ' group by 1, 2, 3, 4';
+end;
+
+function TfrmRelatorioVendas.sql_pedidos_nfe: String;
+begin
+  result := 'select ''NF''||CAST(nf.codigo as VARCHAR(15)) codigo, 0, 0, tnf.desconto       '+
+            ' from notas_fiscais nf                                                         '+
+            ' left join notas_fiscais_nfe_retorno nfr on nfr.codigo_nota_fiscal = nf.codigo '+
+            ' left join totais_notas_fiscais tnf on tnf.codigo_nota_fiscal = nf.codigo      '+
+            ' where nfr.status = ''100'' and nf.entrada_saida = ''S''                       ';
+
+  if not chkPeriodoGeral.Checked then
+    result := result + ' and ( nf.data_saida between :dti and :dtf ) ';
+
+
+  if listaGrupos.comListaCampo.items[ listaGrupos.comListaCampo.itemIndex ] <> '' then
+    result := result + IfThen(listaGrupos.comListaCampo.items[ listaGrupos.comListaCampo.itemIndex ] = 'SERVIÇO',
+                              ' and gr.codigo is null ' ,
+                              ' and gr.codigo = :cod_grupo ');
+
+  result := result + ' group by 1, 2, 3, 4';
+end;
+
+function TfrmRelatorioVendas.sql_vendas_nfce: String;
+begin
+  result := 'select iif( gr.codigo is null, 0, gr.codigo) codgrupo ,        '+
+         ' iif( gr.descricao is null, ''SERVIÇO'', gr.descricao) grupo , '+
+         ' p.descricao produto,                                          '+
+         ' sum( i.quantidade ) qtde,                                     '+
+         ' sum(i.valor_unitario) vlr_uni, i.qtd_fracionado,              '+
+         ' sum(i.valor_unitario * iif(((i.quantidade > 198)and(i.fracionado = ''S''))or(i.quantidade > 599), 1, i.quantidade )) vlr_total_it,            '+
+         ' ( select sum(i.quantidade * ait.quantidade * ait.valor_unitario ) from adicionais_item ait '+
+         '   where ait.codigo_item = i.codigo ) vlr_total_ad, i.codigo, i.quantidade '+
+         ' from pedidos ped                                              '+
+
+         ' left join nfce    on nfce.codigo_pedido = ped.codigo          '+
+         ' left join itens i on i.codigo_pedido = ped.codigo             '+
+         ' left join produtos p on p.codigo = i.codigo_produto           '+
+         ' left join grupos gr on gr.codigo = p.codigo_grupo             '+
+         ' left join verifica_hora_item(ped.codigo)  vant on 1=1         '+
+         ' where ped.situacao = ''F'' ';
+
+  if rgpC.ItemIndex > 0 then
+    result := result + ' and '+IfThen(rgpC.ItemIndex = 1,'not','')+'(nfce.codigo is null) ';
+
+  if not chkPeriodoGeral.Checked then
+    result := result+ ' and ((  (iif(nfce.codigo is null , ped.data, Cast(nfce.dh_recebimento as Date)) >= :dti) and (iif(nfce.codigo is null , ped.data, Cast(nfce.dh_recebimento as Date)) < :dtf) ) ) ';
+
+  if listaGrupos.comListaCampo.items[ listaGrupos.comListaCampo.itemIndex ] <> '' then
+    result := result + IfThen(listaGrupos.comListaCampo.items[ listaGrupos.comListaCampo.itemIndex ] = 'SERVIÇO',
+                              ' and gr.codigo is null ' ,
+                              ' and gr.codigo = :cod_grupo ');
+
+  result := result +' group by 1, 2, 3, 6, 9, 10 ';
+end;
+
+function TfrmRelatorioVendas.sql_vendas_nfe: String;
+begin
+  result := 'select iif( gr.codigo is null, 0, gr.codigo) codgrupo ,                               '+
+            ' iif( gr.descricao is null, ''SERVIÇO'', gr.descricao) grupo ,  p.descricao produto,  '+
+            ' sum( inf.quantidade ) qtde, sum(inf.valor_unitario) vlr_uni, 0,                      '+
+            ' sum(inf.valor_unitario * inf.quantidade) vlr_total_it, 0, inf.codigo, inf.quantidade '+
+            ' from notas_fiscais nf                                                                '+
+            ' left join notas_fiscais_nfe_retorno nfr on nfr.codigo_nota_fiscal = nf.codigo        '+
+            ' left join itens_notas_fiscais inf on inf.codigo_nota_fiscal = nf.codigo              '+
+            ' left join produtos p on p.codigo = inf.codigo_produto                                '+
+            ' left join grupos gr on gr.codigo = p.codigo_grupo                                    '+
+
+            ' where (nfr.status = ''100'') and (nf.entrada_saida = ''S'')                          ';
+
+  if not chkPeriodoGeral.Checked then
+    result := result+ ' and ( nf.data_saida between :dti and :dtf ) ';
+
+  if listaGrupos.comListaCampo.items[ listaGrupos.comListaCampo.itemIndex ] <> '' then
+    result := result + IfThen(listaGrupos.comListaCampo.items[ listaGrupos.comListaCampo.itemIndex ] = 'SERVIÇO',
+                              ' and gr.codigo is null ' ,
+                              ' and gr.codigo = :cod_grupo ');
+
+  result := result +' group by 1, 2, 3, 6, 9, 10 ';
 end;
 
 procedure TfrmRelatorioVendas.calcula_totais;

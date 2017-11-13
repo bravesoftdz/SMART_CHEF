@@ -1,11 +1,16 @@
 inherited frmconfiguracoesSistema: TfrmconfiguracoesSistema
   Caption = 'Configura'#231#245'es do sistema'
-  ExplicitWidth = 710
-  ExplicitHeight = 478
+  ExplicitWidth = 320
+  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgGeral: TPageControl
+    ActivePage = tsDados
     inherited tsConsulta: TTabSheet
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       inherited gridConsulta: TDBGridCBN
         Columns = <
           item
@@ -33,21 +38,29 @@ inherited frmconfiguracoesSistema: TfrmconfiguracoesSistema
           end>
       end
       inherited lblAjudaSelecionar: TStaticText
-        ExplicitWidth = 553
+        Width = 222
       end
     end
     inherited tsDados: TTabSheet
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       inherited pnlDados: TPanel
         object PageControl1: TPageControl
           Left = 1
           Top = 4
           Width = 544
           Height = 377
-          ActivePage = TabSheet1
+          ActivePage = TabSheet2
           Style = tsFlatButtons
           TabOrder = 0
           object TabSheet1: TTabSheet
             Caption = 'Geral'
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object Label1: TLabel
               Left = 17
               Top = 24
@@ -140,6 +153,10 @@ inherited frmconfiguracoesSistema: TfrmconfiguracoesSistema
           object TabSheet2: TTabSheet
             Caption = 'Pedido'
             ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object Label3: TLabel
               Left = 17
               Top = 24
@@ -181,6 +198,13 @@ inherited frmconfiguracoesSistema: TfrmconfiguracoesSistema
               Width = 151
               Height = 13
               Caption = 'Pergunta p/ imprimir pedido?'
+            end
+            object Label11: TLabel
+              Left = 17
+              Top = 126
+              Width = 164
+              Height = 13
+              Caption = 'Controla validade dos produtos'
             end
             object cbxViasImpressao: TComboBox
               Left = 16
@@ -248,6 +272,17 @@ inherited frmconfiguracoesSistema: TfrmconfiguracoesSistema
                 'SIM'
                 'N'#195'O')
             end
+            object cbxControlaValidade: TComboBox
+              Left = 16
+              Top = 142
+              Width = 145
+              Height = 21
+              Style = csDropDownList
+              TabOrder = 6
+              Items.Strings = (
+                'SIM'
+                'N'#195'O')
+            end
           end
         end
       end
@@ -255,7 +290,7 @@ inherited frmconfiguracoesSistema: TfrmconfiguracoesSistema
   end
   inherited cds: TClientDataSet
     Left = 167
-    Top = 160
+    Top = 240
     object cdsCODIGO: TIntegerField
       FieldName = 'CODIGO'
     end
@@ -285,6 +320,6 @@ inherited frmconfiguracoesSistema: TfrmconfiguracoesSistema
     end
   end
   inherited ds: TDataSource
-    Top = 160
+    Top = 240
   end
 end

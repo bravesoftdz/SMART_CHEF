@@ -3,8 +3,8 @@ object frmInputBox: TfrmInputBox
   Top = 226
   BorderStyle = bsNone
   Caption = 'frmInputBox'
-  ClientHeight = 123
-  ClientWidth = 346
+  ClientHeight = 126
+  ClientWidth = 349
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -21,15 +21,16 @@ object frmInputBox: TfrmInputBox
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 346
-    Height = 123
+    Width = 349
+    Height = 126
     Align = alClient
-    BevelInner = bvLowered
+    BevelKind = bkTile
+    BevelOuter = bvNone
     TabOrder = 0
     object panTopo: TPanel
-      Left = 2
-      Top = 2
-      Width = 342
+      Left = 0
+      Top = 0
+      Width = 345
       Height = 18
       Align = alTop
       BevelOuter = bvNone
@@ -38,61 +39,31 @@ object frmInputBox: TfrmInputBox
       object Label1: TLabel
         Left = 15
         Top = 2
-        Width = 48
-        Height = 16
+        Width = 36
+        Height = 15
         Caption = 'Label1'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -13
-        Font.Name = 'MS Sans Serif'
+        Font.Name = 'Calibri'
         Font.Style = [fsBold]
         ParentFont = False
       end
     end
     object panCentro: TPanel
-      Left = 2
-      Top = 20
-      Width = 342
-      Height = 70
+      Left = 0
+      Top = 18
+      Width = 345
+      Height = 73
       Align = alClient
       BevelOuter = bvNone
       Color = 16119285
       TabOrder = 1
-      DesignSize = (
-        342
-        70)
-      object memRetorno: TMemo
-        Left = 8
-        Top = 11
-        Width = 331
-        Height = 50
-        Anchors = [akLeft, akTop, akRight, akBottom]
-        Ctl3D = False
-        ParentCtl3D = False
-        TabOrder = 1
-        Visible = False
-        OnKeyPress = memRetornoKeyPress
-      end
-      object edtRetorno: TMaskEdit
-        Left = 97
-        Top = 27
-        Width = 137
-        Height = 19
-        CharCase = ecUpperCase
-        Ctl3D = False
-        ParentCtl3D = False
-        TabOrder = 0
-        Visible = False
-        OnChange = edtRetornoChange
-        OnEnter = edtRetornoEnter
-        OnExit = edtRetornoExit
-        OnKeyPress = edtRetornoKeyPress
-      end
     end
     object panRodaPe: TPanel
-      Left = 2
-      Top = 90
-      Width = 342
+      Left = 0
+      Top = 91
+      Width = 345
       Height = 31
       Align = alBottom
       BevelOuter = bvNone
@@ -101,11 +72,12 @@ object frmInputBox: TfrmInputBox
       object Shape1: TShape
         Left = 0
         Top = 0
-        Width = 342
+        Width = 345
         Height = 31
         Align = alClient
         Brush.Color = 13744555
         Pen.Style = psClear
+        ExplicitWidth = 342
       end
       object panBotoes: TPanel
         Left = 8
@@ -129,8 +101,6 @@ object frmInputBox: TfrmInputBox
           Width = 141
           Height = 25
           Caption = '<ESC> Cancela'
-          TabOrder = 0
-          OnClick = btnCancelaClick
           Glyph.Data = {
             36080000424D3608000000000000360000002800000020000000100000000100
             2000000000000008000000000000000000000000000000000000FFFFFF00140E
@@ -199,6 +169,8 @@ object frmInputBox: TfrmInputBox
             8C0000008E00000089009B9B9B009B9B9B009B9B9B009B9B9B009B9B9B009B9B
             9B009B9B9B009B9B9B000000890000008E0000008C009B9B9B00}
           NumGlyphs = 2
+          TabOrder = 0
+          OnClick = btnCancelaClick
         end
         object btnConfirma: TBitBtn
           Left = 168
@@ -206,8 +178,6 @@ object frmInputBox: TfrmInputBox
           Width = 141
           Height = 25
           Caption = ' Confirma'
-          TabOrder = 1
-          OnClick = btnConfirmaClick
           Glyph.Data = {
             36080000424D3608000000000000360000002800000020000000100000000100
             2000000000000008000000000000000000000000000000000000FFFFFF00FFFF
@@ -276,6 +246,8 @@ object frmInputBox: TfrmInputBox
             9B009B9B9B009B9B9B009B9B9B009B9B9B009B9B9B009B9B9B009B9B9B009B9B
             9B009B9B9B009B9B9B009B9B9B009B9B9B009B9B9B009B9B9B00}
           NumGlyphs = 2
+          TabOrder = 1
+          OnClick = btnConfirmaClick
         end
       end
     end

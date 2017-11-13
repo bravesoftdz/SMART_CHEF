@@ -14,9 +14,6 @@ type
     panRodape: TPanel;
     Shape1: TShape;
     btnOk: TBitBtn;
-    Shape3: TShape;
-    Shape2: TShape;
-    Label1: TLabel;
     imgAlerta: TImage;
     procedure FormCreate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;

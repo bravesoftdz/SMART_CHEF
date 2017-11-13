@@ -227,8 +227,8 @@ begin
        Cliente.codigo := 0;
      end;
 
-     if (dm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
-       Repositorio.Salvar_2(Cliente);
+ //    if (dm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
+  //     Repositorio.Salvar_2(Cliente);
 
      if not cdsEndDeletado.IsEmpty then begin
        cdsEndDeletado.First;

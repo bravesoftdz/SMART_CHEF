@@ -57,6 +57,7 @@ const
   paEstornoEntradaNF             = 41;
   paCadastroNCM                  = 42;
   paRelatorioMovimentacaoGeral   = 43;
+  paRelatorioValidades           = 44;
 
 implementation
 

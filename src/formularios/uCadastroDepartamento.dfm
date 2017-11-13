@@ -4,6 +4,8 @@ inherited frmCadastroDepartamento: TfrmCadastroDepartamento
   Caption = 'Cadastro de Departamentos'
   ClientHeight = 384
   ClientWidth = 547
+  ExplicitWidth = 320
+  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   inherited Splitter1: TSplitter

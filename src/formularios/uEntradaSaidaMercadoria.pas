@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, uPadrao, StdCtrls, ExtCtrls, pngimage, frameBuscaProduto,
   frameBuscaDispensa, Mask, RXToolEdit, RXCurrEdit, Buttons, DB, DBClient,
-  Grids, DBGrids, EntradaSaida, frameBuscaPessoa, frameBuscaFornecedor;
+  Grids, DBGrids, EntradaSaida, frameBuscaPessoa, frameBuscaFornecedor, Generics.Collections;
 
 type
   TfrmEntradaSaidaMercadoria = class(TfrmPadrao)
@@ -48,6 +48,10 @@ type
     buscaFornecedor: TBuscaFornecedor;
     edtVlrTotal: TCurrencyEdit;
     StaticText7: TStaticText;
+    lbValidade: TStaticText;
+    edtValidade: TMaskEdit;
+    cdsVALIDADE: TDateField;
+    cdsCODIGO_VALIDADE: TIntegerField;
     procedure FormCreate(Sender: TObject);
     procedure rgpTipoClick(Sender: TObject);
     procedure rgpOperacaoClick(Sender: TObject);
@@ -63,15 +67,22 @@ type
       Shift: TShiftState);
     procedure btnCancelarClick(Sender: TObject);
     procedure edtPrecoCustoChange(Sender: TObject);
+    procedure edtValidadeExit(Sender: TObject);
   private
     procedure atualiza_estoque;
     procedure salva_entrada_saida;
+    procedure salvaValidadesEntrada(pListaEntradasSaidas :TObjectList<TEntradaSaida>);
+    procedure salvaValidadesSaida(pListaEntradasSaidas :TObjectList<TEntradaSaida>);
     procedure limpar_campos;
     procedure limpa_info;
     procedure atualiza_preco_custo;
     procedure buscaPorAssociacao(pCodigoProduto, pCodigoFornecedor :integer; pCodigoProdutoFornecedor :String);
 
     function verifica_obrigatorios :Boolean;
+    function possuiValidadeCadastrada(codigoProduto :integer) :Boolean;
+    procedure selecionaQuantidadePorValidade(codigoItem, codigoEstoque :integer; descricao, unidadeMedida, tipoItem :String);
+    procedure adicionaItem(codigoItem, codigoEstoque :integer; descricao, unidadeMedida, tipoItem :String; validade :String;
+                           codigoValidade :integer; quantidade :Real);
   public
     { Public declarations }
   end;
@@ -81,16 +92,15 @@ var
 
 implementation
 
-uses StrUtils, Estoque, Repositorio, FabricaRepositorio, Math, Dispensa,
-  Produto, uModulo, Usuario, ProdutoFornecedor, EspecificacaoProdutoFornecedorPorCodigos;
+uses StrUtils, Estoque, Repositorio, FabricaRepositorio, Math, Dispensa, LoteValidade, ProdutoValidade, funcoes,
+  Produto, uModulo, Usuario, ProdutoFornecedor, EspecificacaoProdutoFornecedorPorCodigos, uSelecionaValidadeItemPedido;
 
 {$R *.dfm}
 
 procedure TfrmEntradaSaidaMercadoria.FormCreate(Sender: TObject);
 begin
   inherited;
-//  TRadioButton(rgpOperacao.Controls[0]).Font.Color := $009B8F26;
- // TRadioButton(rgpOperacao.Controls[1]).Font.Color := $000070DF;
+  BuscaProduto1.IncluiInativos := true;
 end;
 
 procedure TfrmEntradaSaidaMercadoria.rgpTipoClick(Sender: TObject);
@@ -103,10 +113,10 @@ end;
 
 procedure TfrmEntradaSaidaMercadoria.rgpOperacaoClick(Sender: TObject);
 begin
-  lbQuantidade.Caption := IfThen(rgpOperacao.ItemIndex = 0, 'Quantidade a dar entrada', 'Quantidade a dar saída');
+  lbQuantidade.Caption  := IfThen(rgpOperacao.ItemIndex = 0, 'Quantidade a dar entrada', 'Quantidade a dar saída');
 
-//  rgpTipo.Visible := (rgpOperacao.ItemIndex = 0);
-
+  edtValidade.Visible   := (rgpOperacao.ItemIndex = 0);
+  lbValidade.Visible    := (rgpOperacao.ItemIndex = 0);
   edtPrecoCusto.Enabled := (rgpOperacao.ItemIndex = 0);
 
   buscaFornecedor.Limpa;
@@ -182,6 +192,22 @@ begin
  finally
    fdm.conexao.TxOptions.AutoCommit := true;
  end;
+end;
+
+procedure TfrmEntradaSaidaMercadoria.adicionaItem(codigoItem, codigoEstoque: integer; descricao, unidadeMedida, tipoItem: String; validade :String;
+codigoValidade :integer; quantidade :Real);
+begin
+  cds.Append;
+  cdsCODIGO_ITEM.AsInteger    := codigoItem;
+  cdsQUANTIDADE.AsFloat       := quantidade;
+  cdsDESCRICAO.AsString       := descricao;
+  cdsCODIGO_ESTOQUE.AsInteger := codigoEstoque;
+  cdsUN_MEDIDA.AsString       := unidadeMedida;
+  cdsPRECO_CUSTO.AsFloat      := edtPrecoCusto.Value;
+  cdsTIPO_ITEM.AsString       := tipoItem;
+  cdsVALIDADE.AsString        := IfThen(trim(validade) = '/  /', '', validade);
+  cdsCODIGO_VALIDADE.AsInteger:= codigoValidade;
+  cds.Post;
 end;
 
 procedure TfrmEntradaSaidaMercadoria.atualiza_estoque;
@@ -262,6 +288,14 @@ begin
   if (rgpOperacao.ItemIndex = 1) and (edtEstoque.Value < edtQuantidade.Value) then
     edtQuantidade.Value := edtEstoque.Value;
 
+  btnAdd.Enabled := edtQuantidade.Value > 0;
+end;
+
+procedure TfrmEntradaSaidaMercadoria.edtValidadeExit(Sender: TObject);
+begin
+  if length(trim(edtValidade.Text)) = 6 then
+    edtValidade.Text := trim(edtValidade.Text)+ FormatDateTime('yyyy', Date );
+  inherited;
 end;
 
 procedure TfrmEntradaSaidaMercadoria.BuscaDispensa1edtCodigoChange(
@@ -288,6 +322,7 @@ begin
   edtQuantidade.Clear;
   edtPrecoCusto.Clear;
   edtPrecoCusto.Tag := 0;
+  edtValidade.Clear;
 
   if BuscaDispensa1.Visible then  BuscaDispensa1.edtCodigo.SetFocus;
   if BuscaProduto1.Visible  then  BuscaProduto1.edtCodigo.SetFocus;
@@ -358,15 +393,10 @@ begin
       if cds.Locate('CODIGO_ITEM', codigo_item, []) then
          exit;
 
-      cds.Append;
-      cdsCODIGO_ITEM.AsInteger    := codigo_item;
-      cdsQUANTIDADE.AsFloat       := edtQuantidade.Value;
-      cdsDESCRICAO.AsString       := descricao;
-      cdsCODIGO_ESTOQUE.AsInteger := codigo_estoque;
-      cdsUN_MEDIDA.AsString       := unidade_medida;
-      cdsPRECO_CUSTO.AsFloat      := edtPrecoCusto.Value;
-      cdsTIPO_ITEM.AsString       := IfThen( rgpTipo.ItemIndex = 1, 'D', 'P');
-      cds.Post;
+      if (rgpTipo.ItemIndex = 0) and (rgpOperacao.ItemIndex = 1) and (possuiValidadeCadastrada(codigo_item)) then
+        selecionaQuantidadePorValidade(codigo_item, codigo_estoque, descricao, unidade_medida, IfThen( rgpTipo.ItemIndex = 1, 'D', 'P'))
+      else
+        adicionaItem(codigo_item, codigo_estoque, descricao, unidade_medida, IfThen( rgpTipo.ItemIndex = 1, 'D', 'P'), edtValidade.Text,0,edtQuantidade.Value);
 
       btnExecutar.Enabled := true; 
     end;
@@ -394,46 +424,152 @@ begin
   limpar_campos;
 end;
 
+procedure TfrmEntradaSaidaMercadoria.salvaValidadesEntrada(pListaEntradasSaidas :TObjectList<TEntradaSaida>);
+var repositorio  :TRepositorio;
+    Lote         :TLoteValidade;
+    ItemLote     :TProdutoValidade;
+    entradaSaida :TEntradaSaida;
+begin
+  try
+  try
+    repositorio     := TFabricaRepositorio.GetRepositorio(TLoteValidade.ClassName);
+    Lote            := TLoteValidade.Create;
+    Lote.criacao    := Date;
+    Lote.numero_doc := pListaEntradasSaidas.Items[0].num_documento;
+
+    Lote.ItensDoLote := TObjectList<TProdutoValidade>.Create;
+
+    for entradaSaida in pListaEntradasSaidas do
+    begin
+      cds.Locate('CODIGO_ITEM', entradaSaida.codigo, []);
+      if cdsVALIDADE.AsString <> '' then
+      begin
+        ItemLote                := TProdutoValidade.Create;
+        ItemLote.codigo_produto := entradaSaida.codigo_item;
+        ItemLote.codigo_entrada := entradaSaida.codigo;
+        ItemLote.quantidade     := entradaSaida.quantidade;
+
+        ItemLote.validade       := cdsVALIDADE.AsDateTime;
+        Lote.ItensDoLote.Add(ItemLote);
+      end;
+    end;
+    repositorio.Salvar(Lote);
+  except
+    on e :Exception do
+      raise Exception.Create('Erro ao salvar validades');
+  end;
+  finally
+    FreeAndNil(repositorio);
+    FreeAndNil(Lote);
+  end;
+end;
+
+procedure TfrmEntradaSaidaMercadoria.salvaValidadesSaida(pListaEntradasSaidas: TObjectList<TEntradaSaida>);
+var
+  repositorio  :TRepositorio;
+  entradaSaida :TEntradaSaida;
+  ItemValidade :TProdutoValidade;
+begin
+  try
+    repositorio     := TFabricaRepositorio.GetRepositorio(TProdutoValidade.ClassName);
+    for entradaSaida in pListaEntradasSaidas do
+    begin
+      if entradaSaida.codigo_validade > 0 then
+      begin
+         ItemValidade                := TProdutoValidade(repositorio.Get(entradaSaida.codigo_validade));
+         ItemValidade.quantidade     := ItemValidade.quantidade - entradaSaida.quantidade;
+         repositorio.Salvar(ItemValidade);
+      end;
+    end;
+  finally
+    FreeAndNil(repositorio);
+  end;
+end;
+
 procedure TfrmEntradaSaidaMercadoria.salva_entrada_saida;
 var repositorio   :TRepositorio;
     entrada_saida :TEntradaSaida;
+    EntradasSaidas :TObjectList<TEntradaSaida>;
+    informouValidade :boolean;
 begin
-  repositorio   := nil;
-  entrada_saida := nil;
+  repositorio      := nil;
+  entrada_saida    := nil;
+  informouValidade := false;
   try
   try
-    repositorio   := TFabricaRepositorio.GetRepositorio(TEntradaSaida.ClassName);
-    entrada_saida := TEntradaSaida.Create;
-
-    entrada_saida.num_documento     := edtNumDoc.AsInteger;
-    entrada_saida.data              := StrToDate(edtData.Text);
-    entrada_saida.entrada_saida     := IfThen(rgpOperacao.ItemIndex = 0, 'E', 'S');
-    entrada_saida.tipo              := IfThen(rgpTipo.ItemIndex = 0, 'P', 'D');
-    entrada_saida.observacao        := mmoObs.Text;
-    entrada_saida.codigo_usuario    := fdm.UsuarioLogado.Codigo;
-    entrada_saida.codigo_fornecedor := buscaFornecedor.edtCodigo.AsInteger;
-    entrada_saida.valor_total       := edtVlrTotal.Value;
-
+    dm.conexao.TxOptions.AutoCommit := false;
+    repositorio    := TFabricaRepositorio.GetRepositorio(TEntradaSaida.ClassName);
+    EntradasSaidas := TObjectList<TEntradaSaida>.Create;
     cds.First;
     while not cds.Eof do begin
+      entrada_saida := TEntradaSaida.Create;
+
+      entrada_saida.num_documento     := edtNumDoc.AsInteger;
+      entrada_saida.data              := StrToDate(edtData.Text);
+      entrada_saida.entrada_saida     := IfThen(rgpOperacao.ItemIndex = 0, 'E', 'S');
+      entrada_saida.tipo              := IfThen(rgpTipo.ItemIndex = 0, 'P', 'D');
+      entrada_saida.observacao        := mmoObs.Text;
+      entrada_saida.codigo_usuario    := fdm.UsuarioLogado.Codigo;
+      entrada_saida.codigo_fornecedor := buscaFornecedor.edtCodigo.AsInteger;
+      entrada_saida.valor_total       := edtVlrTotal.Value;
+
       entrada_saida.codigo         := 0;
       entrada_saida.codigo_item    := cdsCODIGO_ITEM.AsInteger;
       entrada_saida.quantidade     := cdsQUANTIDADE.AsFloat;
       entrada_saida.preco_custo    := cdsPRECO_CUSTO.AsFloat;
+      entrada_saida.codigo_validade:= cdsCODIGO_VALIDADE.AsInteger;
 
       repositorio.Salvar(entrada_saida);
+      EntradasSaidas.Add(entrada_saida);
+
+      if cdsVALIDADE.AsString <> '' then
+        informouValidade := true;
+
       cds.Next;
     end;
 
+    if (rgpOperacao.ItemIndex = 0) and informouValidade then
+      salvaValidadesEntrada(EntradasSaidas)
+    else if (rgpOperacao.ItemIndex = 1) and informouValidade then
+      salvaValidadesSaida(EntradasSaidas);
+
+    dm.conexao.Commit;
   Except
     On E: Exception do
+    begin
+      dm.conexao.Rollback;
       raise Exception.Create(e.Message);
+    end;
   end;
 
   finally
+    dm.conexao.TxOptions.AutoCommit := true;
     FreeAndNil(repositorio);
-    FreeAndNil(entrada_saida);
+    FreeAndNil(EntradasSaidas);
   end;
+end;
+
+procedure TfrmEntradaSaidaMercadoria.selecionaQuantidadePorValidade(codigoItem, codigoEstoque :integer; descricao, unidadeMedida, tipoItem :String);
+begin
+  frmSelecionaValidadeItemPedido := TfrmSelecionaValidadeItemPedido.Create(nil, codigoItem, edtQuantidade.Value);
+  if frmSelecionaValidadeItemPedido.ShowModal = mrOk then
+  begin
+    frmSelecionaValidadeItemPedido.cdsValidades.First;
+    while not frmSelecionaValidadeItemPedido.cdsValidades.Eof do
+    begin
+      if frmSelecionaValidadeItemPedido.cdsValidadesQTDE.AsFloat > 0 then
+      begin
+        adicionaItem(codigoItem, codigoEstoque, descricao, unidadeMedida, tipoItem,
+                     frmSelecionaValidadeItemPedido.cdsValidadesVALIDADE.AsString,
+                     frmSelecionaValidadeItemPedido.cdsValidadesCODIGO.AsInteger,
+                     frmSelecionaValidadeItemPedido.cdsValidadesQTDE.AsFloat);
+      end;
+      frmSelecionaValidadeItemPedido.cdsValidades.Next;
+    end;
+  end;
+
+  frmSelecionaValidadeItemPedido.Release;
+  frmSelecionaValidadeItemPedido := nil;
 end;
 
 procedure TfrmEntradaSaidaMercadoria.limpa_info;
@@ -442,6 +578,15 @@ begin
   edtNumDoc.Clear;
   edtVlrTotal.Clear;
   mmoObs.Clear;
+end;
+
+function TfrmEntradaSaidaMercadoria.possuiValidadeCadastrada(codigoProduto: integer): Boolean;
+begin
+  dm.qryGenerica.Close;
+  dm.qryGenerica.SQL.Text := 'select codigo from produto_validade where codigo_produto = :codpro and quantidade > 0';
+  dm.qryGenerica.ParamByName('codpro').AsInteger := codigoProduto;
+  dm.qryGenerica.Open;
+  result := not dm.qryGenerica.IsEmpty;
 end;
 
 procedure TfrmEntradaSaidaMercadoria.edtPrecoCustoChange(Sender: TObject);

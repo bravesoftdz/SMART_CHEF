@@ -39,6 +39,8 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
     ExplicitWidth = 450
     ExplicitHeight = 479
     inherited tsConsulta: TTabSheet
+      ExplicitLeft = 0
+      ExplicitTop = 0
       ExplicitWidth = 442
       ExplicitHeight = 448
       DesignSize = (
@@ -58,6 +60,8 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
       end
     end
     inherited tsDados: TTabSheet
+      ExplicitLeft = 0
+      ExplicitTop = 0
       ExplicitWidth = 442
       ExplicitHeight = 448
       inherited pnlDados: TPanel
@@ -425,6 +429,10 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
     object TabSheet1: TTabSheet
       Caption = 'Padr'#245'es'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object pnlPadroes: TPanel
         Left = 0
         Top = -1
@@ -979,6 +987,10 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
     object TabSheet2: TTabSheet
       Caption = 'Config. NF-e'
       ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object PageControl2: TPageControl
         Left = 0
         Top = 0
@@ -995,6 +1007,10 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
           Font.Name = 'Vani'
           Font.Style = []
           ParentFont = False
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object gpbAliquotas: TGroupBox
             Left = 11
             Top = 127
@@ -1236,6 +1252,10 @@ inherited frmCadastroEmpresa: TfrmCadastroEmpresa
         object TabSheet4: TTabSheet
           Caption = 'Informa'#231#245'es de e-mail'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object Label23: TLabel
             Left = 14
             Top = 13

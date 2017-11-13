@@ -227,8 +227,8 @@ begin
   if self.Tag = 1 then
     Usuario.codigo := 0;
 
-  if (fdm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
-    Rep.Salvar_2(Usuario);
+//  if (fdm.ArquivoConfiguracao.CaminhoBancoDeDadosLocal <> '') then
+ //   Rep.Salvar_2(Usuario);
 
   cds.Close;
   cds.Open;

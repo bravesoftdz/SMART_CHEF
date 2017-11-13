@@ -183,7 +183,7 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
     object edtEstoque: TCurrencyEdit
       Left = 20
       Top = 40
-      Width = 117
+      Width = 83
       Height = 26
       TabStop = False
       AutoSize = False
@@ -198,7 +198,7 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
       TabOrder = 0
     end
     object lbQuantidade: TStaticText
-      Left = 300
+      Left = 222
       Top = 23
       Width = 66
       Height = 19
@@ -213,9 +213,9 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
       Transparent = False
     end
     object edtQuantidade: TCurrencyEdit
-      Left = 300
+      Left = 222
       Top = 40
-      Width = 117
+      Width = 83
       Height = 26
       AutoSize = False
       DisplayFormat = ' ,0.00;-,0.00'
@@ -234,6 +234,7 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
       Width = 115
       Height = 30
       Caption = 'Adicionar'
+      Enabled = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
       Font.Height = -11
@@ -308,7 +309,7 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
         9B009B9B9B009B9B9B009B9B9B009B9B9B009B9B9B009B9B9B00}
       NumGlyphs = 2
       ParentFont = False
-      TabOrder = 5
+      TabOrder = 6
       OnClick = btnAddClick
     end
     object btnCancelar: TBitBtn
@@ -391,11 +392,11 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
         9B009B9B9B009B9B9B00807F9A003A3795000102920009089300}
       NumGlyphs = 2
       ParentFont = False
-      TabOrder = 6
+      TabOrder = 7
       OnClick = btnCancelarClick
     end
     object StaticText6: TStaticText
-      Left = 162
+      Left = 121
       Top = 23
       Width = 82
       Height = 19
@@ -406,13 +407,13 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
       Font.Name = 'Segoe UI'
       Font.Style = []
       ParentFont = False
-      TabOrder = 7
+      TabOrder = 8
       Transparent = False
     end
     object edtPrecoCusto: TCurrencyEdit
-      Left = 162
+      Left = 121
       Top = 40
-      Width = 117
+      Width = 83
       Height = 26
       TabStop = False
       AutoSize = False
@@ -425,6 +426,38 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
       ParentFont = False
       TabOrder = 3
       OnChange = edtPrecoCustoChange
+    end
+    object lbValidade: TStaticText
+      Left = 324
+      Top = 23
+      Width = 49
+      Height = 19
+      Caption = 'Validade'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 9
+      Transparent = False
+    end
+    object edtValidade: TMaskEdit
+      Left = 323
+      Top = 40
+      Width = 86
+      Height = 25
+      EditMask = '!99/99/9999;1;_'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      MaxLength = 10
+      ParentFont = False
+      TabOrder = 5
+      Text = '  /  /    '
+      OnExit = edtValidadeExit
     end
   end
   object grpInfEntrada: TGroupBox
@@ -627,8 +660,8 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
       OnClick = btnExecutarClick
     end
     object DBGrid1: TDBGrid
-      Left = 11
-      Top = 8
+      Left = 16
+      Top = 6
       Width = 399
       Height = 137
       DataSource = ds
@@ -750,6 +783,7 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
     end
     object cdsQUANTIDADE: TFloatField
       FieldName = 'QUANTIDADE'
+      DisplayFormat = ',0.00; ,0.00'
     end
     object cdsDESCRICAO: TStringField
       FieldName = 'DESCRICAO'
@@ -767,6 +801,12 @@ inherited frmEntradaSaidaMercadoria: TfrmEntradaSaidaMercadoria
     object cdsTIPO_ITEM: TStringField
       FieldName = 'TIPO_ITEM'
       Size = 1
+    end
+    object cdsVALIDADE: TDateField
+      FieldName = 'VALIDADE'
+    end
+    object cdsCODIGO_VALIDADE: TIntegerField
+      FieldName = 'CODIGO_VALIDADE'
     end
   end
   object ds: TDataSource
